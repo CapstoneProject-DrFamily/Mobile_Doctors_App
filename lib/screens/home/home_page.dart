@@ -14,127 +14,295 @@ class HomeScreen extends StatelessWidget {
     // TODO: implement build
     return BaseView<HomePageViewModel>(builder: (context, child, model) {
       return SafeArea(
-        child: Scaffold(
-          body: Container(
-              child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: LoadingButton(
-                    onPressed: () async {
-                      if (!model.active) {
-                        model.isConnecting(true);
-                        model.isFinding(true);
-                        bool result = await model.activeDoc();
-                        if (result) {
-                          print('success');
-                          model.isActive(true);
-                          model.isConnecting(false);
-                          CoolAlert.show(
-                              context: context,
-                              type: CoolAlertType.success,
-                              text: "Ready to cure",
-                              backgroundColor: Colors.lightBlue[200]);
+        child: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/backgroundhome.jpg'),
+                  fit: BoxFit.cover)),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: LoadingButton(
+                      onPressed: () async {
+                        if (!model.active) {
+                          model.isConnecting(true);
+                          model.isFinding(true);
+                          bool result = await model.activeDoc();
+                          if (result) {
+                            print('success');
+                            model.isActive(true);
+                            model.isConnecting(false);
+                            CoolAlert.show(
+                                context: context,
+                                type: CoolAlertType.success,
+                                text: "Ready to cure",
+                                backgroundColor: Colors.lightBlue[200]);
+                          } else {
+                            print('fail');
+                            model.isActive(false);
+                            model.isConnecting(false);
+                            model.isFinding(false);
+                            CoolAlert.show(
+                                context: context,
+                                type: CoolAlertType.error,
+                                text: "Your transaction was successful!",
+                                backgroundColor: Colors.lightBlue[200]);
+                          }
                         } else {
-                          print('fail');
-                          model.isActive(false);
-                          model.isConnecting(false);
-                          model.isFinding(false);
                           CoolAlert.show(
                               context: context,
-                              type: CoolAlertType.error,
+                              type: CoolAlertType.confirm,
                               text: "Your transaction was successful!",
-                              backgroundColor: Colors.lightBlue[200]);
+                              backgroundColor: Colors.lightBlue[200],
+                              onConfirmBtnTap: () {
+                                model.isConnecting(false);
+                                model.isActive(false);
+                                model.isFinding(false);
+                                Navigator.pop(context);
+                              },
+                              onCancelBtnTap: () {
+                                model.isActive(true);
+                                print('Active : ' + model.active.toString());
+                                Navigator.pop(context);
+                              });
                         }
-                      } else {
-                        CoolAlert.show(
-                            context: context,
-                            type: CoolAlertType.confirm,
-                            text: "Your transaction was successful!",
-                            backgroundColor: Colors.lightBlue[200],
-                            onConfirmBtnTap: () {
-                              model.isConnecting(false);
-                              model.isActive(false);
-                              model.isFinding(false);
-                              Navigator.pop(context);
-                            },
-                            onCancelBtnTap: () {
-                              model.isActive(true);
-                              print('Active : ' + model.active.toString());
-                              Navigator.pop(context);
-                            });
-                      }
-                    },
-                    backgroundColor: Colors.blueAccent[200],
-                    isLoading: model.connecting,
-                    loadingWidget: SizedBox(
-                      width: 25,
-                      height: 25,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
+                      },
+                      backgroundColor: Colors.blueAccent[200],
+                      isLoading: model.connecting,
+                      loadingWidget: SizedBox(
+                        width: 25,
+                        height: 25,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        ),
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(boxShadow: [
+                          BoxShadow(
+                              offset: Offset(0, 20),
+                              blurRadius: 80,
+                              color: Colors.lightBlue[200])
+                        ], borderRadius: BorderRadius.circular(100.0)),
+                        child: Text(
+                          !model.active ? 'Connect' : 'Disconnect',
+                          style: TextStyle(fontSize: 20),
                         ),
                       ),
                     ),
-                    child: Container(
-                      decoration: BoxDecoration(boxShadow: [
-                        BoxShadow(
-                            offset: Offset(0, 20),
-                            blurRadius: 80,
-                            color: Colors.lightBlue[200])
-                      ], borderRadius: BorderRadius.circular(100.0)),
-                      child: Text(
-                        !model.active ? 'Connect' : 'Disconnect',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
                   ),
-                ),
-                SizedBox(height: 30),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
+                  SizedBox(height: 30),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                          padding: EdgeInsets.only(left: 10, bottom: 20),
+                          child: Image(
+                              image: model.active
+                                  ? AssetImage('assets/ondemand.png')
+                                  : AssetImage('assets/offdemand.png'),
+                              width: 100),
+                          margin: const EdgeInsets.only(left: 20)),
+                      Container(
                         padding: EdgeInsets.only(left: 10, bottom: 20),
-                        child: Image(
-                            image: model.active
-                                ? AssetImage('assets/ondemand.png')
-                                : AssetImage('assets/offdemand.png'),
-                            width: 100),
-                        margin: const EdgeInsets.only(left: 20)),
-                    Container(
-                      padding: EdgeInsets.only(left: 10, bottom: 20),
-                      child: model.finding
-                          ? PulsatingCircleIconButton(
-                              icon: Icon(Icons.monetization_on,
-                                  color: Colors.transparent),
-                              onTap: () {},
-                            )
-                          : Text(''),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                        color: MainColors.blueBegin,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(40),
-                            topRight: Radius.circular(40))),
-                    child: Row(
-                      children: [],
-                    ),
+                        child: model.finding
+                            ? PulsatingCircleIconButton(
+                                icon: null,
+                                onTap: () {},
+                              )
+                            : Text(''),
+                      ),
+                    ],
                   ),
-                )
-              ],
+                  SizedBox(height: 10),
+                  Expanded(
+                    child: Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                            color: MainColors.blueBegin,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(40),
+                                topRight: Radius.circular(40))),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                child: ListView.builder(
+                                  itemCount: 4,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Stack(
+                                        children: [
+                                          Container(
+                                            height: 120,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                              border: Border.all(
+                                                  color: MainColors.blueEnd,
+                                                  width: 5),
+                                              gradient: LinearGradient(
+                                                  colors: [
+                                                    MainColors.blueBegin,
+                                                    MainColors.blueEnd
+                                                  ],
+                                                  begin: Alignment.topLeft,
+                                                  end: Alignment.bottomRight),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: MainColors.blueBegin,
+                                                    blurRadius: 12,
+                                                    offset: Offset(0, 6))
+                                              ],
+                                            ),
+                                          ),
+                                          Positioned(
+                                            right: 0,
+                                            bottom: 0,
+                                            top: 0,
+                                            child: CustomPaint(
+                                              size: Size(70, 100),
+                                              painter: CustomCardShapePainter(
+                                                  24,
+                                                  MainColors.blueBegin,
+                                                  MainColors.blueEnd),
+                                            ),
+                                          ),
+                                          Positioned.fill(
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: CircleAvatar(
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                      'https://gocsuckhoe.com/wp-content/uploads/2020/09/avatar-facebook.jpg',
+                                                    ),
+                                                    radius: 40,
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 4,
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text('Nguyễn Thị A',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 20,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold)),
+                                                      SizedBox(height: 10),
+                                                      Row(
+                                                        children: [
+                                                          Icon(
+                                                              Icons.location_on,
+                                                              color: MainColors
+                                                                  .blueEnd),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .fromLTRB(
+                                                                    5.0,
+                                                                    0,
+                                                                    0,
+                                                                    0),
+                                                            child: Text(
+                                                                '263 Khánh Hội, P4,...',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontStyle:
+                                                                        FontStyle
+                                                                            .italic)),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 10),
+                                                      Row(
+                                                        children: [
+                                                          Icon(Icons.add_box,
+                                                              color: MainColors
+                                                                  .blueEnd),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .fromLTRB(
+                                                                    5.0,
+                                                                    0,
+                                                                    0,
+                                                                    0),
+                                                            child: Text(
+                                                                'Đau đầu, sổ mũi...',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontStyle:
+                                                                        FontStyle
+                                                                            .italic)),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Icon(Icons.location_on,
+                                                          color: MainColors
+                                                              .blueEnd),
+                                                      Text('4.8 km',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 12)),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            )
+                          ],
+                        )),
+                  )
+                ],
+              ),
             ),
-          )),
+          ),
         ),
       );
     });
