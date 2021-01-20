@@ -1,7 +1,9 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:loading_button/loading_button.dart';
+import 'package:mobile_doctors_apps/screens/patient/patient_detail_page.dart';
 
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/home_page_view_model.dart';
@@ -9,6 +11,8 @@ import 'package:mobile_doctors_apps/themes/colors.dart';
 import 'dart:ui' as ui;
 
 class HomeScreen extends StatelessWidget {
+  int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 5;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -127,7 +131,7 @@ class HomeScreen extends StatelessWidget {
                     child: Container(
                         padding: EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                            color: MainColors.blueBegin,
+                            color: MainColors.blueBegin.withOpacity(0.6),
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(40),
                                 topRight: Radius.circular(40))),
@@ -143,7 +147,7 @@ class HomeScreen extends StatelessWidget {
                                       child: Stack(
                                         children: [
                                           Container(
-                                            height: 120,
+                                            height: 200,
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(24),
@@ -187,7 +191,7 @@ class HomeScreen extends StatelessWidget {
                                                         NetworkImage(
                                                       'https://gocsuckhoe.com/wp-content/uploads/2020/09/avatar-facebook.jpg',
                                                     ),
-                                                    radius: 40,
+                                                    radius: 35,
                                                     backgroundColor:
                                                         Colors.white,
                                                   ),
@@ -216,24 +220,26 @@ class HomeScreen extends StatelessWidget {
                                                               Icons.location_on,
                                                               color: MainColors
                                                                   .blueEnd),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .fromLTRB(
-                                                                    5.0,
-                                                                    0,
-                                                                    0,
-                                                                    0),
-                                                            child: Text(
-                                                                '263 Khánh Hội, P4,...',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        14,
-                                                                    fontStyle:
-                                                                        FontStyle
-                                                                            .italic)),
+                                                          Flexible(
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .fromLTRB(
+                                                                      5.0,
+                                                                      0,
+                                                                      0,
+                                                                      0),
+                                                              child: Text(
+                                                                  '263 Hoàng Hoa Thám, P4, Q5, TP. Hà Nội',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          14,
+                                                                      fontStyle:
+                                                                          FontStyle
+                                                                              .italic)),
+                                                            ),
                                                           ),
                                                         ],
                                                       ),
@@ -243,27 +249,78 @@ class HomeScreen extends StatelessWidget {
                                                           Icon(Icons.add_box,
                                                               color: MainColors
                                                                   .blueEnd),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .fromLTRB(
-                                                                    5.0,
-                                                                    0,
-                                                                    0,
-                                                                    0),
-                                                            child: Text(
-                                                                'Đau đầu, sổ mũi...',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        14,
-                                                                    fontStyle:
-                                                                        FontStyle
-                                                                            .italic)),
+                                                          Flexible(
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .fromLTRB(
+                                                                      5.0,
+                                                                      0,
+                                                                      0,
+                                                                      0),
+                                                              child: Text(
+                                                                  'Đau đầu',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          14,
+                                                                      fontStyle:
+                                                                          FontStyle
+                                                                              .italic)),
+                                                            ),
                                                           ),
                                                         ],
                                                       ),
+                                                      SizedBox(height: 10),
+                                                      Row(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    right: 10),
+                                                            child: RaisedButton(
+                                                              child: Text(
+                                                                  'Accept'),
+                                                              color:
+                                                                  Colors.green,
+                                                              textColor:
+                                                                  Colors.white,
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            18.0),
+                                                              ),
+                                                              onPressed: () {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) =>
+                                                                                PatientDetailPage()));
+                                                              },
+                                                            ),
+                                                          ),
+                                                          RaisedButton(
+                                                            child:
+                                                                Text('Cancel'),
+                                                            color: Colors.red,
+                                                            textColor:
+                                                                Colors.white,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          18.0),
+                                                            ),
+                                                            onPressed: () {},
+                                                          )
+                                                        ],
+                                                      )
                                                     ],
                                                   ),
                                                 ),
@@ -282,7 +339,29 @@ class HomeScreen extends StatelessWidget {
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.white,
-                                                              fontSize: 12)),
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold)),
+                                                      SizedBox(height: 10),
+                                                      CountdownTimer(
+                                                          endTime: endTime,
+                                                          widgetBuilder:
+                                                              (_, time) {
+                                                            if (time == null) {
+                                                              return Text(
+                                                                'Expired',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white),
+                                                              );
+                                                            }
+                                                            return Text(
+                                                                '0:${time.sec}',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white));
+                                                          })
                                                     ],
                                                   ),
                                                 )
@@ -381,7 +460,7 @@ class CustomCardShapePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var radius = 24.0;
+    var radius = 15.0;
     var paint = Paint();
     paint.shader = ui.Gradient.linear(
         Offset(0, 0), Offset(size.width, size.height), [
