@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/patient_detail_viewmodel.dart';
 import 'package:mobile_doctors_apps/themes/colors.dart';
@@ -15,12 +16,14 @@ class PatientDetailPage extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage('assets/backgroundhome.jpg'),
+                  image: AssetImage('assets/patientdetail.jpg'),
                   alignment: Alignment.topCenter,
                   fit: BoxFit.fitWidth)),
           child: Column(
             children: [
-              SizedBox(height: 50),
+              SizedBox(
+                height: 20,
+              ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.24,
               ),
@@ -30,10 +33,11 @@ class PatientDetailPage extends StatelessWidget {
                     color: Colors.white,
                     // color: MainColors.blueBegin.withOpacity(0.6),
                     borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(80))),
+                        BorderRadius.vertical(top: Radius.circular(66))),
                 child: Padding(
                   padding: EdgeInsets.only(top: 30, left: 30),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
@@ -49,8 +53,153 @@ class PatientDetailPage extends StatelessWidget {
                               backgroundColor: Colors.white,
                             ),
                           ),
+                          SizedBox(width: 20),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Phan Lý Kim Chi Ngọc Diệp',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 20),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        color: MainColors.blueBegin
+                                            .withOpacity(0.3),
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                    child: Icon(Icons.phone),
+                                  ),
+                                  SizedBox(width: 16),
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        color: MainColors.blueBegin
+                                            .withOpacity(0.3),
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                    child: Icon(Icons.contact_page),
+                                  ),
+                                  SizedBox(
+                                    width: 80,
+                                  ),
+                                  Container(
+                                    child: SvgPicture.asset(
+                                      'assets/icons/female.svg',
+                                      width: 40,
+                                      height: 40,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ],
-                      )
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.location_on),
+                          Flexible(
+                            child: Text(
+                              '263 Hoàng Hoa Thám, P4, Q5, TP. Hà Nội',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 30),
+                      Text(
+                        'About User',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Container(
+                                    child: SvgPicture.asset(
+                                        'assets/icons/dob.svg',
+                                        width: 30,
+                                        height: 30)),
+                                SizedBox(width: 10),
+                                Text('01/01/1999')
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Container(
+                                    child: SvgPicture.asset(
+                                        'assets/icons/old-typical-phone.svg',
+                                        width: 30,
+                                        height: 30)),
+                                SizedBox(width: 10),
+                                Text('0988123123')
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Container(
+                                    child: SvgPicture.asset(
+                                        'assets/icons/height.svg',
+                                        width: 30,
+                                        height: 30)),
+                                SizedBox(width: 10),
+                                Text('120 cm')
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Container(
+                                    child: SvgPicture.asset(
+                                        'assets/icons/weight-scale.svg',
+                                        width: 30,
+                                        height: 30)),
+                                SizedBox(width: 10),
+                                Text('50 kg')
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 30),
+                      Text(
+                        'Symptoms',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Đau bụng, nhức đầu, chóng mặt',
+                      ),
                     ],
                   ),
                 ),

@@ -42,6 +42,7 @@ dependencies:
   cool_alert: ^1.0.2
   cupertino_icons: ^1.0.0
   flutter_countdown_timer: ^3.0.0
+  flutter_svg: ^0.19.2+1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -67,6 +68,13 @@ flutter:
     - assets/ondemand.png
     - assets/backgroundhome.jpg
     - assets/patientdetail.jpg
+    - assets/icons/dob.svg
+    - assets/icons/female.svg
+    - assets/icons/male.svg
+    - assets/icons/height.svg
+    - assets/icons/weight-scale.svg
+    - assets/icons/symptoms.svg
+    - assets/icons/old-typical-phone.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
