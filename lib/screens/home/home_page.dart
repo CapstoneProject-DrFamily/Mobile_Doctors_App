@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:loading_button/loading_button.dart';
+import 'package:mobile_doctors_apps/screens/medicine/medicine_form.dart';
 import 'package:mobile_doctors_apps/screens/patient/patient_detail_page.dart';
 
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
@@ -317,7 +318,14 @@ class HomeScreen extends StatelessWidget {
                                                                       .circular(
                                                                           18.0),
                                                             ),
-                                                            onPressed: () {},
+                                                            onPressed: () {
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              MedicineForm()));
+                                                            },
                                                           )
                                                         ],
                                                       )

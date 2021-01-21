@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
-import 'package:mobile_doctors_apps/screens/view_model/patient_detail_viewmodel.dart';
+import 'package:mobile_doctors_apps/screens/view_model/patient_detail_view_model.dart';
 import 'package:mobile_doctors_apps/themes/colors.dart';
 
 class PatientDetailPage extends StatelessWidget {
@@ -33,7 +33,7 @@ class PatientDetailPage extends StatelessWidget {
                     color: Colors.white,
                     // color: MainColors.blueBegin.withOpacity(0.6),
                     borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(66))),
+                        BorderRadius.vertical(top: Radius.circular(50))),
                 child: Padding(
                   padding: EdgeInsets.only(top: 30, left: 30),
                   child: Column(
@@ -197,9 +197,39 @@ class PatientDetailPage extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      Text(
-                        'Đau bụng, nhức đầu, chóng mặt',
-                      ),
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                border: Border.all(color: Colors.grey)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Đau bụng'),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                border: Border.all(color: Colors.grey)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Nhức đầu'),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                border: Border.all(color: Colors.grey)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Sổ mũi'),
+                            ),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),
