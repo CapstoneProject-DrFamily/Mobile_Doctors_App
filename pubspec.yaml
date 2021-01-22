@@ -65,19 +65,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
 
-    - assets/medicine.png
-    - assets/offdemand.png
-    - assets/ondemand.png
-    - assets/backgroundhome.jpg
-    - assets/patientdetail.jpg
-    - assets/icons/dob.svg
-    - assets/icons/female.svg
-    - assets/icons/male.svg
-    - assets/icons/height.svg
-    - assets/icons/weight-scale.svg
-    - assets/icons/symptoms.svg
-    - assets/icons/old-typical-phone.svg
-    - assets/icons/pills.svg
+    - assets/
+    - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -11,7 +11,7 @@ class LandingPageViewModel extends BaseModel {
   int _currentIndex = 0;
 
   final List<Widget> page = [
-    HomeScreen(),
+    HomePage(),
     Text('2'),
     Text('3'),
     Text('4'),

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:loading_button/loading_button.dart';
-import 'package:mobile_doctors_apps/screens/medicine/medicine_form.dart';
+import 'package:mobile_doctors_apps/screens/medicine/medicine_list_page.dart';
 import 'package:mobile_doctors_apps/screens/patient/patient_detail_page.dart';
 
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
@@ -11,7 +11,7 @@ import 'package:mobile_doctors_apps/screens/view_model/home_page_view_model.dart
 import 'package:mobile_doctors_apps/themes/colors.dart';
 import 'dart:ui' as ui;
 
-class HomeScreen extends StatelessWidget {
+class HomePage extends StatelessWidget {
   int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 5;
 
   @override
@@ -324,7 +324,7 @@ class HomeScreen extends StatelessWidget {
                                                                   MaterialPageRoute(
                                                                       builder:
                                                                           (context) =>
-                                                                              MedicineForm()));
+                                                                              MedicineListPage()));
                                                             },
                                                           )
                                                         ],
