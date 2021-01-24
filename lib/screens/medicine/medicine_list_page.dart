@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mobile_doctors_apps/screens/medicine/medicine_form.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/medicine_list_view_model.dart';
 
@@ -10,6 +11,7 @@ class MedicineListPage extends StatelessWidget {
     return BaseView<MedicineListViewModel>(
       builder: (context, child, model) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.lightBlue[100],
           body: Column(
             children: [
@@ -28,14 +30,16 @@ class MedicineListPage extends StatelessWidget {
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (_) => new AlertDialog(
+                builder: (_) => SingleChildScrollView(
+                  child: new AlertDialog(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(30))),
-                    title: Center(child: new Text("Choose patient")),
-                    content: new Container(
-                      height: 300.0, // Change as per your requirement
-                      width: 300.0,
-                    )),
+                    title: Center(child: new Text("Choose Medicine")),
+                    content: Container(
+                        width: 300, height: 500, child: MedicineForm()),
+                    actions: [FlatButton(onPressed: () {}, child: Text('Add'))],
+                  ),
+                ),
               );
             },
             child: SvgPicture.asset(
