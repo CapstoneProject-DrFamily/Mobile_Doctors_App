@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_doctors_apps/screens/medicine/medicine_form.dart';
+import 'package:mobile_doctors_apps/screens/record/diagnose_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/medicine_list_view_model.dart';
 
@@ -37,7 +38,22 @@ class MedicineListPage extends StatelessWidget {
                     title: Center(child: new Text("Choose Medicine")),
                     content: Container(
                         width: 300, height: 500, child: MedicineForm()),
-                    actions: [FlatButton(onPressed: () {}, child: Text('Add'))],
+                    actions: [
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Cancel'),
+                      ),
+                      FlatButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DiagnosePage()));
+                          },
+                          child: Text('Add')),
+                    ],
                   ),
                 ),
               );

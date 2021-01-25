@@ -25,7 +25,7 @@ class PatientDetailPage extends StatelessWidget {
                 height: 20,
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.24,
+                height: MediaQuery.of(context).size.height * 0.20,
               ),
               Container(
                 width: double.infinity,
@@ -57,10 +57,14 @@ class PatientDetailPage extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Phan Lý Kim Chi Ngọc Diệp',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                child: Text(
+                                  'Phan Lý Kim Chi Ngọc Diệp',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ),
                               ),
                               SizedBox(
                                 height: 10,
