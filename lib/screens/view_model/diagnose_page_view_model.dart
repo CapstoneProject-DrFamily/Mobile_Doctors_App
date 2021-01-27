@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:mobile_doctors_apps/model/Speciality.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 
@@ -23,9 +25,20 @@ class DiagnosePageViewModel extends BaseModel {
         description: ""),
   ];
 
-  List<String> listCheck = List();
+  DiagnosePageViewModel() {
+    print('is reload again');
+  }
 
-  void changeCheck(String name, bool isCheck) {
+  // List<String> listCheck = List();
+
+  bool change = false;
+
+  void changed(bool value) {
+    this.change = value;
+    notifyListeners();
+  }
+
+  void changeCheck(String name, bool isCheck, List listCheck) {
     if (isCheck) {
       if (!listCheck.contains(name)) {
         listCheck.add(name);
@@ -33,8 +46,6 @@ class DiagnosePageViewModel extends BaseModel {
     } else {
       listCheck.remove(name);
     }
-    print(listCheck);
-
     notifyListeners();
   }
 }
