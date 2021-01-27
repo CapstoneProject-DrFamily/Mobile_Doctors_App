@@ -3,9 +3,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_doctors_apps/screens/medicine/medicine_form.dart';
 import 'package:mobile_doctors_apps/screens/record/diagnose_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
+import 'package:mobile_doctors_apps/screens/share/timeline_process.dart';
 import 'package:mobile_doctors_apps/screens/view_model/medicine_list_view_model.dart';
+import 'package:mobile_doctors_apps/themes/colors.dart';
 
 class MedicineListPage extends StatelessWidget {
+  int _processIndex = 3;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -14,13 +17,16 @@ class MedicineListPage extends StatelessWidget {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.lightBlue[100],
+          appBar: AppBar(
+            iconTheme: IconThemeData(color: MainColors.blueBegin),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
           body: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 30),
-                child: Container(
-                  child: Image.asset('assets/medicine.png', fit: BoxFit.fill),
-                ),
+              timelineProcess(context, _processIndex),
+              Container(
+                child: Image.asset('assets/medicine.png', fit: BoxFit.fill),
               ),
               Expanded(
                 child: MedicineFormDetail(),
