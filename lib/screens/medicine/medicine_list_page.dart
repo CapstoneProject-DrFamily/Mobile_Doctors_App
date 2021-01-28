@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_doctors_apps/screens/medicine/medicine_form.dart';
-import 'package:mobile_doctors_apps/screens/record/diagnose_page.dart';
+import 'package:mobile_doctors_apps/screens/record/analyze_page.dart';
+
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/share/timeline_process.dart';
 import 'package:mobile_doctors_apps/screens/view_model/medicine_list_view_model.dart';
@@ -16,22 +17,64 @@ class MedicineListPage extends StatelessWidget {
       builder: (context, child, model) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.lightBlue[100],
+          backgroundColor: Colors.transparent,
           appBar: AppBar(
             iconTheme: IconThemeData(color: MainColors.blueBegin),
-            backgroundColor: Colors.transparent,
+            backgroundColor: Colors.white,
             elevation: 0,
           ),
-          body: Column(
-            children: [
-              timelineProcess(context, _processIndex),
-              Container(
-                child: Image.asset('assets/medicine.png', fit: BoxFit.fill),
-              ),
-              Expanded(
-                child: MedicineFormDetail(),
-              ),
-            ],
+          body: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                image: DecorationImage(
+                  colorFilter: new ColorFilter.mode(
+                      Colors.black.withOpacity(0.6), BlendMode.dstATop),
+                  image: AssetImage('assets/images/medicinelist.jpg'),
+                )),
+            child: Column(
+              children: [
+                timelineProcess(context, _processIndex),
+                // Container(
+                //   child: Image.asset('assets/medicine.png', fit: BoxFit.fill),
+                // ),
+                SizedBox(
+                  height: 40,
+                ),
+                Expanded(
+                  child: Stack(
+                      alignment: Alignment.topCenter,
+                      overflow: Overflow.visible,
+                      children: [
+                        MedicineFormDetail(),
+                        Positioned(
+                          top: -66,
+                          child: CircleAvatar(
+                            radius: 73,
+                            backgroundColor:
+                                MainColors.blueBegin.withOpacity(0.5),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 70,
+                              child: Container(
+                                child: Image.asset(
+                                  'assets/images/time_line_4.png',
+                                  width: 120,
+                                  // color: Colors.red,
+                                ),
+
+                                // SvgPicture.asset(
+                                //   'assets/icons/medical-file.svg',
+                                //   height: 80,
+                                //   width: 80,
+                                // ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ]),
+                ),
+              ],
+            ),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
@@ -56,7 +99,7 @@ class MedicineListPage extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => DiagnosePage()));
+                                    builder: (context) => AnalyzePage()));
                           },
                           child: Text('Add')),
                     ],
@@ -89,7 +132,7 @@ class MedicineFormDetail extends StatelessWidget {
       padding: EdgeInsets.all(20),
       width: double.infinity,
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: MainColors.blueBegin.withOpacity(0.6),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(50),
             topRight: Radius.circular(50),
@@ -97,7 +140,7 @@ class MedicineFormDetail extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(
-            height: 10,
+            height: 80,
           ),
           Row(
             children: [
@@ -105,7 +148,10 @@ class MedicineFormDetail extends StatelessWidget {
                   flex: 3,
                   child: Text(
                     'Name',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   )),
               SizedBox(
                 width: 10,
@@ -127,116 +173,127 @@ class MedicineFormDetail extends StatelessWidget {
                   ))
             ],
           ),
+          SizedBox(
+            height: 10,
+          ),
           Expanded(
               child: ListView.builder(
             itemCount: 6,
             itemBuilder: (context, index) => Column(
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                        flex: 3,
-                        child: Text(
-                          'Paracetamol 15g',
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                        )),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                        child: Text(
-                      '15 viên',
-                      style: TextStyle(fontSize: 14),
-                    )),
-                    SizedBox(width: 10),
-                    Expanded(
-                        flex: 2,
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    'Sáng',
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Center(
-                                    child: Text(
-                                      '1',
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    'viên',
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                ),
-                              ],
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12)),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          flex: 3,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Paracetamol 15g',
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
                             ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    'Trưa',
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Center(
+                          )),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                          child: Text(
+                        '15 viên',
+                        style: TextStyle(fontSize: 14),
+                      )),
+                      SizedBox(width: 10),
+                      Expanded(
+                          flex: 2,
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
                                     child: Text(
-                                      '4',
+                                      'Sáng',
                                       style: TextStyle(fontSize: 14),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    'viên',
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    'Chiều',
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Center(
-                                    child: Text(
-                                      '1',
-                                      style: TextStyle(fontSize: 14),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Center(
+                                      child: Text(
+                                        '1',
+                                        style: TextStyle(fontSize: 14),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
+                                  Expanded(
                                     flex: 2,
                                     child: Text(
                                       'viên',
                                       style: TextStyle(fontSize: 14),
-                                    ))
-                              ],
-                            ),
-                            SizedBox(height: 10)
-                          ],
-                        ))
-                  ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      'Trưa',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        '4',
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      'viên',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      'Chiều',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        '1',
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        'viên',
+                                        style: TextStyle(fontSize: 14),
+                                      ))
+                                ],
+                              ),
+                              // SizedBox(height: 10)
+                            ],
+                          ))
+                    ],
+                  ),
                 ),
                 Divider(
                   color: Colors.lightBlue[100],

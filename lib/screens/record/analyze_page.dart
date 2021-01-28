@@ -5,18 +5,18 @@ import 'package:mobile_doctors_apps/helper/StatefulWrapper.dart';
 
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/share/timeline_process.dart';
-import 'package:mobile_doctors_apps/screens/view_model/diagnose_page_view_model.dart';
+import 'package:mobile_doctors_apps/screens/view_model/analyze_page_view_model.dart';
 import 'package:mobile_doctors_apps/themes/colors.dart';
 
-class DiagnosePage extends StatelessWidget {
+class AnalyzePage extends StatelessWidget {
   List<String> listCheck = List();
   bool keyboardOn = false;
-  int _processIndex = 2;
+  int _processIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return BaseView<DiagnosePageViewModel>(
+    return BaseView<AnalyzePageViewModel>(
       builder: (context, child, model) {
         return StatefulWrapper(
           onInit: () {
@@ -263,7 +263,7 @@ class DiagnosePage extends StatelessWidget {
                                       radius: 70,
                                       child: Container(
                                         child: Image.asset(
-                                          'assets/images/time_line_3.png',
+                                          'assets/images/time_line_1.png',
                                           width: 120,
                                           // color: Colors.red,
                                         ),

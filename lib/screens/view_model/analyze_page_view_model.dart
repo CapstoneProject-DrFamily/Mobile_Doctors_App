@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:mobile_doctors_apps/model/Speciality.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 
-class DiagnosePageViewModel extends BaseModel {
+class AnalyzePageViewModel extends BaseModel {
   List<Speciality> listSpeciality = [
     Speciality(name: 'Tim mạch', description: ""),
     Speciality(name: 'Hô hấp', description: ""),
