@@ -25,4 +25,8 @@ class MedicineFormViewModel extends BaseModel {
 
     notifyListeners();
   }
+
+  MedicineFormViewModel() {
+    print('again');
+  }
 }

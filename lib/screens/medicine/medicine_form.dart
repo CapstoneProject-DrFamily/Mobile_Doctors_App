@@ -96,22 +96,6 @@ class MedicineForm extends StatelessWidget {
                                                 },
                                               ),
                                             )
-
-                                            // Expanded(
-                                            //   flex: 3,
-                                            //   child: ListTile(
-                                            //     leading: SvgPicture.asset(
-                                            //         'assets/icons/pills.svg',
-                                            //         width: 40,
-                                            //         height: 40),
-                                            //     title: Text('Paracetamol'),
-                                            //     subtitle: Text('Description'),
-                                            //   ),
-                                            // ),
-                                            // Expanded(
-                                            //     child: new Radio(
-                                            //   value: 0,
-                                            // )),
                                           ],
                                         )),
                                       ),
@@ -151,6 +135,9 @@ class MedicineForm extends StatelessWidget {
                                                         Expanded(
                                                           child: Container(
                                                             child: TextField(
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
                                                                 keyboardType:
                                                                     TextInputType
                                                                         .number,
@@ -179,6 +166,9 @@ class MedicineForm extends StatelessWidget {
                                                         Expanded(
                                                           child: Container(
                                                             child: TextField(
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
                                                                 keyboardType:
                                                                     TextInputType
                                                                         .number,
@@ -207,6 +197,9 @@ class MedicineForm extends StatelessWidget {
                                                         Expanded(
                                                           child: Container(
                                                             child: TextField(
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
                                                                 keyboardType:
                                                                     TextInputType
                                                                         .number,

@@ -5,6 +5,7 @@ import 'package:mobile_doctors_apps/screens/view_model/landing_page_view_model.d
 import 'package:mobile_doctors_apps/screens/view_model/medicine_form_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/medicine_list_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/patient_detail_view_model.dart';
+import 'package:mobile_doctors_apps/screens/view_model/sample_page_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/sign_in_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/verify_otp_view_model.dart';
 
@@ -21,4 +22,5 @@ void setupLocator() {
   locator.registerFactory<MedicineListViewModel>(() => MedicineListViewModel());
   locator.registerFactory<MedicineFormViewModel>(() => MedicineFormViewModel());
   locator.registerFactory<AnalyzePageViewModel>(() => AnalyzePageViewModel());
+  locator.registerFactory<SamplePageViewModel>(() => SamplePageViewModel());
 }

@@ -74,180 +74,7 @@ class AnalyzePage extends StatelessWidget {
                                 width: size.width,
                                 height: size.height * 0.6,
                                 child: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SizedBox(
-                                        height: 100,
-                                      ),
-                                      MedicalHistory(size: size),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        width: size.width * 0.9,
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Examination(),
-                                              Divider(
-                                                thickness: 0.5,
-                                                color: MainColors.blueBegin,
-                                              ),
-                                              EyeSightPart(),
-                                              Divider(
-                                                thickness: 0.5,
-                                                color: MainColors.blueBegin,
-                                              ),
-                                              FullBody(),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 10,
-                                                            left: 10,
-                                                            right: 10),
-                                                    child: Row(
-                                                      children: [
-                                                        Text(
-                                                          '2.3.2 ',
-                                                          style: TextStyle(
-                                                              fontSize: 18,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ),
-                                                        Flexible(
-                                                          child: Text(
-                                                            'Cơ quan',
-                                                            style: TextStyle(
-                                                              fontSize: 18,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Column(
-                                                    children: List.generate(
-                                                        model.listSpeciality
-                                                            .length, (index) {
-                                                      return Column(
-                                                        children: [
-                                                          Card(
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: Container(
-                                                                child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceEvenly,
-                                                              children: [
-                                                                Flexible(
-                                                                  child: Column(
-                                                                    children: [
-                                                                      Container(
-                                                                        alignment:
-                                                                            Alignment.centerLeft,
-                                                                        child:
-                                                                            Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              Text(
-                                                                            model.listSpeciality[index].name,
-                                                                            style:
-                                                                                TextStyle(fontSize: 18),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                Flexible(
-                                                                  child:
-                                                                      Checkbox(
-                                                                    value: listCheck.contains(model
-                                                                            .listSpeciality[index]
-                                                                            .name)
-                                                                        ? true
-                                                                        : false,
-                                                                    onChanged:
-                                                                        (value) {
-                                                                      print(
-                                                                          value);
-
-                                                                      model.changeCheck(
-                                                                          model
-                                                                              .listSpeciality[index]
-                                                                              .name,
-                                                                          value,
-                                                                          listCheck);
-                                                                    },
-                                                                  ),
-                                                                )
-                                                              ],
-                                                            )),
-                                                          ),
-                                                          Visibility(
-                                                            visible: listCheck
-                                                                .contains(model
-                                                                    .listSpeciality[
-                                                                        index]
-                                                                    .name),
-                                                            child: Column(
-                                                              children: [
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  child:
-                                                                      TextField(
-                                                                    maxLines: 3,
-                                                                    decoration: InputDecoration(
-                                                                        hintText:
-                                                                            'Enter text',
-                                                                        border: OutlineInputBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(12))),
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 10,
-                                                                )
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    }),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                    ],
-                                  ),
+                                  child: buildAnalyzeForm(size, model),
                                 ),
                               ),
                               Visibility(
@@ -290,6 +117,149 @@ class AnalyzePage extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Column buildAnalyzeForm(Size size, AnalyzePageViewModel model) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          height: 100,
+        ),
+        MedicalHistory(size: size),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: size.width * 0.9,
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Examination(),
+                Divider(
+                  thickness: 0.5,
+                  color: MainColors.blueBegin,
+                ),
+                EyeSightPart(),
+                Divider(
+                  thickness: 0.5,
+                  color: MainColors.blueBegin,
+                ),
+                FullBody(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 10, left: 10, right: 10),
+                      child: Row(
+                        children: [
+                          Text(
+                            '2.3.2 ',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          Flexible(
+                            child: Text(
+                              'Cơ quan',
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      children:
+                          List.generate(model.listSpeciality.length, (index) {
+                        return Column(
+                          children: [
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Container(
+                                  child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Flexible(
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              model.listSpeciality[index].name,
+                                              style: TextStyle(fontSize: 18),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Flexible(
+                                    child: Checkbox(
+                                      value: listCheck.contains(
+                                              model.listSpeciality[index].name)
+                                          ? true
+                                          : false,
+                                      onChanged: (value) {
+                                        print(value);
+
+                                        model.changeCheck(
+                                            model.listSpeciality[index].name,
+                                            value,
+                                            listCheck);
+                                      },
+                                    ),
+                                  )
+                                ],
+                              )),
+                            ),
+                            Visibility(
+                              visible: listCheck
+                                  .contains(model.listSpeciality[index].name),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextField(
+                                      maxLines: 3,
+                                      decoration: InputDecoration(
+                                          hintText: 'Enter text',
+                                          border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12))),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+      ],
     );
   }
 
