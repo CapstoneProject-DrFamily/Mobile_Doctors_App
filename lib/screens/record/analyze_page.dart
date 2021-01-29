@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 import 'package:mobile_doctors_apps/helper/StatefulWrapper.dart';
+import 'package:mobile_doctors_apps/screens/record/sample_page.dart';
 
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/share/timeline_process.dart';
@@ -40,6 +41,7 @@ class AnalyzePage extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
               ),
+
               // resizeToAvoidBottomInset: false,
               backgroundColor: Colors.transparent,
               body: GestureDetector(
@@ -105,6 +107,20 @@ class AnalyzePage extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                              Positioned(
+                                  bottom: 10,
+                                  right: 20,
+                                  child: FlatButton(
+                                      color:
+                                          MainColors.blueBegin.withOpacity(0.8),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SamplePage()));
+                                      },
+                                      child: Text('Next'))),
                             ],
                           ),
                         ),

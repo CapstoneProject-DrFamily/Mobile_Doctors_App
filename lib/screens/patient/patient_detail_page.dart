@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mobile_doctors_apps/screens/record/sample_page.dart';
+import 'package:mobile_doctors_apps/screens/record/analyze_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/patient_detail_view_model.dart';
 import 'package:mobile_doctors_apps/themes/colors.dart';
@@ -240,7 +240,7 @@ class PatientDetailPage extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SamplePage()));
+                                    builder: (context) => AnalyzePage()));
                           },
                           child: Text('Start')),
                     ],

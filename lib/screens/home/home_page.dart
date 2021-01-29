@@ -21,9 +21,12 @@ class HomePage extends StatelessWidget {
       return SafeArea(
         child: Container(
           decoration: BoxDecoration(
+              color: Colors.white,
               image: DecorationImage(
-                  image: AssetImage('assets/backgroundhome.jpg'),
-                  fit: BoxFit.cover)),
+                colorFilter: new ColorFilter.mode(
+                    Colors.black.withOpacity(0.6), BlendMode.dstATop),
+                image: AssetImage('assets/backgroundhome.jpg'),
+              )),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             body: Padding(
@@ -104,7 +107,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
+                  SizedBox(height: 20),
                   Stack(
                     alignment: Alignment.center,
                     children: [
