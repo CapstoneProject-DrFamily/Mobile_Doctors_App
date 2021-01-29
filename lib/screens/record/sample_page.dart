@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mobile_doctors_apps/screens/record/sample_pop_up.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/share/timeline_process.dart';
 import 'package:mobile_doctors_apps/screens/view_model/sample_page_view_model.dart';
+import 'package:mobile_doctors_apps/screens/view_model/sample_pop_up_view_model.dart';
 import 'package:mobile_doctors_apps/themes/colors.dart';
 
 class SamplePage extends StatelessWidget {
@@ -11,7 +13,7 @@ class SamplePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    // Size size = MediaQuery.of(context).size;
     return BaseView<SamplePageViewModel>(builder: (context, child, model) {
       return Container(
         decoration: BoxDecoration(
@@ -54,98 +56,15 @@ class SamplePage extends StatelessWidget {
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
             backgroundColor: Colors.lightBlue[600],
-            onPressed: () {
-              showDialog(
+            onPressed: () async {
+              List<BloodParameter> values = await showDialog(
                   context: context,
-                  builder: (_) => new AlertDialog(
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(30))),
-                        title: Center(child: new Text("Chọn chỉ số")),
-                        content: Container(
-                          width: 300,
-                          height: 400,
-                          child: ListView.builder(
-                            primary: false,
-                            shrinkWrap: true,
-                            itemCount: model.listParameter.length,
-                            itemBuilder: (context, index) {
-                              return Row(children: [
-                                Expanded(
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: InkWell(
-                                      onTap: () {},
-                                      child: Container(
-                                          child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Expanded(child: TextField()),
-                                          Flexible(
-                                            child: Column(
-                                              children: [
-                                                Container(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    model.listParameter[index]
-                                                        .name,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Flexible(
-                                            child: Checkbox(
-                                              value: false,
-                                              onChanged: (value) {},
-                                            ),
-                                          )
-
-                                          // Expanded(
-                                          //   flex: 3,
-                                          //   child: ListTile(
-                                          //     leading: SvgPicture.asset(
-                                          //         'assets/icons/pills.svg',
-                                          //         width: 40,
-                                          //         height: 40),
-                                          //     title: Text('Paracetamol'),
-                                          //     subtitle: Text('Description'),
-                                          //   ),
-                                          // ),
-                                          // Expanded(
-                                          //     child: new Radio(
-                                          //   value: 0,
-                                          // )),
-                                        ],
-                                      )),
-                                    ),
-                                  ),
-                                ),
-                              ]);
-                            },
-                          ),
-                        ),
-                        actions: [
-                          FlatButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text('Cancel'),
-                          ),
-                          FlatButton(
-                              onPressed: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => AnalyzePage()));
-                              },
-                              child: Text('Add')),
-                        ],
+                  builder: (dialogContext) => SamplePopUp(
+                        list: model.listCheck,
                       ));
+              if (values != null) {
+                model.loadParameter(values);
+              }
             },
           ),
         ),
@@ -213,7 +132,7 @@ class SamplePage extends StatelessWidget {
                       Expanded(
                         child: Container(
                           child: ListView.builder(
-                            itemCount: model.listCheck.length,
+                            itemCount: model.listParameter.length,
                             itemBuilder: (context, index) {
                               return Container(
                                 color: index % 2 == 0
