@@ -23,7 +23,7 @@ class AnalyzePageViewModel extends BaseModel {
         description: ""),
   ];
 
-  DiagnosePageViewModel() {
+  AnalyzePageViewModel() {
     print('is reload again');
   }
 

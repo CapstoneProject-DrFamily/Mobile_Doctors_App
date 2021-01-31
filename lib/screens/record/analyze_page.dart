@@ -16,7 +16,7 @@ class AnalyzePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    // Size size = MediaQuery.of(context).size;
     return BaseView<AnalyzePageViewModel>(
       builder: (context, child, model) {
         return StatefulWrapper(
@@ -41,7 +41,6 @@ class AnalyzePage extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
               ),
-
               // resizeToAvoidBottomInset: false,
               backgroundColor: Colors.transparent,
               body: GestureDetector(
@@ -73,10 +72,12 @@ class AnalyzePage extends StatelessWidget {
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(40),
                                         topRight: Radius.circular(40))),
-                                width: size.width,
-                                height: size.height * 0.6,
+                                width: MediaQuery.of(context).size.width,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.6,
                                 child: SingleChildScrollView(
-                                  child: buildAnalyzeForm(size, model),
+                                  child: buildAnalyzeForm(
+                                      MediaQuery.of(context).size, model),
                                 ),
                               ),
                               Visibility(
@@ -107,20 +108,33 @@ class AnalyzePage extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              Positioned(
-                                  bottom: 10,
-                                  right: 20,
-                                  child: FlatButton(
-                                      color:
-                                          MainColors.blueBegin.withOpacity(0.8),
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SamplePage()));
-                                      },
-                                      child: Text('Next'))),
+                              Visibility(
+                                visible: !keyboardOn ? true : false,
+                                child: Positioned(
+                                    bottom: 10,
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.8,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: FlatButton(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18.0),
+                                            ),
+                                            color: MainColors.blueBegin
+                                                .withOpacity(0.8),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          SamplePage()));
+                                            },
+                                            child: Text('Next')),
+                                      ),
+                                    )),
+                              ),
                             ],
                           ),
                         ),

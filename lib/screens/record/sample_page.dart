@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_doctors_apps/screens/medicine/medicine_list_page.dart';
+import 'package:mobile_doctors_apps/screens/record/diagnose_page.dart';
 import 'package:mobile_doctors_apps/screens/record/sample_pop_up.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/share/timeline_process.dart';
@@ -38,7 +39,7 @@ class SamplePage extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MedicineListPage()));
+                              builder: (context) => DiagnosePage()));
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -155,6 +156,7 @@ class SamplePage extends StatelessWidget {
                                     Expanded(
                                         child: Center(
                                             child: TextField(
+                                      keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
                                           hintText: '0.0',
                                           border: InputBorder.none),

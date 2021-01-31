@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:mobile_doctors_apps/screens/record/sample_pop_up.dart';
 import 'package:mobile_doctors_apps/screens/view_model/analyze_page_view_model.dart';
+import 'package:mobile_doctors_apps/screens/view_model/diagnose_page_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/home_page_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/landing_page_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/medicine_form_view_model.dart';
@@ -26,4 +27,5 @@ void setupLocator() {
   locator.registerFactory<AnalyzePageViewModel>(() => AnalyzePageViewModel());
   locator.registerFactory<SamplePageViewModel>(() => SamplePageViewModel());
   locator.registerFactory<SamplePopUpViewModel>(() => SamplePopUpViewModel());
+  locator.registerFactory<DiagnosePageViewModel>(() => DiagnosePageViewModel());
 }
