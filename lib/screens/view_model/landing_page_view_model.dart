@@ -3,6 +3,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_doctors_apps/screens/home/home_page.dart';
+import 'package:mobile_doctors_apps/screens/setting/setting_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 
 class LandingPageViewModel extends BaseModel {
@@ -14,7 +15,7 @@ class LandingPageViewModel extends BaseModel {
     HomePage(),
     Text('2'),
     Text('3'),
-    Text('4'),
+    SettingPage(),
   ];
 
   List<BottomNavyBarItem> _listItem = [

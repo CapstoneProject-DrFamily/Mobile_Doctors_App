@@ -7,6 +7,7 @@ import 'package:mobile_doctors_apps/screens/view_model/landing_page_view_model.d
 import 'package:mobile_doctors_apps/screens/view_model/medicine_form_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/medicine_list_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/patient_detail_view_model.dart';
+import 'package:mobile_doctors_apps/screens/view_model/profile_page_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/sample_page_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/sample_pop_up_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/sign_in_view_model.dart';
@@ -28,4 +29,5 @@ void setupLocator() {
   locator.registerFactory<SamplePageViewModel>(() => SamplePageViewModel());
   locator.registerFactory<SamplePopUpViewModel>(() => SamplePopUpViewModel());
   locator.registerFactory<DiagnosePageViewModel>(() => DiagnosePageViewModel());
+  locator.registerFactory<ProfilePageViewModel>(() => ProfilePageViewModel());
 }
