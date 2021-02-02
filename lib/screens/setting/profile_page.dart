@@ -147,92 +147,37 @@ class ProfilePage extends StatelessWidget {
                               height: 5,
                             ),
                             _buildDegreeTypeField(model, context),
-                            ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: model.degrees.length,
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8.0, right: 8),
-                                              child: TextFormField(
-                                                keyboardType:
-                                                    TextInputType.emailAddress,
-                                                // controller: model.emailController,
-                                                // onChanged: (value) => model.changePhoneNum(value),
-                                                style: GoogleFonts.varelaRound(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 16,
-                                                ),
-                                                decoration: InputDecoration(
-                                                  hintStyle: TextStyle(
-                                                    color: MainColors
-                                                        .hintTextColor,
-                                                  ),
-                                                  hintText: "Enter your degree",
-                                                  filled: true,
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            6),
-                                                    borderSide: BorderSide(
-                                                      color: Colors.blue,
-                                                    ),
-                                                  ),
-                                                  enabledBorder:
-                                                      OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            6),
-                                                    borderSide: BorderSide(
-                                                      color: Colors.blue,
-                                                    ),
-                                                  ),
-                                                  fillColor: Colors.white,
-                                                  contentPadding:
-                                                      const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 15.0,
-                                                          horizontal: 15),
-                                                  suffixIcon: model
-                                                          .emailController
-                                                          .text
-                                                          .isEmpty
-                                                      ? null
-                                                      : InkWell(
-                                                          onTap: () => model
-                                                              .emailController
-                                                              .clear(),
-                                                          child:
-                                                              Icon(Icons.clear),
-                                                        ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              model.removeDegrees(index);
-                                            },
-                                            child: Icon(
-                                              Icons.cancel,
-                                              color: Colors.red,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                    ],
-                                  );
-                                })
+                            buildListViewDegree(model),
+                            _buildTitle('Speciality'),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            _buildSpecialityTypeField(model, context),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            _buildTitle('Experience'),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            buildTextFieldForm(
+                                model,
+                                model.experienceTypeController,
+                                "Enter your experience"),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            _buildTitle('Graduated'),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            buildTextFieldForm(model, model.graduatedController,
+                                "Enter your graduated university"),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            _buildTitle('Description'),
+                            buildDescriptionForm(model),
                           ],
                         ),
                       ),
@@ -253,13 +198,175 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  Padding buildDescriptionForm(ProfilePageViewModel model) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        controller: model.descriptionController,
+        maxLines: 5,
+        style: GoogleFonts.varelaRound(
+          fontWeight: FontWeight.normal,
+          fontSize: 16,
+        ),
+        decoration: InputDecoration(
+          hintStyle: TextStyle(
+            color: MainColors.hintTextColor,
+          ),
+          hintText: "Enter description",
+          filled: true,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(
+              color: Colors.blue,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(
+              color: Colors.blue,
+            ),
+          ),
+          fillColor: Colors.white,
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
+          suffixIcon: model.descriptionController.text.isEmpty
+              ? null
+              : InkWell(
+                  onTap: () => model.descriptionController.clear(),
+                  child: Icon(Icons.clear),
+                ),
+        ),
+      ),
+    );
+  }
+
+  Padding buildTextFieldForm(ProfilePageViewModel model,
+      TextEditingController controller, String hintText) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8),
+      child: TextFormField(
+        // keyboardType: TextInputType.emailAddress,
+        controller: controller,
+        // onChanged: (value) => model.changePhoneNum(value),
+        style: GoogleFonts.varelaRound(
+          fontWeight: FontWeight.normal,
+          fontSize: 16,
+        ),
+        decoration: InputDecoration(
+          hintStyle: TextStyle(
+            color: MainColors.hintTextColor,
+          ),
+          hintText: hintText,
+          filled: true,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(
+              color: Colors.blue,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(
+              color: Colors.blue,
+            ),
+          ),
+          fillColor: Colors.white,
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
+          suffixIcon: controller.text.isEmpty
+              ? null
+              : InkWell(
+                  onTap: () => controller.clear(),
+                  child: Icon(Icons.clear),
+                ),
+        ),
+      ),
+    );
+  }
+
+  ListView buildListViewDegree(ProfilePageViewModel model) {
+    return ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: model.degrees.length,
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0, right: 8),
+                      child: TextFormField(
+                        // controller: model.emailController,
+                        // onChanged: (value) => model.changePhoneNum(value),
+                        style: GoogleFonts.varelaRound(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                        ),
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(
+                            color: MainColors.hintTextColor,
+                          ),
+                          hintText: "Enter your degree",
+                          filled: true,
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6),
+                            borderSide: BorderSide(
+                              color: Colors.blue,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6),
+                            borderSide: BorderSide(
+                              color: Colors.blue,
+                            ),
+                          ),
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 15.0, horizontal: 15),
+                          // suffixIcon: model
+                          //         .specialityTpeController
+                          //         .text
+                          //         .isEmpty
+                          //     ? null
+                          //     : InkWell(
+                          //         onTap: () => model
+                          //             .specialityTpeController
+                          //             .clear(),
+                          //         child:
+                          //             Icon(Icons.clear),
+                          //       ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      model.removeDegrees(index);
+                    },
+                    child: Icon(
+                      Icons.cancel,
+                      color: Colors.red,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          );
+        });
+  }
+
   Padding _buildDegreeTypeField(
       ProfilePageViewModel model, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8),
       child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
-        // controller: model.emailController,
+        // keyboardType: TextInputType.emailAddress,
+        controller: model.degreeController,
         // onChanged: (value) => model.changePhoneNum(value),
         style: GoogleFonts.varelaRound(
           fontWeight: FontWeight.normal,
@@ -286,10 +393,10 @@ class ProfilePage extends StatelessWidget {
           fillColor: Colors.white,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
-          suffixIcon: model.emailController.text.isEmpty
+          suffixIcon: model.degreeController.text.isEmpty
               ? null
               : InkWell(
-                  onTap: () => model.emailController.clear(),
+                  onTap: () => model.degreeController.clear(),
                   child: Icon(Icons.clear),
                 ),
         ),
@@ -745,6 +852,67 @@ class ProfilePage extends StatelessWidget {
             child: Text(
               "Save",
               style: TextStyle(color: Colors.white, fontSize: 18),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding _buildSpecialityTypeField(
+      ProfilePageViewModel model, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: GestureDetector(
+        onTap: () {
+          Picker(
+              adapter:
+                  PickerDataAdapter<String>(pickerdata: model.listSpeciality),
+              changeToFirst: false,
+              selecteds: [0],
+              hideHeader: false,
+              textAlign: TextAlign.center,
+              textStyle: const TextStyle(color: Colors.black, fontSize: 22),
+              selectedTextStyle: TextStyle(color: Colors.blue),
+              columnPadding: const EdgeInsets.all(8.0),
+              onConfirm: (Picker picker, List value) {
+                print(value.toString());
+                print(picker.adapter.text);
+                model.changeSpecialityType(picker.getSelectedValues().first);
+              }).showModal(context);
+        },
+        child: TextFormField(
+          controller: model.specialityTpeController,
+          // onChanged: (value) => model.changePhoneNum(value),
+          style: GoogleFonts.varelaRound(
+            fontWeight: FontWeight.normal,
+            fontSize: 16,
+          ),
+          decoration: InputDecoration(
+            hintText: "Choose Your Speciality",
+            filled: true,
+            enabled: false,
+            hintStyle: TextStyle(
+              color: MainColors.hintTextColor,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6),
+              borderSide: BorderSide(
+                color: Colors.blue,
+              ),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6),
+              borderSide: BorderSide(
+                color: Colors.blue,
+              ),
+            ),
+            fillColor: Colors.white,
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
+            suffixIcon: Icon(
+              Icons.arrow_drop_down,
+              color: Colors.blue,
             ),
           ),
         ),

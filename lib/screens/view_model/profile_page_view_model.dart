@@ -7,7 +7,11 @@ class ProfilePageViewModel extends BaseModel {
   TextEditingController _phoneNumController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _identityNumberController = TextEditingController();
-  TextEditingController _bloodTpeController = TextEditingController();
+  TextEditingController _specialityTpeController = TextEditingController();
+  TextEditingController _experienceTypeController = TextEditingController();
+  TextEditingController _graduatedController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _degreeController = TextEditingController();
 
   List<String> degrees = [];
 
@@ -16,9 +20,11 @@ class ProfilePageViewModel extends BaseModel {
   String _phoneNum = "";
   String _email = "";
   String _identityNum = "";
-  String _bloodType = "";
-  String _height = "";
-  String _weight = "";
+  String _specialityType = "";
+  String _experience = "";
+  String _graduated = "";
+  String _description = "";
+  String _degree = "";
 
   int _gender = 0;
   List _months = [
@@ -36,6 +42,13 @@ class ProfilePageViewModel extends BaseModel {
     'Dec'
   ];
 
+  List<String> listSpeciality = [
+    'Khoa nội',
+    'Khoa ngoại',
+    'Khoa nhi',
+    'Khoa sản'
+  ];
+
   //getter
   TextEditingController get fullNameController => _fullNameController;
   TextEditingController get dobController => _dobController;
@@ -43,16 +56,23 @@ class ProfilePageViewModel extends BaseModel {
   TextEditingController get emailController => _emailController;
   TextEditingController get identityNumberController =>
       _identityNumberController;
-  TextEditingController get bloodTpeController => _bloodTpeController;
+  TextEditingController get specialityTpeController => _specialityTpeController;
+  TextEditingController get experienceTypeController =>
+      _experienceTypeController;
+  TextEditingController get graduatedController => _graduatedController;
+  TextEditingController get descriptionController => _descriptionController;
+  TextEditingController get degreeController => _degreeController;
 
   String get fullName => _fullName;
   String get dob => _dob;
   String get phoneNum => _phoneNum;
   String get email => _email;
   String get identityNum => _identityNum;
-  String get bloodType => _bloodType;
-  String get height => _height;
-  String get weight => _weight;
+  String get specialityType => _specialityType;
+  String get experienceType => _experience;
+  String get graduated => _graduated;
+  String get description => _description;
+  String get degree => _degree;
 
   int get gender => _gender;
 
@@ -73,12 +93,31 @@ class ProfilePageViewModel extends BaseModel {
       _email = _emailController.text;
       notifyListeners();
     });
+    _descriptionController.addListener(() {
+      _description = _emailController.text;
+      notifyListeners();
+    });
+
+    _degreeController.addListener(() {
+      _degree = _degreeController.text;
+      notifyListeners();
+    });
+    _experienceTypeController.addListener(() {
+      _experience = _experienceTypeController.text;
+      notifyListeners();
+    });
+
+    _graduatedController.addListener(() {
+      _graduated = _graduatedController.text;
+      notifyListeners();
+    });
+
     _identityNumberController.addListener(() {
       _identityNum = _identityNumberController.text;
       notifyListeners();
     });
-    _bloodTpeController.addListener(() {
-      _bloodType = _bloodTpeController.text;
+    _specialityTpeController.addListener(() {
+      _specialityType = _specialityTpeController.text;
       notifyListeners();
     });
   }
@@ -106,6 +145,11 @@ class ProfilePageViewModel extends BaseModel {
   void removeDegrees(int index) {
     print(index);
     degrees.removeAt(index);
+    notifyListeners();
+  }
+
+  void changeSpecialityType(String type) {
+    _specialityTpeController.text = type;
     notifyListeners();
   }
 }
