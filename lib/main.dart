@@ -9,14 +9,14 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  var accountID = prefs.getInt('usAccountID');
+  var profileID = prefs.getInt('usProfileID');
 
   await setupLocator();
 
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: accountID == null ? LoginScreen() : LandingScreen(),
+      home: profileID == null ? LoginScreen() : LandingScreen(),
     ),
   );
 }
