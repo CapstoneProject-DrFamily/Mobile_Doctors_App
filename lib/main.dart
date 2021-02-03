@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_doctors_apps/screens/landing/landing_page.dart';
+import 'package:mobile_doctors_apps/screens/login/login_page.dart';
 
 import 'package:mobile_doctors_apps/service_locator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  setupLocator();
-  runApp(MyApp());
-}
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-class MyApp extends StatelessWidget {
-  //render
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false, home: LandingScreen());
-  }
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var accountID = prefs.getInt('usAccountID');
+
+  await setupLocator();
+
+  runApp(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: accountID == null ? LoginScreen() : LandingScreen(),
+    ),
+  );
 }

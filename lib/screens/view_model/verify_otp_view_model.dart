@@ -1,12 +1,21 @@
 import 'dart:async';
 
+import 'package:commons/commons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobile_doctors_apps/model/login/user_model.dart';
+import 'package:mobile_doctors_apps/repository/sign_in_repo.dart';
+import 'package:mobile_doctors_apps/screens/landing/landing_page.dart';
+import 'package:mobile_doctors_apps/screens/login/login_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VerifyOTPViewModel extends BaseModel {
+  final ISignInRepo _signInRepo = SignInRepo();
+
+  UserModel _userModel;
+
   FirebaseAuth _auth = FirebaseAuth.instance;
   String _smsOTP;
   String _verificationId;
@@ -51,8 +60,8 @@ class VerifyOTPViewModel extends BaseModel {
         } else {
           _start--;
           if (_start == 58) {
-            // verifyPhone(_phoneNum);
-            print(_phoneNum);
+            verifyPhone(_phoneNum);
+            // print(_phoneNum);
           }
           notifyListeners();
         }
@@ -176,14 +185,62 @@ class VerifyOTPViewModel extends BaseModel {
   void submitOTP(BuildContext context) async {
     _smsOTP = _number1 + _number2 + _number3 + _number4 + _number5 + _number6;
     try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+
       final AuthCredential credential = PhoneAuthProvider.getCredential(
           verificationId: _verificationId, smsCode: _smsOTP);
+      waitDialog(context);
       await _auth.signInWithCredential(credential).then(
         (value) async {
-          if (value.user != null)
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) {}),
-                (Route<dynamic> route) => false);
+          if (value.user != null) {
+            print("verify Success");
+            _userModel = await _signInRepo.getLoginUser("84" + _phoneNum, "3");
+
+            if (_userModel != null) {
+              prefs.setInt("usProfileID", _userModel.profileId);
+              prefs.setString("usToken", _userModel.token);
+              prefs.setString("usRole", _userModel.role);
+              prefs.setInt("usAccountID", _userModel.userId);
+
+              var waiting = _userModel.waiting;
+
+              if (waiting == false && _userModel.profileId != null) {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => LandingScreen()),
+                    (Route<dynamic> route) => false);
+              } else if (waiting == true && _userModel.profileId != null) {
+                Fluttertoast.showToast(
+                  msg: "Waiting for your account to be active",
+                  textColor: Colors.red,
+                  toastLength: Toast.LENGTH_SHORT,
+                  backgroundColor: Colors.white,
+                  gravity: ToastGravity.CENTER,
+                );
+              } else if (waiting == true && _userModel.profileId == null) {
+                Fluttertoast.showToast(
+                  msg: "Createing your account",
+                  textColor: Colors.red,
+                  toastLength: Toast.LENGTH_SHORT,
+                  backgroundColor: Colors.white,
+                  gravity: ToastGravity.CENTER,
+                );
+              }
+            } else {
+              await prefs.clear();
+
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                  (Route<dynamic> route) => false);
+
+              Fluttertoast.showToast(
+                msg: "Your account have been Block or try logged in user app",
+                textColor: Colors.red,
+                toastLength: Toast.LENGTH_LONG,
+                backgroundColor: Colors.white,
+                gravity: ToastGravity.CENTER,
+              );
+            }
+          }
         },
       );
     } catch (e) {
@@ -237,6 +294,57 @@ class VerifyOTPViewModel extends BaseModel {
       handleError(e);
       errorMessage = e.toString();
       notifyListeners();
+    }
+  }
+
+  void checkLoginAPI(BuildContext context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    waitDialog(context);
+
+    _userModel = await _signInRepo.getLoginUser("84" + _phoneNum, "3");
+
+    if (_userModel != null) {
+      prefs.setInt("usProfileID", _userModel.profileId);
+      prefs.setString("usToken", _userModel.token);
+      prefs.setString("usRole", _userModel.role);
+
+      var waiting = _userModel.waiting;
+
+      if (waiting == false && _userModel.profileId != null) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => LandingScreen()),
+            (Route<dynamic> route) => false);
+      } else if (waiting == true && _userModel.profileId != null) {
+        Fluttertoast.showToast(
+          msg: "Waiting for your account to be active",
+          textColor: Colors.red,
+          toastLength: Toast.LENGTH_SHORT,
+          backgroundColor: Colors.white,
+          gravity: ToastGravity.CENTER,
+        );
+      } else if (waiting == true && _userModel.profileId == null) {
+        Fluttertoast.showToast(
+          msg: "Createing your account",
+          textColor: Colors.red,
+          toastLength: Toast.LENGTH_SHORT,
+          backgroundColor: Colors.white,
+          gravity: ToastGravity.CENTER,
+        );
+      }
+    } else {
+      await prefs.clear();
+
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+          (Route<dynamic> route) => false);
+
+      Fluttertoast.showToast(
+        msg: "Your account have been Block or try logged in user app",
+        textColor: Colors.red,
+        toastLength: Toast.LENGTH_LONG,
+        backgroundColor: Colors.white,
+        gravity: ToastGravity.CENTER,
+      );
     }
   }
 }

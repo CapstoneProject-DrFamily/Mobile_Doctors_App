@@ -11,19 +11,23 @@ class SignInViewModel extends BaseModel {
   Validate get phoneNum => _phoneNum;
 
   Future storePhone(BuildContext context) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setString("usPhone", phoneNum.value);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => VerifyOtpScreen(),
-      ),
-    );
+    if (_phoneNum.value != null) {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      pref.setString("usPhone", phoneNum.value);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VerifyOtpScreen(),
+        ),
+      );
+    } else {
+      return;
+    }
   }
 
   void changePhoneNum(String value) {
-    if (value.length <= 3 || value.length > 10) {
-      _phoneNum = Validate(null, "Input Must Be > 3 number and < 10 number");
+    if (value.length < 9) {
+      _phoneNum = Validate(null, "Require at least 9 number");
     } else {
       _phoneNum = Validate(value, null);
     }
