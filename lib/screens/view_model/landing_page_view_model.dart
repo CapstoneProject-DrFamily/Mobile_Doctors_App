@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_doctors_apps/screens/home/home_page.dart';
 import 'package:mobile_doctors_apps/screens/setting/setting_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LandingPageViewModel extends BaseModel {
   PageController _pageController = PageController();
@@ -17,6 +18,24 @@ class LandingPageViewModel extends BaseModel {
     Text('3'),
     SettingPage(),
   ];
+
+  LandingPageViewModel() {
+    init();
+  }
+
+  Future<void> init() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String phone = prefs.getString("usPhone");
+    int profileID = prefs.get("usProfileID");
+    int userID = prefs.get("usAccountID");
+
+    print("Phone: " +
+        phone +
+        " ProfileID: " +
+        profileID.toString() +
+        " AccountID: " +
+        userID.toString());
+  }
 
   List<BottomNavyBarItem> _listItem = [
     BottomNavyBarItem(

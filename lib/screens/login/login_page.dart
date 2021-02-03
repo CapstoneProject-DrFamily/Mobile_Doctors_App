@@ -30,8 +30,8 @@ class LoginScreen extends StatelessWidget {
                               color: Colors.white,
                               height: 350.0,
                               width: double.infinity,
-                              child: Image.network(
-                                ImagesLinks.loginWave,
+                              child: Image.asset(
+                                'assets/waves.png',
                                 fit: BoxFit.fill,
                               ),
                             ),
@@ -104,6 +104,7 @@ class LoginScreen extends StatelessWidget {
               enabled: false,
               decoration: InputDecoration(
                 filled: false,
+                errorText: model.phoneNum.error,
                 contentPadding: new EdgeInsets.symmetric(
                   vertical: 14.2,
                 ),
@@ -127,8 +128,11 @@ class LoginScreen extends StatelessWidget {
               onChanged: (value) => model.changePhoneNum(value),
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
+              maxLength: 10,
               style: TextStyle(fontSize: 20),
               decoration: InputDecoration(
+                errorText: model.phoneNum.error,
+                counterText: "",
                 hintText: 'Enter your Number',
                 filled: false,
                 focusedBorder: UnderlineInputBorder(
@@ -190,8 +194,8 @@ class LoginScreen extends StatelessWidget {
       child: Container(
         width: 150,
         height: 150,
-        child: Image.network(
-          ImagesLinks.wordLogoLink,
+        child: Image.asset(
+          'assets/logo_doctor.png',
           fit: BoxFit.contain,
         ),
       ),
