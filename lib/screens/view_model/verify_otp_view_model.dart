@@ -246,6 +246,8 @@ class VerifyOTPViewModel extends BaseModel {
     } catch (e) {
       print("${e.toString()}");
       FocusScope.of(context).unfocus();
+      Navigator.of(context).pop();
+
       Fluttertoast.showToast(
         msg: "Invalid OTP",
         textColor: Colors.red,
@@ -337,7 +339,6 @@ class VerifyOTPViewModel extends BaseModel {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => LoginScreen()),
           (Route<dynamic> route) => false);
-
       Fluttertoast.showToast(
         msg: "Your account have been Block or try logged in user app",
         textColor: Colors.red,

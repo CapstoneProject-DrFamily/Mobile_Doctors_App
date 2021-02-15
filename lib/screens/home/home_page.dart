@@ -43,6 +43,8 @@ class HomePage extends StatelessWidget {
                           model.isFinding(true);
                           bool result = await model.activeDoc();
                           if (result) {
+                            model.makeDoctorOnline();
+                            model.getLocationLiveUpdates();
                             print('success');
                             model.isActive(true);
                             model.isConnecting(false);
@@ -69,6 +71,7 @@ class HomePage extends StatelessWidget {
                               text: "Your transaction was successful!",
                               backgroundColor: Colors.lightBlue[200],
                               onConfirmBtnTap: () {
+                                model.cancelRequest();
                                 model.isConnecting(false);
                                 model.isActive(false);
                                 model.isFinding(false);
