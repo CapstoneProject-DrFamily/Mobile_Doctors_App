@@ -125,9 +125,6 @@ class HomePageViewModel extends BaseModel {
     } catch (e) {
       print("error");
     }
-    Geofire.initialize("availableDoctors");
-    Geofire.setLocation(
-        _firebaseuser.uid, position.latitude, position.longitude);
 
     _doctorRequest.onValue.listen((event) {});
   }
@@ -137,8 +134,17 @@ class HomePageViewModel extends BaseModel {
     String userId = _firebaseuser.uid;
 
     homeTabPageStreamSubscription = geolocator.Geolocator.getPositionStream()
-        .listen((geolocator.Position position) {
-      Geofire.setLocation(userId, position.latitude, position.longitude);
+        .listen((geolocator.Position position) async {
+      geolocator.Position position =
+          await geolocator.Geolocator.getCurrentPosition(
+              desiredAccuracy: geolocator.LocationAccuracy.high);
+      Map doctorLocation = {
+        "latitude": position.latitude.toString(),
+        "longtitude": position.longitude.toString(),
+      };
+      _doctorRequest.child(userId).update({
+        "pickup": doctorLocation,
+      });
     });
   }
 
@@ -147,7 +153,7 @@ class HomePageViewModel extends BaseModel {
     String userId = _firebaseuser.uid;
     homeTabPageStreamSubscription.pause();
     Geofire.removeLocation(userId);
-    await _doctorRequest.remove();
+    await _doctorRequest.child(userId).remove();
   }
 
   Future<bool> loadPatient() async {
