@@ -12,6 +12,7 @@ import 'package:mobile_doctors_apps/screens/view_model/sample_page_view_model.da
 import 'package:mobile_doctors_apps/screens/view_model/sample_pop_up_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/setting_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/sign_in_view_model.dart';
+import 'package:mobile_doctors_apps/screens/view_model/sign_up_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/verify_otp_view_model.dart';
 
 GetIt locator = GetIt.asNewInstance();
@@ -32,4 +33,5 @@ void setupLocator() {
   locator.registerFactory<DiagnosePageViewModel>(() => DiagnosePageViewModel());
   locator.registerFactory<ProfilePageViewModel>(() => ProfilePageViewModel());
   locator.registerFactory<SettingViewModel>(() => SettingViewModel());
+  locator.registerFactory<SignUpViewModel>(() => SignUpViewModel());
 }
