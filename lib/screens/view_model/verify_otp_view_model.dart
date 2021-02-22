@@ -9,6 +9,7 @@ import 'package:mobile_doctors_apps/repository/sign_in_repo.dart';
 import 'package:mobile_doctors_apps/screens/landing/landing_page.dart';
 import 'package:mobile_doctors_apps/screens/login/login_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
+import 'package:mobile_doctors_apps/screens/sign_up/sign_up.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VerifyOTPViewModel extends BaseModel {
@@ -217,6 +218,10 @@ class VerifyOTPViewModel extends BaseModel {
                   gravity: ToastGravity.CENTER,
                 );
               } else if (waiting == true && _userModel.profileId == null) {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => SignUpPage()),
+                    (Route<dynamic> route) => false);
+
                 Fluttertoast.showToast(
                   msg: "Createing your account",
                   textColor: Colors.red,
