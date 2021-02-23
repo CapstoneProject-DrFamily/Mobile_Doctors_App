@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
                           model.isFinding(true);
                           bool result = await model.activeDoc();
                           if (result) {
-                            model.makeDoctorOnline();
+                            // model.makeDoctorOnline();
                             model.getLocationLiveUpdates();
                             print('success');
                             model.isActive(true);
