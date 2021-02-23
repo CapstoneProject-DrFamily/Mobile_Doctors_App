@@ -1,4 +1,4 @@
-import 'package:mobile_doctors_apps/model/speciality.dart';
+import 'package:mobile_doctors_apps/model/specialty_model.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 
 class AnalyzePageViewModel extends BaseModel {

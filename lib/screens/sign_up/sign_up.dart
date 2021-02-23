@@ -121,7 +121,7 @@ class SignUpPage extends StatelessWidget {
           radius: 80.0,
           backgroundImage: (model.image != null
               ? FileImage(model.image)
-              : AssetImage(model.defaultImage)),
+              : NetworkImage(model.defaultImage)),
           child: Align(
             alignment: Alignment.bottomRight,
             child: CircleAvatar(
