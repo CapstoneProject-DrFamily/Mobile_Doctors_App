@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
+import 'package:mobile_doctors_apps/helper/pushnotifycation_service.dart';
 import 'package:mobile_doctors_apps/model/request_doctor_model.dart';
 import 'package:mobile_doctors_apps/repository/doctor_repo.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
@@ -70,6 +70,7 @@ class HomePageViewModel extends BaseModel {
     _firebaseuser = await FirebaseAuth.instance.currentUser();
     String userId = _firebaseuser.uid;
     print(userId);
+    PushNotifycationService pushNotifycationService = PushNotifycationService();
 
     _doctorRequest =
         FirebaseDatabase.instance.reference().child("Doctor Request");
@@ -93,6 +94,9 @@ class HomePageViewModel extends BaseModel {
     }
 
     // if (await Permission.speech.isPermanentlyDenied) {}
+    await pushNotifycationService.initialize();
+
+    String tokenNoti = await pushNotifycationService.getToken();
 
     Map doctorLocation = {
       "latitude": position.latitude.toString(),
@@ -107,6 +111,7 @@ class HomePageViewModel extends BaseModel {
       "doctor_image": _doctorModel.doctorImage,
       "doctor_specialty": _doctorModel.doctorSpecialty,
       "doctor_status": "waiting",
+      "token": tokenNoti,
     };
 
     _doctorRequest.child(userId).set(doctorRequestInfo);
@@ -152,7 +157,6 @@ class HomePageViewModel extends BaseModel {
     _firebaseuser = await FirebaseAuth.instance.currentUser();
     String userId = _firebaseuser.uid;
     homeTabPageStreamSubscription.pause();
-    Geofire.removeLocation(userId);
     await _doctorRequest.child(userId).remove();
   }
 
