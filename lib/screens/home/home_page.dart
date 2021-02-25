@@ -2,7 +2,9 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:get/get.dart';
 import 'package:loading_button/loading_button.dart';
+import 'package:mobile_doctors_apps/helper/pushnotifycation_service.dart';
 import 'package:mobile_doctors_apps/screens/medicine/medicine_list_page.dart';
 import 'package:mobile_doctors_apps/screens/patient/patient_detail_page.dart';
 
@@ -12,8 +14,6 @@ import 'package:mobile_doctors_apps/themes/colors.dart';
 import 'dart:ui' as ui;
 
 class HomePage extends StatelessWidget {
-  int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 5;
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -147,7 +147,7 @@ class HomePage extends StatelessWidget {
                             Expanded(
                               child: Container(
                                 child: ListView.builder(
-                                  itemCount: 4,
+                                  itemCount: model.listTransaction.length,
                                   itemBuilder: (context, index) {
                                     return Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -212,7 +212,11 @@ class HomePage extends StatelessWidget {
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
-                                                      Text('Nguyễn Thị A',
+                                                      Text(
+                                                          model
+                                                              .listTransaction[
+                                                                  index]
+                                                              .patientName,
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.white,
@@ -237,7 +241,13 @@ class HomePage extends StatelessWidget {
                                                                       0,
                                                                       0),
                                                               child: Text(
-                                                                  '263 Hoàng Hoa Thám, P4, Q5, TP. Hà Nội',
+                                                                  model
+                                                                      .listTransaction[
+                                                                          index]
+                                                                      .locationName,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
                                                                   style: TextStyle(
                                                                       color: Colors
                                                                           .white,
@@ -266,7 +276,10 @@ class HomePage extends StatelessWidget {
                                                                       0,
                                                                       0),
                                                               child: Text(
-                                                                  'Đau đầu',
+                                                                  model
+                                                                      .listTransaction[
+                                                                          index]
+                                                                      .symptomName,
                                                                   style: TextStyle(
                                                                       color: Colors
                                                                           .white,
@@ -302,12 +315,12 @@ class HomePage extends StatelessWidget {
                                                                             18.0),
                                                               ),
                                                               onPressed: () {
-                                                                Navigator.push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) =>
-                                                                                PatientDetailPage()));
+                                                                // Navigator.push(
+                                                                //     context,
+                                                                //     MaterialPageRoute(
+                                                                //         builder:
+                                                                //             (context) =>
+                                                                //                 PatientDetailPage()));
                                                               },
                                                             ),
                                                           ),
@@ -325,12 +338,19 @@ class HomePage extends StatelessWidget {
                                                                           18.0),
                                                             ),
                                                             onPressed: () {
-                                                              Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              MedicineListPage()));
+                                                              model.cancelTransaction(model
+                                                                  .listTransaction[
+                                                                      index]
+                                                                  .transactionId);
+                                                              // Get.to(
+                                                              //     MedicineListPage());
+
+                                                              // Navigator.push(
+                                                              //     context,
+                                                              //     MaterialPageRoute(
+                                                              //         builder:
+                                                              //             (context) =>
+                                                              //                 MedicineListPage()));
                                                             },
                                                           )
                                                         ],
@@ -349,7 +369,8 @@ class HomePage extends StatelessWidget {
                                                       Icon(Icons.location_on,
                                                           color: MainColors
                                                               .blueEnd),
-                                                      Text('4.8 km',
+                                                      Text(
+                                                          '${model.listTransaction[index].distance} km',
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.white,
@@ -359,7 +380,16 @@ class HomePage extends StatelessWidget {
                                                                       .bold)),
                                                       SizedBox(height: 10),
                                                       CountdownTimer(
-                                                          endTime: endTime,
+                                                          endTime: model
+                                                              .listTransaction[
+                                                                  index]
+                                                              .endTime,
+                                                          onEnd: () {
+                                                            model.cancelTransaction(model
+                                                                .listTransaction[
+                                                                    index]
+                                                                .transactionId);
+                                                          },
                                                           widgetBuilder:
                                                               (_, time) {
                                                             if (time == null) {

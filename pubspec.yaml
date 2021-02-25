@@ -54,6 +54,7 @@ dependencies:
   permission_handler: ^5.1.0+2
   flutter_geofire: ^1.0.3
   firebase_messaging: ^6.0.16
+  get: ^3.25.4
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
 
@@ -61,7 +62,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-# For information on the generic Dart part of this file, see the
+# For information on the generic Dart part of this file, see the5
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
