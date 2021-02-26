@@ -1,6 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
+import 'package:mobile_doctors_apps/screens/view_model/home_page_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/landing_page_view_model.dart';
 
 class LandingScreen extends StatelessWidget {
@@ -13,10 +14,8 @@ class LandingScreen extends StatelessWidget {
           // resizeToAvoidBottomInset: false,
           // resizeToAvoidBottomPadding: false,
           body: PageView(
+            physics: NeverScrollableScrollPhysics(),
             controller: model.pageController,
-            onPageChanged: (index) {
-              model.changeTab(index);
-            },
             children: [
               model.page[0],
               model.page[1],
@@ -29,9 +28,12 @@ class LandingScreen extends StatelessWidget {
             selectedIndex: model.currentIndex,
             showElevation: true,
             onItemSelected: (index) {
-              print(index);
-              model.changeTab(index);
-              model.pageController.jumpToPage(index);
+              if (HomePageViewModel.checkStatus) {
+                print("Block");
+              } else {
+                model.changeTab(index);
+                model.pageController.jumpToPage(index);
+              }
             },
             items: [
               model.listItem[0],

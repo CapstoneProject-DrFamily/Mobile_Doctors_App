@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile_doctors_apps/screens/landing/landing_page.dart';
 import 'package:mobile_doctors_apps/screens/login/login_page.dart';
 
@@ -14,7 +15,7 @@ Future<void> main() async {
   await setupLocator();
 
   runApp(
-    MaterialApp(
+    GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: profileID == null ? LoginScreen() : LandingScreen(),
     ),
