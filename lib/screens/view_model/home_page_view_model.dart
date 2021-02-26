@@ -7,6 +7,7 @@ import 'package:mobile_doctors_apps/helper/pushnotifycation_service.dart';
 import 'package:mobile_doctors_apps/model/request_doctor_model.dart';
 import 'package:mobile_doctors_apps/model/transaction_basic_model.dart';
 import 'package:mobile_doctors_apps/repository/doctor_repo.dart';
+import 'package:mobile_doctors_apps/repository/notify_repo.dart';
 import 'package:mobile_doctors_apps/repository/transaction_repo.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -14,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePageViewModel extends BaseModel {
   final IDoctorRepo _doctorRepo = DoctorRepo();
+  final INotifyRepo _notifyRepo = NotifyRepo();
   final ITransactionRepo _transactionRepo = TransactionRepo();
 
   FirebaseUser _firebaseuser;
@@ -23,6 +25,8 @@ class HomePageViewModel extends BaseModel {
 
   RequestDoctorModel _doctorModel;
   RequestDoctorModel get doctorModel => _doctorModel;
+
+  static bool checkStatus = false;
 
   bool connecting = false;
   bool active = false;
@@ -41,6 +45,7 @@ class HomePageViewModel extends BaseModel {
 
   isActive(bool active) {
     this.active = active;
+    checkStatus = active;
     notifyListeners();
   }
 
@@ -79,6 +84,7 @@ class HomePageViewModel extends BaseModel {
         String status = dataSnapshot.value['doctor_status'];
         if (status != null) {
           this.active = true;
+          checkStatus = true;
           this.finding = true;
           getLocationLiveUpdates();
         }
@@ -100,12 +106,11 @@ class HomePageViewModel extends BaseModel {
   Future<bool> activeDoc() async {
     _firebaseuser = await FirebaseAuth.instance.currentUser();
     String userId = _firebaseuser.uid;
-    print(userId);
+    print('Firebase ID $userId');
     PushNotifycationService pushNotifycationService = PushNotifycationService();
 
     _doctorRequest =
         FirebaseDatabase.instance.reference().child("Doctor Request");
-    // print("oke" + FirebaseDatabase.instance.databaseURL);
 
     geolocator.Position position;
     try {
@@ -179,7 +184,11 @@ class HomePageViewModel extends BaseModel {
           PushNotifycationService.transaction.length) {
         //add transaction
         addTransaction(position.longitude, position.latitude);
-      } else {}
+      } else if (_listTempTransaction.length >
+          PushNotifycationService.transaction.length) {
+        String removeTransaction = PushNotifycationService.transactionRemove;
+        patientCancelTransaction(removeTransaction);
+      }
 
       Map doctorLocation = {
         "latitude": position.latitude.toString(),
@@ -191,7 +200,7 @@ class HomePageViewModel extends BaseModel {
     });
   }
 
-  Future<void> cancelRequest() async {
+  Future<void> offlineDoctor() async {
     _firebaseuser = await FirebaseAuth.instance.currentUser();
     String userId = _firebaseuser.uid;
     await homeTabPageStreamSubscription?.cancel();
@@ -232,15 +241,45 @@ class HomePageViewModel extends BaseModel {
     notifyListeners();
   }
 
+  void patientCancelTransaction(String transactionID) {
+    _listTempTransaction.removeWhere((element) => element == transactionID);
+    _listTransaction
+        .removeWhere((element) => element.transactionId == transactionID);
+    notifyListeners();
+  }
+
   Future<void> cancelTransaction(String transactionID) async {
     print("in cacel");
+    int indexTransaction = PushNotifycationService.transaction
+        .indexWhere((element) => element.transactionID == transactionID);
+    String tokenPatient =
+        PushNotifycationService.transaction[indexTransaction].notifyToken;
+    await _notifyRepo.cancelTransaction(tokenPatient, transactionID);
     PushNotifycationService.transaction
         .removeWhere((element) => element.transactionID == transactionID);
     _listTempTransaction.removeWhere((element) => element == transactionID);
     _listTransaction
         .removeWhere((element) => element.transactionId == transactionID);
+
     print(
         'List ${PushNotifycationService.transaction.length}  ${_listTempTransaction.length}  ${_listTransaction.length}');
+    notifyListeners();
+  }
+
+  Future<void> acceptTransaction(String transactionID) async {
+    int indexTransaction = PushNotifycationService.transaction
+        .indexWhere((element) => element.transactionID == transactionID);
+    String tokenPatient =
+        PushNotifycationService.transaction[indexTransaction].notifyToken;
+    await _notifyRepo.acceptTransaction(tokenPatient, transactionID);
+    print(transactionID);
+    await offlineDoctor();
+    isConnecting(false);
+    isActive(false);
+    isFinding(false);
+    PushNotifycationService.transaction = [];
+    _listTempTransaction = [];
+    _listTransaction = [];
     notifyListeners();
   }
 }

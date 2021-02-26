@@ -1,8 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:get/get.dart';
 
 class PushNotifycationService {
   static List<TransactionNoti> transaction = [];
+  static String transactionRemove;
   final FirebaseMessaging fcm = FirebaseMessaging();
 
   Future initialize() async {
@@ -12,16 +12,16 @@ class PushNotifycationService {
         print(message);
         String typeNoti = message['data']['type'];
         print('typeNoti $typeNoti');
-        print(typeNoti.endsWith("booking"));
         if (typeNoti.endsWith("booking")) {
-          var transactionId = message['data']['transactionId'];
-          var notifyToken = message['data']['notiToken'];
-          print('noti $transactionId $notifyToken');
-          TransactionNoti transactionNoti = TransactionNoti(
-              transactionID: transactionId, notifyToken: notifyToken);
-          transaction.add(transactionNoti);
-          print("lenght: ${transaction.length}");
-          print(Get.context);
+          String status = message['data']['status'];
+          if (status.endsWith("waiting")) {
+            bookTransaction(message);
+          } else if (status.endsWith("cancel")) {
+            var transactionId = message['data']['transactionId'];
+            transactionRemove = transactionId;
+            transaction.removeWhere(
+                (element) => element.transactionID == transactionRemove);
+          }
           print('booking');
         }
       },
@@ -54,6 +54,16 @@ class PushNotifycationService {
     fcm.subscribeToTopic('allUsers');
 
     return token;
+  }
+
+  void bookTransaction(Map<String, dynamic> message) {
+    var transactionId = message['data']['transactionId'];
+    var notifyToken = message['data']['notiToken'];
+
+    TransactionNoti transactionNoti =
+        TransactionNoti(transactionID: transactionId, notifyToken: notifyToken);
+    transaction.add(transactionNoti);
+    print("notiTransLengh: ${transaction.length}");
   }
 }
 

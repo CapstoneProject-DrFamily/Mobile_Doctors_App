@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_doctors_apps/screens/home/home_page.dart';
 import 'package:mobile_doctors_apps/screens/setting/setting_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mobile_doctors_apps/screens/view_model/home_page_view_model.dart';
 
 class LandingPageViewModel extends BaseModel {
   PageController _pageController = PageController();

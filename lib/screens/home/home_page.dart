@@ -71,7 +71,7 @@ class HomePage extends StatelessWidget {
                               text: "Your transaction was successful!",
                               backgroundColor: Colors.lightBlue[200],
                               onConfirmBtnTap: () {
-                                model.cancelRequest();
+                                model.offlineDoctor();
                                 model.isConnecting(false);
                                 model.isActive(false);
                                 model.isFinding(false);
@@ -315,6 +315,10 @@ class HomePage extends StatelessWidget {
                                                                             18.0),
                                                               ),
                                                               onPressed: () {
+                                                                model.acceptTransaction(model
+                                                                    .listTransaction[
+                                                                        index]
+                                                                    .transactionId);
                                                                 // Navigator.push(
                                                                 //     context,
                                                                 //     MaterialPageRoute(
@@ -384,11 +388,16 @@ class HomePage extends StatelessWidget {
                                                               .listTransaction[
                                                                   index]
                                                               .endTime,
-                                                          onEnd: () {
-                                                            model.cancelTransaction(model
-                                                                .listTransaction[
-                                                                    index]
-                                                                .transactionId);
+                                                          onEnd: () async {
+                                                            if (model
+                                                                    .listTransaction
+                                                                    .length >
+                                                                0) {
+                                                              await model.cancelTransaction(model
+                                                                  .listTransaction[
+                                                                      index]
+                                                                  .transactionId);
+                                                            }
                                                           },
                                                           widgetBuilder:
                                                               (_, time) {
