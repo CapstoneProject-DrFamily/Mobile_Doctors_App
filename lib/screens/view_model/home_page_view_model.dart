@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -68,7 +69,9 @@ class HomePageViewModel extends BaseModel {
     int userID = prefs.get("usAccountID");
 
     _doctorModel = await _doctorRepo.getSimpleInfo(profileID);
-
+    prefs.setString("usImage", _doctorModel.doctorImage);
+    prefs.setString("usName", _doctorModel.doctorName);
+    prefs.setInt("doctorId", _doctorModel.doctorId);
     if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
       // Use location.
     }
