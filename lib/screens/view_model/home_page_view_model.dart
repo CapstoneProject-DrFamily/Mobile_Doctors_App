@@ -1,15 +1,21 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
+import 'package:get/get.dart';
 import 'package:mobile_doctors_apps/helper/pushnotifycation_service.dart';
 import 'package:mobile_doctors_apps/model/request_doctor_model.dart';
 import 'package:mobile_doctors_apps/model/transaction_basic_model.dart';
 import 'package:mobile_doctors_apps/repository/doctor_repo.dart';
 import 'package:mobile_doctors_apps/repository/notify_repo.dart';
 import 'package:mobile_doctors_apps/repository/transaction_repo.dart';
+import 'package:mobile_doctors_apps/screens/home/map_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
+import 'package:mobile_doctors_apps/screens/view_model/map_page_view_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -266,13 +272,17 @@ class HomePageViewModel extends BaseModel {
     notifyListeners();
   }
 
-  Future<void> acceptTransaction(String transactionID) async {
+  Future<void> acceptTransaction(
+      String transactionID, BuildContext context) async {
     int indexTransaction = PushNotifycationService.transaction
         .indexWhere((element) => element.transactionID == transactionID);
     String tokenPatient =
         PushNotifycationService.transaction[indexTransaction].notifyToken;
-    await _notifyRepo.acceptTransaction(tokenPatient, transactionID);
-    print(transactionID);
+    // await _notifyRepo.acceptTransaction(tokenPatient, transactionID);
+    int indexInTransaction = _listTransaction
+        .indexWhere((element) => element.transactionId == transactionID);
+    var transaction = _listTransaction[indexInTransaction];
+
     await offlineDoctor();
     isConnecting(false);
     isActive(false);
@@ -281,5 +291,13 @@ class HomePageViewModel extends BaseModel {
     _listTempTransaction = [];
     _listTransaction = [];
     notifyListeners();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MapPage(
+          model: MapPageViewModel(transaction),
+        ),
+      ),
+    );
   }
 }

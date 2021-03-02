@@ -2,12 +2,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
-import 'package:get/get.dart';
 import 'package:loading_button/loading_button.dart';
-import 'package:mobile_doctors_apps/helper/pushnotifycation_service.dart';
-import 'package:mobile_doctors_apps/screens/medicine/medicine_list_page.dart';
-import 'package:mobile_doctors_apps/screens/patient/patient_detail_page.dart';
-
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/home_page_view_model.dart';
 import 'package:mobile_doctors_apps/themes/colors.dart';
@@ -16,7 +11,6 @@ import 'dart:ui' as ui;
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return BaseView<HomePageViewModel>(builder: (context, child, model) {
       return SafeArea(
         child: Container(
@@ -196,7 +190,10 @@ class HomePage extends StatelessWidget {
                                                   child: CircleAvatar(
                                                     backgroundImage:
                                                         NetworkImage(
-                                                      'https://gocsuckhoe.com/wp-content/uploads/2020/09/avatar-facebook.jpg',
+                                                      model
+                                                          .listTransaction[
+                                                              index]
+                                                          .patientImage,
                                                     ),
                                                     radius: 35,
                                                     backgroundColor:
@@ -248,6 +245,7 @@ class HomePage extends StatelessWidget {
                                                                   overflow:
                                                                       TextOverflow
                                                                           .ellipsis,
+                                                                  maxLines: 2,
                                                                   style: TextStyle(
                                                                       color: Colors
                                                                           .white,
@@ -280,6 +278,10 @@ class HomePage extends StatelessWidget {
                                                                       .listTransaction[
                                                                           index]
                                                                       .symptomName,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  maxLines: 2,
                                                                   style: TextStyle(
                                                                       color: Colors
                                                                           .white,
@@ -315,10 +317,12 @@ class HomePage extends StatelessWidget {
                                                                             18.0),
                                                               ),
                                                               onPressed: () {
-                                                                model.acceptTransaction(model
-                                                                    .listTransaction[
-                                                                        index]
-                                                                    .transactionId);
+                                                                model.acceptTransaction(
+                                                                    model
+                                                                        .listTransaction[
+                                                                            index]
+                                                                        .transactionId,
+                                                                    context);
                                                                 // Navigator.push(
                                                                 //     context,
                                                                 //     MaterialPageRoute(
@@ -509,7 +513,7 @@ class CustomCardShapePainter extends CustomPainter {
   final Color startColor;
   final Color endColor;
 
-  CustomCardShapePainter(this.radius, this.startColor, this.endColor) {}
+  CustomCardShapePainter(this.radius, this.startColor, this.endColor);
 
   @override
   void paint(Canvas canvas, Size size) {
