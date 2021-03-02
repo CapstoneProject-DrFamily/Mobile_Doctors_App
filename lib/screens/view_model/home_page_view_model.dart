@@ -74,7 +74,9 @@ class HomePageViewModel extends BaseModel {
     int userID = prefs.get("usAccountID");
 
     _doctorModel = await _doctorRepo.getSimpleInfo(profileID);
-
+    prefs.setString("usImage", _doctorModel.doctorImage);
+    prefs.setString("usName", _doctorModel.doctorName);
+    prefs.setInt("doctorId", _doctorModel.doctorId);
     if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
       // Use location.
     }

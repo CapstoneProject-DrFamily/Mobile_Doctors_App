@@ -3,10 +3,13 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:mobile_doctors_apps/helper/api_helper.dart';
+import 'package:mobile_doctors_apps/model/doctor_detail.dart';
 import 'package:mobile_doctors_apps/model/request_doctor_model.dart';
+import 'package:mobile_doctors_apps/model/user_profile.dart';
 
 abstract class IDoctorRepo {
   Future<RequestDoctorModel> getSimpleInfo(int profileId);
+  Future<List<dynamic>> getDoctorDetail(int doctorId);
 }
 
 class DoctorRepo extends IDoctorRepo {
@@ -31,5 +34,25 @@ class DoctorRepo extends IDoctorRepo {
     } else {
       return null;
     }
+  }
+
+  @override
+  Future<List<dynamic>> getDoctorDetail(int doctorId) async {
+    List list = [];
+    String urlAPI = APIHelper.URI_PREFIX_API;
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    var uri = Uri.http(urlAPI, "/api/v1/Doctors/$doctorId");
+    var response = await http.get(uri, headers: header);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> doctorData = jsonDecode(response.body);
+      DoctorDetail doctor = DoctorDetail.fromJson(doctorData);
+      UserProfile profile = UserProfile.fromJson(doctorData['profile']);
+      list.add(doctor);
+      list.add(profile);
+    }
+    return list;
   }
 }
