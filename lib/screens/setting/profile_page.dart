@@ -12,10 +12,10 @@ import 'package:mobile_doctors_apps/themes/colors.dart';
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BaseView<ProfilePageViewModel>(
-        builder: (context, child, model) {
-          return SingleChildScrollView(
+    return BaseView<ProfilePageViewModel>(
+      builder: (context, child, model) {
+        return Scaffold(
+          body: SingleChildScrollView(
             physics: ScrollPhysics(),
             child: Stack(
               children: [
@@ -23,7 +23,7 @@ class ProfilePage extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      _buildImageSelectField(),
+                      _buildImageSelectField(model),
                       Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -132,15 +132,15 @@ class ProfilePage extends StatelessWidget {
                             Row(
                               children: [
                                 Expanded(child: _buildTitle('Degree')),
-                                InkWell(
-                                  onTap: () {
-                                    model.addListDegrees();
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Icon(Icons.add),
-                                  ),
-                                )
+                                // InkWell(
+                                //   onTap: () {
+                                //     model.addListDegrees();
+                                //   },
+                                //   child: Padding(
+                                //     padding: const EdgeInsets.all(8.0),
+                                //     child: Icon(Icons.add),
+                                //   ),
+                                // )
                               ],
                             ),
                             SizedBox(
@@ -191,10 +191,10 @@ class ProfilePage extends StatelessWidget {
                 _buildAppbar(context),
               ],
             ),
-          );
-        },
-      ),
-      bottomNavigationBar: _buildSaveButtom(),
+          ),
+          bottomNavigationBar: _buildSaveButtom(model),
+        );
+      },
     );
   }
 
@@ -791,7 +791,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  ClipPath _buildImageSelectField() {
+  ClipPath _buildImageSelectField(ProfilePageViewModel model) {
     return ClipPath(
       clipper: MyClipper(),
       child: GestureDetector(
@@ -815,14 +815,24 @@ class ProfilePage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
                 radius: 50,
-                backgroundColor: Colors.white,
-                child: ClipOval(
-                  child: SizedBox(
-                    width: 95,
-                    height: 95,
-                    child: Image.network(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgG6EKIxYXUZheCOWbsXznT-Bt7t2rz-1txw&usqp=CAU',
-                      fit: BoxFit.fill,
+                backgroundColor: Colors.blue,
+                backgroundImage: NetworkImage(model.defaultImage == ""
+                    ? 'https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg'
+                    : model.defaultImage),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.blue.shade400,
+                    radius: 20.0,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.camera_alt,
+                        size: 18.0,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        model.getUserImage();
+                      },
                     ),
                   ),
                 ),
@@ -834,10 +844,10 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  GestureDetector _buildSaveButtom() {
+  GestureDetector _buildSaveButtom(ProfilePageViewModel model) {
     return GestureDetector(
       onTap: () {
-        print('save');
+        model.updateProfile();
       },
       child: Padding(
         padding: const EdgeInsets.all(4.0),
@@ -878,6 +888,7 @@ class ProfilePage extends StatelessWidget {
               onConfirm: (Picker picker, List value) {
                 print(value.toString());
                 print(picker.adapter.text);
+                print(picker.getSelectedValues().first);
                 model.changeSpecialityType(picker.getSelectedValues().first);
               }).showModal(context);
         },

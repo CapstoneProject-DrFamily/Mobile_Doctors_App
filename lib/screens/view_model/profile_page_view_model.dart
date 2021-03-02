@@ -1,8 +1,23 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mobile_doctors_apps/model/doctor_detail.dart';
+import 'package:mobile_doctors_apps/model/sign_up/specialty_sign_up_model.dart';
+import 'package:mobile_doctors_apps/model/specialty_model.dart';
+import 'package:mobile_doctors_apps/model/user_profile.dart';
+import 'package:mobile_doctors_apps/repository/doctor_repo.dart';
+import 'package:mobile_doctors_apps/repository/sign_up/specialty_repo.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path/path.dart' as path;
 
 class ProfilePageViewModel extends BaseModel {
-  TextEditingController _fullNameController = TextEditingController();
+  final IDoctorRepo _doctorRepo = DoctorRepo();
+  final ISpecialtyRepo _specialtyRepo = SpecialtyRepo();
+
+  final TextEditingController _fullNameController = TextEditingController();
   TextEditingController _dobController = TextEditingController();
   TextEditingController _phoneNumController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
@@ -26,6 +41,12 @@ class ProfilePageViewModel extends BaseModel {
   String _description = "";
   String _degree = "";
 
+  DoctorDetail doctorDetail;
+  UserProfile userProfile;
+
+  String defaultImage = "";
+  int specialtyId;
+
   int _gender = 0;
   List _months = [
     'Jan',
@@ -42,12 +63,7 @@ class ProfilePageViewModel extends BaseModel {
     'Dec'
   ];
 
-  List<String> listSpeciality = [
-    'Khoa nội',
-    'Khoa ngoại',
-    'Khoa nhi',
-    'Khoa sản'
-  ];
+  List<String> listSpeciality = [];
 
   //getter
   TextEditingController get fullNameController => _fullNameController;
@@ -75,6 +91,8 @@ class ProfilePageViewModel extends BaseModel {
   String get degree => _degree;
 
   int get gender => _gender;
+  File _image;
+  File get image => _image;
 
   ProfilePageViewModel() {
     _fullNameController.addListener(() {
@@ -120,6 +138,59 @@ class ProfilePageViewModel extends BaseModel {
       _specialityType = _specialityTpeController.text;
       notifyListeners();
     });
+
+    fetchProfileData();
+  }
+
+  Future<bool> fetchProfileData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // mock
+    prefs.setInt("doctorId", 17);
+    //
+    int doctorId = prefs.getInt("doctorId");
+
+    var res = await _doctorRepo.getDoctorDetail(doctorId);
+    if (res != null) {
+      doctorDetail = res[0];
+      userProfile = res[1];
+      transferToViewModel(doctorDetail, userProfile);
+    }
+    return null;
+  }
+
+  Future<void> transferToViewModel(
+      DoctorDetail doctorDetail, UserProfile userProfile) async {
+    fullNameController.text = userProfile.fullName;
+    // miss gender, birthday, sle
+    if (userProfile.gender.toLowerCase().trim() == 'male') {
+      changeGender(0);
+    } else if (userProfile.gender.toLowerCase().trim() == 'female') {
+      changeGender(1);
+    } else
+      changeGender(2);
+
+    defaultImage = userProfile.image;
+
+    phoneNumController.text = userProfile.phone;
+    emailController.text = userProfile.email;
+    identityNumberController.text = userProfile.idCard;
+
+    degreeController.text = doctorDetail.degree;
+    specialtyId = doctorDetail.specialtyId;
+    experienceTypeController.text = doctorDetail.experience;
+    graduatedController.text = doctorDetail.school;
+    descriptionController.text = doctorDetail.description;
+    DateTime date = DateTime.parse(userProfile.birthday);
+    changeDOB(date);
+
+    List<SpecialtyModel> list = await _specialtyRepo.getAllSpecialty();
+    for (var i = 0; i < list.length; i++) {
+      listSpeciality.add(list[i].specialtyTitle);
+      if (list[i].specialtyId == specialtyId) {
+        specialityTpeController.text = list[i].specialtyTitle;
+      }
+    }
   }
 
   void changeGender(int gen) {
@@ -151,5 +222,46 @@ class ProfilePageViewModel extends BaseModel {
   void changeSpecialityType(String type) {
     _specialityTpeController.text = type;
     notifyListeners();
+  }
+
+  Future getUserImage() async {
+    var pickedImage = await ImagePicker().getImage(source: ImageSource.gallery);
+    _image = File(pickedImage.path);
+    notifyListeners();
+  }
+
+  Future<bool> updateProfile() async {
+    if (_image != null) {
+      var url = await upLoadImage();
+      defaultImage = url.toString();
+    }
+  }
+
+  void transferToModel() {
+    userProfile.fullName = fullNameController.text;
+    userProfile.image = defaultImage;
+
+    userProfile.phone = phoneNumController.text;
+
+    userProfile.email = emailController.text;
+
+    userProfile.idCard = identityNumberController.text;
+
+    doctorDetail.degree = degreeController.text;
+
+    doctorDetail.experience = experienceTypeController.text;
+
+    doctorDetail.school = graduatedController.text;
+    doctorDetail.description = descriptionController.text;
+  }
+
+  Future<String> upLoadImage() async {
+    String basename = path.basename(_image.path);
+    StorageReference reference =
+        FirebaseStorage.instance.ref().child("DoctorStorage/" + basename);
+    StorageUploadTask uploadTask = reference.putFile(_image);
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    String url = await reference.getDownloadURL();
+    return url;
   }
 }

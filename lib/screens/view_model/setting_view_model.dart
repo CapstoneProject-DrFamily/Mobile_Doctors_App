@@ -5,6 +5,20 @@ import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingViewModel extends BaseModel {
+  String username;
+  String image;
+
+  SettingViewModel() {
+    init();
+  }
+
+  Future<void> init() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    username = prefs.getString("usName");
+    image = prefs.getString("usImage");
+    notifyListeners();
+  }
+
   Future<void> signOut(BuildContext context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
