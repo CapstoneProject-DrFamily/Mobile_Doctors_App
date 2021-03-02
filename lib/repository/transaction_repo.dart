@@ -31,6 +31,8 @@ class TransactionRepo extends ITransactionRepo {
       String symptomName = "";
 
       String patientName = "";
+      String patientImage = "";
+      String patientNote = "";
 
       String latitude = "";
       String longitude = "";
@@ -77,16 +79,25 @@ class TransactionRepo extends ITransactionRepo {
         }
       }
       patientName = transactionSimpleInfo["patient"]["profile"]["fullName"];
+      patientImage = transactionSimpleInfo["patient"]["profile"]["image"];
       transactionID = transactionSimpleInfo["transactionId"];
+      patientNote = transactionSimpleInfo["note"];
+
       int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 30;
 
       transactionBasic = TransactionBasicModel(
-          transactionId: transactionId,
-          distance: distanceKM,
-          endTime: endTime,
-          locationName: placeName,
-          patientName: patientName,
-          symptomName: symptomName);
+        transactionId: transactionId,
+        distance: distanceKM,
+        endTime: endTime,
+        locationName: placeName,
+        patientName: patientName,
+        symptomName: symptomName,
+        latitude: double.parse(latitude),
+        longitude: double.parse(longitude),
+        patientImage: patientImage,
+        patientSymptom: listSymptom,
+        patientNote: patientNote,
+      );
 
       return transactionBasic;
     } else {
