@@ -283,7 +283,15 @@ class HomePageViewModel extends BaseModel {
         .indexWhere((element) => element.transactionId == transactionID);
     var transaction = _listTransaction[indexInTransaction];
 
-    await offlineDoctor();
+    // await offlineDoctor();
+    await homeTabPageStreamSubscription?.cancel();
+    _firebaseuser = await FirebaseAuth.instance.currentUser();
+    String userId = _firebaseuser.uid;
+
+    _doctorRequest.child(userId).update({
+      "doctor_status": "bussy",
+    });
+
     isConnecting(false);
     isActive(false);
     isFinding(false);
