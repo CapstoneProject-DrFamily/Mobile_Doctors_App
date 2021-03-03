@@ -4,11 +4,14 @@ import 'dart:io';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_doctors_apps/helper/api_helper.dart';
+import 'package:mobile_doctors_apps/model/transaction.dart';
 import 'package:mobile_doctors_apps/model/transaction_basic_model.dart';
 
 abstract class ITransactionRepo {
   Future<TransactionBasicModel> getTransactionDetail(
       String transactionId, double currentLongitude, double currentLatitude);
+
+  Future<bool> updateTransaction(Transaction transaction);
 }
 
 class TransactionRepo extends ITransactionRepo {
@@ -113,5 +116,23 @@ class TransactionRepo extends ITransactionRepo {
     } else {
       return null;
     }
+  }
+
+  @override
+  Future<bool> updateTransaction(Transaction transaction) async {
+    bool isSuccess = false;
+    String urlAPI = APIHelper.TRANSACTION_API;
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    var response = await http.put(urlAPI,
+        headers: header, body: jsonEncode(transaction.toJson()));
+
+    if (response.statusCode == 200) {
+      isSuccess = true;
+    }
+
+    return isSuccess;
   }
 }
