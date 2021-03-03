@@ -280,15 +280,15 @@ class HomePageViewModel extends BaseModel {
         .indexWhere((element) => element.transactionID == transactionID);
     String tokenPatient =
         PushNotifycationService.transaction[indexTransaction].notifyToken;
-    // await _notifyRepo.acceptTransaction(tokenPatient, transactionID);
+    _firebaseuser = await FirebaseAuth.instance.currentUser();
+    String userId = _firebaseuser.uid;
+    await _notifyRepo.acceptTransaction(tokenPatient, transactionID, userId);
     int indexInTransaction = _listTransaction
         .indexWhere((element) => element.transactionId == transactionID);
     var transaction = _listTransaction[indexInTransaction];
 
     // await offlineDoctor();
     await homeTabPageStreamSubscription?.cancel();
-    _firebaseuser = await FirebaseAuth.instance.currentUser();
-    String userId = _firebaseuser.uid;
 
     _doctorRequest.child(userId).update({
       "doctor_status": "bussy",

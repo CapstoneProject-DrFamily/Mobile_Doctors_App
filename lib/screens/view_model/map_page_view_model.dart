@@ -79,8 +79,8 @@ class MapPageViewModel extends BaseModel {
   }
 
   void initMap() async {
-    // _firebaseuser = await FirebaseAuth.instance.currentUser();
-    userId = "I5YLsF8vo1X9wGpJUjYjAOsLlR73";
+    _firebaseuser = await FirebaseAuth.instance.currentUser();
+    userId = _firebaseuser.uid;
     _doctorRequest =
         FirebaseDatabase.instance.reference().child("Doctor Request");
 

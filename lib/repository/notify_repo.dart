@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 
 abstract class INotifyRepo {
   Future<void> cancelTransaction(String usToken, String transactionId);
-  Future<void> acceptTransaction(String usToken, String transactionId);
+  Future<void> acceptTransaction(
+      String usToken, String transactionId, String doctorFBId);
 }
 
 class NotifyRepo extends INotifyRepo {
@@ -47,7 +48,8 @@ class NotifyRepo extends INotifyRepo {
   }
 
   @override
-  Future<void> acceptTransaction(String usToken, String transactionID) async {
+  Future<void> acceptTransaction(
+      String usToken, String transactionID, String doctorFBId) async {
     await firebaseMessaging.requestNotificationPermissions(
       const IosNotificationSettings(
           sound: true, badge: true, alert: true, provisional: false),
@@ -70,6 +72,7 @@ class NotifyRepo extends INotifyRepo {
           'priority': 'high',
           'data': <String, dynamic>{
             'transactionId': transactionID,
+            'doctorFBId': doctorFBId,
             'status': 'accept',
             'type': 'booking',
           },
