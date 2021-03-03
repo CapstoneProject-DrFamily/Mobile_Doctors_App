@@ -290,7 +290,6 @@ class HomePageViewModel extends BaseModel {
         PushNotifycationService.transaction[indexTransaction].notifyToken;
     _firebaseuser = await FirebaseAuth.instance.currentUser();
     String userId = _firebaseuser.uid;
-    await _notifyRepo.acceptTransaction(tokenPatient, transactionID, userId);
     int indexInTransaction = _listTransaction
         .indexWhere((element) => element.transactionId == transactionID);
     var transaction = _listTransaction[indexInTransaction];
@@ -354,6 +353,7 @@ class HomePageViewModel extends BaseModel {
     _listTempTransaction = [];
     _listTransaction = [];
     notifyListeners();
+    await _notifyRepo.acceptTransaction(tokenPatient, transactionID, userId);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -361,6 +361,8 @@ class HomePageViewModel extends BaseModel {
           model: MapPageViewModel(transaction, directionDetails),
         ),
       ),
-    );
+    ).then((value) {
+      HelperMethod.disableLiveLocationUpdates();
+    });
   }
 }
