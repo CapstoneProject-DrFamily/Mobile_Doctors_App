@@ -38,6 +38,10 @@ class TransactionRepo extends ITransactionRepo {
       String longitude = "";
       String placeName = "";
 
+      int doctorId = 0;
+      int patientId = 0;
+      String location = "";
+
       double distanceKM = 0;
 
       Map<String, dynamic> transactionSimpleInfo = jsonDecode(response.body);
@@ -82,6 +86,9 @@ class TransactionRepo extends ITransactionRepo {
       patientImage = transactionSimpleInfo["patient"]["profile"]["image"];
       transactionID = transactionSimpleInfo["transactionId"];
       patientNote = transactionSimpleInfo["note"];
+      doctorId = transactionSimpleInfo["doctorId"];
+      patientId = transactionSimpleInfo["patientId"];
+      location = locationTemp;
 
       int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 30;
 
@@ -97,6 +104,9 @@ class TransactionRepo extends ITransactionRepo {
         patientImage: patientImage,
         patientSymptom: listSymptom,
         patientNote: patientNote,
+        doctorId: doctorId,
+        location: location,
+        patientId: patientId,
       );
 
       return transactionBasic;
