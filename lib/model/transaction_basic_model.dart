@@ -4,9 +4,10 @@ class TransactionBasicModel {
       patientImage,
       locationName,
       symptomName,
-      patientNote;
+      patientNote,
+      location;
   final double distance, longitude, latitude;
-  final int endTime;
+  final int endTime, doctorId, patientId;
   final List<SymptomTempModel> patientSymptom;
 
   TransactionBasicModel({
@@ -21,6 +22,9 @@ class TransactionBasicModel {
     this.patientImage,
     this.patientNote,
     this.patientSymptom,
+    this.doctorId,
+    this.location,
+    this.patientId,
   });
 
   factory TransactionBasicModel.fromJson(Map<String, dynamic> json) {
@@ -36,6 +40,9 @@ class TransactionBasicModel {
       distance: json['distance'] as double,
       endTime: json['endTime'] as int,
       symptomName: json['symptomName'] as String,
+      doctorId: json['doctorId'] as int,
+      location: json['location'] as String,
+      patientId: json['patientId'] as int,
     );
   }
 
@@ -51,6 +58,9 @@ class TransactionBasicModel {
         'distance': distance,
         'endTime': endTime,
         'symptomName': symptomName,
+        'doctorId': doctorId,
+        'location': location,
+        'patientId': patientId,
       };
 }
 
