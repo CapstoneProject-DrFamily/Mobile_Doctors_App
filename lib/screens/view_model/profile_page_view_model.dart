@@ -46,6 +46,7 @@ class ProfilePageViewModel extends BaseModel {
 
   String defaultImage = "";
   int specialtyId;
+  bool isLoading = false;
 
   int _gender = 0;
   List _months = [
@@ -64,6 +65,7 @@ class ProfilePageViewModel extends BaseModel {
   ];
 
   List<String> listSpeciality = [];
+  List<SpecialtyModel> listSpecialtyModel = [];
 
   //getter
   TextEditingController get fullNameController => _fullNameController;
@@ -94,6 +96,7 @@ class ProfilePageViewModel extends BaseModel {
   File _image;
   File get image => _image;
 
+  bool loadingProfile = false;
   ProfilePageViewModel() {
     _fullNameController.addListener(() {
       _fullName = _fullNameController.text;
@@ -143,10 +146,12 @@ class ProfilePageViewModel extends BaseModel {
   }
 
   Future<bool> fetchProfileData() async {
+    loadingProfile = true;
+    notifyListeners();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // mock
-    prefs.setInt("doctorId", 17);
+    // prefs.setInt("doctorId", 17);
     //
     int doctorId = prefs.getInt("doctorId");
 
@@ -156,6 +161,8 @@ class ProfilePageViewModel extends BaseModel {
       userProfile = res[1];
       transferToViewModel(doctorDetail, userProfile);
     }
+    loadingProfile = false;
+    notifyListeners();
     return null;
   }
 
@@ -184,11 +191,11 @@ class ProfilePageViewModel extends BaseModel {
     DateTime date = DateTime.parse(userProfile.birthday);
     changeDOB(date);
 
-    List<SpecialtyModel> list = await _specialtyRepo.getAllSpecialty();
-    for (var i = 0; i < list.length; i++) {
-      listSpeciality.add(list[i].specialtyTitle);
-      if (list[i].specialtyId == specialtyId) {
-        specialityTpeController.text = list[i].specialtyTitle;
+    listSpecialtyModel = await _specialtyRepo.getAllSpecialty();
+    for (var i = 0; i < listSpecialtyModel.length; i++) {
+      listSpeciality.add(listSpecialtyModel[i].specialtyTitle);
+      if (listSpecialtyModel[i].specialtyId == specialtyId) {
+        specialityTpeController.text = listSpecialtyModel[i].specialtyTitle;
       }
     }
   }
@@ -205,6 +212,8 @@ class ProfilePageViewModel extends BaseModel {
         _months[datetime.month - 1] +
         '-' +
         datetime.day.toString();
+
+    userProfile.birthday = datetime.toIso8601String();
     notifyListeners();
   }
 
@@ -221,6 +230,11 @@ class ProfilePageViewModel extends BaseModel {
 
   void changeSpecialityType(String type) {
     _specialityTpeController.text = type;
+    for (int i = 0; i < listSpecialtyModel.length; i++) {
+      if (listSpecialtyModel[i].specialtyTitle == type) {
+        doctorDetail.specialtyId = listSpecialtyModel[i].specialtyId;
+      }
+    }
     notifyListeners();
   }
 
@@ -231,14 +245,34 @@ class ProfilePageViewModel extends BaseModel {
   }
 
   Future<bool> updateProfile() async {
+    isLoading = true;
+    notifyListeners();
     if (_image != null) {
       var url = await upLoadImage();
       defaultImage = url.toString();
     }
+    transferToModel();
+    bool isUpdated = await _doctorRepo.updateDoctor(doctorDetail, userProfile);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setString("usName", userProfile.fullName);
+    prefs.setString("usImage", userProfile.image);
+    isLoading = false;
+    notifyListeners();
+    return isUpdated;
   }
 
   void transferToModel() {
     userProfile.fullName = fullNameController.text;
+
+    if (_gender == 0) {
+      userProfile.gender = "Male";
+    } else if (_gender == 1) {
+      userProfile.gender = "Female";
+    } else {
+      userProfile.gender = "Other";
+    }
+
     userProfile.image = defaultImage;
 
     userProfile.phone = phoneNumController.text;
@@ -252,6 +286,7 @@ class ProfilePageViewModel extends BaseModel {
     doctorDetail.experience = experienceTypeController.text;
 
     doctorDetail.school = graduatedController.text;
+
     doctorDetail.description = descriptionController.text;
   }
 

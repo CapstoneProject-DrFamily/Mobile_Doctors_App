@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_doctors_apps/screens/login/login_page.dart';
+import 'package:mobile_doctors_apps/screens/setting/profile_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,5 +29,14 @@ class SettingViewModel extends BaseModel {
           builder: (context) => LoginScreen(),
         ),
         (Route<dynamic> route) => false);
+  }
+
+  void seeDetail(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfilePage(),
+      ),
+    ).then((value) => init());
   }
 }

@@ -4,6 +4,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/profile_page_view_model.dart';
@@ -15,184 +16,192 @@ class ProfilePage extends StatelessWidget {
     return BaseView<ProfilePageViewModel>(
       builder: (context, child, model) {
         return Scaffold(
-          body: SingleChildScrollView(
-            physics: ScrollPhysics(),
-            child: Stack(
-              children: [
-                Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+          body: model.loadingProfile
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : SingleChildScrollView(
+                  physics: ScrollPhysics(),
+                  child: Stack(
                     children: [
-                      _buildImageSelectField(model),
                       Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.3),
-                              spreadRadius: 1,
-                              blurRadius: 7,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
-                            ),
-                          ],
-                        ),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            _buildTitleCard('Basic Infomation', Icons.info,
-                                Colors.greenAccent),
-                            SizedBox(
-                              height: 15,
+                            _buildImageSelectField(model),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    spreadRadius: 1,
+                                    blurRadius: 7,
+                                    offset: Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _buildTitleCard('Basic Infomation',
+                                      Icons.info, Colors.greenAccent),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  _buildTitle('Full Name'),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  _buildFullNameField(model),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  _buildTitle('Gender'),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  _buildFieldGender(model),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  _buildTitle('Date of Birth'),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  _buildDOBFIeld(context, model),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  _buildTitle('Phone Number'),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  _buildPhoneNumberField(model),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  _buildTitle('Email'),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  _buildEmailField(model),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  _buildTitle('ID Card'),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  _buildIDCardField(model),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              ),
                             ),
-                            _buildTitle('Full Name'),
                             SizedBox(
-                              height: 5,
+                              height: 20,
                             ),
-                            _buildFullNameField(model),
-                            SizedBox(
-                              height: 15,
+                            //additional
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    spreadRadius: 1,
+                                    blurRadius: 7,
+                                    offset: Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _buildTitleCard('Additional Infomation',
+                                      EvaIcons.fileTextOutline, Colors.blue),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(child: _buildTitle('Degree')),
+                                      // InkWell(
+                                      //   onTap: () {
+                                      //     model.addListDegrees();
+                                      //   },
+                                      //   child: Padding(
+                                      //     padding: const EdgeInsets.all(8.0),
+                                      //     child: Icon(Icons.add),
+                                      //   ),
+                                      // )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  _buildDegreeTypeField(model, context),
+                                  buildListViewDegree(model),
+                                  _buildTitle('Speciality'),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  _buildSpecialityTypeField(model, context),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  _buildTitle('Experience'),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  buildTextFieldForm(
+                                      model,
+                                      model.experienceTypeController,
+                                      "Enter your experience"),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  _buildTitle('Graduated'),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  buildTextFieldForm(
+                                      model,
+                                      model.graduatedController,
+                                      "Enter your graduated university"),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  _buildTitle('Description'),
+                                  buildDescriptionForm(model),
+                                ],
+                              ),
                             ),
-                            _buildTitle('Gender'),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            _buildFieldGender(model),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            _buildTitle('Date of Birth'),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            _buildDOBFIeld(context, model),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            _buildTitle('Phone Number'),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            _buildPhoneNumberField(model),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            _buildTitle('Email'),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            _buildEmailField(model),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            _buildTitle('ID Card'),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            _buildIDCardField(model),
+
                             SizedBox(
                               height: 20,
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      //additional
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.3),
-                              spreadRadius: 1,
-                              blurRadius: 7,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildTitleCard('Additional Infomation',
-                                EvaIcons.fileTextOutline, Colors.blue),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(child: _buildTitle('Degree')),
-                                // InkWell(
-                                //   onTap: () {
-                                //     model.addListDegrees();
-                                //   },
-                                //   child: Padding(
-                                //     padding: const EdgeInsets.all(8.0),
-                                //     child: Icon(Icons.add),
-                                //   ),
-                                // )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            _buildDegreeTypeField(model, context),
-                            buildListViewDegree(model),
-                            _buildTitle('Speciality'),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            _buildSpecialityTypeField(model, context),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            _buildTitle('Experience'),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            buildTextFieldForm(
-                                model,
-                                model.experienceTypeController,
-                                "Enter your experience"),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            _buildTitle('Graduated'),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            buildTextFieldForm(model, model.graduatedController,
-                                "Enter your graduated university"),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            _buildTitle('Description'),
-                            buildDescriptionForm(model),
-                          ],
-                        ),
-                      ),
-
-                      SizedBox(
-                        height: 20,
-                      ),
+                      _buildAppbar(context),
                     ],
                   ),
                 ),
-                _buildAppbar(context),
-              ],
-            ),
-          ),
-          bottomNavigationBar: _buildSaveButtom(model),
+          bottomNavigationBar: _buildSaveButtom(model, context),
         );
       },
     );
@@ -844,28 +853,56 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  GestureDetector _buildSaveButtom(ProfilePageViewModel model) {
+  GestureDetector _buildSaveButtom(
+      ProfilePageViewModel model, BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        model.updateProfile();
+      onTap: () async {
+        bool isUpdated = await model.updateProfile();
+        print(isUpdated);
+        if (isUpdated) {
+          Fluttertoast.showToast(
+            msg: "Update Successfull",
+            textColor: Colors.green,
+            toastLength: Toast.LENGTH_SHORT,
+            backgroundColor: Colors.white,
+            gravity: ToastGravity.CENTER,
+          );
+        }
       },
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Container(
-          width: double.infinity,
-          height: 40,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-            color: Colors.blue[400],
-          ),
-          child: Center(
-            child: Text(
-              "Save",
-              style: TextStyle(color: Colors.white, fontSize: 18),
+      child: model.loadingProfile
+          ? Text('')
+          : Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Container(
+                width: double.infinity,
+                height: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  color: Colors.blue[400],
+                ),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Save",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(6),
+                          child: model.isLoading
+                              ? CircularProgressIndicator(
+                                  backgroundColor: Colors.white,
+                                )
+                              : Container(),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 
