@@ -23,4 +23,15 @@ class UserProfile {
         email: json['email'] as String,
         idCard: json['idCard'] as String);
   }
+
+  Map<String, dynamic> toJson() => {
+        "profileId": profileId,
+        "fullName": fullName,
+        "birthday": birthday,
+        "gender": gender,
+        "phone": phone,
+        "image": image,
+        "email": email,
+        "idCard": idCard
+      };
 }

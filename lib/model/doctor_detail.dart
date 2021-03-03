@@ -22,4 +22,14 @@ class DoctorDetail {
       school: json['school'] as String,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        "doctorId": doctorId,
+        "degree": degree,
+        "experience": experience,
+        "description": description,
+        "specialtyId": specialtyId,
+        "profileId": profileId,
+        "school": school,
+      };
 }
