@@ -10,6 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile_doctors_apps/global_variable.dart';
 import 'package:mobile_doctors_apps/helper/helper_method.dart';
+import 'package:mobile_doctors_apps/model/direction_detail.dart';
 import 'package:mobile_doctors_apps/model/transaction_basic_model.dart';
 import 'package:mobile_doctors_apps/repository/map_repo.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
@@ -70,10 +71,16 @@ class MapPageViewModel extends BaseModel {
 
   String userId;
 
-  MapPageViewModel(TransactionBasicModel transaction) {
+  DirectionDetails _directionDetails;
+  DirectionDetails get directionDetails => _directionDetails;
+
+  MapPageViewModel(
+      TransactionBasicModel transaction, DirectionDetails directionDetails) {
     _isLoading = true;
     this._basicTransaction = transaction;
+    this._directionDetails = directionDetails;
     _fabHeight = _initFabHeight;
+    durationString = _basicTransaction.estimateTime;
     notifyListeners();
     initMap();
   }
@@ -182,11 +189,9 @@ class MapPageViewModel extends BaseModel {
 
   Future<void> getDirection(
       LatLng currentPosition, LatLng destinationLocation) async {
-    var locationDetail = await _mapRepo.getDirectionDetails(
-        currentPosition, destinationLocation);
     PolylinePoints polylinePoints = PolylinePoints();
     List<PointLatLng> result =
-        polylinePoints.decodePolyline(locationDetail.encodePoints);
+        polylinePoints.decodePolyline(_directionDetails.encodePoints);
 
     polylineCoordinates.clear();
     if (result.isNotEmpty) {
@@ -262,9 +267,6 @@ class MapPageViewModel extends BaseModel {
 
     _circles.add(destinationCirle);
 
-    durationString =
-        locationDetail.durationText + " - " + locationDetail.distanceText;
-
     notifyListeners();
   }
 
@@ -281,7 +283,7 @@ class MapPageViewModel extends BaseModel {
       CameraPosition cp = new CameraPosition(target: pos, zoom: 17);
       _controller.animateCamera(CameraUpdate.newCameraPosition(cp));
 
-      updateTripDetails();
+      // updateTripDetails();
 
       Map doctorLocation = {
         "latitude": position.latitude.toString(),

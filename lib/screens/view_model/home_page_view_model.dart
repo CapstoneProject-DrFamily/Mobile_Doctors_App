@@ -7,10 +7,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mobile_doctors_apps/global_variable.dart';
+import 'package:mobile_doctors_apps/helper/helper_method.dart';
 import 'package:mobile_doctors_apps/helper/pushnotifycation_service.dart';
 import 'package:mobile_doctors_apps/model/request_doctor_model.dart';
+import 'package:mobile_doctors_apps/model/transaction.dart';
 import 'package:mobile_doctors_apps/model/transaction_basic_model.dart';
 import 'package:mobile_doctors_apps/repository/doctor_repo.dart';
+import 'package:mobile_doctors_apps/repository/examination_repo.dart';
+import 'package:mobile_doctors_apps/repository/map_repo.dart';
 import 'package:mobile_doctors_apps/repository/notify_repo.dart';
 import 'package:mobile_doctors_apps/repository/transaction_repo.dart';
 import 'package:mobile_doctors_apps/screens/home/map_page.dart';
@@ -23,11 +29,13 @@ class HomePageViewModel extends BaseModel {
   final IDoctorRepo _doctorRepo = DoctorRepo();
   final INotifyRepo _notifyRepo = NotifyRepo();
   final ITransactionRepo _transactionRepo = TransactionRepo();
+  final IExaminationRepo _examinationRepo = ExaminationRepo();
+  final IMapRepo _mapRepo = MapRepo();
 
   FirebaseUser _firebaseuser;
   DatabaseReference _doctorRequest;
 
-  StreamSubscription<geolocator.Position> homeTabPageStreamSubscription;
+  // StreamSubscription<geolocator.Position> homeTabPageStreamSubscription;
 
   RequestDoctorModel _doctorModel;
   RequestDoctorModel get doctorModel => _doctorModel;
@@ -90,7 +98,7 @@ class HomePageViewModel extends BaseModel {
     _doctorRequest.child(userId).once().then((DataSnapshot dataSnapshot) {
       if (dataSnapshot.value != null) {
         String status = dataSnapshot.value['doctor_status'];
-        if (status != null) {
+        if (status != null && status == "waiting") {
           this.active = true;
           checkStatus = true;
           this.finding = true;
@@ -286,13 +294,58 @@ class HomePageViewModel extends BaseModel {
     int indexInTransaction = _listTransaction
         .indexWhere((element) => element.transactionId == transactionID);
     var transaction = _listTransaction[indexInTransaction];
+    geolocator.Position position;
+    try {
+      position = await geolocator.Geolocator.getCurrentPosition(
+          desiredAccuracy: geolocator.LocationAccuracy.high);
+    } catch (e) {
+      print("error");
+    }
+    LatLng destinationLocation =
+        LatLng(transaction.latitude, transaction.longitude);
+    LatLng positionLatLng = LatLng(position.latitude, position.longitude);
+
+    var directionDetails =
+        await _mapRepo.getDirectionDetails(positionLatLng, destinationLocation);
+    var firstEstimate =
+        DateTime.now().add(Duration(seconds: directionDetails.durationValue));
+    var secondEstimate = firstEstimate.add(Duration(minutes: 15));
+    String estimatedTime = firstEstimate.hour.toString() +
+        ":" +
+        firstEstimate.minute.toString() +
+        " - " +
+        secondEstimate.hour.toString() +
+        ":" +
+        secondEstimate.minute.toString();
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String creator = prefs.getString("usName");
+
+    int idExamination = await _examinationRepo.createNewExamination(creator);
+
+    //mock
+    if (idExamination != null) {
+      Transaction transactionTemp = new Transaction(
+          doctorId: transaction.doctorId,
+          examId: idExamination,
+          location: transaction.location,
+          note: transaction.patientNote,
+          patientId: transaction.patientId,
+          prescriptionId: null,
+          status: 1,
+          transactionId: transaction.transactionId,
+          estimatedTime: estimatedTime);
+      await _transactionRepo.updateTransaction(transactionTemp);
+    }
 
     // await offlineDoctor();
-    await homeTabPageStreamSubscription?.cancel();
+    HelperMethod.disableHomeTabLocationUpdates();
 
     _doctorRequest.child(userId).update({
-      "doctor_status": "bussy",
+      "doctor_status": "busy",
     });
+
+    transaction.estimateTime = estimatedTime;
 
     isConnecting(false);
     isActive(false);
@@ -305,7 +358,7 @@ class HomePageViewModel extends BaseModel {
       context,
       MaterialPageRoute(
         builder: (context) => MapPage(
-          model: MapPageViewModel(transaction),
+          model: MapPageViewModel(transaction, directionDetails),
         ),
       ),
     );

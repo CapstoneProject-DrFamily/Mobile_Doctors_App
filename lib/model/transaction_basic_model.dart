@@ -9,6 +9,7 @@ class TransactionBasicModel {
   final double distance, longitude, latitude;
   final int endTime, doctorId, patientId;
   final List<SymptomTempModel> patientSymptom;
+  String estimateTime;
 
   TransactionBasicModel({
     this.distance,

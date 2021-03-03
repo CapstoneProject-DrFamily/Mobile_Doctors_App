@@ -7,4 +7,5 @@ class APIHelper {
   static const String CREATE_PROFILE_API = '$Prefix_API/api/v1/Profiles';
   static const String UPDATE_USER_API = '$Prefix_API/api/v1/Users';
   static const String CREATE_DOCTOR_API = '$Prefix_API/api/v1/Doctors';
+  static const String TRANSACTION_API = '$Prefix_API/api/v1/Transactions';
 }
