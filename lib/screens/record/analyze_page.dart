@@ -131,11 +131,11 @@ class AnalyzePage extends StatelessWidget {
                                             color: MainColors.blueBegin
                                                 .withOpacity(0.8),
                                             onPressed: () {
-                                              // Navigator.push(
-                                              //     context,
-                                              //     MaterialPageRoute(
-                                              //         builder: (context) =>
-                                              //             SamplePage()));
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          SamplePage()));
                                             },
                                             child: Text('Next')),
                                       ),

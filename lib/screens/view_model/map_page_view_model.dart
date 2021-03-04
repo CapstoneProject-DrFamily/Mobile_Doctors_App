@@ -11,9 +11,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile_doctors_apps/global_variable.dart';
 import 'package:mobile_doctors_apps/helper/helper_method.dart';
 import 'package:mobile_doctors_apps/model/direction_detail.dart';
+import 'package:mobile_doctors_apps/model/transaction.dart';
 import 'package:mobile_doctors_apps/model/transaction_basic_model.dart';
 import 'package:mobile_doctors_apps/repository/map_repo.dart';
 import 'package:mobile_doctors_apps/repository/notify_repo.dart';
+import 'package:mobile_doctors_apps/repository/transaction_repo.dart';
 import 'package:mobile_doctors_apps/screens/record/analyze_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,6 +23,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MapPageViewModel extends BaseModel {
   final IMapRepo _mapRepo = MapRepo();
   final INotifyRepo _notifyRepo = NotifyRepo();
+  final ITransactionRepo _transactionRepo = TransactionRepo();
 
   final double _initFabHeight = 260.0;
   double _fabHeight;
@@ -339,6 +342,19 @@ class MapPageViewModel extends BaseModel {
     await _doctorRequest
         .child(_basicTransaction.transactionId)
         .set(transactionInfo);
+
+    Transaction updateTransactionModel = Transaction(
+        doctorId: _basicTransaction.doctorId,
+        estimatedTime: _basicTransaction.estimateTime,
+        examId: _basicTransaction.examId,
+        location: _basicTransaction.location,
+        note: _basicTransaction.patientNote,
+        patientId: _basicTransaction.patientId,
+        prescriptionId: null,
+        status: 2,
+        transactionId: _basicTransaction.transactionId);
+
+    _transactionRepo.updateTransaction(updateTransactionModel);
 
     _notifyRepo.arrivedTransaction(usToken, _basicTransaction.transactionId);
     prefs.remove("userToken");
