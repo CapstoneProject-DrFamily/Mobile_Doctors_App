@@ -7,6 +7,7 @@ abstract class INotifyRepo {
   Future<void> cancelTransaction(String usToken, String transactionId);
   Future<void> acceptTransaction(
       String usToken, String transactionId, String doctorFBId);
+  Future<void> arrivedTransaction(String usToken, String transactionId);
 }
 
 class NotifyRepo extends INotifyRepo {
@@ -74,6 +75,35 @@ class NotifyRepo extends INotifyRepo {
             'transactionId': transactionID,
             'doctorFBId': doctorFBId,
             'status': 'accept',
+            'type': 'booking',
+          },
+          'to': usToken,
+        },
+      ),
+    );
+  }
+
+  @override
+  Future<void> arrivedTransaction(String usToken, String transactionId) async {
+    await firebaseMessaging.requestNotificationPermissions(
+      const IosNotificationSettings(
+          sound: true, badge: true, alert: true, provisional: false),
+    );
+
+    print(transactionId);
+
+    await http.post(
+      'https://fcm.googleapis.com/fcm/send',
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'key=$serverToken',
+      },
+      body: jsonEncode(
+        <String, dynamic>{
+          'priority': 'high',
+          'data': <String, dynamic>{
+            'transactionId': transactionId,
+            'status': 'arrived',
             'type': 'booking',
           },
           'to': usToken,
