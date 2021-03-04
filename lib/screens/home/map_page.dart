@@ -79,7 +79,7 @@ class MapPage extends StatelessWidget {
           margin: EdgeInsets.all(15),
           child: RaisedButton(
             onPressed: () {
-              model.btnArrived();
+              model.btnArrived(context);
             },
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(80.0)),

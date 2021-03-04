@@ -74,10 +74,16 @@ class AnalyzePage extends StatelessWidget {
                                         topRight: Radius.circular(40))),
                                 width: MediaQuery.of(context).size.width,
                                 height:
-                                    MediaQuery.of(context).size.height * 0.6,
-                                child: SingleChildScrollView(
-                                  child: buildAnalyzeForm(
-                                      MediaQuery.of(context).size, model),
+                                    MediaQuery.of(context).size.height * 0.65,
+                                child: Container(
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 100, 0, 0),
+                                    child: SingleChildScrollView(
+                                      child: buildAnalyzeForm(
+                                          MediaQuery.of(context).size, model),
+                                    ),
+                                  ),
                                 ),
                               ),
                               Visibility(
@@ -125,11 +131,11 @@ class AnalyzePage extends StatelessWidget {
                                             color: MainColors.blueBegin
                                                 .withOpacity(0.8),
                                             onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          SamplePage()));
+                                              // Navigator.push(
+                                              //     context,
+                                              //     MaterialPageRoute(
+                                              //         builder: (context) =>
+                                              //             SamplePage()));
                                             },
                                             child: Text('Next')),
                                       ),
@@ -154,9 +160,6 @@ class AnalyzePage extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SizedBox(
-          height: 100,
-        ),
         MedicalHistory(size: size),
         SizedBox(
           height: 10,
@@ -217,19 +220,17 @@ class AnalyzePage extends StatelessWidget {
                               child: Container(
                                   child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Flexible(
+                                    flex: 2,
                                     child: Column(
                                       children: [
                                         Container(
                                           alignment: Alignment.centerLeft,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                              model.listSpeciality[index].name,
-                                              style: TextStyle(fontSize: 18),
-                                            ),
+                                          child: Text(
+                                            model.listSpeciality[index].name,
+                                            style: TextStyle(fontSize: 18),
                                           ),
                                         ),
                                       ],
@@ -287,7 +288,7 @@ class AnalyzePage extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 20,
+          height: 80,
         ),
       ],
     );
@@ -431,6 +432,9 @@ class EyeSightPart extends StatelessWidget {
               ),
               Row(
                 children: [
+                  SizedBox(
+                    width: 15,
+                  ),
                   Expanded(
                     child: Text(
                       'Mắt trái',
@@ -440,10 +444,26 @@ class EyeSightPart extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                      child: TextField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none, hintText: '0 ~ 10'),
+                      child: Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                            color: MainColors.blueBegin.withOpacity(0.6))),
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          border: InputBorder.none, hintText: '0 ~ 10'),
+                    ),
                   )),
+                ],
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 15,
+                  ),
                   Expanded(
                     child: Text(
                       'Mắt phải',
@@ -453,9 +473,17 @@ class EyeSightPart extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                      child: TextField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none, hintText: '0 ~ 10'),
+                      child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                            color: MainColors.blueBegin.withOpacity(0.6))),
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          border: InputBorder.none, hintText: '0 ~ 10'),
+                    ),
                   )),
                 ],
               ),
@@ -465,6 +493,9 @@ class EyeSightPart extends StatelessWidget {
               ),
               Row(
                 children: [
+                  SizedBox(
+                    width: 15,
+                  ),
                   Expanded(
                     child: Text(
                       'Mắt trái',
@@ -474,10 +505,26 @@ class EyeSightPart extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                      child: TextField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none, hintText: '0 ~ 10'),
+                      child: Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                            color: MainColors.blueBegin.withOpacity(0.6))),
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          border: InputBorder.none, hintText: '0 ~ 10'),
+                    ),
                   )),
+                ],
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 15,
+                  ),
                   Expanded(
                     child: Text(
                       'Mắt phải',
@@ -487,9 +534,17 @@ class EyeSightPart extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                      child: TextField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none, hintText: '0 ~ 10'),
+                      child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                            color: MainColors.blueBegin.withOpacity(0.6))),
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          border: InputBorder.none, hintText: '0 ~ 10'),
+                    ),
                   )),
                 ],
               ),
@@ -521,6 +576,7 @@ class Examination extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 10),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 '2.1 ',
@@ -549,47 +605,87 @@ class Examination extends StatelessWidget {
               style: TextStyle(fontSize: 18),
             )),
             Expanded(
-                child: TextField(
-              decoration: InputDecoration(
-                  border: InputBorder.none, hintText: 'nhịp/phút'),
+                child: Container(
+              margin: EdgeInsets.only(right: 10, bottom: 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border:
+                      Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
+              child: TextField(
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    border: InputBorder.none, hintText: 'nhịp/phút'),
+              ),
             )),
-            Expanded(
-                child: Text(
-              'Nhiệt độ',
-              style: TextStyle(fontSize: 18),
-            )),
-            Expanded(
-                child: TextField(
+          ],
+        ),
+        Row(children: [
+          SizedBox(width: 15),
+          Expanded(
+              child: Text(
+            'Nhiệt độ',
+            style: TextStyle(fontSize: 18),
+          )),
+          Expanded(
+              child: Container(
+            margin: EdgeInsets.only(right: 10, bottom: 10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border:
+                    Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
+            child: TextField(
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
               decoration:
                   InputDecoration(border: InputBorder.none, hintText: 'độ C'),
-            ))
-          ],
-        ),
-        Row(
-          children: [
-            SizedBox(width: 15),
-            Expanded(
-                child: Text(
-              'Huyết áp',
-              style: TextStyle(fontSize: 18),
-            )),
-            Expanded(
-                child: TextField(
+            ),
+          )),
+        ]),
+        Row(children: [
+          SizedBox(width: 15),
+          Expanded(
+              child: Text(
+            'Huyết áp',
+            style: TextStyle(fontSize: 18),
+          )),
+          Expanded(
+              child: Container(
+            margin: EdgeInsets.only(right: 10, bottom: 10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border:
+                    Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
+            child: TextField(
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
               decoration:
                   InputDecoration(border: InputBorder.none, hintText: '...'),
-            )),
-            Expanded(
-                child: Text(
-              'Nhịp thở',
-              style: TextStyle(fontSize: 18),
-            )),
-            Expanded(
-                child: TextField(
+            ),
+          )),
+        ]),
+        Row(children: [
+          SizedBox(width: 15),
+          Expanded(
+              child: Text(
+            'Nhịp thở',
+            style: TextStyle(fontSize: 18),
+          )),
+          Expanded(
+              child: Container(
+            margin: EdgeInsets.only(right: 10, bottom: 10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border:
+                    Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
+            child: TextField(
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
               decoration:
                   InputDecoration(border: InputBorder.none, hintText: '...'),
-            ))
-          ],
-        ),
+            ),
+          )),
+        ]),
         Row(
           children: [
             SizedBox(width: 15),
@@ -599,20 +695,43 @@ class Examination extends StatelessWidget {
               style: TextStyle(fontSize: 18),
             )),
             Expanded(
-                child: TextField(
-              decoration:
-                  InputDecoration(border: InputBorder.none, hintText: 'kg'),
+                child: Container(
+              margin: EdgeInsets.only(right: 10, bottom: 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border:
+                      Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
+              child: TextField(
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    border: InputBorder.none, hintText: 'kilograms'),
+              ),
             )),
+          ],
+        ),
+        Row(
+          children: [
+            SizedBox(width: 15),
             Expanded(
                 child: Text(
               'Chiều cao',
               style: TextStyle(fontSize: 18),
             )),
             Expanded(
-                child: TextField(
-              decoration:
-                  InputDecoration(border: InputBorder.none, hintText: 'cm'),
-            ))
+                child: Container(
+              margin: EdgeInsets.only(right: 10, bottom: 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border:
+                      Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
+              child: TextField(
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    border: InputBorder.none, hintText: 'centimet'),
+              ),
+            )),
           ],
         ),
         Row(
@@ -624,20 +743,43 @@ class Examination extends StatelessWidget {
               style: TextStyle(fontSize: 18),
             )),
             Expanded(
-                child: TextField(
-              decoration:
-                  InputDecoration(border: InputBorder.none, hintText: '...'),
+                child: Container(
+              margin: EdgeInsets.only(right: 10, bottom: 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border:
+                      Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
+              child: TextField(
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
+                decoration:
+                    InputDecoration(border: InputBorder.none, hintText: '...'),
+              ),
             )),
+          ],
+        ),
+        Row(
+          children: [
+            SizedBox(width: 15),
             Expanded(
                 child: Text(
               'Vòng bụng',
               style: TextStyle(fontSize: 18),
             )),
             Expanded(
-                child: TextField(
-              decoration:
-                  InputDecoration(border: InputBorder.none, hintText: '...'),
-            ))
+                child: Container(
+              margin: EdgeInsets.only(right: 10, bottom: 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border:
+                      Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
+              child: TextField(
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
+                decoration:
+                    InputDecoration(border: InputBorder.none, hintText: '...'),
+              ),
+            )),
           ],
         ),
       ],
@@ -667,7 +809,7 @@ class MedicalHistory extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Text(
-                '1. Bệnh sử',
+                '1. Medical History',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
@@ -683,8 +825,8 @@ class MedicalHistory extends StatelessWidget {
                   width: size.width * 0.8,
                   child: TextField(
                     maxLines: 5,
-                    decoration:
-                        InputDecoration.collapsed(hintText: 'Enter your text'),
+                    decoration: InputDecoration.collapsed(
+                        hintText: 'Enter medical history of patient'),
                   ),
                 ),
               ],

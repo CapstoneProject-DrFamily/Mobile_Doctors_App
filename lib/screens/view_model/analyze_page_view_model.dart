@@ -1,7 +1,10 @@
+import 'package:mobile_doctors_apps/model/examination_history.dart';
 import 'package:mobile_doctors_apps/model/specialty_model.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 
 class AnalyzePageViewModel extends BaseModel {
+  ExaminationHistory examinationForm;
+
   List<Speciality> listSpeciality = [
     Speciality(name: 'Tim mạch', description: ""),
     Speciality(name: 'Hô hấp', description: ""),
@@ -23,9 +26,7 @@ class AnalyzePageViewModel extends BaseModel {
         description: ""),
   ];
 
-  AnalyzePageViewModel() {
-    print('is reload again');
-  }
+  AnalyzePageViewModel() {}
 
   // List<String> listCheck = List();
 
