@@ -224,7 +224,6 @@ class HomePageViewModel extends BaseModel {
   }
 
   Future<void> addTransaction(double longitude, double latitude) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_listTempTransaction.length == 0) {
       _listTempTransaction
           .add(PushNotifycationService.transaction[0].transactionID);
@@ -318,6 +317,7 @@ class HomePageViewModel extends BaseModel {
         secondEstimate.minute.toString();
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("userToken", tokenPatient);
     String creator = prefs.getString("usName");
 
     int idExamination = await _examinationRepo.createNewExamination(creator);
@@ -345,6 +345,7 @@ class HomePageViewModel extends BaseModel {
     });
 
     transaction.estimateTime = estimatedTime;
+    transaction.examId = idExamination;
 
     isConnecting(false);
     isActive(false);

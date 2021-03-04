@@ -13,11 +13,14 @@ import 'package:mobile_doctors_apps/helper/helper_method.dart';
 import 'package:mobile_doctors_apps/model/direction_detail.dart';
 import 'package:mobile_doctors_apps/model/transaction_basic_model.dart';
 import 'package:mobile_doctors_apps/repository/map_repo.dart';
+import 'package:mobile_doctors_apps/repository/notify_repo.dart';
+import 'package:mobile_doctors_apps/screens/record/analyze_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MapPageViewModel extends BaseModel {
   final IMapRepo _mapRepo = MapRepo();
+  final INotifyRepo _notifyRepo = NotifyRepo();
 
   final double _initFabHeight = 260.0;
   double _fabHeight;
@@ -321,7 +324,29 @@ class MapPageViewModel extends BaseModel {
     }
   }
 
-  void btnArrived() {
+  void btnArrived(BuildContext context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String usToken = prefs.getString("userToken");
     HelperMethod.disableLiveLocationUpdates();
+
+    await _doctorRequest.child(userId).remove();
+
+    _doctorRequest = FirebaseDatabase.instance.reference().child("Transaction");
+    Map transactionInfo = {
+      "transaction_status": "Analysis Symptom",
+      "exam_id": _basicTransaction.examId,
+    };
+    await _doctorRequest
+        .child(_basicTransaction.transactionId)
+        .set(transactionInfo);
+
+    _notifyRepo.arrivedTransaction(usToken, _basicTransaction.transactionId);
+    prefs.remove("userToken");
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AnalyzePage(),
+      ),
+    );
   }
 }
