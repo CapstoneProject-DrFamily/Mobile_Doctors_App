@@ -131,6 +131,7 @@ class AnalyzePage extends StatelessWidget {
                                             color: MainColors.blueBegin
                                                 .withOpacity(0.8),
                                             onPressed: () {
+                                              model.createExaminationForm();
                                               // Navigator.push(
                                               //     context,
                                               //     MaterialPageRoute(
@@ -160,7 +161,7 @@ class AnalyzePage extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        MedicalHistory(size: size),
+        buildMedicalHistory(size, model),
         SizedBox(
           height: 10,
         ),
@@ -170,121 +171,7 @@ class AnalyzePage extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15.0),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Examination(),
-                Divider(
-                  thickness: 0.5,
-                  color: MainColors.blueBegin,
-                ),
-                EyeSightPart(),
-                Divider(
-                  thickness: 0.5,
-                  color: MainColors.blueBegin,
-                ),
-                FullBody(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 10, left: 10, right: 10),
-                      child: Row(
-                        children: [
-                          Text(
-                            '2.3.2 ',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          Flexible(
-                            child: Text(
-                              'Cơ quan',
-                              style: TextStyle(
-                                fontSize: 18,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Column(
-                      children:
-                          List.generate(model.listSpeciality.length, (index) {
-                        return Column(
-                          children: [
-                            Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Container(
-                                  child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Flexible(
-                                    flex: 2,
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            model.listSpeciality[index].name,
-                                            style: TextStyle(fontSize: 18),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Flexible(
-                                    child: Checkbox(
-                                      value: listCheck.contains(
-                                              model.listSpeciality[index].name)
-                                          ? true
-                                          : false,
-                                      onChanged: (value) {
-                                        print(value);
-
-                                        model.changeCheck(
-                                            model.listSpeciality[index].name,
-                                            value,
-                                            listCheck);
-                                      },
-                                    ),
-                                  )
-                                ],
-                              )),
-                            ),
-                            Visibility(
-                              visible: listCheck
-                                  .contains(model.listSpeciality[index].name),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextField(
-                                      maxLines: 3,
-                                      decoration: InputDecoration(
-                                          hintText: 'Enter text',
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12))),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        );
-                      }),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            child: buildExamination(model),
           ),
         ),
         SizedBox(
@@ -294,24 +181,213 @@ class AnalyzePage extends StatelessWidget {
     );
   }
 
-  void changeCheck(String name, bool isCheck) {
-    if (isCheck) {
-      if (!listCheck.contains(name)) {
-        listCheck.add(name);
-      }
-    } else {
-      listCheck.remove(name);
-    }
+  Container buildMedicalHistory(Size size, AnalyzePageViewModel model) {
+    return Container(
+      width: size.width * 0.9,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                '1. Medical History',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  color: Colors.white.withOpacity(0.8),
+                  alignment: Alignment.topCenter,
+                  width: size.width * 0.8,
+                  child: TextField(
+                    maxLines: 5,
+                    decoration: InputDecoration.collapsed(
+                        hintText: 'Enter medical history of patient'),
+                    onChanged: (value) {
+                      model.examinationForm.history = value;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
-}
 
-class FullBody extends StatelessWidget {
-  const FullBody({
-    Key key,
-  }) : super(key: key);
+  Column buildExamination(AnalyzePageViewModel model) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                '2. Thăm khám lâm sàng',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '2.1 ',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Flexible(
+                    child: Text(
+                      'Dấu hiệu sinh tồn, chỉ số nhân trắc học',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            buildAnthropometricIndex("Mạch", "nhịp/phút", model, "pulseRate"),
+            buildAnthropometricIndex("Nhiệt độ", "độ C", model, "temperature"),
+            buildAnthropometricIndex("Huyết áp", "...", model, "bloodPressure"),
+            buildAnthropometricIndex(
+                "Nhịp thở", "...", model, "respiratoryRate"),
+            buildAnthropometricIndex("Cân nặng", "kg", model, "weight"),
+            buildAnthropometricIndex("Chiều cao", "cm", model, "height"),
+            buildAnthropometricIndex("BMI", "...", model, "BMI"),
+            buildAnthropometricIndex(
+                "Vòng bụng", "...", model, "waistCircumference"),
+          ],
+        ),
+        Divider(
+          thickness: 0.5,
+          color: MainColors.blueBegin,
+        ),
+        buildEyeSight(model),
+        Divider(
+          thickness: 0.5,
+          color: MainColors.blueBegin,
+        ),
+        buildBody(model),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+              child: Row(
+                children: [
+                  Text(
+                    '2.3.2 ',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Flexible(
+                    child: Text(
+                      'Cơ quan',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              children: List.generate(model.listSpeciality.length, (index) {
+                return Column(
+                  children: [
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Container(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Flexible(
+                            flex: 2,
+                            child: Column(
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    model.listSpeciality[index].name,
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Flexible(
+                            child: Checkbox(
+                              value: listCheck.contains(
+                                      model.listSpeciality[index].name)
+                                  ? true
+                                  : false,
+                              onChanged: (value) {
+                                print(value);
 
-  @override
-  Widget build(BuildContext context) {
+                                model.changeCheck(
+                                    model.listSpeciality[index].name,
+                                    value,
+                                    listCheck,
+                                    index,
+                                    model);
+                              },
+                            ),
+                          )
+                        ],
+                      )),
+                    ),
+                    Visibility(
+                      visible:
+                          listCheck.contains(model.listSpeciality[index].name),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextField(
+                              onChanged: (value) {
+                                model.changeFieldText(index, model, value);
+                              },
+                              maxLines: 3,
+                              decoration: InputDecoration(
+                                  hintText: 'Enter text',
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12))),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Column buildBody(AnalyzePageViewModel model) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -363,6 +439,9 @@ class FullBody extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextField(
+            onChanged: (value) {
+              model.examinationForm.mucosa = value;
+            },
             maxLines: 3,
             decoration: InputDecoration(
                 hintText: 'Enter text',
@@ -380,6 +459,9 @@ class FullBody extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextField(
+            onChanged: (value) {
+              model.examinationForm.otherBody = value;
+            },
             maxLines: 3,
             decoration: InputDecoration(
                 hintText: 'Enter text',
@@ -390,15 +472,8 @@ class FullBody extends StatelessWidget {
       ],
     );
   }
-}
 
-class EyeSightPart extends StatelessWidget {
-  const EyeSightPart({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Column buildEyeSight(AnalyzePageViewModel model) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -430,410 +505,95 @@ class EyeSightPart extends StatelessWidget {
                 'Không kính ',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Expanded(
-                    child: Text(
-                      'Mắt trái',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                      child: Container(
-                    margin: EdgeInsets.only(bottom: 10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                            color: MainColors.blueBegin.withOpacity(0.6))),
-                    child: TextField(
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: InputBorder.none, hintText: '0 ~ 10'),
-                    ),
-                  )),
-                ],
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Expanded(
-                    child: Text(
-                      'Mắt phải',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                      child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                            color: MainColors.blueBegin.withOpacity(0.6))),
-                    child: TextField(
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: InputBorder.none, hintText: '0 ~ 10'),
-                    ),
-                  )),
-                ],
-              ),
+              buildEyeExaminationForm("Mắt trái", "0 ~ 10", model, "leftEye"),
+              buildEyeExaminationForm("Mắt phải", "0 ~ 10", model, "rightEye"),
               Text(
                 'Có kính',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Expanded(
-                    child: Text(
-                      'Mắt trái',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                      child: Container(
-                    margin: EdgeInsets.only(bottom: 10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                            color: MainColors.blueBegin.withOpacity(0.6))),
-                    child: TextField(
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: InputBorder.none, hintText: '0 ~ 10'),
-                    ),
-                  )),
-                ],
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Expanded(
-                    child: Text(
-                      'Mắt phải',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                      child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                            color: MainColors.blueBegin.withOpacity(0.6))),
-                    child: TextField(
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: InputBorder.none, hintText: '0 ~ 10'),
-                    ),
-                  )),
-                ],
-              ),
+              buildEyeExaminationForm(
+                  "Mắt trái", "0 ~ 10", model, "leftEyeGlassed"),
+              buildEyeExaminationForm(
+                  "Mắt phải", "0 ~ 10", model, "rightEyeGlassed"),
             ],
           ),
         ),
       ],
     );
   }
+
+  void changeCheck(String name, bool isCheck) {
+    if (isCheck) {
+      if (!listCheck.contains(name)) {
+        listCheck.add(name);
+      }
+    } else {
+      listCheck.remove(name);
+    }
+  }
 }
 
-class Examination extends StatelessWidget {
-  const Examination({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(10.0),
+Row buildAnthropometricIndex(
+    String label, String hintText, AnalyzePageViewModel model, String field) {
+  return Row(
+    children: [
+      SizedBox(width: 15),
+      Expanded(
           child: Text(
-            '2. Thăm khám lâm sàng',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
+        label,
+        style: TextStyle(fontSize: 18),
+      )),
+      Expanded(
+          child: Container(
+        margin: EdgeInsets.only(right: 10, bottom: 10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
+        child: TextField(
+          onChanged: (value) {
+            model.changeFieldNumber(field, model, value);
+          },
+          textAlign: TextAlign.center,
+          keyboardType: TextInputType.number,
+          decoration:
+              InputDecoration(border: InputBorder.none, hintText: hintText),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '2.1 ',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Flexible(
-                child: Text(
-                  'Dấu hiệu sinh tồn, chỉ số nhân trắc học',
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          children: [
-            SizedBox(width: 15),
-            Expanded(
-                child: Text(
-              'Mạch',
-              style: TextStyle(fontSize: 18),
-            )),
-            Expanded(
-                child: Container(
-              margin: EdgeInsets.only(right: 10, bottom: 10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border:
-                      Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
-              child: TextField(
-                textAlign: TextAlign.center,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    border: InputBorder.none, hintText: 'nhịp/phút'),
-              ),
-            )),
-          ],
-        ),
-        Row(children: [
-          SizedBox(width: 15),
-          Expanded(
-              child: Text(
-            'Nhiệt độ',
-            style: TextStyle(fontSize: 18),
-          )),
-          Expanded(
-              child: Container(
-            margin: EdgeInsets.only(right: 10, bottom: 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border:
-                    Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
-            child: TextField(
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
-              decoration:
-                  InputDecoration(border: InputBorder.none, hintText: 'độ C'),
-            ),
-          )),
-        ]),
-        Row(children: [
-          SizedBox(width: 15),
-          Expanded(
-              child: Text(
-            'Huyết áp',
-            style: TextStyle(fontSize: 18),
-          )),
-          Expanded(
-              child: Container(
-            margin: EdgeInsets.only(right: 10, bottom: 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border:
-                    Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
-            child: TextField(
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
-              decoration:
-                  InputDecoration(border: InputBorder.none, hintText: '...'),
-            ),
-          )),
-        ]),
-        Row(children: [
-          SizedBox(width: 15),
-          Expanded(
-              child: Text(
-            'Nhịp thở',
-            style: TextStyle(fontSize: 18),
-          )),
-          Expanded(
-              child: Container(
-            margin: EdgeInsets.only(right: 10, bottom: 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border:
-                    Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
-            child: TextField(
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
-              decoration:
-                  InputDecoration(border: InputBorder.none, hintText: '...'),
-            ),
-          )),
-        ]),
-        Row(
-          children: [
-            SizedBox(width: 15),
-            Expanded(
-                child: Text(
-              'Cân nặng',
-              style: TextStyle(fontSize: 18),
-            )),
-            Expanded(
-                child: Container(
-              margin: EdgeInsets.only(right: 10, bottom: 10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border:
-                      Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
-              child: TextField(
-                textAlign: TextAlign.center,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    border: InputBorder.none, hintText: 'kilograms'),
-              ),
-            )),
-          ],
-        ),
-        Row(
-          children: [
-            SizedBox(width: 15),
-            Expanded(
-                child: Text(
-              'Chiều cao',
-              style: TextStyle(fontSize: 18),
-            )),
-            Expanded(
-                child: Container(
-              margin: EdgeInsets.only(right: 10, bottom: 10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border:
-                      Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
-              child: TextField(
-                textAlign: TextAlign.center,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    border: InputBorder.none, hintText: 'centimet'),
-              ),
-            )),
-          ],
-        ),
-        Row(
-          children: [
-            SizedBox(width: 15),
-            Expanded(
-                child: Text(
-              'BMI',
-              style: TextStyle(fontSize: 18),
-            )),
-            Expanded(
-                child: Container(
-              margin: EdgeInsets.only(right: 10, bottom: 10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border:
-                      Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
-              child: TextField(
-                textAlign: TextAlign.center,
-                keyboardType: TextInputType.number,
-                decoration:
-                    InputDecoration(border: InputBorder.none, hintText: '...'),
-              ),
-            )),
-          ],
-        ),
-        Row(
-          children: [
-            SizedBox(width: 15),
-            Expanded(
-                child: Text(
-              'Vòng bụng',
-              style: TextStyle(fontSize: 18),
-            )),
-            Expanded(
-                child: Container(
-              margin: EdgeInsets.only(right: 10, bottom: 10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border:
-                      Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
-              child: TextField(
-                textAlign: TextAlign.center,
-                keyboardType: TextInputType.number,
-                decoration:
-                    InputDecoration(border: InputBorder.none, hintText: '...'),
-              ),
-            )),
-          ],
-        ),
-      ],
-    );
-  }
+      )),
+    ],
+  );
 }
 
-class MedicalHistory extends StatelessWidget {
-  const MedicalHistory({
-    Key key,
-    @required this.size,
-  }) : super(key: key);
-
-  final Size size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size.width * 0.9,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                '1. Medical History',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  color: Colors.white.withOpacity(0.8),
-                  alignment: Alignment.topCenter,
-                  width: size.width * 0.8,
-                  child: TextField(
-                    maxLines: 5,
-                    decoration: InputDecoration.collapsed(
-                        hintText: 'Enter medical history of patient'),
-                  ),
-                ),
-              ],
-            ),
-          ],
+Row buildEyeExaminationForm(
+    String label, String hintText, AnalyzePageViewModel model, String field) {
+  return Row(
+    children: [
+      SizedBox(
+        width: 15,
+      ),
+      Expanded(
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 18,
+          ),
         ),
       ),
-    );
-  }
+      Expanded(
+          child: Container(
+        margin: EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
+        child: TextField(
+          onChanged: (value) {
+            model.changeFieldNumber(field, model, value);
+          },
+          textAlign: TextAlign.center,
+          keyboardType: TextInputType.number,
+          decoration:
+              InputDecoration(border: InputBorder.none, hintText: '0 ~ 10'),
+        ),
+      )),
+    ],
+  );
 }
