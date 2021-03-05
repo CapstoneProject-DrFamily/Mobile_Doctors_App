@@ -167,6 +167,7 @@ class ExaminationHistory {
         "urineBiochemistry": urineBiochemistry,
         "abdominalUltrasound": abdominalUltrasound,
         "conclusion": conclusion,
+        "advisory": advisory,
         "insBy": insBy,
         "updBy": updBy,
       };

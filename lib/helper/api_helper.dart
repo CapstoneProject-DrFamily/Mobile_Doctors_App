@@ -8,4 +8,7 @@ class APIHelper {
   static const String UPDATE_USER_API = '$Prefix_API/api/v1/Users';
   static const String CREATE_DOCTOR_API = '$Prefix_API/api/v1/Doctors';
   static const String TRANSACTION_API = '$Prefix_API/api/v1/Transactions';
+  static const String MEDICINE_API = '$Prefix_API/api/v1/Medicines';
+  static const String EXAMINATIONHISTORY_API =
+      '$Prefix_API/api/v1/ExaminationHistory';
 }

@@ -1,6 +1,8 @@
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import 'package:mobile_doctors_apps/screens/medicine/medicine_search_bar.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
@@ -9,12 +11,12 @@ import 'package:mobile_doctors_apps/screens/view_model/medicine_form_view_model.
 class MedicineForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BaseView<MedicineFormViewModel>(builder: (context, child, model) {
-      Size size = MediaQuery.of(context).size;
-      return Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.transparent,
-        body: Padding(
+    return BaseView<MedicineFormViewModel>(
+      builder: (context, child, model) {
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Colors.transparent,
+          body: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
@@ -55,7 +57,31 @@ class MedicineForm extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(40),
                                       ),
                                       child: InkWell(
-                                        onTap: () {},
+                                        onTap: () {
+                                          // Navigator.pop(context);
+                                          // waitDialog(context,
+                                          //     duration:
+                                          //         Duration(milliseconds: 500));
+                                          showDialog(
+                                            context: context,
+                                            builder: (_) => AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(30))),
+                                              title: Center(
+                                                  child: new Text(
+                                                      "Add Medicine Detail")),
+                                              content: GestureDetector(
+                                                onTap: () {},
+                                                child: Container(
+                                                  width: 300,
+                                                  height: 500,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
                                         child: Container(
                                             child: Row(
                                           mainAxisAlignment:
@@ -83,19 +109,20 @@ class MedicineForm extends StatelessWidget {
                                                 ],
                                               ),
                                             ),
-                                            Flexible(
-                                              child: Checkbox(
-                                                value: model.listCheck.contains(
-                                                        model.list[index].id)
-                                                    ? true
-                                                    : false,
-                                                onChanged: (value) {
-                                                  model.changeCheck(
-                                                      model.list[index].id,
-                                                      value);
-                                                },
-                                              ),
-                                            )
+                                            // Flexible(
+                                            //   child: Checkbox(
+                                            //     value: model.listCheck.contains(
+                                            //             model.list[index].id)
+                                            //         ? true
+                                            //         : false,
+                                            //     onChanged: (value) {
+                                            //       Navigator.pop(context);
+                                            //       model.changeCheck(
+                                            //           model.list[index].id,
+                                            //           value);
+                                            //     },
+                                            //   ),
+                                            // )
                                           ],
                                         )),
                                       ),
@@ -228,6 +255,9 @@ class MedicineForm extends StatelessWidget {
                                                         Expanded(
                                                           child: Container(
                                                             child: TextField(
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
                                                                 keyboardType:
                                                                     TextInputType
                                                                         .number,
@@ -239,7 +269,7 @@ class MedicineForm extends StatelessWidget {
                                                         ),
                                                         Expanded(
                                                             child: Text(
-                                                          'ngày',
+                                                          'Ngày',
                                                           textAlign:
                                                               TextAlign.center,
                                                         ))
@@ -282,8 +312,10 @@ class MedicineForm extends StatelessWidget {
                   ),
                 ),
               ],
-            )),
-      );
-    });
+            ),
+          ),
+        );
+      },
+    );
   }
 }

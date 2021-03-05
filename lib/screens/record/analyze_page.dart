@@ -132,11 +132,11 @@ class AnalyzePage extends StatelessWidget {
                                                 .withOpacity(0.8),
                                             onPressed: () {
                                               model.createExaminationForm();
-                                              // Navigator.push(
-                                              //     context,
-                                              //     MaterialPageRoute(
-                                              //         builder: (context) =>
-                                              //             SamplePage()));
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          SamplePage()));
                                             },
                                             child: Text('Next')),
                                       ),

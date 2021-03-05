@@ -54,7 +54,7 @@ class DiagnosePage extends StatelessWidget {
                                 child: Column(
                                   children: [
                                     SizedBox(
-                                      height: 100,
+                                      height: 65,
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(20.0),
@@ -71,7 +71,7 @@ class DiagnosePage extends StatelessWidget {
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Text(
-                                                'Chẩn đoán/Kết luận',
+                                                'Diagnose / Conclusion',
                                                 style: TextStyle(
                                                     fontSize: 18,
                                                     fontWeight:
@@ -85,6 +85,50 @@ class DiagnosePage extends StatelessWidget {
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: TextField(
+                                                controller: model
+                                                    .diagnoseConclusionController,
+                                                maxLines: 5,
+                                                decoration:
+                                                    InputDecoration.collapsed(
+                                                        hintText:
+                                                            'Enter your text'),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Card(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15.0),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                'Doctor Advice',
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: TextField(
+                                                controller: model
+                                                    .doctorAdviceController,
                                                 maxLines: 5,
                                                 decoration:
                                                     InputDecoration.collapsed(
@@ -98,7 +142,7 @@ class DiagnosePage extends StatelessWidget {
                                     ),
                                     SizedBox(
                                       height: 50,
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),
@@ -140,7 +184,8 @@ class DiagnosePage extends StatelessWidget {
                                           ),
                                           color: MainColors.blueBegin
                                               .withOpacity(0.8),
-                                          onPressed: () {
+                                          onPressed: () async {
+                                            await model.confirmDiagnose();
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
