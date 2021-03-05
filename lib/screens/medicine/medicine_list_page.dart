@@ -14,7 +14,7 @@ class MedicineListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return BaseView<MedicineListViewModel>(
-      builder: (context, child, model) {
+      builder: (context, child, medicineModel) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
@@ -22,6 +22,18 @@ class MedicineListPage extends StatelessWidget {
             iconTheme: IconThemeData(color: MainColors.blueBegin),
             backgroundColor: Colors.white,
             elevation: 0,
+            actions: <Widget>[
+              FlatButton(
+                textColor: Colors.blue,
+                onPressed: () {},
+                child: Text(
+                  "Finish",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                shape:
+                    CircleBorder(side: BorderSide(color: Colors.transparent)),
+              ),
+            ],
           ),
           body: Container(
             decoration: BoxDecoration(
@@ -81,28 +93,13 @@ class MedicineListPage extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (_) => SingleChildScrollView(
+                  padding: EdgeInsets.only(top: 75),
                   child: new AlertDialog(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(30))),
                     title: Center(child: new Text("Choose Medicine")),
                     content: Container(
                         width: 300, height: 500, child: MedicineForm()),
-                    actions: [
-                      FlatButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text('Cancel'),
-                      ),
-                      FlatButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AnalyzePage()));
-                          },
-                          child: Text('Add')),
-                    ],
                   ),
                 ),
               );
