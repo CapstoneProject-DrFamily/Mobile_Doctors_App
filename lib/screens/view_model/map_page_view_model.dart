@@ -338,7 +338,13 @@ class MapPageViewModel extends BaseModel {
     Map transactionInfo = {
       "transaction_status": "Analysis Symptom",
       "exam_id": _basicTransaction.examId,
+      "doctor_id": _basicTransaction.doctorId,
+      "patientId": _basicTransaction.patientId,
+      "estimatedTime": _basicTransaction.estimateTime,
+      "location": _basicTransaction.location,
+      "note": _basicTransaction.patientNote,
     };
+
     await _doctorRequest
         .child(_basicTransaction.transactionId)
         .set(transactionInfo);
