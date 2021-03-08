@@ -322,7 +322,6 @@ class HomePageViewModel extends BaseModel {
 
     int idExamination = await _examinationRepo.createNewExamination(creator);
 
-    //mock
     if (idExamination != null) {
       Transaction transactionTemp = new Transaction(
           doctorId: transaction.doctorId,

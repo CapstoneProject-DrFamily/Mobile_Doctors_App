@@ -1,10 +1,16 @@
+import 'dart:convert';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:mobile_doctors_apps/model/examination_history.dart';
 import 'package:mobile_doctors_apps/model/specialty_model.dart';
+import 'package:mobile_doctors_apps/repository/examination_repo.dart';
 import 'package:mobile_doctors_apps/screens/record/analyze_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AnalyzePageViewModel extends BaseModel {
   ExaminationHistory examinationForm;
+  final IExaminationRepo _examinationRepo = ExaminationRepo();
 
   List<Speciality> listSpeciality = [
     Speciality(name: 'Tim mạch', description: ""),
@@ -28,6 +34,8 @@ class AnalyzePageViewModel extends BaseModel {
         name: 'Đánh giá phát triển thể chất, tinh thần, vận động',
         description: ""),
   ];
+
+  DatabaseReference _transactionRequest;
 
   AnalyzePageViewModel() {
     examinationForm = new ExaminationHistory();
@@ -184,8 +192,46 @@ class AnalyzePageViewModel extends BaseModel {
     notifyListeners();
   }
 
-  Future<bool> createExaminationForm() {
-    print(examinationForm.toJson());
+  Future<bool> createExaminationForm(String transactionId) async {
+    // mock
+    // transactionId = "TS-4b190c72-a679-4d8f-90f7-b5de8b882d4d";
+    //
+
+    _transactionRequest =
+        FirebaseDatabase.instance.reference().child("Transaction");
+    int exam_id;
+    await _transactionRequest
+        .child(transactionId)
+        .once()
+        .then((DataSnapshot dataSnapshot) {
+      if (dataSnapshot.value != null) {
+        exam_id = dataSnapshot.value['exam_id'];
+      }
+    });
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String creator = prefs.getString("usName");
+
+    //mock
+    // String creator = "khoa";
+
+    examinationForm.id = exam_id;
+    examinationForm.updBy = creator;
+    examinationForm.insBy = creator;
+
+    bool isSuccess = await _examinationRepo
+        .updateExaminationHistory(jsonEncode(examinationForm));
+
+    if (isSuccess) {
+      _transactionRequest = FirebaseDatabase.instance
+          .reference()
+          .child("Transaction")
+          .child(transactionId);
+
+      _transactionRequest.update({"transaction_status": "Sample"});
+    }
+
+    return isSuccess;
   }
 
   void clearInput(int index, AnalyzePageViewModel model) {

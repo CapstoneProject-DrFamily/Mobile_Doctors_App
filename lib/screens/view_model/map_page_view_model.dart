@@ -367,7 +367,8 @@ class MapPageViewModel extends BaseModel {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => AnalyzePage(),
+        builder: (context) =>
+            AnalyzePage(transactionId: _basicTransaction.transactionId),
       ),
     );
   }

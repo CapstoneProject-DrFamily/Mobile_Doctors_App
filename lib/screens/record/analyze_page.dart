@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 import 'package:mobile_doctors_apps/helper/StatefulWrapper.dart';
@@ -13,6 +14,9 @@ class AnalyzePage extends StatelessWidget {
   List<String> listCheck = List();
   bool keyboardOn = false;
   int _processIndex = 0;
+
+  final String transactionId;
+  AnalyzePage({@required this.transactionId});
 
   @override
   Widget build(BuildContext context) {
@@ -130,13 +134,27 @@ class AnalyzePage extends StatelessWidget {
                                             ),
                                             color: MainColors.blueBegin
                                                 .withOpacity(0.8),
-                                            onPressed: () {
-                                              model.createExaminationForm();
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          SamplePage()));
+                                            onPressed: () async {
+                                              bool isSuccess = await model
+                                                  .createExaminationForm(
+                                                      transactionId);
+                                              if (isSuccess) {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            SamplePage()));
+                                              } else {
+                                                Fluttertoast.showToast(
+                                                  msg:
+                                                      "Error. Please try again",
+                                                  textColor: Colors.red,
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  backgroundColor: Colors.white,
+                                                  gravity: ToastGravity.CENTER,
+                                                );
+                                              }
                                             },
                                             child: Text('Next')),
                                       ),
