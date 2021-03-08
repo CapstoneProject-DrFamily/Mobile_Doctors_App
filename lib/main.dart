@@ -19,8 +19,8 @@ Future<void> main() async {
   runApp(
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: profileID == null ? LoginScreen() : LandingScreen(),
-      home: AnalyzePage(),
+      home: profileID == null ? LoginScreen() : LandingScreen(),
+      // home: AnalyzePage(),
     ),
   );
 }
