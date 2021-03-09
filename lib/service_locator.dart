@@ -6,8 +6,10 @@ import 'package:mobile_doctors_apps/screens/view_model/diagnose_page_view_model.
 import 'package:mobile_doctors_apps/screens/view_model/home_page_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/landing_page_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/map_page_view_model.dart';
+import 'package:mobile_doctors_apps/screens/view_model/medicine_detail_form_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/medicine_form_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/medicine_list_view_model.dart';
+import 'package:mobile_doctors_apps/screens/view_model/medicine_search_page_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/patient_detail_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/profile_page_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/sample_page_view_model.dart';
@@ -38,4 +40,8 @@ void setupLocator() {
   locator.registerFactory<SignUpViewModel>(() => SignUpViewModel());
   locator.registerFactory<TimeLineViewModel>(() => TimeLineViewModel());
   // locator.registerFactory<MapPageViewModel>(() => MapPageViewModel());
+  locator.registerFactory<MedicineSearchPageViewModel>(
+      () => MedicineSearchPageViewModel());
+  locator.registerFactory<MedicineDetailFormViewModel>(
+      () => MedicineDetailFormViewModel());
 }

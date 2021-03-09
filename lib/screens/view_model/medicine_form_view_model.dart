@@ -1,7 +1,12 @@
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:mobile_doctors_apps/model/medicine.dart';
+import 'package:mobile_doctors_apps/model/medicine_model.dart';
+import 'package:mobile_doctors_apps/repository/medicine_repo.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 
 class MedicineFormViewModel extends BaseModel {
+  final IMedicineRepo _medicineRepo = MedicineRepo();
+
   List<int> listCheck = [];
 
   List<Medicine> list = [
@@ -16,13 +21,47 @@ class MedicineFormViewModel extends BaseModel {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+  bool _isNotHave = false;
+  bool get isNotHave => _isNotHave;
+
+  List<MedicineModel> _listMedicineModel;
+  List<MedicineModel> get listMedicineModel => _listMedicineModel;
+
+  PagingMedicineModel _pagingMedicineModel;
+  PagingMedicineModel get pagingMedicineModel => _pagingMedicineModel;
+
+  bool hasNextPage;
+
+  bool keyboard = false;
+
   MedicineFormViewModel() {
+    KeyboardVisibilityNotification().addNewListener(
+      onChange: (bool visible) {
+        keyboard = visible;
+        Future.delayed(const Duration(seconds: 2), () {});
+
+        notifyListeners();
+      },
+    );
     print('again');
     initMedicineForm();
   }
 
   Future<void> initMedicineForm() async {
     _isLoading = true;
+    _pagingMedicineModel = await _medicineRepo.getPagingMedicine(1, 5, null);
+    if (_pagingMedicineModel == null) {
+      _isNotHave = true;
+      _isLoading = false;
+      notifyListeners();
+      return;
+    } else {
+      _listMedicineModel = _pagingMedicineModel.listMedicine;
+      hasNextPage = _pagingMedicineModel.hasNextPage;
+
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   void changeCheck(int id, bool isCheck) {
