@@ -1,4 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 class PushNotifycationService {
   static List<TransactionNoti> transaction = [];
@@ -21,6 +24,9 @@ class PushNotifycationService {
             transactionRemove = transactionId;
             transaction.removeWhere(
                 (element) => element.transactionID == transactionRemove);
+          } else if (status.endsWith("end")) {
+            print("in cancel");
+            endTransaction();
           }
           print('booking');
         }
@@ -64,6 +70,17 @@ class PushNotifycationService {
         TransactionNoti(transactionID: transactionId, notifyToken: notifyToken);
     transaction.add(transactionNoti);
     print("notiTransLengh: ${transaction.length}");
+  }
+
+  void endTransaction() {
+    Get.back();
+    Fluttertoast.showToast(
+      msg: "Patient Have Cancel.",
+      textColor: Colors.red,
+      toastLength: Toast.LENGTH_SHORT,
+      backgroundColor: Colors.white,
+      gravity: ToastGravity.CENTER,
+    );
   }
 }
 
