@@ -11,4 +11,5 @@ class APIHelper {
   static const String MEDICINE_API = '$Prefix_API/api/v1/Medicines';
   static const String EXAMINATIONHISTORY_API =
       '$Prefix_API/api/v1/ExaminationHistory';
+  static const String PRESCRIPTION_API = '$Prefix_API/api/v1/Presciptions';
 }

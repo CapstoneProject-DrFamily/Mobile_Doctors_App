@@ -13,9 +13,9 @@ class MedicineModel {
     return MedicineModel(
       medicineId: json['medicineId'] as int,
       medicineForm: json['form'] as String,
-      medicineStrength: json['pulseRate'] as String,
-      medicineName: json['temperature'] as String,
-      activeIngredient: json['bloodPressure'] as String,
+      medicineStrength: json['strength'] as String,
+      medicineName: json['name'] as String,
+      activeIngredient: json['activeIngredient'] as String,
     );
   }
 
@@ -26,4 +26,11 @@ class MedicineModel {
         "name": medicineName,
         "activeIngredient": activeIngredient,
       };
+}
+
+class PagingMedicineModel {
+  List<MedicineModel> listMedicine;
+  bool hasNextPage;
+
+  PagingMedicineModel({this.hasNextPage, this.listMedicine});
 }
