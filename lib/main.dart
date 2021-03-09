@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_doctors_apps/screens/landing/landing_page.dart';
 import 'package:mobile_doctors_apps/screens/login/login_page.dart';
-import 'package:mobile_doctors_apps/screens/record/analyze_page.dart';
-import 'package:mobile_doctors_apps/screens/setting/setting_page.dart';
 
 import 'package:mobile_doctors_apps/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
