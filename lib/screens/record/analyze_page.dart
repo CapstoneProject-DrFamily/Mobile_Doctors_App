@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/timeline_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/analyze_page_view_model.dart';
@@ -105,21 +106,22 @@ class AnalyzePage extends StatelessWidget {
                                         color: MainColors.blueBegin
                                             .withOpacity(0.8),
                                         onPressed: () async {
-                                          timelineModel.changeIndex(1);
+                                          // timelineModel.changeIndex(1);
 
-                                          // bool isSuccess = await model
-                                          //     .createExaminationForm(transactionId);
-                                          // if (isSuccess) {
-                                          //   timelineModel.changeIndex(1);
-                                          // } else {
-                                          //   Fluttertoast.showToast(
-                                          //     msg: "Error. Please try again",
-                                          //     textColor: Colors.red,
-                                          //     toastLength: Toast.LENGTH_SHORT,
-                                          //     backgroundColor: Colors.white,
-                                          //     gravity: ToastGravity.CENTER,
-                                          //   );
-                                          // }
+                                          bool isSuccess =
+                                              await model.createExaminationForm(
+                                                  transactionId);
+                                          if (isSuccess) {
+                                            timelineModel.changeIndex(1);
+                                          } else {
+                                            Fluttertoast.showToast(
+                                              msg: "Error. Please try again",
+                                              textColor: Colors.red,
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              backgroundColor: Colors.white,
+                                              gravity: ToastGravity.CENTER,
+                                            );
+                                          }
                                         },
                                         child: !model.isLoading
                                             ? Text(
