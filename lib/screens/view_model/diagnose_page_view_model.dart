@@ -14,6 +14,7 @@ class DiagnosePageViewModel extends BaseModel {
   bool keyboard = false;
   int examId;
   String transactionId;
+  bool init = true;
 
   ExaminationHistory _examinationHistory;
   ExaminationHistory get examinationHistory => _examinationHistory;
@@ -33,17 +34,30 @@ class DiagnosePageViewModel extends BaseModel {
         keyboard = visible;
       },
     );
-
-    _transactionRequest =
-        FirebaseDatabase.instance.reference().child("Transaction");
-
-    examId = 9;
-    transactionId = "TS-4b190c72-a679-4d8f-90f7-b5de8b882d4d";
-    initDiagnose();
   }
 
   void initDiagnose() async {
+    _transactionRequest =
+        FirebaseDatabase.instance.reference().child("Transaction");
+
+    await _transactionRequest
+        .child(transactionId)
+        .once()
+        .then((DataSnapshot dataSnapshot) {
+      if (dataSnapshot.value != null) {
+        examId = dataSnapshot.value['exam_id'];
+      }
+    });
     _examinationHistory = await _examinationRepo.getExaminationHistory(examId);
+  }
+
+  fetchData(transactionId) {
+    if (init) {
+      this.transactionId = transactionId;
+      init = false;
+      print("load transaction");
+      initDiagnose();
+    }
   }
 
   Future<void> confirmDiagnose() async {
@@ -59,7 +73,6 @@ class DiagnosePageViewModel extends BaseModel {
         await _examinationRepo.updateExaminationHistory(jsonExaminationHistory);
     Map transactionInfo = {
       "transaction_status": "Prescription",
-      "exam_id": examId,
     };
 
     await _transactionRequest.child(transactionId).set(transactionInfo);

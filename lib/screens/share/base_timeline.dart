@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_doctors_apps/screens/record/analyze_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/share/timeline_process.dart';
-import 'package:mobile_doctors_apps/screens/test_timeline/analyze_refactor.dart';
-import 'package:mobile_doctors_apps/screens/test_timeline/timeline_view_model.dart';
+import 'package:mobile_doctors_apps/screens/view_model/timeline_view_model.dart';
 import 'package:mobile_doctors_apps/themes/colors.dart';
 
 class BaseTimeLine extends StatelessWidget {
+  final String transactionId;
+  BaseTimeLine({@required this.transactionId});
+
   @override
   Widget build(BuildContext contextA) {
     return BaseView<TimeLineViewModel>(builder: (contextB, child, model) {
@@ -23,7 +24,8 @@ class BaseTimeLine extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: InkWell(
-                        onTap: () {
+                        onTap: () async {
+                          await model.skipTransaction(transactionId);
                           model.changeIndex(2);
                         },
                         child: Padding(
@@ -50,7 +52,8 @@ class BaseTimeLine extends StatelessWidget {
                 Container(
                   child: timelineProcess(contextB, model.index),
                 ),
-                Expanded(child: model.buildWidget(model.index, model))
+                Expanded(
+                    child: model.buildWidget(model.index, model, transactionId))
               ],
             )),
       );

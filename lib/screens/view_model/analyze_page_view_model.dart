@@ -10,9 +10,11 @@ import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AnalyzePageViewModel extends BaseModel {
+  String transactionId;
   ExaminationHistory examinationForm;
   final IExaminationRepo _examinationRepo = ExaminationRepo();
   bool isLoading = false;
+  bool init = true;
 
   List<Speciality> listSpeciality = [
     Speciality(name: 'Tim mạch', description: ""),
@@ -42,8 +44,6 @@ class AnalyzePageViewModel extends BaseModel {
   bool keyboard = false;
 
   AnalyzePageViewModel() {
-    print('init');
-
     KeyboardVisibilityNotification().addNewListener(
       onChange: (bool visible) {
         print("visible : " + visible.toString());
@@ -52,6 +52,14 @@ class AnalyzePageViewModel extends BaseModel {
     );
 
     examinationForm = new ExaminationHistory();
+  }
+
+  fetchData(transactionId) {
+    if (init) {
+      this.transactionId = transactionId;
+      init = false;
+      print("load transaction");
+    }
   }
 
   void resetField(String field, AnalyzePageViewModel model) {
@@ -209,7 +217,7 @@ class AnalyzePageViewModel extends BaseModel {
     isLoading = true;
     notifyListeners();
     // mock
-    transactionId = "TS-4b190c72-a679-4d8f-90f7-b5de8b882d4d";
+    // transactionId = "TS-4b190c72-a679-4d8f-90f7-b5de8b882d4d";
 
     _transactionRequest =
         FirebaseDatabase.instance.reference().child("Transaction");
@@ -223,11 +231,11 @@ class AnalyzePageViewModel extends BaseModel {
       }
     });
 
-    // final SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String creator = prefs.getString("usName");
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String creator = prefs.getString("usName");
 
     // mock
-    String creator = "khoa";
+    // String creator = "khoa";
 
     examinationForm.id = exam_id;
     examinationForm.updBy = creator;
@@ -242,7 +250,7 @@ class AnalyzePageViewModel extends BaseModel {
           .child("Transaction")
           .child(transactionId);
 
-      _transactionRequest.update({"transaction_status": "Sample"});
+      _transactionRequest.update({"transaction_status": "Take Sample"});
     }
     isLoading = false;
     notifyListeners();

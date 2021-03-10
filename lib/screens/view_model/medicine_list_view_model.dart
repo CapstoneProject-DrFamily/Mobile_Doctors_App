@@ -17,6 +17,7 @@ import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 class MedicineListViewModel extends BaseModel {
   final IPrescriptionRepo _prescriptionRepo = PrescriptionRepo();
   final ITransactionRepo _transactionRepo = TransactionRepo();
+  bool init = true;
 
   static bool isUpdate = false;
   static List<MedicineDetailModel> listMedicine = [];
@@ -28,10 +29,39 @@ class MedicineListViewModel extends BaseModel {
 
   DatabaseReference _transactionRequest;
 
+  String transactionId, estimateTime, location, note;
+  int doctorId, examId, patientId;
+
   MedicineListViewModel() {
+    initMedicineList();
+  }
+
+  fetchData(transactionId) {
+    if (init) {
+      this.transactionId = transactionId;
+      init = false;
+      print("load transaction");
+      getTransactionFireBase();
+    }
+  }
+
+  void getTransactionFireBase() async {
     _transactionRequest =
         FirebaseDatabase.instance.reference().child("Transaction");
-    initMedicineList();
+
+    await _transactionRequest
+        .child(transactionId)
+        .once()
+        .then((DataSnapshot dataSnapshot) {
+      if (dataSnapshot.value != null) {
+        estimateTime = dataSnapshot.value['estimatedTime'];
+        location = dataSnapshot.value['location'];
+        note = dataSnapshot.value['note'];
+        doctorId = dataSnapshot.value['doctor_id'];
+        patientId = dataSnapshot.value['patientId'];
+        examId = dataSnapshot.value['exam_id'];
+      }
+    });
   }
 
   void initMedicineList() {
@@ -83,22 +113,20 @@ class MedicineListViewModel extends BaseModel {
         await _prescriptionRepo.createPrescription(prescriptionJson);
 
     Transaction transaction = new Transaction(
-        transactionId: "TS-bdab3709-f484-4067-94de-cb53a28d1ee8",
-        doctorId: 14,
-        patientId: 20,
-        estimatedTime: "14:9 - 14:24",
-        examId: 9,
-        location: "latitude: 10.7739452, longitude: 106.66849769999999",
-        note: "nothing",
+        transactionId: transactionId,
+        doctorId: doctorId,
+        patientId: patientId,
+        estimatedTime: estimateTime,
+        examId: examId,
+        location: location,
+        note: note,
         prescriptionId: prescriptionId,
         status: 3);
 
     bool statusUpdate = await _transactionRepo.updateTransaction(transaction);
 
     if (statusUpdate == true) {
-      _transactionRequest
-          .child("TS-4b190c72-a679-4d8f-90f7-b5de8b882d4d")
-          .update({
+      _transactionRequest.child(transactionId).update({
         "transaction_status": "done",
         "rating": false,
       });
