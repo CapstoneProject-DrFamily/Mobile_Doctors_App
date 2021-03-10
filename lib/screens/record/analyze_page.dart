@@ -34,113 +34,118 @@ class AnalyzePage extends StatelessWidget {
                   onTap: () {
                     FocusScope.of(contextA).requestFocus(new FocusNode());
                   },
-                  child: Container(
-                    child: Align(
-                      alignment: FractionalOffset.bottomCenter,
-                      child: Stack(
-                        alignment: Alignment.topCenter,
-                        overflow: Overflow.visible,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                color: MainColors.blueBegin.withOpacity(0.6),
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(40),
-                                    topRight: Radius.circular(40))),
-                            width: MediaQuery.of(contextB).size.width,
-                            height: MediaQuery.of(contextB).size.height * 0.65,
-                            child: Padding(
-                              padding: !model.keyboard
-                                  ? EdgeInsets.only(top: 85.0)
-                                  : EdgeInsets.only(top: 10),
-                              child: SingleChildScrollView(
-                                child: Container(
-                                  child: buildAnalyzeForm(contextB, model),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Visibility(
-                            visible: !model.keyboard ? true : false,
-                            // visible: false,
-                            child: Positioned(
-                              top: -66,
-                              child: CircleAvatar(
-                                radius: 73,
-                                backgroundColor:
-                                    MainColors.blueBegin.withOpacity(0.5),
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  radius: 70,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 40),
+                    child: Container(
+                      child: Align(
+                        alignment: FractionalOffset.bottomCenter,
+                        child: Stack(
+                          alignment: Alignment.topCenter,
+                          overflow: Overflow.visible,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: MainColors.blueBegin.withOpacity(0.6),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(40),
+                                      topRight: Radius.circular(40))),
+                              width: MediaQuery.of(contextB).size.width,
+                              height:
+                                  MediaQuery.of(contextB).size.height * 0.65,
+                              child: Padding(
+                                padding: !model.keyboard
+                                    ? EdgeInsets.only(top: 85.0)
+                                    : EdgeInsets.only(top: 10),
+                                child: SingleChildScrollView(
                                   child: Container(
-                                    child: Image.asset(
-                                      'assets/images/time_line_1.png',
-                                      width: 120,
-                                      // color: Colors.red,
-                                    ),
-
-                                    // SvgPicture.asset(
-                                    //   'assets/icons/medical-file.svg',
-                                    //   height: 80,
-                                    //   width: 80,
-                                    // ),
+                                    child: buildAnalyzeForm(contextB, model),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          Visibility(
-                            visible: !model.keyboard ? true : false,
-                            child: Positioned(
-                                bottom: 10,
-                                child: Container(
-                                  width:
-                                      MediaQuery.of(contextB).size.width * 0.6,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: FlatButton(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0),
-                                        ),
-                                        color: MainColors.blueBegin
-                                            .withOpacity(0.8),
-                                        onPressed: () async {
-                                          // timelineModel.changeIndex(1);
+                            Visibility(
+                              visible: !model.keyboard ? true : false,
+                              // visible: false,
+                              child: Positioned(
+                                top: -66,
+                                child: CircleAvatar(
+                                  radius: 73,
+                                  backgroundColor:
+                                      MainColors.blueBegin.withOpacity(0.5),
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: 70,
+                                    child: Container(
+                                      child: Image.asset(
+                                        'assets/images/time_line_1.png',
+                                        width: 120,
+                                        // color: Colors.red,
+                                      ),
 
-                                          bool isSuccess =
-                                              await model.createExaminationForm(
-                                                  transactionId);
-                                          if (isSuccess) {
-                                            timelineModel.changeIndex(1);
-                                          } else {
-                                            Fluttertoast.showToast(
-                                              msg: "Error. Please try again",
-                                              textColor: Colors.red,
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              backgroundColor: Colors.white,
-                                              gravity: ToastGravity.CENTER,
-                                            );
-                                          }
-                                        },
-                                        child: !model.isLoading
-                                            ? Text(
-                                                'Next',
-                                                // style: TextStyle(fontSize: 20),
-                                              )
-                                            : Container(
-                                                child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(2),
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  backgroundColor: Colors.white,
-                                                ),
-                                              ))),
+                                      // SvgPicture.asset(
+                                      //   'assets/icons/medical-file.svg',
+                                      //   height: 80,
+                                      //   width: 80,
+                                      // ),
+                                    ),
                                   ),
-                                )),
-                          ),
-                        ],
+                                ),
+                              ),
+                            ),
+                            Visibility(
+                              visible: !model.keyboard ? true : false,
+                              child: Positioned(
+                                  bottom: 10,
+                                  child: Container(
+                                    width: MediaQuery.of(contextB).size.width *
+                                        0.6,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: FlatButton(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                          ),
+                                          color: MainColors.blueBegin
+                                              .withOpacity(0.8),
+                                          onPressed: () async {
+                                            // timelineModel.changeIndex(1);
+
+                                            bool isSuccess = await model
+                                                .createExaminationForm(
+                                                    transactionId);
+                                            if (isSuccess) {
+                                              timelineModel.changeIndex(1);
+                                            } else {
+                                              Fluttertoast.showToast(
+                                                msg: "Error. Please try again",
+                                                textColor: Colors.red,
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                backgroundColor: Colors.white,
+                                                gravity: ToastGravity.CENTER,
+                                              );
+                                            }
+                                          },
+                                          child: !model.isLoading
+                                              ? Text(
+                                                  'Next',
+                                                  // style: TextStyle(fontSize: 20),
+                                                )
+                                              : Container(
+                                                  child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(2),
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                  ),
+                                                ))),
+                                    ),
+                                  )),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -26,79 +26,86 @@ class MedicineListPage extends StatelessWidget {
                   onTap: () {
                     FocusScope.of(context).requestFocus(new FocusNode());
                   },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        image: DecorationImage(
-                          colorFilter: new ColorFilter.mode(
-                              Colors.black.withOpacity(0.6), BlendMode.dstATop),
-                          image: AssetImage('assets/images/medicinelist.jpg'),
-                        )),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Expanded(
-                          child: Stack(
-                              alignment: Alignment.topCenter,
-                              overflow: Overflow.visible,
-                              children: [
-                                MedicineFormDetail(
-                                  model: model,
-                                ),
-                                Visibility(
-                                  visible: !model.keyboard ? true : false,
-                                  child: Positioned(
-                                    top: -66,
-                                    child: CircleAvatar(
-                                      radius: 73,
-                                      backgroundColor:
-                                          MainColors.blueBegin.withOpacity(0.5),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          image: DecorationImage(
+                            colorFilter: new ColorFilter.mode(
+                                Colors.black.withOpacity(0.6),
+                                BlendMode.dstATop),
+                            image: AssetImage('assets/images/medicinelist.jpg'),
+                          )),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Expanded(
+                            child: Stack(
+                                alignment: Alignment.topCenter,
+                                overflow: Overflow.visible,
+                                children: [
+                                  MedicineFormDetail(
+                                    model: model,
+                                  ),
+                                  Visibility(
+                                    visible: !model.keyboard ? true : false,
+                                    child: Positioned(
+                                      top: -66,
                                       child: CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        radius: 70,
-                                        child: Container(
-                                          child: Image.asset(
-                                            'assets/images/time_line_4.png',
-                                            width: 120,
+                                        radius: 73,
+                                        backgroundColor: MainColors.blueBegin
+                                            .withOpacity(0.5),
+                                        child: CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          radius: 70,
+                                          child: Container(
+                                            child: Image.asset(
+                                              'assets/images/time_line_4.png',
+                                              width: 120,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Visibility(
-                                  visible: !model.keyboard ? true : false,
-                                  child: Positioned(
-                                      bottom: 10,
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: FlatButton(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(18.0),
-                                              ),
-                                              color: MainColors.blueBegin
-                                                  .withOpacity(0.8),
-                                              onPressed: () async {
-                                                model
-                                                    .finishTransaction(context);
-                                              },
-                                              child: Text(
-                                                'Finish',
-                                                style: TextStyle(fontSize: 20),
-                                              )),
-                                        ),
-                                      )),
-                                ),
-                              ]),
-                        ),
-                      ],
+                                  Visibility(
+                                    visible: !model.keyboard ? true : false,
+                                    child: Positioned(
+                                        bottom: 10,
+                                        child: Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.6,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: FlatButton(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          18.0),
+                                                ),
+                                                color: MainColors.blueBegin
+                                                    .withOpacity(0.8),
+                                                onPressed: () async {
+                                                  model.finishTransaction(
+                                                      context);
+                                                },
+                                                child: Text(
+                                                  'Finish',
+                                                  style:
+                                                      TextStyle(fontSize: 20),
+                                                )),
+                                          ),
+                                        )),
+                                  ),
+                                ]),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
