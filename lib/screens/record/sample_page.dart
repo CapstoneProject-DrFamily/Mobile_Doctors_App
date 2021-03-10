@@ -16,31 +16,34 @@ class SamplePage extends StatelessWidget {
       return FutureBuilder(
         future: model.fetchData(transactionId),
         builder: (context, snapshot) {
-          return Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                image: DecorationImage(
-                  colorFilter: new ColorFilter.mode(
-                      Colors.white.withOpacity(0.6), BlendMode.dstATop),
-                  image: AssetImage('assets/images/sample.jpg'),
-                )),
-            child: Scaffold(
-              resizeToAvoidBottomInset: false,
-              backgroundColor: Colors.transparent,
-              body: buildListParameter(context, model),
-              floatingActionButton: FloatingActionButton(
-                child: Icon(Icons.add),
-                backgroundColor: Colors.lightBlue[600],
-                onPressed: () async {
-                  List<BloodParameter> values = await showDialog(
-                      context: context,
-                      builder: (dialogContext) => SamplePopUp(
-                            list: model.listCheck,
-                          ));
-                  if (values != null) {
-                    model.loadParameter(values);
-                  }
-                },
+          return Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  image: DecorationImage(
+                    colorFilter: new ColorFilter.mode(
+                        Colors.white.withOpacity(0.6), BlendMode.dstATop),
+                    image: AssetImage('assets/images/sample.jpg'),
+                  )),
+              child: Scaffold(
+                resizeToAvoidBottomInset: false,
+                backgroundColor: Colors.transparent,
+                body: buildListParameter(context, model),
+                floatingActionButton: FloatingActionButton(
+                  child: Icon(Icons.add),
+                  backgroundColor: Colors.lightBlue[600],
+                  onPressed: () async {
+                    List<BloodParameter> values = await showDialog(
+                        context: context,
+                        builder: (dialogContext) => SamplePopUp(
+                              list: model.listCheck,
+                            ));
+                    if (values != null) {
+                      model.loadParameter(values);
+                    }
+                  },
+                ),
               ),
             ),
           );

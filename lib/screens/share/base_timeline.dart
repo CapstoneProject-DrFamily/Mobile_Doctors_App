@@ -15,7 +15,7 @@ class BaseTimeLine extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           iconTheme: IconThemeData(color: MainColors.blueBegin),
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.white,
           elevation: 0,
           actions: [
             model.index == 1
@@ -45,6 +45,7 @@ class BaseTimeLine extends StatelessWidget {
           ],
         ),
         body: Container(
+            color: Colors.white,
             height: double.infinity,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,

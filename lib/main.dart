@@ -20,9 +20,9 @@ Future<void> main() async {
 
   runApp(
     GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: profileID == null ? LoginScreen() : LandingScreen()
-        // home: BaseTimeLine(),
-        ),
+      debugShowCheckedModeBanner: false,
+      // home: profileID == null ? LoginScreen() : LandingScreen()
+      home: BaseTimeLine(),
+    ),
   );
 }
