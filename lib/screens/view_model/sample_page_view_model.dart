@@ -3,6 +3,8 @@ import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/sample_pop_up_view_model.dart';
 
 class SamplePageViewModel extends BaseModel {
+  String transactionId;
+  bool init = true;
   List<BloodTestParameter> listParameter = [];
 
   List<BloodParameter> listCheck = [];
@@ -32,6 +34,14 @@ class SamplePageViewModel extends BaseModel {
     notifyListeners();
   }
 
+  fetchData(transactionId) {
+    if (init) {
+      this.transactionId = transactionId;
+      init = false;
+      print("load transaction");
+    }
+  }
+
   // List<String> listCheck = [];
 
   // void changeCheck(String name, bool isCheck) {
@@ -45,4 +55,5 @@ class SamplePageViewModel extends BaseModel {
 
   //   notifyListeners();
   // }
+
 }

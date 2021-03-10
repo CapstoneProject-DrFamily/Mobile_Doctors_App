@@ -5,7 +5,7 @@ import 'package:mobile_doctors_apps/enums/processTimeline.dart';
 import 'package:mobile_doctors_apps/helper/common.dart';
 import 'package:timelines/timelines.dart';
 
-Container timelineProcess(BuildContext context, int _processIndex) {
+Container timelineProcess(BuildContext contextC, int _processIndex) {
   return Container(
     height: 150,
     child: Timeline.tileBuilder(
@@ -14,10 +14,10 @@ Container timelineProcess(BuildContext context, int _processIndex) {
             connectorTheme: ConnectorThemeData(space: 30, thickness: 5)),
         builder: TimelineTileBuilder.connected(
             connectionDirection: ConnectionDirection.before,
-            itemExtentBuilder: (_, __) =>
-                MediaQuery.of(context).size.width /
+            itemExtentBuilder: (contextD, __) =>
+                MediaQuery.of(contextD).size.width /
                 ProcessTimeline.values.length,
-            oppositeContentsBuilder: (context, index) {
+            oppositeContentsBuilder: (contextE, index) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 15.0),
                 child: Image.asset(
@@ -26,7 +26,7 @@ Container timelineProcess(BuildContext context, int _processIndex) {
                 ),
               );
             },
-            contentsBuilder: (context, index) {
+            contentsBuilder: (contextF, index) {
               return Padding(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: Text(
@@ -38,7 +38,7 @@ Container timelineProcess(BuildContext context, int _processIndex) {
                 ),
               );
             },
-            indicatorBuilder: (_, index) {
+            indicatorBuilder: (contextI, index) {
               var color;
               var child;
               if (index == _processIndex) {
@@ -104,7 +104,7 @@ Container timelineProcess(BuildContext context, int _processIndex) {
                 );
               }
             },
-            connectorBuilder: (_, index, type) {
+            connectorBuilder: (contextM, index, type) {
               if (index > 0) {
                 if (index == _processIndex) {
                   final prevColor = Common.getColor(index - 1, _processIndex);
