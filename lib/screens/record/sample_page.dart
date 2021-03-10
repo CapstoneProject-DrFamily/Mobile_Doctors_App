@@ -1,78 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_doctors_apps/screens/medicine/medicine_list_page.dart';
-import 'package:mobile_doctors_apps/screens/record/diagnose_page.dart';
 import 'package:mobile_doctors_apps/screens/record/sample_pop_up.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
-import 'package:mobile_doctors_apps/screens/share/timeline_process.dart';
 import 'package:mobile_doctors_apps/screens/view_model/sample_page_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/sample_pop_up_view_model.dart';
+import 'package:mobile_doctors_apps/screens/view_model/timeline_view_model.dart';
 import 'package:mobile_doctors_apps/themes/colors.dart';
 
 class SamplePage extends StatelessWidget {
-  int _processIndex = 1;
+  final TimeLineViewModel timelineModel;
+  final String transactionId;
 
-  @override
+  SamplePage({@required this.timelineModel, @required this.transactionId});
   Widget build(BuildContext context) {
-    // Size size = MediaQuery.of(context).size;
     return BaseView<SamplePageViewModel>(builder: (context, child, model) {
-      return Container(
-        decoration: BoxDecoration(
-            color: Colors.white,
-            image: DecorationImage(
-              colorFilter: new ColorFilter.mode(
-                  Colors.white.withOpacity(0.6), BlendMode.dstATop),
-              image: AssetImage('assets/images/sample.jpg'),
-            )),
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            iconTheme: IconThemeData(color: MainColors.blueBegin),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            actions: [
-              Container(
-                  child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DiagnosePage()));
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Skip this step',
-                        style: TextStyle(
-                            color: MainColors.blueBegin,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      ),
-                    ),
-                  ),
-                ),
-              ))
-            ],
-          ),
-          backgroundColor: Colors.transparent,
-          body: buildListParameter(context, model),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            backgroundColor: Colors.lightBlue[600],
-            onPressed: () async {
-              List<BloodParameter> values = await showDialog(
-                  context: context,
-                  builder: (dialogContext) => SamplePopUp(
-                        list: model.listCheck,
-                      ));
-              if (values != null) {
-                model.loadParameter(values);
-              }
-            },
-          ),
-        ),
+      return FutureBuilder(
+        future: model.fetchData(transactionId),
+        builder: (context, snapshot) {
+          return Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                image: DecorationImage(
+                  colorFilter: new ColorFilter.mode(
+                      Colors.white.withOpacity(0.6), BlendMode.dstATop),
+                  image: AssetImage('assets/images/sample.jpg'),
+                )),
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              backgroundColor: Colors.transparent,
+              body: buildListParameter(context, model),
+              floatingActionButton: FloatingActionButton(
+                child: Icon(Icons.add),
+                backgroundColor: Colors.lightBlue[600],
+                onPressed: () async {
+                  List<BloodParameter> values = await showDialog(
+                      context: context,
+                      builder: (dialogContext) => SamplePopUp(
+                            list: model.listCheck,
+                          ));
+                  if (values != null) {
+                    model.loadParameter(values);
+                  }
+                },
+              ),
+            ),
+          );
+        },
       );
     });
   }
@@ -83,9 +55,8 @@ class SamplePage extends StatelessWidget {
       height: double.infinity,
       child: Column(
         children: [
-          timelineProcess(context, _processIndex),
           SizedBox(
-            height: 50,
+            height: 10,
           ),
           Expanded(
             child: Container(

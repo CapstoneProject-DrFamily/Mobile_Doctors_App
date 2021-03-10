@@ -18,6 +18,7 @@ import 'package:mobile_doctors_apps/repository/notify_repo.dart';
 import 'package:mobile_doctors_apps/repository/transaction_repo.dart';
 import 'package:mobile_doctors_apps/screens/record/analyze_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
+import 'package:mobile_doctors_apps/screens/share/base_timeline.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MapPageViewModel extends BaseModel {
@@ -371,7 +372,7 @@ class MapPageViewModel extends BaseModel {
       context,
       MaterialPageRoute(
         builder: (context) =>
-            AnalyzePage(transactionId: _basicTransaction.transactionId),
+            BaseTimeLine(transactionId: _basicTransaction.transactionId),
       ),
     );
   }
