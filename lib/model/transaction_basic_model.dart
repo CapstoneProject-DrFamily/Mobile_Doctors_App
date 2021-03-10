@@ -6,10 +6,10 @@ class TransactionBasicModel {
       symptomName,
       patientNote,
       location;
-  final double distance, longitude, latitude;
+  final double distance, longitude, latitude, servicePrice;
   final int endTime, doctorId, patientId;
   final List<SymptomTempModel> patientSymptom;
-  String estimateTime;
+  String estimateTime, serviceName;
   int examId;
 
   TransactionBasicModel({
@@ -27,6 +27,8 @@ class TransactionBasicModel {
     this.doctorId,
     this.location,
     this.patientId,
+    this.serviceName,
+    this.servicePrice,
   });
 
   factory TransactionBasicModel.fromJson(Map<String, dynamic> json) {

@@ -237,7 +237,7 @@ class HomePageViewModel extends BaseModel {
     } else {
       for (var item in PushNotifycationService.transaction) {
         if (_listTempTransaction.contains(item.transactionID)) {
-          // print("contain");
+          print("contain");
           // _listTempTransaction.add(item);
           // await _transactionRepo.getTransactionDetail(item);
         } else {
@@ -269,12 +269,12 @@ class HomePageViewModel extends BaseModel {
         .indexWhere((element) => element.transactionID == transactionID);
     String tokenPatient =
         PushNotifycationService.transaction[indexTransaction].notifyToken;
-    await _notifyRepo.cancelTransaction(tokenPatient, transactionID);
     PushNotifycationService.transaction
         .removeWhere((element) => element.transactionID == transactionID);
     _listTempTransaction.removeWhere((element) => element == transactionID);
     _listTransaction
         .removeWhere((element) => element.transactionId == transactionID);
+    await _notifyRepo.cancelTransaction(tokenPatient, transactionID);
 
     print(
         'List ${PushNotifycationService.transaction.length}  ${_listTempTransaction.length}  ${_listTransaction.length}');
