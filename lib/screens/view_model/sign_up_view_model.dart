@@ -326,7 +326,8 @@ class SignUpViewModel extends BaseModel {
 
       if (check == true)
         check = await _signUpRepo.createDoctor(createDoctorJson);
-      sharedPreferences.remove("usProfileID");
+
+      await sharedPreferences.clear();
     }
 
     return check;

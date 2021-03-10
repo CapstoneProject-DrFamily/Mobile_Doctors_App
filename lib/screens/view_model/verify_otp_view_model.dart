@@ -217,8 +217,9 @@ class VerifyOTPViewModel extends BaseModel {
                   backgroundColor: Colors.white,
                   gravity: ToastGravity.CENTER,
                 );
+                await prefs.clear();
                 Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => SignUpPage()),
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
                     (Route<dynamic> route) => false);
               } else if (waiting == true && _userModel.profileId == null) {
                 Navigator.of(context).pushAndRemoveUntil(

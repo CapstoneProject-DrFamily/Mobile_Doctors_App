@@ -41,9 +41,13 @@ class TransactionRepo extends ITransactionRepo {
       String longitude = "";
       String placeName = "";
 
+      String serviceName = "";
+
       int doctorId = 0;
       int patientId = 0;
       String location = "";
+
+      double servicePrice = 0;
 
       double distanceKM = 0;
 
@@ -77,14 +81,19 @@ class TransactionRepo extends ITransactionRepo {
 
       distanceKM = double.parse((distance / 1000).toStringAsFixed(1));
 
-      for (int i = 0; i < listSymptom.length; i++) {
-        if (i == listSymptom.length) {
-          symptomName = symptomName + listSymptom[i].symptomName.toString();
-        } else {
-          symptomName =
-              symptomName + listSymptom[i].symptomName.toString() + ", ";
+      if (listSymptom != null) {
+        for (int i = 0; i < listSymptom.length; i++) {
+          if (i == listSymptom.length) {
+            symptomName = symptomName + listSymptom[i].symptomName.toString();
+          } else {
+            symptomName =
+                symptomName + listSymptom[i].symptomName.toString() + ", ";
+          }
         }
+      } else {
+        symptomName = null;
       }
+
       patientName = transactionSimpleInfo["patient"]["profile"]["fullName"];
       patientImage = transactionSimpleInfo["patient"]["profile"]["image"];
       transactionID = transactionSimpleInfo["transactionId"];
@@ -92,7 +101,10 @@ class TransactionRepo extends ITransactionRepo {
       doctorId = transactionSimpleInfo["doctorId"];
       patientId = transactionSimpleInfo["patientId"];
       location = locationTemp;
+      serviceName = transactionSimpleInfo['service']['serviceName'];
+      servicePrice = transactionSimpleInfo['service']['servicePrice'];
 
+      print('$serviceName - $symptomName');
       int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 30;
 
       transactionBasic = TransactionBasicModel(
@@ -110,6 +122,8 @@ class TransactionRepo extends ITransactionRepo {
         doctorId: doctorId,
         location: location,
         patientId: patientId,
+        serviceName: serviceName,
+        servicePrice: servicePrice,
       );
 
       return transactionBasic;

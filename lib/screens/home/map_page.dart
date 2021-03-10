@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile_doctors_apps/screens/view_model/map_page_view_model.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -274,38 +275,71 @@ class MapPage extends StatelessWidget {
                 SizedBox(
                   height: 12.0,
                 ),
-                ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: model.symptomsDisplay.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 15),
-                          child: Text(
-                            model.symptomsDisplay[index].symptomtype,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+                model.symptomsDisplay.length != 0
+                    ? ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: model.symptomsDisplay.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: Text(
+                                  model.symptomsDisplay[index].symptomtype,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 25),
+                                child: Text(
+                                  model.symptomsDisplay[index].symptomName,
+                                  softWrap: true,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 12.0,
+                              ),
+                            ],
+                          );
+                        },
+                      )
+                    : Text(
+                        "Nothing",
+                        style: GoogleFonts.varelaRound(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14,
+                          color: Colors.black,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 25),
-                          child: Text(
-                            model.symptomsDisplay[index].symptomName,
-                            softWrap: true,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 12.0,
-                        ),
-                      ],
-                    );
-                  },
+                      )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 36,
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text("Service",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                    )),
+                SizedBox(
+                  height: 12.0,
                 ),
+                Container(
+                  child: Text(
+                    '${model.basicTransaction.serviceName} - ${model.basicTransaction.servicePrice}',
+                    softWrap: true,
+                  ),
+                )
               ],
             ),
           ),

@@ -130,212 +130,184 @@ class HomePage extends StatelessWidget {
                   SizedBox(height: 10),
                   Expanded(
                     child: Container(
-                        padding: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                            color: MainColors.blueBegin.withOpacity(0.3),
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(40),
-                                topRight: Radius.circular(40))),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                child: ListView.builder(
-                                  itemCount: model.listTransaction.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Stack(
-                                        children: [
-                                          Container(
-                                            height: 200,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(24),
-                                              border: Border.all(
-                                                  color: MainColors.blueEnd,
-                                                  width: 5),
-                                              gradient: LinearGradient(
-                                                  colors: [
-                                                    MainColors.blueBegin,
-                                                    MainColors.blueEnd
-                                                  ],
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.bottomRight),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    color: MainColors.blueBegin,
-                                                    blurRadius: 12,
-                                                    offset: Offset(0, 6))
-                                              ],
-                                            ),
-                                          ),
-                                          Positioned(
-                                            right: 0,
-                                            bottom: 0,
-                                            top: 0,
-                                            child: CustomPaint(
-                                              size: Size(70, 100),
-                                              painter: CustomCardShapePainter(
-                                                  24,
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          color: MainColors.blueBegin.withOpacity(0.3),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(40),
+                              topRight: Radius.circular(40))),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              child: ListView.builder(
+                                itemCount: model.listTransaction.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          height: 230,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(24),
+                                            border: Border.all(
+                                                color: MainColors.blueEnd,
+                                                width: 5),
+                                            gradient: LinearGradient(
+                                                colors: [
                                                   MainColors.blueBegin,
-                                                  MainColors.blueEnd),
-                                            ),
+                                                  MainColors.blueEnd
+                                                ],
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: MainColors.blueBegin,
+                                                  blurRadius: 12,
+                                                  offset: Offset(0, 6))
+                                            ],
                                           ),
-                                          Positioned.fill(
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  flex: 2,
-                                                  child: CircleAvatar(
-                                                    backgroundImage:
-                                                        NetworkImage(
-                                                      model
-                                                          .listTransaction[
-                                                              index]
-                                                          .patientImage,
-                                                    ),
-                                                    radius: 35,
-                                                    backgroundColor:
-                                                        Colors.white,
+                                        ),
+                                        Positioned(
+                                          right: 0,
+                                          bottom: 0,
+                                          top: 0,
+                                          child: CustomPaint(
+                                            size: Size(70, 100),
+                                            painter: CustomCardShapePainter(
+                                                24,
+                                                MainColors.blueBegin,
+                                                MainColors.blueEnd),
+                                          ),
+                                        ),
+                                        Positioned.fill(
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 2,
+                                                child: CircleAvatar(
+                                                  backgroundImage: NetworkImage(
+                                                    model.listTransaction[index]
+                                                        .patientImage,
                                                   ),
+                                                  radius: 35,
+                                                  backgroundColor: Colors.white,
                                                 ),
-                                                Expanded(
-                                                  flex: 4,
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                          model
-                                                              .listTransaction[
-                                                                  index]
-                                                              .patientName,
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 20,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
-                                                      SizedBox(height: 10),
-                                                      Row(
-                                                        children: [
-                                                          Icon(
-                                                              Icons.location_on,
-                                                              color: MainColors
-                                                                  .blueEnd),
-                                                          Flexible(
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .fromLTRB(
-                                                                      5.0,
-                                                                      0,
-                                                                      0,
-                                                                      0),
-                                                              child: Text(
-                                                                  model
-                                                                      .listTransaction[
-                                                                          index]
-                                                                      .locationName,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  maxLines: 2,
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          14,
-                                                                      fontStyle:
-                                                                          FontStyle
-                                                                              .italic)),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      SizedBox(height: 10),
-                                                      Row(
-                                                        children: [
-                                                          Icon(Icons.add_box,
-                                                              color: MainColors
-                                                                  .blueEnd),
-                                                          Flexible(
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .fromLTRB(
-                                                                      5.0,
-                                                                      0,
-                                                                      0,
-                                                                      0),
-                                                              child: Text(
-                                                                  model
-                                                                      .listTransaction[
-                                                                          index]
-                                                                      .symptomName,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  maxLines: 2,
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          14,
-                                                                      fontStyle:
-                                                                          FontStyle
-                                                                              .italic)),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      SizedBox(height: 10),
-                                                      Row(
-                                                        children: [
-                                                          Padding(
+                                              ),
+                                              Expanded(
+                                                flex: 4,
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                        model
+                                                            .listTransaction[
+                                                                index]
+                                                            .patientName,
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                    SizedBox(height: 10),
+                                                    Row(
+                                                      children: [
+                                                        Icon(Icons.location_on,
+                                                            color: MainColors
+                                                                .blueEnd),
+                                                        Flexible(
+                                                          child: Padding(
                                                             padding:
                                                                 const EdgeInsets
-                                                                        .only(
-                                                                    right: 10),
-                                                            child: RaisedButton(
-                                                              child: Text(
-                                                                  'Accept'),
-                                                              color:
-                                                                  Colors.green,
-                                                              textColor:
-                                                                  Colors.white,
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            18.0),
-                                                              ),
-                                                              onPressed: () {
-                                                                model.acceptTransaction(
-                                                                    model
+                                                                        .fromLTRB(
+                                                                    5.0,
+                                                                    0,
+                                                                    0,
+                                                                    0),
+                                                            child: Text(
+                                                                model
+                                                                    .listTransaction[
+                                                                        index]
+                                                                    .locationName,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                maxLines: 3,
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontStyle:
+                                                                        FontStyle
+                                                                            .italic)),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 10),
+                                                    Row(
+                                                      children: [
+                                                        Icon(Icons.add_box,
+                                                            color: MainColors
+                                                                .blueEnd),
+                                                        Flexible(
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .fromLTRB(
+                                                                    5.0,
+                                                                    0,
+                                                                    0,
+                                                                    0),
+                                                            child: Text(
+                                                                model
                                                                         .listTransaction[
                                                                             index]
-                                                                        .transactionId,
-                                                                    context);
-                                                                // Navigator.push(
-                                                                //     context,
-                                                                //     MaterialPageRoute(
-                                                                //         builder:
-                                                                //             (context) =>
-                                                                //                 PatientDetailPage()));
-                                                              },
-                                                            ),
+                                                                        .symptomName
+                                                                        .isEmpty
+                                                                    ? model
+                                                                        .listTransaction[
+                                                                            index]
+                                                                        .serviceName
+                                                                    : model
+                                                                        .listTransaction[
+                                                                            index]
+                                                                        .symptomName,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                maxLines: 2,
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontStyle:
+                                                                        FontStyle
+                                                                            .italic)),
                                                           ),
-                                                          RaisedButton(
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 10),
+                                                    Row(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  right: 10),
+                                                          child: RaisedButton(
                                                             child:
-                                                                Text('Cancel'),
-                                                            color: Colors.red,
+                                                                Text('Accept'),
+                                                            color: Colors.green,
                                                             textColor:
                                                                 Colors.white,
                                                             shape:
@@ -346,94 +318,123 @@ class HomePage extends StatelessWidget {
                                                                           18.0),
                                                             ),
                                                             onPressed: () {
-                                                              model.cancelTransaction(model
-                                                                  .listTransaction[
-                                                                      index]
-                                                                  .transactionId);
-                                                              // Get.to(
-                                                              //     MedicineListPage());
-
+                                                              model.acceptTransaction(
+                                                                  model
+                                                                      .listTransaction[
+                                                                          index]
+                                                                      .transactionId,
+                                                                  context);
                                                               // Navigator.push(
                                                               //     context,
                                                               //     MaterialPageRoute(
                                                               //         builder:
                                                               //             (context) =>
-                                                              //                 MedicineListPage()));
+                                                              //                 PatientDetailPage()));
                                                             },
-                                                          )
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
+                                                          ),
+                                                        ),
+                                                        RaisedButton(
+                                                          child: Text('Cancel'),
+                                                          color: Colors.red,
+                                                          textColor:
+                                                              Colors.white,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        18.0),
+                                                          ),
+                                                          onPressed: () {
+                                                            model.cancelTransaction(model
+                                                                .listTransaction[
+                                                                    index]
+                                                                .transactionId);
+                                                            // Get.to(
+                                                            //     MedicineListPage());
+
+                                                            // Navigator.push(
+                                                            //     context,
+                                                            //     MaterialPageRoute(
+                                                            //         builder:
+                                                            //             (context) =>
+                                                            //                 MedicineListPage()));
+                                                          },
+                                                        )
+                                                      ],
+                                                    )
+                                                  ],
                                                 ),
-                                                Expanded(
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Icon(Icons.location_on,
-                                                          color: MainColors
-                                                              .blueEnd),
-                                                      Text(
-                                                          '${model.listTransaction[index].distance} km',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
-                                                      SizedBox(height: 10),
-                                                      CountdownTimer(
-                                                          endTime: model
-                                                              .listTransaction[
-                                                                  index]
-                                                              .endTime,
-                                                          onEnd: () async {
-                                                            if (model
-                                                                    .listTransaction
-                                                                    .length >
-                                                                0) {
-                                                              await model.cancelTransaction(model
+                                              ),
+                                              Expanded(
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Icon(Icons.location_on,
+                                                        color:
+                                                            MainColors.blueEnd),
+                                                    Text(
+                                                        '${model.listTransaction[index].distance} km',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                    SizedBox(height: 10),
+                                                    CountdownTimer(
+                                                      endTime: model
+                                                          .listTransaction[
+                                                              index]
+                                                          .endTime,
+                                                      onEnd: () async {
+                                                        if (model
+                                                                .listTransaction
+                                                                .length >
+                                                            0) {
+                                                          print("time cancel");
+                                                          await model
+                                                              .cancelTransaction(model
                                                                   .listTransaction[
                                                                       index]
                                                                   .transactionId);
-                                                            }
-                                                          },
-                                                          widgetBuilder:
-                                                              (_, time) {
-                                                            if (time == null) {
-                                                              return Text(
-                                                                'Expired',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white),
-                                                              );
-                                                            }
-                                                            return Text(
-                                                                '0:${time.sec}',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white));
-                                                          })
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            ),
+                                                        }
+                                                      },
+                                                      widgetBuilder: (_, time) {
+                                                        if (time == null) {
+                                                          return Text(
+                                                            'Expired',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                          );
+                                                        }
+                                                        return Text(
+                                                            '0:${time.sec}',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white));
+                                                      },
+                                                    )
+                                                  ],
+                                                ),
+                                              )
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
                               ),
-                            )
-                          ],
-                        )),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   )
                 ],
               ),
