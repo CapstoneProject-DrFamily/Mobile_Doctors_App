@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:mobile_doctors_apps/model/examination_history.dart';
 import 'package:mobile_doctors_apps/model/specialty_model.dart';
 import 'package:mobile_doctors_apps/repository/examination_repo.dart';
@@ -11,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AnalyzePageViewModel extends BaseModel {
   ExaminationHistory examinationForm;
   final IExaminationRepo _examinationRepo = ExaminationRepo();
+  bool isLoading = false;
 
   List<Speciality> listSpeciality = [
     Speciality(name: 'Tim mạch', description: ""),
@@ -37,7 +39,18 @@ class AnalyzePageViewModel extends BaseModel {
 
   DatabaseReference _transactionRequest;
 
+  bool keyboard = false;
+
   AnalyzePageViewModel() {
+    print('init');
+
+    KeyboardVisibilityNotification().addNewListener(
+      onChange: (bool visible) {
+        print("visible : " + visible.toString());
+        this.keyboard = visible;
+      },
+    );
+
     examinationForm = new ExaminationHistory();
   }
 
@@ -193,9 +206,10 @@ class AnalyzePageViewModel extends BaseModel {
   }
 
   Future<bool> createExaminationForm(String transactionId) async {
+    isLoading = true;
+    notifyListeners();
     // mock
-    // transactionId = "TS-4b190c72-a679-4d8f-90f7-b5de8b882d4d";
-    //
+    transactionId = "TS-4b190c72-a679-4d8f-90f7-b5de8b882d4d";
 
     _transactionRequest =
         FirebaseDatabase.instance.reference().child("Transaction");
@@ -209,11 +223,11 @@ class AnalyzePageViewModel extends BaseModel {
       }
     });
 
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String creator = prefs.getString("usName");
+    // final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String creator = prefs.getString("usName");
 
-    //mock
-    // String creator = "khoa";
+    // mock
+    String creator = "khoa";
 
     examinationForm.id = exam_id;
     examinationForm.updBy = creator;
@@ -230,7 +244,8 @@ class AnalyzePageViewModel extends BaseModel {
 
       _transactionRequest.update({"transaction_status": "Sample"});
     }
-
+    isLoading = false;
+    notifyListeners();
     return isSuccess;
   }
 
