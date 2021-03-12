@@ -2,41 +2,41 @@ import 'dart:convert';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:mobile_doctors_apps/enums/processState.dart';
 import 'package:mobile_doctors_apps/model/examination_history.dart';
 import 'package:mobile_doctors_apps/model/specialty_model.dart';
 import 'package:mobile_doctors_apps/repository/examination_repo.dart';
 import 'package:mobile_doctors_apps/screens/record/analyze_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
+import 'package:mobile_doctors_apps/screens/view_model/timeline_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AnalyzePageViewModel extends BaseModel {
   String transactionId;
-  ExaminationHistory examinationForm;
+  ExaminationHistory examinationForm = ExaminationHistory();
   final IExaminationRepo _examinationRepo = ExaminationRepo();
   bool isLoading = false;
   bool init = true;
 
   List<Speciality> listSpeciality = [
-    Speciality(name: 'Tim mạch', description: ""),
-    Speciality(name: 'Hô hấp', description: ""),
-    Speciality(name: 'Tiêu hóa', description: ""),
-    Speciality(name: 'Tiết niệu', description: ""),
-    Speciality(name: 'Cơ xương khớp', description: ""),
-    Speciality(name: 'Nội tiết', description: ""),
-    Speciality(name: 'Thần kinh', description: ""),
-    Speciality(name: 'Tâm thần', description: ""),
-    Speciality(name: 'Ngoại khoa', description: ""),
-    Speciality(name: 'Sản phụ khoa', description: ""),
-    Speciality(name: 'Tai mũi họng', description: ""),
-    Speciality(name: 'Răng hàm mặt', description: ""),
-    Speciality(name: 'Mắt', description: ""),
-    Speciality(name: 'Da liễu', description: ""),
-    Speciality(name: 'Dinh dưỡng', description: ""),
-    Speciality(name: 'Vận động', description: ""),
+    Speciality(name: 'Cardiovascular', description: ""),
+    Speciality(name: 'Respiratory', description: ""),
+    Speciality(name: 'Gastroenterology', description: ""),
+    Speciality(name: 'Nephrology', description: ""),
+    Speciality(name: 'Rheumatology', description: ""),
+    Speciality(name: 'Endocrine', description: ""),
+    Speciality(name: 'Nerve', description: ""),
+    Speciality(name: 'Mental', description: ""),
+    Speciality(name: 'Surgery', description: ""),
+    Speciality(name: 'Obstetrics & Gynecology', description: ""),
+    Speciality(name: 'Otorhinolaryngology', description: ""),
+    Speciality(name: 'Odonto-Stomatology', description: ""),
+    Speciality(name: 'Ophthalmology', description: ""),
+    Speciality(name: 'Dermatology', description: ""),
+    Speciality(name: 'Nutrition', description: ""),
+    Speciality(name: 'Activity', description: ""),
     // Speciality(name: 'Khác', description: ""),
-    Speciality(
-        name: 'Đánh giá phát triển thể chất, tinh thần, vận động',
-        description: ""),
+    Speciality(name: 'Evaluation', description: ""),
   ];
 
   DatabaseReference _transactionRequest;
@@ -50,15 +50,34 @@ class AnalyzePageViewModel extends BaseModel {
         this.keyboard = visible;
       },
     );
-
-    examinationForm = new ExaminationHistory();
   }
 
-  fetchData(transactionId) {
-    if (init) {
+  Future<void> fetchData(
+      String transactionId, TimeLineViewModel model, List listCheck) async {
+    if (this.init) {
+      print("analyze");
       this.transactionId = transactionId;
-      init = false;
-      print("load transaction");
+
+      if (model.currentIndex < model.index) {
+        _transactionRequest =
+            await FirebaseDatabase.instance.reference().child("Transaction");
+
+        int exam_id;
+        await _transactionRequest
+            .child(transactionId)
+            .once()
+            .then((DataSnapshot dataSnapshot) {
+          if (dataSnapshot.value != null) {
+            exam_id = dataSnapshot.value['exam_id'];
+          }
+        });
+
+        examinationForm = await _examinationRepo.getExaminationHistory(exam_id);
+
+        initCheck(listCheck);
+      }
+      this.init = false;
+      notifyListeners();
     }
   }
 
@@ -144,6 +163,64 @@ class AnalyzePageViewModel extends BaseModel {
     }
   }
 
+  String getTextData(
+    int index,
+  ) {
+    switch (index) {
+      case 0:
+        return this.examinationForm.cardiovascular;
+        break;
+      case 1:
+        return this.examinationForm.respiratory;
+        break;
+      case 2:
+        return this.examinationForm.gastroenterology;
+        break;
+      case 3:
+        return this.examinationForm.nephrology;
+        break;
+      case 4:
+        return this.examinationForm.rheumatology;
+        break;
+      case 5:
+        return this.examinationForm.endocrine;
+        break;
+      case 6:
+        return this.examinationForm.nerve;
+        break;
+      case 7:
+        return this.examinationForm.mental;
+        break;
+      case 8:
+        return this.examinationForm.surgery;
+        break;
+      case 9:
+        return this.examinationForm.obstetricsGynecology;
+        break;
+      case 10:
+        return this.examinationForm.otorhinolaryngology;
+        break;
+      case 11:
+        return this.examinationForm.odontoStomatology;
+        break;
+      case 12:
+        return this.examinationForm.ophthalmology;
+        break;
+      case 13:
+        return this.examinationForm.dermatology;
+        break;
+      case 14:
+        return this.examinationForm.nutrition;
+        break;
+      case 15:
+        return this.examinationForm.activity;
+        break;
+      case 16:
+        return this.examinationForm.evaluation;
+        break;
+    }
+  }
+
   void changeFieldNumber(
       String field, AnalyzePageViewModel model, String value) {
     var num;
@@ -191,6 +268,44 @@ class AnalyzePageViewModel extends BaseModel {
     }
   }
 
+  double getFieldNumber(String field) {
+    switch (field) {
+      case 'pulseRate':
+        return this.examinationForm.pulseRate;
+        break;
+      case 'temperature':
+        return this.examinationForm.temperature;
+        break;
+      case 'bloodPressure':
+        return this.examinationForm.bloodPressure;
+        break;
+      case 'respiratoryRate':
+        return this.examinationForm.respiratoryRate;
+        break;
+      case 'weight':
+        return this.examinationForm.weight;
+        break;
+      case 'height':
+        return this.examinationForm.height;
+        break;
+      case 'waistCircumference':
+        return this.examinationForm.waistCircumference;
+        break;
+      case 'rightEye':
+        return this.examinationForm.rightEye;
+        break;
+      case 'leftEye':
+        return this.examinationForm.leftEye;
+        break;
+      case 'rightEyeGlassed':
+        return this.examinationForm.rightEyeGlassed;
+        break;
+      case 'leftEyeGlassed':
+        return this.examinationForm.leftEyeGlassed;
+        break;
+    }
+  }
+
   // List<String> listCheck = List();
 
   bool change = false;
@@ -198,6 +313,62 @@ class AnalyzePageViewModel extends BaseModel {
   void changed(bool value) {
     this.change = value;
     notifyListeners();
+  }
+
+  void initCheck(List listCheck) {
+    if (this.examinationForm.cardiovascular != null) {
+      listCheck.add(this.listSpeciality[0].name);
+    }
+    if (this.examinationForm.respiratory != null) {
+      listCheck.add(this.listSpeciality[1].name);
+    }
+    if (this.examinationForm.gastroenterology != null) {
+      listCheck.add(this.listSpeciality[2].name);
+    }
+
+    if (this.examinationForm.nephrology != null) {
+      listCheck.add(this.listSpeciality[3].name);
+    }
+
+    if (this.examinationForm.rheumatology != null) {
+      listCheck.add(this.listSpeciality[4].name);
+    }
+    if (this.examinationForm.endocrine != null) {
+      listCheck.add(this.listSpeciality[5].name);
+    }
+    if (this.examinationForm.nerve != null) {
+      listCheck.add(this.listSpeciality[6].name);
+    }
+    if (this.examinationForm.mental != null) {
+      listCheck.add(this.listSpeciality[7].name);
+    }
+    if (this.examinationForm.surgery != null) {
+      listCheck.add(this.listSpeciality[8].name);
+    }
+    if (this.examinationForm.obstetricsGynecology != null) {
+      listCheck.add(this.listSpeciality[9].name);
+    }
+    if (this.examinationForm.otorhinolaryngology != null) {
+      listCheck.add(this.listSpeciality[10].name);
+    }
+    if (this.examinationForm.odontoStomatology != null) {
+      listCheck.add(this.listSpeciality[11].name);
+    }
+    if (this.examinationForm.ophthalmology != null) {
+      listCheck.add(this.listSpeciality[12].name);
+    }
+    if (this.examinationForm.dermatology != null) {
+      listCheck.add(this.listSpeciality[13].name);
+    }
+    if (this.examinationForm.nutrition != null) {
+      listCheck.add(this.listSpeciality[14].name);
+    }
+    if (this.examinationForm.activity != null) {
+      listCheck.add(this.listSpeciality[15].name);
+    }
+    if (this.examinationForm.evaluation != null) {
+      listCheck.add(this.listSpeciality[16].name);
+    }
   }
 
   void changeCheck(String name, bool isCheck, List listCheck, int index,
@@ -213,11 +384,12 @@ class AnalyzePageViewModel extends BaseModel {
     notifyListeners();
   }
 
-  Future<bool> createExaminationForm(String transactionId) async {
+  Future<bool> createExaminationForm(
+      String transactionId, TimeLineViewModel timelineModel) async {
     isLoading = true;
     notifyListeners();
     // mock
-    // transactionId = "TS-4b190c72-a679-4d8f-90f7-b5de8b882d4d";
+    // transactionId = "TS-1387c26f-f89a-43e7-a907-e7d20aff2542";
 
     _transactionRequest =
         FirebaseDatabase.instance.reference().child("Transaction");
@@ -230,7 +402,6 @@ class AnalyzePageViewModel extends BaseModel {
         exam_id = dataSnapshot.value['exam_id'];
       }
     });
-
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String creator = prefs.getString("usName");
 
@@ -244,13 +415,14 @@ class AnalyzePageViewModel extends BaseModel {
     bool isSuccess = await _examinationRepo
         .updateExaminationHistory(jsonEncode(examinationForm));
 
-    if (isSuccess) {
+    if (isSuccess && timelineModel.currentIndex == timelineModel.index) {
       _transactionRequest = FirebaseDatabase.instance
           .reference()
           .child("Transaction")
           .child(transactionId);
 
       _transactionRequest.update({"transaction_status": "Take Sample"});
+      timelineModel.index = ProcessState.SAMPLE;
     }
     isLoading = false;
     notifyListeners();

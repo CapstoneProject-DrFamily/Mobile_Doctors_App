@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/timeline_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/analyze_page_view_model.dart';
@@ -12,145 +13,176 @@ class AnalyzePage extends StatelessWidget {
 
   final String transactionId;
   AnalyzePage({@required this.timelineModel, @required this.transactionId});
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext contextA) {
     return BaseView<AnalyzePageViewModel>(builder: (contextB, child, model) {
       return FutureBuilder(
-        future: model.fetchData(transactionId),
+        future: model.fetchData(transactionId, timelineModel, listCheck),
         builder: (contextC, snapshop) {
-          return Container(
-              width: MediaQuery.of(contextB).size.width,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  image: DecorationImage(
-                    colorFilter: new ColorFilter.mode(
-                        Colors.black.withOpacity(0.6), BlendMode.dstATop),
-                    image: AssetImage('assets/images/diagnose.jpg'),
-                  )),
-              child: Scaffold(
-                backgroundColor: Colors.transparent,
-                body: GestureDetector(
-                  onTap: () {
-                    FocusScope.of(contextA).requestFocus(new FocusNode());
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 40),
-                    child: Container(
-                      child: Align(
-                        alignment: FractionalOffset.bottomCenter,
-                        child: Stack(
-                          alignment: Alignment.topCenter,
-                          overflow: Overflow.visible,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: MainColors.blueBegin.withOpacity(0.6),
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(40),
-                                      topRight: Radius.circular(40))),
-                              width: MediaQuery.of(contextB).size.width,
-                              height:
-                                  MediaQuery.of(contextB).size.height * 0.65,
-                              child: Padding(
-                                padding: !model.keyboard
-                                    ? EdgeInsets.only(top: 85.0)
-                                    : EdgeInsets.only(top: 10),
-                                child: SingleChildScrollView(
-                                  child: Container(
-                                    child: buildAnalyzeForm(contextB, model),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Visibility(
-                              visible: !model.keyboard ? true : false,
-                              // visible: false,
-                              child: Positioned(
-                                top: -66,
-                                child: CircleAvatar(
-                                  radius: 73,
-                                  backgroundColor:
-                                      MainColors.blueBegin.withOpacity(0.5),
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    radius: 70,
-                                    child: Container(
-                                      child: Image.asset(
-                                        'assets/images/time_line_1.png',
-                                        width: 120,
-                                        // color: Colors.red,
+          if (!model.init) {
+            return Container(
+                width: MediaQuery.of(contextB).size.width,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    image: DecorationImage(
+                      colorFilter: new ColorFilter.mode(
+                          Colors.black.withOpacity(0.6), BlendMode.dstATop),
+                      image: AssetImage('assets/images/diagnose.jpg'),
+                    )),
+                child: Scaffold(
+                  backgroundColor: Colors.transparent,
+                  body: GestureDetector(
+                    onTap: () {
+                      FocusScope.of(contextA).requestFocus(new FocusNode());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 40),
+                      child: Container(
+                        child: Align(
+                          alignment: FractionalOffset.bottomCenter,
+                          child: Stack(
+                            alignment: Alignment.topCenter,
+                            overflow: Overflow.visible,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                    color:
+                                        MainColors.blueBegin.withOpacity(0.6),
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(40),
+                                        topRight: Radius.circular(40))),
+                                width: MediaQuery.of(contextB).size.width,
+                                height:
+                                    MediaQuery.of(contextB).size.height * 0.65,
+                                child: Padding(
+                                  padding: !model.keyboard
+                                      ? EdgeInsets.only(top: 85.0)
+                                      : EdgeInsets.only(top: 10),
+                                  child: SingleChildScrollView(
+                                    child: Form(
+                                      key: _formKey,
+                                      child: Container(
+                                        child:
+                                            buildAnalyzeForm(contextB, model),
                                       ),
-
-                                      // SvgPicture.asset(
-                                      //   'assets/icons/medical-file.svg',
-                                      //   height: 80,
-                                      //   width: 80,
-                                      // ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Visibility(
-                              visible: !model.keyboard ? true : false,
-                              child: Positioned(
-                                  bottom: 10,
-                                  child: Container(
-                                    width: MediaQuery.of(contextB).size.width *
-                                        0.6,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: FlatButton(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(18.0),
-                                          ),
-                                          color: MainColors.blueBegin
-                                              .withOpacity(0.8),
-                                          onPressed: () async {
-                                            // timelineModel.changeIndex(1);
+                              Visibility(
+                                visible: !model.keyboard ? true : false,
+                                // visible: false,
+                                child: Positioned(
+                                  top: -66,
+                                  child: CircleAvatar(
+                                    radius: 73,
+                                    backgroundColor:
+                                        MainColors.blueBegin.withOpacity(0.5),
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      radius: 70,
+                                      child: Container(
+                                        child: Image.asset(
+                                          'assets/images/time_line_1.png',
+                                          width: 120,
+                                          // color: Colors.red,
+                                        ),
 
-                                            bool isSuccess = await model
-                                                .createExaminationForm(
-                                                    transactionId);
-                                            if (isSuccess) {
-                                              timelineModel.changeIndex(1);
-                                            } else {
-                                              Fluttertoast.showToast(
-                                                msg: "Error. Please try again",
-                                                textColor: Colors.red,
-                                                toastLength: Toast.LENGTH_SHORT,
-                                                backgroundColor: Colors.white,
-                                                gravity: ToastGravity.CENTER,
-                                              );
-                                            }
-                                          },
-                                          child: !model.isLoading
-                                              ? Text(
-                                                  'Next',
-                                                  // style: TextStyle(fontSize: 20),
-                                                )
-                                              : Container(
-                                                  child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(2),
-                                                  child:
-                                                      CircularProgressIndicator(
+                                        // SvgPicture.asset(
+                                        //   'assets/icons/medical-file.svg',
+                                        //   height: 80,
+                                        //   width: 80,
+                                        // ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Visibility(
+                                visible: !model.keyboard ? true : false,
+                                child: Positioned(
+                                    bottom: 10,
+                                    child: Container(
+                                      width:
+                                          MediaQuery.of(contextB).size.width *
+                                              0.6,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: FlatButton(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18.0),
+                                            ),
+                                            color: MainColors.blueBegin
+                                                .withOpacity(0.8),
+                                            onPressed: () async {
+                                              // timelineModel.changeIndex(1);
+                                              if (_formKey.currentState
+                                                  .validate()) {
+                                                bool isSuccess = await model
+                                                    .createExaminationForm(
+                                                        transactionId,
+                                                        timelineModel);
+                                                if (isSuccess) {
+                                                  timelineModel.changeIndex(1);
+                                                } else {
+                                                  Fluttertoast.showToast(
+                                                    msg:
+                                                        "Error. Please try again",
+                                                    textColor: Colors.red,
+                                                    toastLength:
+                                                        Toast.LENGTH_SHORT,
                                                     backgroundColor:
                                                         Colors.white,
-                                                  ),
-                                                ))),
-                                    ),
-                                  )),
-                            ),
-                          ],
+                                                    gravity:
+                                                        ToastGravity.CENTER,
+                                                  );
+                                                }
+                                              } else {
+                                                Fluttertoast.showToast(
+                                                  msg:
+                                                      "Error. Please check your field again",
+                                                  textColor: Colors.red,
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  backgroundColor: Colors.white,
+                                                  gravity: ToastGravity.CENTER,
+                                                );
+                                              }
+                                            },
+                                            child: !model.isLoading
+                                                ? Text(
+                                                    'Next',
+                                                    // style: TextStyle(fontSize: 20),
+                                                  )
+                                                : Container(
+                                                    child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(2),
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      backgroundColor:
+                                                          Colors.white,
+                                                    ),
+                                                  ))),
+                                      ),
+                                    )),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ));
+                ));
+          } else
+            return Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
         },
       );
     });
@@ -208,7 +240,8 @@ class AnalyzePage extends StatelessWidget {
                   color: Colors.white.withOpacity(0.8),
                   alignment: Alignment.topCenter,
                   width: MediaQuery.of(context).size.width * 0.8,
-                  child: TextField(
+                  child: TextFormField(
+                    initialValue: model.examinationForm.history,
                     maxLines: 5,
                     decoration: InputDecoration.collapsed(
                         hintText: 'Enter medical history of patient'),
@@ -263,6 +296,7 @@ class AnalyzePage extends StatelessWidget {
               height: 10,
             ),
             buildAnthropometricIndex("Mạch", "nhịp/phút", model, "pulseRate"),
+            // buildErrorMessage(),
             buildAnthropometricIndex("Nhiệt độ", "độ C", model, "temperature"),
             buildAnthropometricIndex("Huyết áp", "...", model, "bloodPressure"),
             buildAnthropometricIndex(
@@ -360,7 +394,8 @@ class AnalyzePage extends StatelessWidget {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: TextField(
+                            child: TextFormField(
+                              initialValue: model.getTextData(index),
                               onChanged: (value) {
                                 model.changeFieldText(index, model, value);
                               },
@@ -384,6 +419,26 @@ class AnalyzePage extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+
+  Padding buildErrorMessage() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.error,
+            color: Colors.red,
+          ),
+          Center(
+              child: Text(
+            'Number should between 0 ~ 999',
+            style: TextStyle(color: Colors.red),
+          )),
+        ],
+      ),
     );
   }
 
@@ -438,7 +493,8 @@ class AnalyzePage extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: TextField(
+          child: TextFormField(
+            initialValue: model.examinationForm.mucosa,
             onChanged: (value) {
               model.examinationForm.mucosa = value;
             },
@@ -458,7 +514,8 @@ class AnalyzePage extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: TextField(
+          child: TextFormField(
+            initialValue: model.examinationForm.otherBody,
             onChanged: (value) {
               model.examinationForm.otherBody = value;
             },
@@ -484,21 +541,62 @@ class AnalyzePage extends StatelessWidget {
           style: TextStyle(fontSize: 18),
         )),
         Expanded(
+          //   child: Container(
+          // margin: EdgeInsets.only(right: 10, bottom: 10),
+          // decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.circular(12),
+          //     border: Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
             child: Container(
-          margin: EdgeInsets.only(right: 10, bottom: 10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
-          child: TextField(
-            onChanged: (value) {
-              model.changeFieldNumber(field, model, value);
-            },
-            textAlign: TextAlign.center,
-            keyboardType: TextInputType.number,
-            decoration:
-                InputDecoration(border: InputBorder.none, hintText: hintText),
+              child: TextFormField(
+                validator: (value) {
+                  if (value.isNotEmpty) {
+                    try {
+                      double num = double.parse(value);
+                      if (num < 0 || num > 999) {
+                        return "Range 0 ~ 999";
+                      }
+                    } catch (e) {
+                      return "Must be a number";
+                    }
+                  }
+
+                  return null;
+                },
+                initialValue: model.getFieldNumber(field) != null
+                    ? model.getFieldNumber(field).toString()
+                    : null,
+                onChanged: (value) {
+                  model.changeFieldNumber(field, model, value);
+                },
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.grey, width: 2),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(color: MainColors.blueBegin, width: 2),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.red, width: 2),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.red, width: 2),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  hintText: hintText,
+                ),
+              ),
+            ),
           ),
-        )),
+          // )
+        ),
       ],
     );
   }
@@ -520,18 +618,50 @@ class AnalyzePage extends StatelessWidget {
         ),
         Expanded(
             child: Container(
-          margin: EdgeInsets.only(bottom: 10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: MainColors.blueBegin.withOpacity(0.6))),
-          child: TextField(
-            onChanged: (value) {
-              model.changeFieldNumber(field, model, value);
-            },
-            textAlign: TextAlign.center,
-            keyboardType: TextInputType.number,
-            decoration:
-                InputDecoration(border: InputBorder.none, hintText: '0 ~ 10'),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 10, top: 10, left: 10),
+            child: TextFormField(
+              validator: (value) {
+                if (value.isNotEmpty) {
+                  try {
+                    double num = double.parse(value);
+                    if (num < 0 || num > 10) {
+                      return "Range 0 ~ 10";
+                    }
+                  } catch (e) {
+                    return "Must be a number";
+                  }
+                }
+
+                return null;
+              },
+              initialValue: model.getFieldNumber(field).toString(),
+              onChanged: (value) {
+                model.changeFieldNumber(field, model, value);
+              },
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey, width: 2),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide:
+                      const BorderSide(color: MainColors.blueBegin, width: 2),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.red, width: 2),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.red, width: 2),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                hintText: hintText,
+              ),
+            ),
           ),
         )),
       ],

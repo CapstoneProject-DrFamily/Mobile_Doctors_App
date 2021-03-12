@@ -11,53 +11,62 @@ class BaseTimeLine extends StatelessWidget {
   @override
   Widget build(BuildContext contextA) {
     return BaseView<TimeLineViewModel>(builder: (contextB, child, model) {
-      return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: MainColors.blueBegin),
-          backgroundColor: Colors.white,
-          elevation: 0,
-          actions: [
-            model.index == 1
-                ? Container(
-                    child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: InkWell(
-                        onTap: () async {
-                          await model.skipTransaction(transactionId);
-                          model.changeIndex(2);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Skip this step',
-                            style: TextStyle(
-                                color: MainColors.blueBegin,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ))
-                : Container(),
-          ],
-        ),
-        body: Container(
-            color: Colors.white,
-            height: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  child: timelineProcess(contextB, model.index),
+      return FutureBuilder(
+          future: model.fetchData(transactionId),
+          builder: (contextC, snapshop) {
+            if (model.init) {
+              return Scaffold(body: Center(child: CircularProgressIndicator()));
+            } else
+              return Scaffold(
+                resizeToAvoidBottomInset: false,
+                appBar: AppBar(
+                  iconTheme: IconThemeData(color: MainColors.blueBegin),
+                  backgroundColor: Colors.white,
+                  elevation: 0,
+                  actions: [
+                    model.index == 1
+                        ? Container(
+                            child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: InkWell(
+                                onTap: () async {
+                                  await model.skipTransaction(transactionId);
+                                  model.changeIndex(2);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Skip this step',
+                                    style: TextStyle(
+                                        color: MainColors.blueBegin,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ))
+                        : Container(),
+                  ],
                 ),
-                Expanded(
-                    child: model.buildWidget(model.index, model, transactionId))
-              ],
-            )),
-      );
+                body: Container(
+                    color: Colors.white,
+                    height: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: timelineProcess(
+                              contextB, model.currentIndex, model),
+                        ),
+                        Expanded(
+                            child: model.buildWidget(
+                                model.currentIndex, model, transactionId))
+                      ],
+                    )),
+              );
+          });
     });
   }
 }
