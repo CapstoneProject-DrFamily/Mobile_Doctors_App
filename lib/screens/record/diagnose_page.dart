@@ -9,6 +9,7 @@ import 'package:mobile_doctors_apps/themes/colors.dart';
 class DiagnosePage extends StatelessWidget {
   final TimeLineViewModel timelineModel;
   final String transactionId;
+  final _formKey = GlobalKey<FormState>();
 
   DiagnosePage({@required this.timelineModel, @required this.transactionId});
   @override
@@ -17,216 +18,251 @@ class DiagnosePage extends StatelessWidget {
       return FutureBuilder(
           future: model.fetchData(transactionId),
           builder: (context, snapshot) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 30),
-              child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      image: DecorationImage(
-                        colorFilter: new ColorFilter.mode(
-                            Colors.white.withOpacity(0.6), BlendMode.dstATop),
-                        image: AssetImage('assets/images/result.jpg'),
-                      )),
-                  child: Scaffold(
-                      backgroundColor: Colors.transparent,
-                      body: GestureDetector(
-                        onTap: () {
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                        },
-                        child: Container(
-                          height: double.infinity,
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Expanded(
-                                child: Stack(
-                                  alignment: Alignment.topCenter,
-                                  overflow: Overflow.visible,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color: MainColors.blueBegin
-                                              .withOpacity(0.6),
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(40),
-                                              topRight: Radius.circular(40))),
-                                      width: MediaQuery.of(context).size.width,
-                                      height:
-                                          MediaQuery.of(context).size.height,
-                                      child: Padding(
-                                        padding: !model.keyboard
-                                            ? EdgeInsets.only(top: 85.0)
-                                            : EdgeInsets.only(top: 10),
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(20.0),
-                                                child: Card(
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15.0),
-                                                  ),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Text(
-                                                          'Diagnose / Conclusion',
-                                                          style: TextStyle(
-                                                              fontSize: 18,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ),
+            if (model.init) {
+              return Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            } else
+              return Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        image: DecorationImage(
+                          colorFilter: new ColorFilter.mode(
+                              Colors.white.withOpacity(0.6), BlendMode.dstATop),
+                          image: AssetImage('assets/images/result.jpg'),
+                        )),
+                    child: Scaffold(
+                        backgroundColor: Colors.transparent,
+                        body: GestureDetector(
+                          onTap: () {
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode());
+                          },
+                          child: Form(
+                            key: _formKey,
+                            child: Container(
+                              height: double.infinity,
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Expanded(
+                                    child: Stack(
+                                      alignment: Alignment.topCenter,
+                                      overflow: Overflow.visible,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: MainColors.blueBegin
+                                                  .withOpacity(0.6),
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(40),
+                                                  topRight:
+                                                      Radius.circular(40))),
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: MediaQuery.of(context)
+                                              .size
+                                              .height,
+                                          child: Padding(
+                                            padding: !model.keyboard
+                                                ? EdgeInsets.only(top: 85.0)
+                                                : EdgeInsets.only(top: 10),
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            20.0),
+                                                    child: Card(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15.0),
                                                       ),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: TextField(
-                                                          controller: model
-                                                              .diagnoseConclusionController,
-                                                          maxLines: 5,
-                                                          decoration:
-                                                              InputDecoration
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Text(
+                                                              'Diagnose / Conclusion',
+                                                              style: TextStyle(
+                                                                  fontSize: 18,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child:
+                                                                TextFormField(
+                                                              validator:
+                                                                  (value) {
+                                                                if (value
+                                                                    .isEmpty) {
+                                                                  return "Please enter your conclusion";
+                                                                }
+                                                                return null;
+                                                              },
+                                                              controller: model
+                                                                  .diagnoseConclusionController,
+                                                              maxLines: 5,
+                                                              decoration: InputDecoration
                                                                   .collapsed(
                                                                       hintText:
                                                                           'Enter your text'),
-                                                        ),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ],
+                                                    ),
                                                   ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(20.0),
-                                                child: Card(
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15.0),
-                                                  ),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Text(
-                                                          'Doctor Advice',
-                                                          style: TextStyle(
-                                                              fontSize: 18,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            20.0),
+                                                    child: Card(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15.0),
                                                       ),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: TextField(
-                                                          controller: model
-                                                              .doctorAdviceController,
-                                                          maxLines: 5,
-                                                          decoration:
-                                                              InputDecoration
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Text(
+                                                              'Doctor Advice',
+                                                              style: TextStyle(
+                                                                  fontSize: 18,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: TextField(
+                                                              controller: model
+                                                                  .doctorAdviceController,
+                                                              maxLines: 5,
+                                                              decoration: InputDecoration
                                                                   .collapsed(
                                                                       hintText:
                                                                           'Enter your text'),
-                                                        ),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ],
+                                                    ),
                                                   ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 50,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Visibility(
-                                      visible: !model.keyboard ? true : false,
-                                      child: Positioned(
-                                        top: -66,
-                                        child: CircleAvatar(
-                                          radius: 73,
-                                          backgroundColor: MainColors.blueBegin
-                                              .withOpacity(0.5),
-                                          child: CircleAvatar(
-                                            backgroundColor: Colors.white,
-                                            radius: 70,
-                                            child: Container(
-                                              child: Image.asset(
-                                                'assets/images/time_line_3.png',
-                                                width: 120,
+                                                  SizedBox(
+                                                    height: 50,
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    Visibility(
-                                      visible: !model.keyboard ? true : false,
-                                      child: Positioned(
-                                          bottom: 10,
-                                          child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.6,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: FlatButton(
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            18.0),
+                                        Visibility(
+                                          visible:
+                                              !model.keyboard ? true : false,
+                                          child: Positioned(
+                                            top: -66,
+                                            child: CircleAvatar(
+                                              radius: 73,
+                                              backgroundColor: MainColors
+                                                  .blueBegin
+                                                  .withOpacity(0.5),
+                                              child: CircleAvatar(
+                                                backgroundColor: Colors.white,
+                                                radius: 70,
+                                                child: Container(
+                                                  child: Image.asset(
+                                                    'assets/images/time_line_3.png',
+                                                    width: 120,
                                                   ),
-                                                  color: MainColors.blueBegin
-                                                      .withOpacity(0.8),
-                                                  onPressed: () async {
-                                                    await model
-                                                        .confirmDiagnose();
-                                                    timelineModel
-                                                        .changeIndex(3);
-                                                  },
-                                                  child: Text('Next')),
+                                                ),
+                                              ),
                                             ),
-                                          )),
+                                          ),
+                                        ),
+                                        Visibility(
+                                          visible:
+                                              !model.keyboard ? true : false,
+                                          child: Positioned(
+                                              bottom: 10,
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.6,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: FlatButton(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(18.0),
+                                                      ),
+                                                      color: MainColors
+                                                          .blueBegin
+                                                          .withOpacity(0.8),
+                                                      onPressed: () async {
+                                                        if (_formKey
+                                                            .currentState
+                                                            .validate()) {
+                                                          await model
+                                                              .confirmDiagnose(
+                                                                  timelineModel);
+                                                          timelineModel
+                                                              .changeIndex(3);
+                                                        }
+                                                      },
+                                                      child: Text('Next')),
+                                                ),
+                                              )),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ))),
-            );
+                        ))),
+              );
           });
     });
   }

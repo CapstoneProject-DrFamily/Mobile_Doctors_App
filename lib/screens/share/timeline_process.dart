@@ -3,9 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mobile_doctors_apps/enums/processTimeline.dart';
 import 'package:mobile_doctors_apps/helper/common.dart';
+import 'package:mobile_doctors_apps/screens/view_model/timeline_view_model.dart';
 import 'package:timelines/timelines.dart';
 
-Container timelineProcess(BuildContext contextC, int _processIndex) {
+Container timelineProcess(
+    BuildContext contextC, int _processIndex, TimeLineViewModel model) {
   return Container(
     height: 150,
     child: Timeline.tileBuilder(
@@ -18,11 +20,23 @@ Container timelineProcess(BuildContext contextC, int _processIndex) {
                 MediaQuery.of(contextD).size.width /
                 ProcessTimeline.values.length,
             oppositeContentsBuilder: (contextE, index) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 15.0),
-                child: Image.asset(
-                  'assets/images/time_line_${index + 1}.png',
-                  width: 200,
+              return Material(
+                color: Colors.transparent,
+                child: Container(
+                  child: InkWell(
+                    onTap: () {
+                      if (index <= model.index) {
+                        model.changeIndex(index);
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 15.0),
+                      child: Image.asset(
+                        'assets/images/time_line_${index + 1}.png',
+                        width: 200,
+                      ),
+                    ),
+                  ),
                 ),
               );
             },
@@ -57,7 +71,7 @@ Container timelineProcess(BuildContext contextC, int _processIndex) {
                     //   valueColor: AlwaysStoppedAnimation(Colors.white),
                     // ),
                     );
-              } else if (index < _processIndex) {
+              } else if (index < model.index) {
                 color = Common.completeColor;
                 child = Icon(
                   Icons.check,
@@ -127,7 +141,7 @@ Container timelineProcess(BuildContext contextC, int _processIndex) {
                   );
                 } else {
                   return SolidLineConnector(
-                    color: Common.getColor(index, _processIndex),
+                    color: Common.getColor(index, model.index),
                   );
                 }
               } else {

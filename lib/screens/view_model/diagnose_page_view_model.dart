@@ -4,9 +4,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:mobile_doctors_apps/enums/processState.dart';
 import 'package:mobile_doctors_apps/model/examination_history.dart';
 import 'package:mobile_doctors_apps/repository/examination_repo.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
+import 'package:mobile_doctors_apps/screens/view_model/timeline_view_model.dart';
+import 'package:timelines/timelines.dart';
 
 class DiagnosePageViewModel extends BaseModel {
   final IExaminationRepo _examinationRepo = ExaminationRepo();
@@ -51,16 +54,20 @@ class DiagnosePageViewModel extends BaseModel {
     _examinationHistory = await _examinationRepo.getExaminationHistory(examId);
   }
 
-  fetchData(transactionId) {
+  fetchData(transactionId) async {
     if (init) {
+      await Future.delayed(Duration(seconds: 1));
       this.transactionId = transactionId;
-      init = false;
+
       print("load transaction");
       initDiagnose();
+
+      init = false;
+      notifyListeners();
     }
   }
 
-  Future<void> confirmDiagnose() async {
+  Future<void> confirmDiagnose(TimeLineViewModel model) async {
     print(
         'conclusion: ${_diagnoseConclusionController.text}, advice: ${_doctorAdviceController.text}');
 
@@ -71,11 +78,16 @@ class DiagnosePageViewModel extends BaseModel {
 
     bool diagnoseStatus =
         await _examinationRepo.updateExaminationHistory(jsonExaminationHistory);
-    Map transactionInfo = {
-      "transaction_status": "Prescription",
-    };
 
-    await _transactionRequest.child(transactionId).set(transactionInfo);
+    if (model.currentIndex == model.index) {
+      _transactionRequest = FirebaseDatabase.instance
+          .reference()
+          .child("Transaction")
+          .child(transactionId);
+
+      _transactionRequest.update({"transaction_status": "Prescription"});
+      model.index = ProcessState.PRESCRIPTION;
+    }
 
     if (diagnoseStatus) {
       Fluttertoast.showToast(
