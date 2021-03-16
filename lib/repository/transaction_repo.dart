@@ -4,6 +4,9 @@ import 'dart:io';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_doctors_apps/helper/api_helper.dart';
+import 'package:mobile_doctors_apps/model/profile/profile_model.dart';
+import 'package:mobile_doctors_apps/model/service/service_model.dart';
+import 'package:mobile_doctors_apps/model/symptom/symptom_model.dart';
 import 'package:mobile_doctors_apps/model/transaction.dart';
 import 'package:mobile_doctors_apps/model/transaction_basic_model.dart';
 
@@ -12,6 +15,8 @@ abstract class ITransactionRepo {
       String transactionId, double currentLongitude, double currentLatitude);
 
   Future<bool> updateTransaction(Transaction transaction);
+
+  Future<List<dynamic>> getTransactionHistory(String transactionId);
 }
 
 class TransactionRepo extends ITransactionRepo {
@@ -148,5 +153,42 @@ class TransactionRepo extends ITransactionRepo {
     }
 
     return isSuccess;
+  }
+
+  @override
+  Future<List<dynamic>> getTransactionHistory(String transactionId) async {
+    List<dynamic> list = [];
+    Transaction transaction = null;
+    String urlAPI = APIHelper.TRANSACTION_API;
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+    var response = await http.get(urlAPI + "/$transactionId", headers: header);
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      transaction = Transaction.fromJson(data);
+
+      ProfileModel profileUser =
+          ProfileModel.fromJson(data['patient']['profile']);
+
+      ServiceModel service = ServiceModel.fromJson(data['service']);
+
+      List<SymptomModel> listSymptom = [];
+
+      int sizeSym = data['symptomDetails'].length;
+      for (int i = 0; i < sizeSym; i++) {
+        SymptomModel symp = SymptomModel.fromJson(data['symptomDetails'][i]);
+        listSymptom.add(symp);
+      }
+
+      list.add(transaction);
+      list.add(profileUser);
+      list.add(service);
+      list.add(listSymptom);
+    }
+
+    return list;
   }
 }
