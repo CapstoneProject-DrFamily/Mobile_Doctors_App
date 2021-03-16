@@ -402,6 +402,8 @@ class AnalyzePageViewModel extends BaseModel {
         exam_id = dataSnapshot.value['exam_id'];
       }
     });
+
+    print('transactionId: $transactionId $exam_id');
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String creator = prefs.getString("usName");
 
