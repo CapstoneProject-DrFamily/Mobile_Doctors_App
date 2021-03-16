@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
-import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile_doctors_apps/global_variable.dart';
 import 'package:mobile_doctors_apps/helper/helper_method.dart';
@@ -335,6 +333,8 @@ class HomePageViewModel extends BaseModel {
           estimatedTime: estimatedTime);
       await _transactionRepo.updateTransaction(transactionTemp);
     }
+
+    print('examId: $idExamination');
 
     // await offlineDoctor();
     HelperMethod.disableHomeTabLocationUpdates();

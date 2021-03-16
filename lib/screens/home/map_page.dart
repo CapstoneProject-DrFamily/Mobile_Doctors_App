@@ -14,7 +14,7 @@ class MapPage extends StatelessWidget {
     return ScopedModel<MapPageViewModel>(
       model: model,
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         body: ScopedModelDescendant<MapPageViewModel>(
           builder: (context, child, model) {
             if (model.isLoading == true) {
@@ -183,9 +183,14 @@ class MapPage extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(right: 30),
-                child: Icon(Icons.call),
+              InkWell(
+                onTap: () {
+                  model.callPhone(context);
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(right: 30),
+                  child: Icon(Icons.call),
+                ),
               ),
             ],
           ),

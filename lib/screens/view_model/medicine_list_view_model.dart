@@ -33,6 +33,8 @@ class MedicineListViewModel extends BaseModel {
   int doctorId, examId, patientId;
 
   MedicineListViewModel() {
+    isUpdate = false;
+    listMedicine = [];
     initMedicineList();
   }
 
@@ -99,6 +101,8 @@ class MedicineListViewModel extends BaseModel {
   }
 
   void finishTransaction(BuildContext context) async {
+    isUpdate = false;
+    listMedicine = [];
     PrescriptionModel prescriptionModel = new PrescriptionModel(
         prescriptionDes: _noteController.text,
         insBy: "H.Duc",
