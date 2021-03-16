@@ -635,7 +635,9 @@ class AnalyzePage extends StatelessWidget {
 
                 return null;
               },
-              initialValue: model.getFieldNumber(field).toString(),
+              initialValue: model.getFieldNumber(field) != null
+                  ? model.getFieldNumber(field).toString()
+                  : null,
               onChanged: (value) {
                 model.changeFieldNumber(field, model, value);
               },
