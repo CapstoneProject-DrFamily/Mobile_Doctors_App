@@ -6,6 +6,7 @@ import 'package:mobile_doctors_apps/helper/helper_method.dart';
 import 'package:mobile_doctors_apps/model/transaction_history_model.dart';
 import 'package:mobile_doctors_apps/repository/map_repo.dart';
 import 'package:mobile_doctors_apps/repository/transaction_repo.dart';
+import 'package:mobile_doctors_apps/screens/history/transaction_detail_page.dart';
 import 'package:mobile_doctors_apps/screens/home/map_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_timeline.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
@@ -44,9 +45,11 @@ class MedicalCareHistoryViewModel extends BaseModel {
       _isNotHave = false;
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       _doctorId = prefs.getInt("doctorId");
+      print("oke" + _doctorId.toString());
 
       _listTransaction = await transactionRepo.getListTransactionHistory(
           _doctorId.toString(), -1);
+      print("oke 1");
 
       if (_listTransaction == null) {
         _isNotHave = true;
@@ -55,7 +58,6 @@ class MedicalCareHistoryViewModel extends BaseModel {
       _isLoading = false;
       _isFirst = false;
       notifyListeners();
-      // print("oke");
     }
   }
 
@@ -198,12 +200,24 @@ class MedicalCareHistoryViewModel extends BaseModel {
         break;
       case 3:
         {
-          print("status 3");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  TransactionDetailPage(transactionId: transactionId),
+            ),
+          );
         }
         break;
       case 4:
         {
-          print("status 4");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  TransactionDetailPage(transactionId: transactionId),
+            ),
+          );
         }
         break;
       default:

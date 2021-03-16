@@ -9,6 +9,7 @@ import 'package:mobile_doctors_apps/model/prescription_model.dart';
 import 'package:mobile_doctors_apps/model/transaction.dart';
 import 'package:mobile_doctors_apps/repository/prescription_repo.dart';
 import 'package:mobile_doctors_apps/repository/transaction_repo.dart';
+import 'package:mobile_doctors_apps/screens/history/transaction_detail_page.dart';
 import 'package:mobile_doctors_apps/screens/landing/landing_page.dart';
 import 'package:mobile_doctors_apps/screens/medicine/medicine_detail_form.dart';
 import 'package:mobile_doctors_apps/screens/medicine/medicine_search_page.dart';
@@ -142,9 +143,13 @@ class MedicineListViewModel extends BaseModel {
         backgroundColor: Colors.white,
         gravity: ToastGravity.CENTER,
       );
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => LandingScreen()),
-          (Route<dynamic> route) => false);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              TransactionDetailPage(transactionId: transactionId),
+        ),
+      );
     }
   }
 }
