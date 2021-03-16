@@ -1,14 +1,14 @@
 class TransactionBasicModel {
-  final String transactionId,
+  String transactionId,
       patientName,
       patientImage,
       locationName,
       symptomName,
       patientNote,
       location;
-  final double distance, longitude, latitude, servicePrice;
-  final int endTime, doctorId, patientId;
-  final List<SymptomTempModel> patientSymptom;
+  double distance, longitude, latitude, servicePrice;
+  int endTime, doctorId, patientId, accountId;
+  List<SymptomTempModel> patientSymptom;
   String estimateTime, serviceName;
   int examId;
 

@@ -2,6 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_doctors_apps/screens/history/medical_care_history.dart';
 import 'package:mobile_doctors_apps/screens/home/home_page.dart';
 import 'package:mobile_doctors_apps/screens/setting/setting_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
@@ -14,7 +15,7 @@ class LandingPageViewModel extends BaseModel {
   final List<Widget> page = [
     HomePage(),
     Text('2'),
-    Text('3'),
+    MedicalCareHistory(),
     SettingPage(),
   ];
 
@@ -49,7 +50,7 @@ class LandingPageViewModel extends BaseModel {
         activeColor: Colors.blue[400]),
     BottomNavyBarItem(
         icon: Icon(EvaIcons.clockOutline),
-        title: Text('History'),
+        title: Text('Record'),
         textAlign: TextAlign.center,
         activeColor: Colors.blue[400]),
     BottomNavyBarItem(

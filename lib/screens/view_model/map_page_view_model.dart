@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
 
+import 'package:commons/commons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,7 +16,7 @@ import 'package:mobile_doctors_apps/model/transaction_basic_model.dart';
 import 'package:mobile_doctors_apps/repository/map_repo.dart';
 import 'package:mobile_doctors_apps/repository/notify_repo.dart';
 import 'package:mobile_doctors_apps/repository/transaction_repo.dart';
-import 'package:mobile_doctors_apps/screens/record/analyze_page.dart';
+import 'package:mobile_doctors_apps/repository/user_repo.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/share/base_timeline.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,6 +25,7 @@ class MapPageViewModel extends BaseModel {
   final IMapRepo _mapRepo = MapRepo();
   final INotifyRepo _notifyRepo = NotifyRepo();
   final ITransactionRepo _transactionRepo = TransactionRepo();
+  final IUserRepo _userRepo = UserRepo();
 
   final double _initFabHeight = 260.0;
   double _fabHeight;
@@ -81,6 +82,8 @@ class MapPageViewModel extends BaseModel {
   DirectionDetails _directionDetails;
   DirectionDetails get directionDetails => _directionDetails;
 
+  int _phoneNum;
+
   MapPageViewModel(
       TransactionBasicModel transaction, DirectionDetails directionDetails) {
     _isLoading = true;
@@ -93,6 +96,8 @@ class MapPageViewModel extends BaseModel {
   }
 
   void initMap() async {
+    _phoneNum = await _userRepo.getPhoneUser(_basicTransaction.accountId);
+
     _firebaseuser = await FirebaseAuth.instance.currentUser();
     userId = _firebaseuser.uid;
     _doctorRequest =
@@ -141,7 +146,9 @@ class MapPageViewModel extends BaseModel {
           SymptomTempModel(symptomtype: sympTitle, symptomName: symptomName);
       symptomsDisplay.add(symptom);
     }
+
     _isLoading = false;
+
     notifyListeners();
   }
 
@@ -150,7 +157,8 @@ class MapPageViewModel extends BaseModel {
     _controller = controller;
 
     _bottomPadding = 200;
-
+    // HelperMethod.enableLiveLocationUpdates();
+    print("map created");
     notifyListeners();
 
     locatePosition();
@@ -199,6 +207,7 @@ class MapPageViewModel extends BaseModel {
 
   Future<void> getDirection(
       LatLng currentPosition, LatLng destinationLocation) async {
+    print("direction");
     PolylinePoints polylinePoints = PolylinePoints();
     List<PointLatLng> result =
         polylinePoints.decodePolyline(_directionDetails.encodePoints);
@@ -375,5 +384,10 @@ class MapPageViewModel extends BaseModel {
             BaseTimeLine(transactionId: _basicTransaction.transactionId),
       ),
     );
+  }
+
+  void callPhone(BuildContext context) async {
+    await launch('tel://$_phoneNum');
+    Navigator.pop(context);
   }
 }
