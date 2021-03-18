@@ -5,8 +5,7 @@ import 'package:http/http.dart' as http;
 
 abstract class INotifyRepo {
   Future<void> cancelTransaction(String usToken, String transactionId);
-  Future<void> acceptTransaction(
-      String usToken, String transactionId, String doctorFBId);
+  Future<void> acceptTransaction(String usToken);
   Future<void> arrivedTransaction(String usToken, String transactionId);
 }
 
@@ -49,14 +48,11 @@ class NotifyRepo extends INotifyRepo {
   }
 
   @override
-  Future<void> acceptTransaction(
-      String usToken, String transactionID, String doctorFBId) async {
+  Future<void> acceptTransaction(String usToken) async {
     await firebaseMessaging.requestNotificationPermissions(
       const IosNotificationSettings(
           sound: true, badge: true, alert: true, provisional: false),
     );
-
-    print(transactionID);
 
     await http.post(
       'https://fcm.googleapis.com/fcm/send',
@@ -67,13 +63,11 @@ class NotifyRepo extends INotifyRepo {
       body: jsonEncode(
         <String, dynamic>{
           'notification': <String, dynamic>{
-            'body': 'choose another doctor please',
-            'title': 'DOCTOR HAVE CANCEL'
+            'body': 'please go back screen to tracking doctor',
+            'title': 'DOCTOR HAVE ACCEPT YOU'
           },
           'priority': 'high',
           'data': <String, dynamic>{
-            'transactionId': transactionID,
-            'doctorFBId': doctorFBId,
             'status': 'accept',
             'type': 'booking',
           },

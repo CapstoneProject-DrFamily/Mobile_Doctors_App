@@ -349,8 +349,8 @@ class MapPageViewModel extends BaseModel {
 
     _doctorRequest = FirebaseDatabase.instance.reference().child("Transaction");
     Map transactionInfo = {
+      "doctor_FBId": userId,
       "transaction_status": "Analysis Symptom",
-      "exam_id": _basicTransaction.examId,
       "doctor_id": _basicTransaction.doctorId,
       "patientId": _basicTransaction.patientId,
       "estimatedTime": _basicTransaction.estimateTime,
@@ -365,11 +365,9 @@ class MapPageViewModel extends BaseModel {
     Transaction updateTransactionModel = Transaction(
         doctorId: _basicTransaction.doctorId,
         estimatedTime: _basicTransaction.estimateTime,
-        examId: _basicTransaction.examId,
         location: _basicTransaction.location,
         note: _basicTransaction.patientNote,
         patientId: _basicTransaction.patientId,
-        prescriptionId: null,
         status: 2,
         transactionId: _basicTransaction.transactionId);
 

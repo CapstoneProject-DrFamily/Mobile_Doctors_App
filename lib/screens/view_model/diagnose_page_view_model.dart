@@ -9,13 +9,12 @@ import 'package:mobile_doctors_apps/model/examination_history.dart';
 import 'package:mobile_doctors_apps/repository/examination_repo.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/timeline_view_model.dart';
-import 'package:timelines/timelines.dart';
 
 class DiagnosePageViewModel extends BaseModel {
   final IExaminationRepo _examinationRepo = ExaminationRepo();
 
   bool keyboard = false;
-  int examId;
+  String examId;
   String transactionId;
   bool init = true;
 
@@ -42,15 +41,8 @@ class DiagnosePageViewModel extends BaseModel {
   void initDiagnose() async {
     _transactionRequest =
         FirebaseDatabase.instance.reference().child("Transaction");
+    examId = transactionId;
 
-    await _transactionRequest
-        .child(transactionId)
-        .once()
-        .then((DataSnapshot dataSnapshot) {
-      if (dataSnapshot.value != null) {
-        examId = dataSnapshot.value['exam_id'];
-      }
-    });
     _examinationHistory = await _examinationRepo.getExaminationHistory(examId);
   }
 

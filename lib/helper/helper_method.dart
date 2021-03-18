@@ -16,4 +16,20 @@ class HelperMethod {
   static void enableLiveLocationUpdates() {
     liveLocationStreamSubscription.resume();
   }
+
+  static void disableBookTransactionUpdates() {
+    transactionBookingStreamSubscription.pause();
+  }
+
+  static void enableBookTransactionUpdates() {
+    transactionBookingStreamSubscription.resume();
+  }
+
+  static void disableCancelTransactionUpdates() {
+    transactionCancelStreamSubscription.pause();
+  }
+
+  static void enableCancelTransactionUpdates() {
+    transactionCancelStreamSubscription.resume();
+  }
 }

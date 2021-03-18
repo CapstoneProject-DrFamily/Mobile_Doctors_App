@@ -176,7 +176,7 @@ class TransactionRepo extends ITransactionRepo {
       transaction = Transaction.fromJson(data);
 
       ProfileModel profileUser =
-          ProfileModel.fromJson(data['patient']['profile']);
+          ProfileModel.fromJson(data['patient']['patientNavigation']);
 
       ServiceModel service = ServiceModel.fromJson(data['service']);
 
@@ -286,8 +286,10 @@ class TransactionRepo extends ITransactionRepo {
         symptomName = null;
       }
 
-      patientName = transactionSimpleInfo["patient"]["profile"]["fullName"];
-      patientImage = transactionSimpleInfo["patient"]["profile"]["image"];
+      patientName =
+          transactionSimpleInfo["patient"]["patientNavigation"]["fullName"];
+      patientImage =
+          transactionSimpleInfo["patient"]["patientNavigation"]["image"];
       transactionID = transactionSimpleInfo["transactionId"];
       patientNote = transactionSimpleInfo["note"];
       doctorId = transactionSimpleInfo["doctorId"];
@@ -296,8 +298,8 @@ class TransactionRepo extends ITransactionRepo {
       serviceName = transactionSimpleInfo['service']['serviceName'];
       servicePrice = transactionSimpleInfo['service']['servicePrice'];
       estimateTime = transactionSimpleInfo['estimatedTime'];
-      accountId = transactionSimpleInfo['patient']['accountId'];
-      examId = transactionSimpleInfo['examId'];
+      accountId =
+          transactionSimpleInfo['patient']['patientNavigation']['accountId'];
 
       print('$serviceName - $symptomName');
 
@@ -319,7 +321,6 @@ class TransactionRepo extends ITransactionRepo {
       );
       transactionBasic.estimateTime = estimateTime;
       transactionBasic.accountId = accountId;
-      transactionBasic.examId = examId;
 
       return transactionBasic;
     } else {
