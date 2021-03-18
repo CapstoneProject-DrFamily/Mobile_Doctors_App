@@ -205,11 +205,11 @@ class VerifyOTPViewModel extends BaseModel {
 
               var waiting = _userModel.waiting;
 
-              if (waiting == false && _userModel.profileId != null) {
+              if (waiting == false && _userModel.profileId != 0) {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => LandingScreen()),
                     (Route<dynamic> route) => false);
-              } else if (waiting == true && _userModel.profileId != null) {
+              } else if (waiting == true && _userModel.profileId != 0) {
                 Fluttertoast.showToast(
                   msg: "Waiting for your account to be active",
                   textColor: Colors.red,
@@ -221,7 +221,7 @@ class VerifyOTPViewModel extends BaseModel {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => LoginScreen()),
                     (Route<dynamic> route) => false);
-              } else if (waiting == true && _userModel.profileId == null) {
+              } else if (waiting == true && _userModel.profileId == 0) {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => SignUpPage()),
                     (Route<dynamic> route) => false);

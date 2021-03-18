@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:mobile_doctors_apps/model/sign_up/create_doctor_model.dart';
 import 'package:mobile_doctors_apps/model/sign_up/create_profile_model.dart';
 import 'package:mobile_doctors_apps/model/sign_up/specialty_sign_up_model.dart';
-import 'package:mobile_doctors_apps/model/sign_up/update_user_model.dart';
 import 'package:mobile_doctors_apps/repository/sign_up/sign_up_repo.dart';
 import 'package:mobile_doctors_apps/repository/sign_up/specialty_repo.dart';
 import 'package:path/path.dart' as path;
@@ -195,6 +194,16 @@ class SignUpViewModel extends BaseModel {
     notifyListeners();
   }
 
+  void checkDescription(String description) {
+    print(description);
+    if (description == null || description.length == 0) {
+      _description = Validate(null, "Description can't be blank");
+    } else {
+      _description = Validate(description, null);
+    }
+    notifyListeners();
+  }
+
   void checkIDCard(String idCard) {
     print(idCard);
     if (idCard == null || idCard.length == 0) {
@@ -292,6 +301,10 @@ class SignUpViewModel extends BaseModel {
         currentImage = defaultImage;
       }
 
+      final SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      var accountId = sharedPreferences.getInt('usAccountID');
+
       _createProfileModel = new CreateProfileModel(
         fullName: _fullName.value,
         dob: _dob,
@@ -300,23 +313,22 @@ class SignUpViewModel extends BaseModel {
         image: currentImage,
         email: _email.value,
         idCard: _idCard.value,
+        accountId: accountId,
       );
 
       String createProfileJson = jsonEncode(_createProfileModel.toJson());
       print("CreateProfileJson: " + createProfileJson + "\n");
 
       bool check = await _signUpRepo.createProfile(createProfileJson);
-      if (check == true) check = await _signUpRepo.updateUser();
+      // if (check == true) check = await _signUpRepo.updateUser();
 
-      final SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
       profileId = sharedPreferences.getInt('usProfileID');
 
       _createDoctorModel = new CreateDoctorModel(
+        doctorId: profileId,
         degree: _degree.value,
         experience: _experience.value,
         description: _description.value,
-        profileId: profileId,
         specialtyId: _idSpecialty,
         school: _school.value,
       );

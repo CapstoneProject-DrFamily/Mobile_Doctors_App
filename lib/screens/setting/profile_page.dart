@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -808,7 +806,7 @@ class ProfilePage extends StatelessWidget {
           print('Select Image');
         },
         child: Container(
-          padding: EdgeInsets.only(top: 50, bottom: 50),
+          padding: EdgeInsets.only(top: 70, bottom: 50),
           decoration: BoxDecoration(
             gradient: LinearGradient(
                 begin: Alignment.topRight,

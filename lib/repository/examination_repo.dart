@@ -6,20 +6,20 @@ import 'package:http/http.dart' as http;
 import 'package:mobile_doctors_apps/model/examination_history.dart';
 
 abstract class IExaminationRepo {
-  Future<int> createNewExamination(String creator);
+  Future<int> createNewExamination(String transactionID, String creator);
   Future<ExaminationHistory> getExaminationHistory(int examID);
   Future<bool> updateExaminationHistory(String examinationJson);
 }
 
 class ExaminationRepo extends IExaminationRepo {
   @override
-  Future<int> createNewExamination(String creator) async {
+  Future<int> createNewExamination(String transactionID, String creator) async {
     String urlAPI = APIHelper.Prefix_API + "/api/v1/ExaminationHistory";
     print(urlAPI);
     Map<String, String> header = {
       HttpHeaders.contentTypeHeader: "application/json",
     };
-    var data = {'insBy': creator, 'updBy': creator};
+    var data = {'id': transactionID, 'insBy': creator, 'updBy': creator};
     print(data);
 
     var response =
