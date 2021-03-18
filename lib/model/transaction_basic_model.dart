@@ -10,7 +10,6 @@ class TransactionBasicModel {
   int endTime, doctorId, patientId, accountId;
   List<SymptomTempModel> patientSymptom;
   String estimateTime, serviceName;
-  int examId;
 
   TransactionBasicModel({
     this.distance,

@@ -6,7 +6,6 @@ import 'package:mobile_doctors_apps/enums/processState.dart';
 import 'package:mobile_doctors_apps/model/examination_history.dart';
 import 'package:mobile_doctors_apps/model/specialty_model.dart';
 import 'package:mobile_doctors_apps/repository/examination_repo.dart';
-import 'package:mobile_doctors_apps/screens/record/analyze_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/timeline_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +16,8 @@ class AnalyzePageViewModel extends BaseModel {
   final IExaminationRepo _examinationRepo = ExaminationRepo();
   bool isLoading = false;
   bool init = true;
+
+  String _exam_id;
 
   List<Speciality> listSpeciality = [
     Speciality(name: 'Cardiovascular', description: ""),
@@ -55,24 +56,18 @@ class AnalyzePageViewModel extends BaseModel {
   Future<void> fetchData(
       String transactionId, TimeLineViewModel model, List listCheck) async {
     if (this.init) {
-      print("analyze");
+      print('analyze $transactionId');
       this.transactionId = transactionId;
+      _exam_id = transactionId;
 
       if (model.currentIndex < model.index) {
         _transactionRequest =
-            await FirebaseDatabase.instance.reference().child("Transaction");
+            FirebaseDatabase.instance.reference().child("Transaction");
 
-        int exam_id;
-        await _transactionRequest
-            .child(transactionId)
-            .once()
-            .then((DataSnapshot dataSnapshot) {
-          if (dataSnapshot.value != null) {
-            exam_id = dataSnapshot.value['exam_id'];
-          }
-        });
+        _exam_id = transactionId;
 
-        examinationForm = await _examinationRepo.getExaminationHistory(exam_id);
+        examinationForm =
+            await _examinationRepo.getExaminationHistory(_exam_id);
 
         initCheck(listCheck);
       }
@@ -393,24 +388,15 @@ class AnalyzePageViewModel extends BaseModel {
 
     _transactionRequest =
         FirebaseDatabase.instance.reference().child("Transaction");
-    int exam_id;
-    await _transactionRequest
-        .child(transactionId)
-        .once()
-        .then((DataSnapshot dataSnapshot) {
-      if (dataSnapshot.value != null) {
-        exam_id = dataSnapshot.value['exam_id'];
-      }
-    });
 
-    print('transactionId: $transactionId $exam_id');
+    print('transactionId: $transactionId $_exam_id');
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String creator = prefs.getString("usName");
 
     // mock
     // String creator = "khoa";
 
-    examinationForm.id = exam_id;
+    examinationForm.id = _exam_id;
     examinationForm.updBy = creator;
     examinationForm.insBy = creator;
 

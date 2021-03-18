@@ -324,6 +324,7 @@ class HomePage extends StatelessWidget {
                                                                           index]
                                                                       .transactionId,
                                                                   context);
+
                                                               // Navigator.push(
                                                               //     context,
                                                               //     MaterialPageRoute(
@@ -346,10 +347,11 @@ class HomePage extends StatelessWidget {
                                                                         18.0),
                                                           ),
                                                           onPressed: () {
-                                                            model.cancelTransaction(model
-                                                                .listTransaction[
-                                                                    index]
-                                                                .transactionId);
+                                                            // model.cancelTransaction(model
+                                                            //     .listTransaction[
+                                                            //         index]
+                                                            //     .transactionId);
+
                                                             // Get.to(
                                                             //     MedicineListPage());
 
@@ -396,11 +398,11 @@ class HomePage extends StatelessWidget {
                                                                 .length >
                                                             0) {
                                                           print("time cancel");
-                                                          await model
-                                                              .cancelTransaction(model
-                                                                  .listTransaction[
-                                                                      index]
-                                                                  .transactionId);
+                                                          // await model
+                                                          //     .cancelTransaction(model
+                                                          //         .listTransaction[
+                                                          //             index]
+                                                          //         .transactionId);
                                                         }
                                                       },
                                                       widgetBuilder: (_, time) {
