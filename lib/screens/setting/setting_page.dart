@@ -1,10 +1,7 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mobile_doctors_apps/screens/setting/profile_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/setting_view_model.dart';
-import 'package:settings_ui/settings_ui.dart';
 
 class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {

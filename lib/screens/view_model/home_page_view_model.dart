@@ -188,7 +188,8 @@ class HomePageViewModel extends BaseModel {
     _firebaseuser = await FirebaseAuth.instance.currentUser();
     String userId = _firebaseuser.uid;
 
-    homeTabPageStreamSubscription = geolocator.Geolocator.getPositionStream()
+    homeTabPageStreamSubscription = geolocator.Geolocator.getPositionStream(
+            desiredAccuracy: geolocator.LocationAccuracy.bestForNavigation)
         .listen((geolocator.Position position) async {
       geolocator.Position position =
           await geolocator.Geolocator.getCurrentPosition(
@@ -318,7 +319,8 @@ class HomePageViewModel extends BaseModel {
     prefs.setString("userToken", tokenPatient);
     String creator = prefs.getString("usName");
 
-    int idExamination = await _examinationRepo.createNewExamination(creator);
+    int idExamination = await _examinationRepo.createNewExamination(
+        transaction.transactionId, creator);
 
     if (idExamination != null) {
       Transaction transactionTemp = new Transaction(

@@ -420,9 +420,9 @@ class SignUpPage extends StatelessWidget {
       ),
       child: TextFormField(
         controller: model.descriptionController,
-        // onChanged: (text) {
-        //   model.checkFullName(text);
-        // },
+        onChanged: (text) {
+          model.checkDescription(text);
+        },
         keyboardType: TextInputType.text,
         textCapitalization: TextCapitalization.none,
         decoration: InputDecoration(

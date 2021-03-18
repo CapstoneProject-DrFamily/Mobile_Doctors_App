@@ -100,8 +100,10 @@ class TransactionRepo extends ITransactionRepo {
         symptomName = null;
       }
 
-      patientName = transactionSimpleInfo["patient"]["profile"]["fullName"];
-      patientImage = transactionSimpleInfo["patient"]["profile"]["image"];
+      patientName =
+          transactionSimpleInfo["patient"]["patientNavigation"]["fullName"];
+      patientImage =
+          transactionSimpleInfo["patient"]["patientNavigation"]["image"];
       transactionID = transactionSimpleInfo["transactionId"];
       patientNote = transactionSimpleInfo["note"];
       doctorId = transactionSimpleInfo["doctorId"];
