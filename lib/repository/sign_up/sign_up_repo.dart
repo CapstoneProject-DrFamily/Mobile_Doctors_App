@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class ISignUpRepo {
   Future<bool> createProfile(String createProfileJson);
-  Future<bool> updateUser();
+  // Future<bool> updateUser();
   Future<bool> createDoctor(String createDoctorJson);
 }
 
@@ -33,6 +33,9 @@ class SignUpRepo extends ISignUpRepo {
       String jSonData = response.body;
       var decodeData = jsonDecode(jSonData);
       profileId = decodeData["profileId"];
+      final SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      sharedPreferences.setInt("usProfileID", profileId);
 
       print("ProfileId: " + profileId.toString());
       return isCreated;
@@ -42,47 +45,44 @@ class SignUpRepo extends ISignUpRepo {
     }
   }
 
-  @override
-  Future<bool> updateUser() async {
-    String urlAPI = APIHelper.UPDATE_USER_API;
-    Map<String, String> header = {
-      HttpHeaders.contentTypeHeader: "application/json",
-    };
+  // @override
+  // Future<bool> updateUser() async {
+  //   String urlAPI = APIHelper.UPDATE_USER_API;
+  //   Map<String, String> header = {
+  //     HttpHeaders.contentTypeHeader: "application/json",
+  //   };
 
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    sharedPreferences.setInt("usProfileID", profileId);
-    phone = sharedPreferences.getString('usPhone');
-    accountId = sharedPreferences.getInt('usAccountID');
-    formatPhone = phone.replaceFirst("0", "84");
+  //   phone = sharedPreferences.getString('usPhone');
+  //   accountId = sharedPreferences.getInt('usAccountID');
+  //   formatPhone = phone.replaceFirst("0", "84");
 
-    _updateUserModel = new UpdateUserModel(
-        disable: 0,
-        updBy: phone,
-        updDatetime: DateFormat('yyyy-MM-dd').format(DateTime.now()),
-        accountId: accountId,
-        username: formatPhone,
-        password: null,
-        roleId: 2,
-        profileId: profileId,
-        waiting: 1);
+  //   _updateUserModel = new UpdateUserModel(
+  //       disable: 0,
+  //       updBy: phone,
+  //       updDatetime: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+  //       accountId: accountId,
+  //       username: formatPhone,
+  //       password: null,
+  //       roleId: 3,
+  //       profileId: profileId,
+  //       waiting: 1);
 
-    String updateUserJson = jsonEncode(_updateUserModel.toJson());
-    print("UpdUserJson: " + updateUserJson);
+  //   String updateUserJson = jsonEncode(_updateUserModel.toJson());
+  //   print("UpdUserJson: " + updateUserJson);
 
-    var response =
-        await http.put(urlAPI, headers: header, body: updateUserJson);
+  //   var response =
+  //       await http.put(urlAPI, headers: header, body: updateUserJson);
 
-    print("Status code: " + response.statusCode.toString());
+  //   print("Status code: " + response.statusCode.toString());
 
-    bool isUpdated = true;
-    if (response.statusCode == 200) {
-      return isUpdated;
-    } else {
-      isUpdated = false;
-      return isUpdated;
-    }
-  }
+  //   bool isUpdated = true;
+  //   if (response.statusCode == 200) {
+  //     return isUpdated;
+  //   } else {
+  //     isUpdated = false;
+  //     return isUpdated;
+  //   }
+  // }
 
   @override
   Future<bool> createDoctor(String createDoctorJson) async {

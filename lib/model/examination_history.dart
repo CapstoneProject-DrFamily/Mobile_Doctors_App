@@ -1,6 +1,6 @@
 class ExaminationHistory {
-  int id;
-  String history,
+  String id,
+      history,
       mucosa,
       otherBody,
       cardiovascular,
@@ -86,7 +86,7 @@ class ExaminationHistory {
 
   factory ExaminationHistory.fromJson(Map<String, dynamic> json) {
     return ExaminationHistory(
-      id: json['id'] as int,
+      id: json['id'] as String,
       history: json['history'] as String,
       pulseRate: json['pulseRate'] as double,
       temperature: json['temperature'] as double,

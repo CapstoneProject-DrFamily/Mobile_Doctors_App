@@ -157,6 +157,7 @@ class ProfilePageViewModel extends BaseModel {
 
     var res = await _doctorRepo.getDoctorDetail(doctorId);
     if (res != null) {
+      print('resp: $res');
       doctorDetail = res[0];
       userProfile = res[1];
       transferToViewModel(doctorDetail, userProfile);

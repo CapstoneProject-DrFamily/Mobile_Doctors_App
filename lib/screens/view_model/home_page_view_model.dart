@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:commons/commons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,7 +34,7 @@ class HomePageViewModel extends BaseModel {
   FirebaseUser _firebaseuser;
   DatabaseReference _doctorRequest;
 
-  // StreamSubscription<geolocator.Position> homeTabPageStreamSubscription;
+  String _userFBID;
 
   RequestDoctorModel _doctorModel;
   RequestDoctorModel get doctorModel => _doctorModel;
@@ -46,9 +47,10 @@ class HomePageViewModel extends BaseModel {
 
   int sltransaction = 1;
 
+  geolocator.Position _currentPosition;
+
   List<TransactionBasicModel> _listTransaction = [];
   List<TransactionBasicModel> get listTransaction => _listTransaction;
-  List<String> _listTempTransaction = [];
 
   isConnecting(bool connecting) {
     this.connecting = connecting;
@@ -67,7 +69,6 @@ class HomePageViewModel extends BaseModel {
   }
 
   HomePageViewModel() {
-    print('list ${PushNotifycationService.transaction.length}');
     print('listtran ${_listTransaction.length}');
 
     init();
@@ -88,12 +89,12 @@ class HomePageViewModel extends BaseModel {
     }
 
     _firebaseuser = await FirebaseAuth.instance.currentUser();
-    String userId = _firebaseuser.uid;
+    _userFBID = _firebaseuser.uid;
 
     _doctorRequest =
         FirebaseDatabase.instance.reference().child("Doctor Request");
 
-    _doctorRequest.child(userId).once().then((DataSnapshot dataSnapshot) {
+    _doctorRequest.child(_userFBID).once().then((DataSnapshot dataSnapshot) {
       if (dataSnapshot.value != null) {
         String status = dataSnapshot.value['doctor_status'];
         if (status != null && status == "waiting") {
@@ -118,9 +119,7 @@ class HomePageViewModel extends BaseModel {
   }
 
   Future<bool> activeDoc() async {
-    _firebaseuser = await FirebaseAuth.instance.currentUser();
-    String userId = _firebaseuser.uid;
-    print('Firebase ID $userId');
+    print('Firebase ID $_userFBID');
     PushNotifycationService pushNotifycationService = PushNotifycationService();
 
     _doctorRequest =
@@ -133,6 +132,7 @@ class HomePageViewModel extends BaseModel {
     } catch (e) {
       print("error");
     }
+
     var status = await Permission.location.status;
 
     if (status.isUndetermined) {
@@ -143,7 +143,8 @@ class HomePageViewModel extends BaseModel {
       return false;
     }
 
-    // if (await Permission.speech.isPermanentlyDenied) {}
+    _currentPosition = position;
+
     await pushNotifycationService.initialize();
 
     String tokenNoti = await pushNotifycationService.getToken();
@@ -164,142 +165,135 @@ class HomePageViewModel extends BaseModel {
       "token": tokenNoti,
     };
 
-    _doctorRequest.child(userId).set(doctorRequestInfo);
+    _doctorRequest.child(_userFBID).set(doctorRequestInfo);
 
-    _doctorRequest.onValue.listen((event) {});
+    getTransactionBookingListen();
+    cancelTransactionListen();
+
     return true;
   }
 
-  Future<void> makeDoctorOnline() async {
-    _firebaseuser = await FirebaseAuth.instance.currentUser();
-
-    geolocator.Position position;
-    try {
-      position = await geolocator.Geolocator.getCurrentPosition(
-          desiredAccuracy: geolocator.LocationAccuracy.high);
-    } catch (e) {
-      print("error");
-    }
-
-    _doctorRequest.onValue.listen((event) {});
-  }
-
   Future<void> getLocationLiveUpdates() async {
-    _firebaseuser = await FirebaseAuth.instance.currentUser();
-    String userId = _firebaseuser.uid;
-
-    homeTabPageStreamSubscription = geolocator.Geolocator.getPositionStream()
-        .listen((geolocator.Position position) async {
-      geolocator.Position position =
-          await geolocator.Geolocator.getCurrentPosition(
-              desiredAccuracy: geolocator.LocationAccuracy.high);
-
-      if (_listTempTransaction.length <
-          PushNotifycationService.transaction.length) {
-        //add transaction
-        addTransaction(position.longitude, position.latitude);
-      } else if (_listTempTransaction.length >
-          PushNotifycationService.transaction.length) {
-        String removeTransaction = PushNotifycationService.transactionRemove;
-        patientCancelTransaction(removeTransaction);
-      }
+    homeTabPageStreamSubscription = geolocator.Geolocator.getPositionStream(
+            desiredAccuracy: geolocator.LocationAccuracy.bestForNavigation)
+        .listen((geolocator.Position position) {
+      _currentPosition = position;
 
       Map doctorLocation = {
         "latitude": position.latitude.toString(),
         "longtitude": position.longitude.toString(),
       };
-      _doctorRequest.child(userId).update({
+      _doctorRequest.child(_userFBID).update({
         "pickup": doctorLocation,
       });
     });
   }
 
   Future<void> offlineDoctor() async {
-    _firebaseuser = await FirebaseAuth.instance.currentUser();
-    String userId = _firebaseuser.uid;
+    await transactionBookingStreamSubscription?.cancel();
+    await transactionCancelStreamSubscription?.cancel();
     await homeTabPageStreamSubscription?.cancel();
-    await _doctorRequest.child(userId).remove();
+    await _doctorRequest.child(_userFBID).remove();
   }
 
-  Future<void> addTransaction(double longitude, double latitude) async {
-    if (_listTempTransaction.length == 0) {
-      _listTempTransaction
-          .add(PushNotifycationService.transaction[0].transactionID);
-      TransactionBasicModel transactionBasic =
-          await _transactionRepo.getTransactionDetail(
-              PushNotifycationService.transaction[0].transactionID,
-              longitude,
-              latitude);
-      _listTransaction.add(transactionBasic);
-      //add
-    } else {
-      for (var item in PushNotifycationService.transaction) {
-        if (_listTempTransaction.contains(item.transactionID)) {
-          print("contain");
-          // _listTempTransaction.add(item);
-          // await _transactionRepo.getTransactionDetail(item);
-        } else {
-          print("don't contain");
-          _listTempTransaction.add(item.transactionID);
-          TransactionBasicModel transactionBasic = await _transactionRepo
-              .getTransactionDetail(item.transactionID, longitude, latitude);
-          _listTransaction.add(transactionBasic);
-        }
-      }
-    }
-    // prefs.setStringList("listTransaction", );
+  void getTransactionBookingListen() {
+    transactionBookingStreamSubscription = _doctorRequest
+        .child(_userFBID)
+        .child("transaction")
+        .onChildAdded
+        .listen(
+      (event) async {
+        print(
+            'TransactionID: ${event.snapshot.key} TransactionValue: ${event.snapshot.value}');
 
-    print(
-        'Listtrantemp: ${_listTempTransaction.length}, ListRealTrans: ${_listTransaction.length}');
+        await addTransaction(event.snapshot.key, _currentPosition.longitude,
+            _currentPosition.latitude);
+      },
+    );
+  }
+
+  void cancelTransactionListen() {
+    transactionCancelStreamSubscription = _doctorRequest
+        .child(_userFBID)
+        .child("transaction")
+        .onChildRemoved
+        .listen(
+      (event) async {
+        print(
+            'TransactionID: ${event.snapshot.key} TransactionValue: ${event.snapshot.value}');
+        patientCancelTransaction(event.snapshot.key);
+      },
+    );
+  }
+
+  Future<void> addTransaction(
+      String transactionID, double longitude, double latitude) async {
+    TransactionBasicModel transactionBasic = await _transactionRepo
+        .getTransactionDetail(transactionID, longitude, latitude);
+    _listTransaction.add(transactionBasic);
     notifyListeners();
   }
 
   void patientCancelTransaction(String transactionID) {
-    _listTempTransaction.removeWhere((element) => element == transactionID);
     _listTransaction
         .removeWhere((element) => element.transactionId == transactionID);
-    notifyListeners();
-  }
-
-  Future<void> cancelTransaction(String transactionID) async {
-    print("in cacel");
-    int indexTransaction = PushNotifycationService.transaction
-        .indexWhere((element) => element.transactionID == transactionID);
-    String tokenPatient =
-        PushNotifycationService.transaction[indexTransaction].notifyToken;
-    PushNotifycationService.transaction
-        .removeWhere((element) => element.transactionID == transactionID);
-    _listTempTransaction.removeWhere((element) => element == transactionID);
-    _listTransaction
-        .removeWhere((element) => element.transactionId == transactionID);
-    await _notifyRepo.cancelTransaction(tokenPatient, transactionID);
-
-    print(
-        'List ${PushNotifycationService.transaction.length}  ${_listTempTransaction.length}  ${_listTransaction.length}');
     notifyListeners();
   }
 
   Future<void> acceptTransaction(
       String transactionID, BuildContext context) async {
-    int indexTransaction = PushNotifycationService.transaction
-        .indexWhere((element) => element.transactionID == transactionID);
-    String tokenPatient =
-        PushNotifycationService.transaction[indexTransaction].notifyToken;
-    _firebaseuser = await FirebaseAuth.instance.currentUser();
-    String userId = _firebaseuser.uid;
-    int indexInTransaction = _listTransaction
+    waitDialog(
+      context,
+    );
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    int indexTransaction = _listTransaction
         .indexWhere((element) => element.transactionId == transactionID);
-    var transaction = _listTransaction[indexInTransaction];
-    geolocator.Position position;
-    try {
-      position = await geolocator.Geolocator.getCurrentPosition(
-          desiredAccuracy: geolocator.LocationAccuracy.high);
-    } catch (e) {
-      print("error");
+    var transaction = _listTransaction[indexTransaction];
+    _listTransaction.removeAt(indexTransaction);
+
+    for (var item in _listTransaction) {
+      await _doctorRequest
+          .child(_userFBID)
+          .child("transaction")
+          .child(item.transactionId)
+          .update(
+        {
+          "status": "cancel",
+        },
+      );
     }
+
+    print("done list Cancel");
+
+    var patientNotiToken;
+
+    await _doctorRequest
+        .child(_userFBID)
+        .child("transaction")
+        .child(transaction.transactionId)
+        .once()
+        .then((DataSnapshot dataSnapshot) {
+      prefs.setString("userToken", dataSnapshot.value['usNotiToken']);
+      patientNotiToken = dataSnapshot.value['usNotiToken'];
+    });
+
+    await _doctorRequest
+        .child(_userFBID)
+        .child("transaction")
+        .child(transaction.transactionId)
+        .update(
+      {
+        "status": "accept",
+      },
+    );
+
+    print("accept Transaction");
+
     LatLng destinationLocation =
         LatLng(transaction.latitude, transaction.longitude);
-    LatLng positionLatLng = LatLng(position.latitude, position.longitude);
+    LatLng positionLatLng =
+        LatLng(_currentPosition.latitude, _currentPosition.longitude);
 
     var directionDetails =
         await _mapRepo.getDirectionDetails(positionLatLng, destinationLocation);
@@ -314,46 +308,54 @@ class HomePageViewModel extends BaseModel {
         ":" +
         secondEstimate.minute.toString();
 
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("userToken", tokenPatient);
     String creator = prefs.getString("usName");
 
-    int idExamination = await _examinationRepo.createNewExamination(creator);
+    String idExamination = await _examinationRepo.createNewExamination(
+        transaction.transactionId, creator);
 
-    if (idExamination != null) {
-      Transaction transactionTemp = new Transaction(
-          doctorId: transaction.doctorId,
-          examId: idExamination,
-          location: transaction.location,
-          note: transaction.patientNote,
-          patientId: transaction.patientId,
-          prescriptionId: null,
-          status: 1,
-          transactionId: transaction.transactionId,
-          estimatedTime: estimatedTime);
-      await _transactionRepo.updateTransaction(transactionTemp);
-    }
+    Transaction transactionTemp = new Transaction(
+        doctorId: transaction.doctorId,
+        location: transaction.location,
+        note: transaction.patientNote,
+        patientId: transaction.patientId,
+        status: 1,
+        transactionId: transaction.transactionId,
+        estimatedTime: estimatedTime);
+    await _transactionRepo.updateTransaction(transactionTemp);
 
     print('examId: $idExamination');
 
-    // await offlineDoctor();
+    // // await offlineDoctor();
+    HelperMethod.disableBookTransactionUpdates();
+    HelperMethod.disableCancelTransactionUpdates();
     HelperMethod.disableHomeTabLocationUpdates();
 
-    _doctorRequest.child(userId).update({
+    _doctorRequest.child(_userFBID).update({
       "doctor_status": "busy",
     });
 
     transaction.estimateTime = estimatedTime;
-    transaction.examId = idExamination;
 
     isConnecting(false);
     isActive(false);
     isFinding(false);
-    PushNotifycationService.transaction = [];
-    _listTempTransaction = [];
     _listTransaction = [];
+
+    _doctorRequest = FirebaseDatabase.instance.reference().child("Transaction");
+    Map transactionInfo = {
+      "doctor_FBId": _userFBID,
+      "doctor_id": transaction.doctorId,
+      "patientId": transaction.patientId,
+      "estimatedTime": transaction.estimateTime,
+      "location": transaction.location,
+      "note": transaction.patientNote,
+    };
+
+    await _doctorRequest.child(transaction.transactionId).set(transactionInfo);
+
     notifyListeners();
-    await _notifyRepo.acceptTransaction(tokenPatient, transactionID, userId);
+    await _notifyRepo.acceptTransaction(patientNotiToken);
+    Navigator.pop(context);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -361,8 +363,17 @@ class HomePageViewModel extends BaseModel {
           model: MapPageViewModel(transaction, directionDetails),
         ),
       ),
-    ).then((value) {
-      HelperMethod.disableLiveLocationUpdates();
-    });
+    ).then(
+      (value) {
+        HelperMethod.disableLiveLocationUpdates();
+        HelperMethod.disableBookTransactionUpdates();
+        HelperMethod.disableCancelTransactionUpdates();
+      },
+    );
   }
+}
+
+class TransactionTemp {
+  final String transactionID, patientNotiToken;
+  TransactionTemp({this.patientNotiToken, this.transactionID});
 }

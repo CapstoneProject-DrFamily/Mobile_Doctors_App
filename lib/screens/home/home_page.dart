@@ -353,37 +353,29 @@ class HomePage extends StatelessWidget {
                                                           ),
                                                           Flexible(
                                                             child: RaisedButton(
-                                                              child: Icon(
-                                                                  Icons.block),
-                                                              // Text(
-                                                              //     'Cancel'),
-                                                              color: Colors.red,
-                                                              textColor:
-                                                                  Colors.white,
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            18.0),
-                                                              ),
-                                                              onPressed: () {
-                                                                model.cancelTransaction(model
-                                                                    .listTransaction[
-                                                                        index]
-                                                                    .transactionId);
-
-                                                                // Get.to(
-                                                                //     MedicineListPage());
-
-                                                                // Navigator.push(
-                                                                //     context,
-                                                                //     MaterialPageRoute(
-                                                                //         builder:
-                                                                //             (context) =>
-                                                                //                 MedicineListPage()));
-                                                              },
-                                                            ),
+                                                                child: Icon(
+                                                                    Icons
+                                                                        .block),
+                                                                // Text(
+                                                                //     'Cancel'),
+                                                                color:
+                                                                    Colors.red,
+                                                                textColor:
+                                                                    Colors
+                                                                        .white,
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              18.0),
+                                                                ),
+                                                                onPressed: () {
+                                                                  // model.cancelTransaction(model
+                                                                  //     .listTransaction[
+                                                                  //         index]
+                                                                  //     .transactionId);
+                                                                }),
                                                           )
                                                         ],
                                                       ),
@@ -421,11 +413,11 @@ class HomePage extends StatelessWidget {
                                                                 .length >
                                                             0) {
                                                           print("time cancel");
-                                                          await model
-                                                              .cancelTransaction(model
-                                                                  .listTransaction[
-                                                                      index]
-                                                                  .transactionId);
+                                                          // await model
+                                                          //     .cancelTransaction(model
+                                                          //         .listTransaction[
+                                                          //             index]
+                                                          //         .transactionId);
                                                         }
                                                       },
                                                       widgetBuilder: (_, time) {

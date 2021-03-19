@@ -1,3 +1,4 @@
+import 'package:commons/commons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -163,6 +164,7 @@ class MedicalCareHistoryViewModel extends BaseModel {
     switch (transactionStatus) {
       case 1:
         {
+          waitDialog(context, message: "Getting record please wait...");
           var transaction =
               await transactionRepo.getTransactionDetailMap(transactionId);
 
@@ -177,6 +179,7 @@ class MedicalCareHistoryViewModel extends BaseModel {
           var directionDetails = await _mapRepo.getDirectionDetails(
               positionLatLng, destinationLocation);
 
+          Navigator.pop(context);
           Navigator.push(
             context,
             MaterialPageRoute(

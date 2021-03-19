@@ -14,6 +14,7 @@ import 'package:mobile_doctors_apps/screens/landing/landing_page.dart';
 import 'package:mobile_doctors_apps/screens/medicine/medicine_detail_form.dart';
 import 'package:mobile_doctors_apps/screens/medicine/medicine_search_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MedicineListViewModel extends BaseModel {
   final IPrescriptionRepo _prescriptionRepo = PrescriptionRepo();
@@ -102,35 +103,37 @@ class MedicineListViewModel extends BaseModel {
   }
 
   void finishTransaction(BuildContext context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String doctor = prefs.getString("usName");
     isUpdate = false;
-    listMedicine = [];
     PrescriptionModel prescriptionModel = new PrescriptionModel(
-        prescriptionDes: _noteController.text,
-        insBy: "H.Duc",
-        updateBy: "H.Duc",
+        prescriptionId: transactionId,
+        prescriptionDes:
+            (_noteController.text == "") ? null : _noteController.text,
+        insBy: doctor,
+        updateBy: doctor,
         listMedicine: listMedicine);
 
     String prescriptionJson = jsonEncode(prescriptionModel.toJson());
 
     print(prescriptionJson);
 
-    int prescriptionId =
-        await _prescriptionRepo.createPrescription(prescriptionJson);
+    await _prescriptionRepo.createPrescription(prescriptionJson);
 
     Transaction transaction = new Transaction(
         transactionId: transactionId,
         doctorId: doctorId,
         patientId: patientId,
         estimatedTime: estimateTime,
-        examId: examId,
         location: location,
         note: note,
-        prescriptionId: prescriptionId,
         status: 3);
 
     bool statusUpdate = await _transactionRepo.updateTransaction(transaction);
 
     if (statusUpdate == true) {
+      listMedicine = [];
+
       _transactionRequest.child(transactionId).update({
         "transaction_status": "done",
         "rating": false,
