@@ -182,7 +182,9 @@ class TransactionRepo extends ITransactionRepo {
 
       int sizeSym = data['symptomDetails'].length;
       for (int i = 0; i < sizeSym; i++) {
-        SymptomModel symp = SymptomModel.fromJson(data['symptomDetails'][i]);
+        SymptomModel symp =
+            SymptomModel.fromJson(data['symptomDetails'][i]['symptom']);
+
         listSymptom.add(symp);
       }
 
