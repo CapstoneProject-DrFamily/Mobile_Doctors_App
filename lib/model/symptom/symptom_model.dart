@@ -13,11 +13,11 @@ class SymptomModel {
       symptomType: json['type'] as String,
     );
   }
-}
 
-class SymtomModel {
-  String headerValue;
-  Map<int, String> expandedValue;
-
-  SymtomModel({this.expandedValue, this.headerValue});
+  Map<String, dynamic> toJson() => {
+        "symptomId": this.symptomId,
+        "symptomName": this.symptomName,
+        "symptomDes": this.symptomDes,
+        "symptomType": this.symptomType,
+      };
 }

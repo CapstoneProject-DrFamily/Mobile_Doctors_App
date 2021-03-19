@@ -252,44 +252,6 @@ class HomePageViewModel extends BaseModel {
     var transaction = _listTransaction[indexTransaction];
     _listTransaction.removeAt(indexTransaction);
 
-    for (var item in _listTransaction) {
-      await _doctorRequest
-          .child(_userFBID)
-          .child("transaction")
-          .child(item.transactionId)
-          .update(
-        {
-          "status": "cancel",
-        },
-      );
-    }
-
-    print("done list Cancel");
-
-    var patientNotiToken;
-
-    await _doctorRequest
-        .child(_userFBID)
-        .child("transaction")
-        .child(transaction.transactionId)
-        .once()
-        .then((DataSnapshot dataSnapshot) {
-      prefs.setString("userToken", dataSnapshot.value['usNotiToken']);
-      patientNotiToken = dataSnapshot.value['usNotiToken'];
-    });
-
-    await _doctorRequest
-        .child(_userFBID)
-        .child("transaction")
-        .child(transaction.transactionId)
-        .update(
-      {
-        "status": "accept",
-      },
-    );
-
-    print("accept Transaction");
-
     LatLng destinationLocation =
         LatLng(transaction.latitude, transaction.longitude);
     LatLng positionLatLng =
@@ -335,7 +297,43 @@ class HomePageViewModel extends BaseModel {
     });
 
     transaction.estimateTime = estimatedTime;
+    for (var item in _listTransaction) {
+      await _doctorRequest
+          .child(_userFBID)
+          .child("transaction")
+          .child(item.transactionId)
+          .update(
+        {
+          "status": "cancel",
+        },
+      );
+    }
 
+    print("done list Cancel");
+
+    var patientNotiToken;
+
+    await _doctorRequest
+        .child(_userFBID)
+        .child("transaction")
+        .child(transaction.transactionId)
+        .once()
+        .then((DataSnapshot dataSnapshot) {
+      prefs.setString("userToken", dataSnapshot.value['usNotiToken']);
+      patientNotiToken = dataSnapshot.value['usNotiToken'];
+    });
+
+    await _doctorRequest
+        .child(_userFBID)
+        .child("transaction")
+        .child(transaction.transactionId)
+        .update(
+      {
+        "status": "accept",
+      },
+    );
+
+    print("accept Transaction");
     isConnecting(false);
     isActive(false);
     isFinding(false);
