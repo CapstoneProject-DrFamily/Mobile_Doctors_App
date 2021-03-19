@@ -142,6 +142,7 @@ class HomePage extends StatelessWidget {
                             child: Container(
                               child: ListView.builder(
                                 itemCount: model.listTransaction.length,
+                                // itemCount: 1,
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -185,16 +186,30 @@ class HomePage extends StatelessWidget {
                                         Positioned.fill(
                                           child: Row(
                                             children: [
-                                              Expanded(
-                                                flex: 2,
-                                                child: CircleAvatar(
-                                                  backgroundImage: NetworkImage(
-                                                    model.listTransaction[index]
-                                                        .patientImage,
+                                              Column(
+                                                children: [
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: CircleAvatar(
+                                                        backgroundImage:
+                                                            NetworkImage(
+                                                          // 'https://www.w3schools.com/w3css/img_lights.jpg'
+                                                          model
+                                                              .listTransaction[
+                                                                  index]
+                                                              .patientImage,
+                                                        ),
+                                                        radius: 35,
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                      ),
+                                                    ),
                                                   ),
-                                                  radius: 35,
-                                                  backgroundColor: Colors.white,
-                                                ),
+                                                ],
                                               ),
                                               Expanded(
                                                 flex: 4,
@@ -205,6 +220,7 @@ class HomePage extends StatelessWidget {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
+                                                        // 'Name',
                                                         model
                                                             .listTransaction[
                                                                 index]
@@ -231,6 +247,7 @@ class HomePage extends StatelessWidget {
                                                                     0,
                                                                     0),
                                                             child: Text(
+                                                                // 'Location Name Location Name Location Name Location Name Location Name Location Name Location Name Location Name Location Name Location Name Location Name Location Name',
                                                                 model
                                                                     .listTransaction[
                                                                         index]
@@ -267,6 +284,7 @@ class HomePage extends StatelessWidget {
                                                                     0,
                                                                     0),
                                                             child: Text(
+                                                                // 'symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom',
                                                                 model
                                                                         .listTransaction[
                                                                             index]
@@ -297,16 +315,13 @@ class HomePage extends StatelessWidget {
                                                       ],
                                                     ),
                                                     SizedBox(height: 10),
-                                                    Row(
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  right: 10),
-                                                          child: RaisedButton(
-                                                            child:
-                                                                Text('Accept'),
+                                                    Flexible(
+                                                      child: Row(
+                                                        children: [
+                                                          RaisedButton(
+                                                            child: Icon(
+                                                                Icons.check),
+                                                            // Text('Accept'),
                                                             color: Colors.green,
                                                             textColor:
                                                                 Colors.white,
@@ -333,37 +348,37 @@ class HomePage extends StatelessWidget {
                                                               //                 PatientDetailPage()));
                                                             },
                                                           ),
-                                                        ),
-                                                        RaisedButton(
-                                                          child: Text('Cancel'),
-                                                          color: Colors.red,
-                                                          textColor:
-                                                              Colors.white,
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        18.0),
+                                                          SizedBox(
+                                                            width: 10,
                                                           ),
-                                                          onPressed: () {
-                                                            // model.cancelTransaction(model
-                                                            //     .listTransaction[
-                                                            //         index]
-                                                            //     .transactionId);
-
-                                                            // Get.to(
-                                                            //     MedicineListPage());
-
-                                                            // Navigator.push(
-                                                            //     context,
-                                                            //     MaterialPageRoute(
-                                                            //         builder:
-                                                            //             (context) =>
-                                                            //                 MedicineListPage()));
-                                                          },
-                                                        )
-                                                      ],
+                                                          Flexible(
+                                                            child: RaisedButton(
+                                                                child: Icon(
+                                                                    Icons
+                                                                        .block),
+                                                                // Text(
+                                                                //     'Cancel'),
+                                                                color:
+                                                                    Colors.red,
+                                                                textColor:
+                                                                    Colors
+                                                                        .white,
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              18.0),
+                                                                ),
+                                                                onPressed: () {
+                                                                  // model.cancelTransaction(model
+                                                                  //     .listTransaction[
+                                                                  //         index]
+                                                                  //     .transactionId);
+                                                                }),
+                                                          )
+                                                        ],
+                                                      ),
                                                     )
                                                   ],
                                                 ),
@@ -378,8 +393,8 @@ class HomePage extends StatelessWidget {
                                                     Icon(Icons.location_on,
                                                         color:
                                                             MainColors.blueEnd),
-                                                    Text(
-                                                        '${model.listTransaction[index].distance} km',
+                                                    Text('km',
+                                                        // '${model.listTransaction[index].distance} km',
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontSize: 14,

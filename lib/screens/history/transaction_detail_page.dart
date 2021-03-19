@@ -60,17 +60,20 @@ class TransactionDetailPage extends StatelessWidget {
                                 Row(
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 8, right: 8, left: 20),
-                                      child: Icon(
-                                        Icons.android,
-                                        size: 40,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        width: 50,
+                                        height: 50,
+                                        child: Image.asset(
+                                          'assets/logo_doctor.png',
+                                          fit: BoxFit.contain,
+                                        ),
                                       ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(
                                           top: 8, right: 8),
-                                      child: Text('Family Doctor'),
+                                      child: Text('FD System'),
                                     ),
                                   ],
                                 ),
@@ -117,7 +120,8 @@ class TransactionDetailPage extends StatelessWidget {
                                         model.transaction.dateStart)),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 8),
+                                    padding: const EdgeInsets.only(
+                                        top: 8, left: 8, right: 20),
                                     child: Icon(Icons.arrow_downward_rounded),
                                   ),
                                   Padding(
@@ -145,7 +149,9 @@ class TransactionDetailPage extends StatelessWidget {
                         ),
                         RatingBar.builder(
                           ignoreGestures: true,
-                          initialRating: 5,
+                          initialRating: model.feedback == null
+                              ? 0
+                              : model.feedback.ratingPoint,
                           minRating: 1,
                           direction: Axis.horizontal,
                           allowHalfRating: false,
@@ -166,11 +172,32 @@ class TransactionDetailPage extends StatelessWidget {
                         Container(
                           width: MediaQuery.of(context).size.width * 0.8,
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('User like most : '),
-                              Flexible(
-                                  child: Text(
-                                      'Specialist skill, Professionalism, Price, other'))
+                              model.feedback == null
+                                  ? Flexible(
+                                      child: Container(
+                                        child: Text(
+                                            'This transaction has no feedback'),
+                                      ),
+                                    )
+                                  : Flexible(
+                                      child: Container(
+                                        child: Center(
+                                            child: model.feedback.ratingPoint ==
+                                                    5
+                                                ? Text(
+                                                    model.feedback.note == null
+                                                        ? ""
+                                                        : 'User like most : ' +
+                                                            model.feedback.note)
+                                                : Text(model.feedback.note ==
+                                                        null
+                                                    ? ""
+                                                    : 'Need to improve : ' +
+                                                        model.feedback.note)),
+                                      ),
+                                    )
                             ],
                           ),
                         ),
@@ -218,14 +245,20 @@ class TransactionDetailPage extends StatelessWidget {
                                             height: 60,
                                             child: ListView.builder(
                                               scrollDirection: Axis.horizontal,
-                                              itemCount: 3,
+                                              itemCount: model.listSymp.length,
                                               itemBuilder: (context, index) {
                                                 return Padding(
                                                   padding:
                                                       const EdgeInsets.all(8.0),
                                                   child: Chip(
+                                                    backgroundColor:
+                                                        Colors.lightBlue,
                                                     label: Text(
-                                                        'Difficulty sleeping'),
+                                                      model.listSymp[index]
+                                                          .symptomName,
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
                                                   ),
                                                 );
                                               },

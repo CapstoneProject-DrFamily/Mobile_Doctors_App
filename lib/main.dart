@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile_doctors_apps/screens/history/transaction_detail_page.dart';
+import 'package:mobile_doctors_apps/screens/home/home_page.dart';
 import 'package:mobile_doctors_apps/screens/landing/landing_page.dart';
 import 'package:mobile_doctors_apps/screens/login/login_page.dart';
+
+import 'package:mobile_doctors_apps/screens/share/base_timeline.dart';
 
 import 'package:mobile_doctors_apps/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,11 +20,15 @@ Future<void> main() async {
 
   runApp(
     GetMaterialApp(
+        theme: ThemeData(fontFamily: 'VarelaRound'),
         debugShowCheckedModeBanner: false,
-        home: (profileID == 0 || profileID == null)
-            ? LoginScreen()
-            : LandingScreen()
-        // home: SchedulePage(),
+        home: profileID == null ? LoginScreen() : LandingScreen()
+        // home: BaseTimeLine(
+        //   transactionId: "TS-1387c26f-f89a-43e7-a907-e7d20aff2542",
+        // ),
+        // home: TransactionDetailPage(
+        //   transactionId: "TS-5e83bdc8-a3e0-48f8-a155-82ef819c09b4",
+        // ),
         ),
   );
 }
