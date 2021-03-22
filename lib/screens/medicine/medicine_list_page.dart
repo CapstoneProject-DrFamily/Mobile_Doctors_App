@@ -241,7 +241,6 @@ class MedicineFormDetail extends StatelessWidget {
                                     child: Column(
                                       children: [
                                         Container(
-                                          height: 75,
                                           decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius:
@@ -280,7 +279,7 @@ class MedicineFormDetail extends StatelessWidget {
                                               )),
                                               SizedBox(width: 20),
                                               Expanded(
-                                                flex: 2,
+                                                flex: 3,
                                                 child: Padding(
                                                   padding:
                                                       const EdgeInsets.only(
@@ -291,10 +290,16 @@ class MedicineFormDetail extends StatelessWidget {
                                                         children: [
                                                           Expanded(
                                                             flex: 5,
-                                                            child: Text(
-                                                              'Morning',
-                                                              style: TextStyle(
-                                                                  fontSize: 14),
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(3.0),
+                                                              child: SvgPicture
+                                                                  .asset(
+                                                                'assets/icons/sunrise.svg',
+                                                                width: 20,
+                                                                height: 20,
+                                                              ),
                                                             ),
                                                           ),
                                                           Expanded(
@@ -335,10 +340,16 @@ class MedicineFormDetail extends StatelessWidget {
                                                         children: [
                                                           Expanded(
                                                             flex: 5,
-                                                            child: Text(
-                                                              'Noon',
-                                                              style: TextStyle(
-                                                                  fontSize: 14),
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(3.0),
+                                                              child: SvgPicture
+                                                                  .asset(
+                                                                'assets/icons/sun.svg',
+                                                                width: 20,
+                                                                height: 20,
+                                                              ),
                                                             ),
                                                           ),
                                                           Expanded(
@@ -378,10 +389,21 @@ class MedicineFormDetail extends StatelessWidget {
                                                         children: [
                                                           Expanded(
                                                             flex: 5,
-                                                            child: Text(
-                                                              'Afternoon',
-                                                              style: TextStyle(
-                                                                  fontSize: 14),
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      top: 3,
+                                                                      left: 3,
+                                                                      right: 3,
+                                                                      bottom:
+                                                                          10),
+                                                              child: SvgPicture
+                                                                  .asset(
+                                                                'assets/icons/moon.svg',
+                                                                width: 15,
+                                                                height: 15,
+                                                              ),
                                                             ),
                                                           ),
                                                           Expanded(
