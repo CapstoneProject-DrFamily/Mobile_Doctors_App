@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:loading_button/loading_button.dart';
+import 'package:mobile_doctors_apps/helper/app_image.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/home_page_view_model.dart';
 import 'package:mobile_doctors_apps/themes/colors.dart';
@@ -195,14 +196,20 @@ class HomePage extends StatelessWidget {
                                                           const EdgeInsets.all(
                                                               8.0),
                                                       child: CircleAvatar(
-                                                        backgroundImage:
-                                                            NetworkImage(
-                                                          // 'https://www.w3schools.com/w3css/img_lights.jpg'
-                                                          model
-                                                              .listTransaction[
-                                                                  index]
-                                                              .patientImage,
-                                                        ),
+                                                        backgroundImage: (model
+                                                                    .listTransaction[
+                                                                        index]
+                                                                    .patientImage ==
+                                                                null)
+                                                            ? NetworkImage(
+                                                                DEFAULT_IMG)
+                                                            : NetworkImage(
+                                                                // 'https://www.w3schools.com/w3css/img_lights.jpg'
+                                                                model
+                                                                    .listTransaction[
+                                                                        index]
+                                                                    .patientImage,
+                                                              ),
                                                         radius: 35,
                                                         backgroundColor:
                                                             Colors.white,

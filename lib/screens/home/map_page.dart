@@ -1,3 +1,4 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -167,9 +168,9 @@ class MapPage extends StatelessWidget {
             height: 20.0,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Flexible(
+              Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 25),
                   child: Text(
@@ -188,10 +189,22 @@ class MapPage extends StatelessWidget {
                   model.callPhone(context);
                 },
                 child: Padding(
-                  padding: EdgeInsets.only(right: 30),
+                  padding: const EdgeInsets.only(right: 30),
                   child: Icon(Icons.call),
                 ),
               ),
+              InkWell(
+                onTap: () {
+                  _confirmCancelBookingDialog(context, model);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 30),
+                  child: Icon(
+                    EvaIcons.closeCircleOutline,
+                    color: Colors.red,
+                  ),
+                ),
+              )
             ],
           ),
           SizedBox(
@@ -377,6 +390,125 @@ class MapPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Future _confirmCancelBookingDialog(
+      BuildContext context, MapPageViewModel model) {
+    return showDialog(
+      context: context,
+      builder: (bookingContext) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+          ),
+          child: Container(
+            height: 345,
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 25,
+                ),
+                Icon(
+                  Icons.info,
+                  color: Color(0xff4ee1c7),
+                  size: 90,
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Text(
+                  "Confirmation?",
+                  style: TextStyle(
+                    fontSize: 27,
+                    fontWeight: FontWeight.w800,
+                    fontFamily: 'avenir',
+                    color: Color(0xff0d47a1),
+                  ),
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Text(
+                  'Are you sure want to Cancel this?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'avenir',
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(
+                  height: 45,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                      customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      onTap: () {
+                        Navigator.pop(bookingContext);
+                        model.cancelTransaction();
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 50,
+                        width: MediaQuery.of(bookingContext).size.width * 0.3,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(color: Colors.blueAccent),
+                        ),
+                        child: Text(
+                          "Yes",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'avenir',
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      onTap: () {
+                        Navigator.pop(bookingContext);
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 50,
+                        width: MediaQuery.of(bookingContext).size.width * 0.3,
+                        decoration: BoxDecoration(
+                          color: Colors.blueAccent,
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(color: Colors.blueAccent),
+                        ),
+                        child: Text(
+                          "No",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'avenir',
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

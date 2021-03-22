@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:commons/commons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,7 +7,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile_doctors_apps/global_variable.dart';
 import 'package:mobile_doctors_apps/helper/helper_method.dart';
@@ -84,9 +87,13 @@ class MapPageViewModel extends BaseModel {
 
   int _phoneNum;
 
+  DatabaseReference _transactionRequest;
+
   MapPageViewModel(
       TransactionBasicModel transaction, DirectionDetails directionDetails) {
     _isLoading = true;
+    _transactionRequest =
+        FirebaseDatabase.instance.reference().child("Transaction");
     this._basicTransaction = transaction;
     this._directionDetails = directionDetails;
     _fabHeight = _initFabHeight;
@@ -147,9 +154,32 @@ class MapPageViewModel extends BaseModel {
       symptomsDisplay.add(symptom);
     }
 
+    getTransactionUpdate();
+
     _isLoading = false;
 
     notifyListeners();
+  }
+
+  void getTransactionUpdate() {
+    transactionMapStreamSubscription = _transactionRequest
+        .child(_basicTransaction.transactionId)
+        .onChildRemoved
+        .listen(
+      (event) {
+        HelperMethod.disableLiveLocationUpdates();
+        HelperMethod.disableTransactionMapUpdates();
+
+        Fluttertoast.showToast(
+          msg: "Patient have Cancel Booking",
+          textColor: Colors.red,
+          toastLength: Toast.LENGTH_LONG,
+          backgroundColor: Colors.white,
+          gravity: ToastGravity.CENTER,
+        );
+        Get.back();
+      },
+    );
   }
 
   void onMapCreated(GoogleMapController controller) {
@@ -344,6 +374,7 @@ class MapPageViewModel extends BaseModel {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String usToken = prefs.getString("userToken");
     HelperMethod.disableLiveLocationUpdates();
+    HelperMethod.disableTransactionMapUpdates();
 
     await _doctorRequest.child(userId).remove();
 
@@ -387,5 +418,25 @@ class MapPageViewModel extends BaseModel {
   void callPhone(BuildContext context) async {
     await launch('tel://$_phoneNum');
     Navigator.pop(context);
+  }
+
+  Future<void> cancelTransaction() async {
+    HelperMethod.disableTransactionMapUpdates();
+    HelperMethod.disableLiveLocationUpdates();
+
+    Transaction updateTransactionModel = Transaction(
+        doctorId: _basicTransaction.doctorId,
+        estimatedTime: _basicTransaction.estimateTime,
+        location: _basicTransaction.location,
+        note: _basicTransaction.patientNote,
+        patientId: _basicTransaction.patientId,
+        status: 4,
+        transactionId: _basicTransaction.transactionId);
+
+    _transactionRepo.updateTransaction(updateTransactionModel);
+
+    await _transactionRequest.child(_basicTransaction.transactionId).remove();
+
+    Get.back();
   }
 }
