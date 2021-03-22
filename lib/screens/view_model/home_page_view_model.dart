@@ -177,6 +177,7 @@ class HomePageViewModel extends BaseModel {
     homeTabPageStreamSubscription = geolocator.Geolocator.getPositionStream(
             desiredAccuracy: geolocator.LocationAccuracy.bestForNavigation)
         .listen((geolocator.Position position) {
+      print("home location");
       _currentPosition = position;
 
       Map doctorLocation = {
@@ -204,7 +205,7 @@ class HomePageViewModel extends BaseModel {
         .listen(
       (event) async {
         print(
-            'TransactionID: ${event.snapshot.key} TransactionValue: ${event.snapshot.value}');
+            'Get TransactionID: ${event.snapshot.key} TransactionValue: ${event.snapshot.value}');
 
         await addTransaction(event.snapshot.key, _currentPosition.longitude,
             _currentPosition.latitude);

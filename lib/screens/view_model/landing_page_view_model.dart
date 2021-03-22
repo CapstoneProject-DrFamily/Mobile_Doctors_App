@@ -4,6 +4,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_doctors_apps/screens/history/medical_care_history.dart';
 import 'package:mobile_doctors_apps/screens/home/home_page.dart';
+import 'package:mobile_doctors_apps/screens/schedule/schedule_page.dart';
 import 'package:mobile_doctors_apps/screens/setting/setting_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 
@@ -14,7 +15,7 @@ class LandingPageViewModel extends BaseModel {
 
   final List<Widget> page = [
     HomePage(),
-    Text('2'),
+    SchedulePage(),
     MedicalCareHistory(),
     SettingPage(),
   ];

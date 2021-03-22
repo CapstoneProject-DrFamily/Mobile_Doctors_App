@@ -338,7 +338,7 @@ class _ArticleDescription extends StatelessWidget {
           height: 5,
         ),
         Text(
-          'PatientName: $patientName',
+          'Patient: $patientName',
           textAlign: TextAlign.left,
           style: GoogleFonts.varelaRound(
             fontWeight: FontWeight.bold,

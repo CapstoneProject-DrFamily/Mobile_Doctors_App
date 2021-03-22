@@ -32,4 +32,12 @@ class HelperMethod {
   static void enableCancelTransactionUpdates() {
     transactionCancelStreamSubscription.resume();
   }
+
+  static void disableTransactionMapUpdates() {
+    transactionMapStreamSubscription.pause();
+  }
+
+  static void enableTransactionMapUpdates() {
+    transactionMapStreamSubscription.resume();
+  }
 }
