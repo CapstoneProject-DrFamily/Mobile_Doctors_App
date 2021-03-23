@@ -140,9 +140,8 @@ class MedicalCareHistory extends StatelessWidget {
                                                   .location
                                                   .split(';')[1]
                                                   .split(':')[1],
-                                              price: NumberFormat
-                                                      .simpleCurrency(
-                                                          locale: 'vi')
+                                              price: NumberFormat.currency(
+                                                      locale: 'vi')
                                                   .format(model
                                                       .listTransaction[index]
                                                       .servicePrice),

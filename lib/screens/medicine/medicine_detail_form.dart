@@ -76,7 +76,7 @@ class MedicineDetailForm extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  _buildTitle("Total Quantity"),
+                  _buildTitle("Total Days"),
                   SizedBox(
                     height: 15,
                   ),
@@ -84,8 +84,32 @@ class MedicineDetailForm extends StatelessWidget {
                     children: [
                       Flexible(
                           flex: 4,
-                          child: _buildQuantityField(
-                              model, model.totalQuantityController)),
+                          child: _buildTotalDaysField(
+                              model, model.medicineTotalDays)),
+                      Flexible(
+                        flex: 6,
+                        child: Center(
+                          child: Text(
+                            "Days",
+                            style: GoogleFonts.varelaRound(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  _buildTitle("Total Quantity & Type Medicine"),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    children: [
+                      Flexible(flex: 4, child: _buildTotalQuantity(model)),
                       Flexible(flex: 6, child: _buildTypeMedicine(model))
                     ],
                   ),
@@ -216,6 +240,60 @@ class MedicineDetailForm extends StatelessWidget {
         ),
         decoration: InputDecoration(
           hintText: "ex: 1,2,3, ...",
+          errorText: (model.isValidQuantity)
+              ? null
+              : (controller.text.isEmpty || int.parse(controller.text) < 1)
+                  ? "Please input value"
+                  : null,
+          filled: true,
+          hintStyle: TextStyle(
+            color: MainColors.hintTextColor,
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(
+              color: Colors.blue,
+            ),
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(
+              color: Colors.blue,
+            ),
+          ),
+
+          fillColor: Colors.white,
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
+          // suffixIcon: model.fullNameController.text.isEmpty
+          //     ? null
+          //     : InkWell(
+          //         onTap: () => model.fullNameController.clear(),
+          //         child: Icon(Icons.clear),
+          //       ),
+        ),
+      ),
+    );
+  }
+
+  Padding _buildTotalDaysField(
+      MedicineDetailFormViewModel model, TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8),
+      child: TextFormField(
+        controller: controller,
+        keyboardType: TextInputType.number,
+        // onChanged: (value) => model.changePhoneNum(value),
+        textAlign: TextAlign.center,
+        style: GoogleFonts.varelaRound(
+          fontWeight: FontWeight.normal,
+          fontSize: 16,
+        ),
+        decoration: InputDecoration(
+          hintText: "ex: 1,2,3, ...",
+          errorText: (controller.text.isEmpty || int.parse(controller.text) < 1)
+              ? "Please input value"
+              : null,
           filled: true,
           hintStyle: TextStyle(
             color: MainColors.hintTextColor,
@@ -261,6 +339,7 @@ class MedicineDetailForm extends StatelessWidget {
         decoration: InputDecoration(
           hintText: "ex: spoon, pill, ...",
           filled: true,
+          errorText: (!model.isValidType) ? "Please Input Valid Value" : null,
           hintStyle: TextStyle(
             color: MainColors.hintTextColor,
           ),
@@ -430,6 +509,38 @@ class MedicineDetailForm extends StatelessWidget {
             shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
           ),
         ], //No shadow
+      ),
+    );
+  }
+
+  Padding _buildTotalQuantity(MedicineDetailFormViewModel model) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8),
+      child: TextFormField(
+        textAlign: TextAlign.center,
+        enabled: false,
+        controller: model.totalQuantityController,
+        style: GoogleFonts.varelaRound(
+          fontWeight: FontWeight.normal,
+          fontSize: 16,
+        ),
+        decoration: InputDecoration(
+          filled: true,
+          hintStyle: TextStyle(
+            color: MainColors.hintTextColor,
+          ),
+          border: InputBorder.none,
+
+          fillColor: Colors.white,
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
+          // suffixIcon: model.fullNameController.text.isEmpty
+          //     ? null
+          //     : InkWell(
+          //         onTap: () => model.fullNameController.clear(),
+          //         child: Icon(Icons.clear),
+          //       ),
+        ),
       ),
     );
   }

@@ -50,7 +50,6 @@ class MedicalCareHistoryViewModel extends BaseModel {
 
       _listTransaction = await transactionRepo.getListTransactionHistory(
           _doctorId.toString(), -1);
-      print("oke 1");
 
       if (_listTransaction == null) {
         _isNotHave = true;
@@ -186,8 +185,13 @@ class MedicalCareHistoryViewModel extends BaseModel {
               builder: (context) => MapPage(
                   model: MapPageViewModel(transaction, directionDetails)),
             ),
-          ).then((value) {
+          ).then((value) async {
             HelperMethod.disableLiveLocationUpdates();
+            _status = 0;
+            _isFirst = true;
+            print('init2 $_isFirst');
+
+            await initHistory();
           });
         }
         break;
@@ -198,7 +202,12 @@ class MedicalCareHistoryViewModel extends BaseModel {
             MaterialPageRoute(
               builder: (context) => BaseTimeLine(transactionId: transactionId),
             ),
-          );
+          ).then((value) async {
+            _status = 0;
+            _isFirst = true;
+            print('init3 $_isFirst');
+            await initHistory();
+          });
         }
         break;
       case 3:
@@ -209,7 +218,12 @@ class MedicalCareHistoryViewModel extends BaseModel {
               builder: (context) =>
                   TransactionDetailPage(transactionId: transactionId),
             ),
-          );
+          ).then((value) async {
+            _status = 0;
+            _isFirst = true;
+            print('init4 $_isFirst');
+            await initHistory();
+          });
         }
         break;
       case 4:
@@ -220,7 +234,12 @@ class MedicalCareHistoryViewModel extends BaseModel {
               builder: (context) =>
                   TransactionDetailPage(transactionId: transactionId),
             ),
-          );
+          ).then((value) async {
+            _status = 0;
+            _isFirst = true;
+            print('init5 $_isFirst');
+            await initHistory();
+          });
         }
         break;
       default:

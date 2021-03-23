@@ -1,26 +1,17 @@
 class ScheduleModel {
-  DateTime dateSchedule;
+  String appointmentTime, updDatetime;
   bool status;
-  String transactionId, location, note;
-  int patientId;
+  int scheduleId;
 
-  ScheduleModel({
-    this.dateSchedule,
-    this.status,
-    this.transactionId,
-    this.patientId,
-    this.location,
-    this.note,
-  });
+  ScheduleModel(
+      {this.appointmentTime, this.scheduleId, this.status, this.updDatetime});
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) {
     return ScheduleModel(
-      dateSchedule: json['dateSchedule'] as DateTime,
+      scheduleId: json['scheduleId'] as int,
+      appointmentTime: json['appointmentTime'] as String,
       status: json['status'] as bool,
-      transactionId: json['transactionId'] as String,
-      patientId: json['patientId'] as int,
-      location: json['location'] as String,
-      note: json['note'] as String,
+      updDatetime: json['updDatetime'] as String,
     );
   }
 }

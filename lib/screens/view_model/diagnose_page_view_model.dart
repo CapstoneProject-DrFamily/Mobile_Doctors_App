@@ -46,13 +46,25 @@ class DiagnosePageViewModel extends BaseModel {
     _examinationHistory = await _examinationRepo.getExaminationHistory(examId);
   }
 
-  fetchData(transactionId) async {
+  fetchData(transactionId, TimeLineViewModel model) async {
     if (init) {
       await Future.delayed(Duration(seconds: 1));
       this.transactionId = transactionId;
 
       print("load transaction");
       initDiagnose();
+
+      if (model.currentIndex < model.index) {
+        _transactionRequest =
+            FirebaseDatabase.instance.reference().child("Transaction");
+
+        examId = transactionId;
+
+        _examinationHistory =
+            await _examinationRepo.getExaminationHistory(examId);
+        _diagnoseConclusionController.text = _examinationHistory.conclusion;
+        _doctorAdviceController.text = _examinationHistory.advisory;
+      }
 
       init = false;
       notifyListeners();
