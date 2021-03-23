@@ -204,17 +204,17 @@ class MedicineFormDetail extends StatelessWidget {
                                       child: Text(
                                     'Total',
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.bold),
                                   )),
                                   SizedBox(width: 10),
                                   Expanded(
-                                      flex: 2,
+                                      flex: 3,
                                       child: Center(
                                         child: Text(
                                           'Period',
                                           style: TextStyle(
-                                              fontSize: 20,
+                                              fontSize: 18,
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ))

@@ -4,7 +4,8 @@ class MedicineDetailModel {
       noonQuantity,
       afternoonQuantity,
       totalQuantity,
-      medicineId;
+      medicineId,
+      totalDays;
 
   MedicineDetailModel(
       {this.afternoonQuantity,
@@ -14,7 +15,8 @@ class MedicineDetailModel {
       this.morningQuantity,
       this.noonQuantity,
       this.totalQuantity,
-      this.medicineName});
+      this.medicineName,
+      this.totalDays});
 
   Map<String, dynamic> toJson() => {
         "medicineId": medicineId,
@@ -24,5 +26,6 @@ class MedicineDetailModel {
         "totalQuantity": totalQuantity,
         "afternoonQuantity": afternoonQuantity,
         "type": medicineType,
+        "totalDays": totalDays,
       };
 }

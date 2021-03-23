@@ -1,7 +1,9 @@
+import 'package:commons/commons.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
+import 'package:mobile_doctors_apps/screens/share/popup_info_patient_page.dart';
 import 'package:mobile_doctors_apps/screens/view_model/schedule_page_view_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -119,45 +121,113 @@ class SchedulePage extends StatelessWidget {
                                           fontSize: 16),
                                     ),
                                     Expanded(child: Container()),
-                                    ClipOval(
-                                      child: Material(
-                                        color: Colors.white, // button color
-                                        child: InkWell(
-                                          splashColor:
-                                              Colors.grey, // inkwell color
-                                          child: SizedBox(
-                                            width: 35,
-                                            height: 35,
-                                            child: Icon(
-                                              Icons.add,
-                                              color: Colors.black,
+                                    (model.isAdd)
+                                        ? ClipOval(
+                                            child: Material(
+                                              color:
+                                                  Colors.white, // button color
+                                              child: InkWell(
+                                                splashColor: Colors
+                                                    .grey, // inkwell color
+                                                child: SizedBox(
+                                                  width: 35,
+                                                  height: 35,
+                                                  child: Icon(
+                                                    Icons.add,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                onTap: () async {
+                                                  await model
+                                                      .selectTime(context);
+                                                  await model.confirmDateTime();
+                                                },
+                                              ),
                                             ),
-                                          ),
-                                          onTap: () async {
-                                            await model.selectTime(context);
-                                            await model.confirmDateTime();
-                                          },
-                                        ),
-                                      ),
-                                    ),
+                                          )
+                                        : Container(),
                                   ],
                                 ),
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Column(
-                                  children: [
-                                    _buildDayTask(context, "10 am",
-                                        "Bùi Thông Hoàng Đức"),
-                                    _buildDayNoTask(context, "1:30 pm"),
-                                    _buildDayTask(
-                                        context, "3 pm", "Đinh Trần Anh Khoa"),
-                                    _buildDayTask(
-                                        context, "7 pm", "Trần Ngọc Đức"),
-                                    _buildDayTask(
-                                        context, "12:30 pm", "Trần Phú Tài"),
-                                  ],
-                                )
+                                (model.loadingListTransaction)
+                                    ? Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.5,
+                                        alignment: Alignment.center,
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    : ListView.builder(
+                                        physics: NeverScrollableScrollPhysics(),
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        itemCount: model.selectedEvents.length,
+                                        itemBuilder: (context, index) {
+                                          return (model
+                                                  .selectedEvents[index].status)
+                                              ? (() {
+                                                  int indexTransaction = model
+                                                      .listBookingTransaction
+                                                      .indexWhere((element) =>
+                                                          element.dateStart ==
+                                                          model
+                                                              .selectedEvents[
+                                                                  index]
+                                                              .updDatetime);
+                                                  print(
+                                                      'indexTransaction ${model.listBookingTransaction[indexTransaction].patientId}');
+
+                                                  return _buildDayTask(
+                                                    context,
+                                                    DateFormat('hh:mm a')
+                                                        .format(
+                                                      DateTime.parse(model
+                                                          .selectedEvents[index]
+                                                          .appointmentTime),
+                                                    ),
+                                                    model
+                                                        .listBookingTransaction[
+                                                            indexTransaction]
+                                                        .patientName,
+                                                    model
+                                                        .listBookingTransaction[
+                                                            indexTransaction]
+                                                        .relationShip,
+                                                    model
+                                                        .listBookingTransaction[
+                                                            indexTransaction]
+                                                        .serviceName,
+                                                    model
+                                                        .listBookingTransaction[
+                                                            indexTransaction]
+                                                        .location
+                                                        .split(';')[1]
+                                                        .split(':')[1],
+                                                    NumberFormat.currency(
+                                                            locale: 'vi')
+                                                        .format(model
+                                                            .listBookingTransaction[
+                                                                indexTransaction]
+                                                            .servicePrice),
+                                                    model
+                                                        .listBookingTransaction[
+                                                            indexTransaction]
+                                                        .patientId,
+                                                    model,
+                                                  );
+                                                }())
+                                              : _buildDayNoTask(
+                                                  context,
+                                                  DateFormat('hh:mm a').format(
+                                                    DateTime.parse(model
+                                                        .selectedEvents[index]
+                                                        .appointmentTime),
+                                                  ),
+                                                );
+                                        },
+                                      )
                               ],
                             ),
                           ),
@@ -181,7 +251,16 @@ class SchedulePage extends StatelessWidget {
     );
   }
 
-  Row _buildDayTask(BuildContext context, String time, String name) {
+  Row _buildDayTask(
+      BuildContext context,
+      String time,
+      String name,
+      String relation,
+      String serviceName,
+      String location,
+      String servicePrice,
+      int patientId,
+      SchedulePageViewModel model) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -203,7 +282,7 @@ class SchedulePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name,
+                  '$name ($relation)',
                   style: TextStyle(
                       fontSize: 16,
                       color: Color(0xff0d47a1),
@@ -213,7 +292,7 @@ class SchedulePage extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  "Internal Medicine",
+                  serviceName,
                   style: TextStyle(
                       color: Colors.grey[700], fontWeight: FontWeight.w500),
                 ),
@@ -233,7 +312,7 @@ class SchedulePage extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        "2549/28/3/4 Phạm Thế Hiển, Phường 7, Quận 8",
+                        location,
                       ),
                     )
                   ],
@@ -263,7 +342,9 @@ class SchedulePage extends StatelessWidget {
                               color: Colors.white,
                             ),
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            model.callPhone(patientId);
+                          },
                         ),
                       ),
                     ),
@@ -323,7 +404,10 @@ class SchedulePage extends StatelessWidget {
                               color: Colors.white,
                             ),
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            PatientDialog()
+                                .showCustomDialog(context, patientId);
+                          },
                         ),
                       ),
                     ),
@@ -335,7 +419,7 @@ class SchedulePage extends StatelessWidget {
                 Container(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    "1.000.000 đ",
+                    servicePrice.toString(),
                     style: TextStyle(
                         color: Colors.green,
                         fontSize: 18,

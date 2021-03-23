@@ -4,6 +4,7 @@ import 'package:mobile_doctors_apps/screens/history/transaction_detail_page.dart
 import 'package:mobile_doctors_apps/screens/home/home_page.dart';
 import 'package:mobile_doctors_apps/screens/landing/landing_page.dart';
 import 'package:mobile_doctors_apps/screens/login/login_page.dart';
+import 'package:mobile_doctors_apps/screens/patient/patient_detail_page.dart';
 import 'package:mobile_doctors_apps/screens/schedule/schedule_page.dart';
 
 import 'package:mobile_doctors_apps/screens/share/base_timeline.dart';
@@ -21,13 +22,13 @@ Future<void> main() async {
 
   runApp(
     GetMaterialApp(
-      theme: ThemeData(fontFamily: 'VarelaRound'),
-      debugShowCheckedModeBanner: false,
-      home: profileID == null ? LoginScreen() : LandingScreen()
-      // home: SchedulePage(),
-      // home: TransactionDetailPage(
-      //   transactionId: "TS-5e83bdc8-a3e0-48f8-a155-82ef819c09b4",
-      // ),
-    ),
+        theme: ThemeData(fontFamily: 'VarelaRound'),
+        debugShowCheckedModeBanner: false,
+        home: profileID == null ? LoginScreen() : LandingScreen()
+        // home: PatientDetailPage(),
+        // home: TransactionDetailPage(
+        //   transactionId: "TS-5e83bdc8-a3e0-48f8-a155-82ef819c09b4",
+        // ),
+        ),
   );
 }

@@ -263,6 +263,7 @@ class HomePageViewModel extends BaseModel {
     var firstEstimate =
         DateTime.now().add(Duration(seconds: directionDetails.durationValue));
     var secondEstimate = firstEstimate.add(Duration(minutes: 15));
+    
     String estimatedTime = firstEstimate.hour.toString() +
         ":" +
         firstEstimate.minute.toString() +

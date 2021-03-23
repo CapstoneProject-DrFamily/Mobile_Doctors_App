@@ -9,6 +9,7 @@ import 'package:mobile_doctors_apps/model/service/service_model.dart';
 import 'package:mobile_doctors_apps/model/symptom/symptom_model.dart';
 import 'package:mobile_doctors_apps/model/transaction.dart';
 import 'package:mobile_doctors_apps/model/transaction_basic_model.dart';
+import 'package:mobile_doctors_apps/model/transaction_booking_model.dart';
 import 'package:mobile_doctors_apps/model/transaction_history_model.dart';
 
 abstract class ITransactionRepo {
@@ -21,6 +22,8 @@ abstract class ITransactionRepo {
   Future<List<TransactionHistoryModel>> getListTransactionHistory(
       String doctorId, int status);
   Future<TransactionBasicModel> getTransactionDetailMap(String transactionId);
+  Future<List<TransactionBookingModel>> getListTransactionBookingInDay(
+      int doctorId, String dateTime);
 }
 
 class TransactionRepo extends ITransactionRepo {
@@ -328,5 +331,30 @@ class TransactionRepo extends ITransactionRepo {
     } else {
       return null;
     }
+  }
+
+  @override
+  Future<List<TransactionBookingModel>> getListTransactionBookingInDay(
+      int doctorId, String dateTime) async {
+    String urlAPI = APIHelper.TRANSACTION_DOCTOR_API +
+        '$doctorId?status=-1&dateStart=$dateTime';
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    var response = await http.get(urlAPI, headers: header);
+
+    List<TransactionBookingModel> _listTransactionBooking = [];
+
+    if (response.statusCode == 200) {
+      _listTransactionBooking = (json.decode(response.body) as List)
+          .map((data) => TransactionBookingModel.fromJson(data))
+          .toList();
+
+      if (_listTransactionBooking.isEmpty) return null;
+
+      return _listTransactionBooking;
+    } else
+      return null;
   }
 }
