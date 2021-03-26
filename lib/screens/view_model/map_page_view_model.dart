@@ -20,6 +20,7 @@ import 'package:mobile_doctors_apps/repository/map_repo.dart';
 import 'package:mobile_doctors_apps/repository/notify_repo.dart';
 import 'package:mobile_doctors_apps/repository/transaction_repo.dart';
 import 'package:mobile_doctors_apps/repository/user_repo.dart';
+import 'package:mobile_doctors_apps/screens/landing/landing_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/share/base_timeline.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -177,7 +178,7 @@ class MapPageViewModel extends BaseModel {
           backgroundColor: Colors.white,
           gravity: ToastGravity.CENTER,
         );
-        Get.back();
+        Get.offAll(LandingScreen());
       },
     );
   }

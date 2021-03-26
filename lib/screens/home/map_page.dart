@@ -2,6 +2,8 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mobile_doctors_apps/helper/app_image.dart';
+import 'package:mobile_doctors_apps/screens/share/health_record_page.dart';
 import 'package:mobile_doctors_apps/screens/share/popup_info_patient_page.dart';
 import 'package:mobile_doctors_apps/screens/view_model/map_page_view_model.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -289,7 +291,19 @@ class MapPage extends StatelessWidget {
                         context, model.basicTransaction.patientId);
                   },
                   child: _button("Info", EvaIcons.person, Colors.blue)),
-              _button("Health Record", EvaIcons.activity, Colors.red),
+              InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HealthRecordScreen(
+                            patientId: model.basicTransaction.patientId,
+                            patientName: model.basicTransaction.patientName),
+                      ),
+                    );
+                  },
+                  child:
+                      _button("Health Record", EvaIcons.activity, Colors.red)),
               _button("History", EvaIcons.clock, Colors.amber),
             ],
           ),
@@ -560,7 +574,9 @@ class MapPage extends StatelessWidget {
         alignment: Alignment.center,
         child: CircleAvatar(
           radius: 50.0,
-          backgroundImage: NetworkImage(model.basicTransaction.patientImage),
+          backgroundImage: (model.basicTransaction.patientImage == null)
+              ? NetworkImage(DEFAULT_IMG)
+              : NetworkImage(model.basicTransaction.patientImage),
         ),
       ),
     );

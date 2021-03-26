@@ -1,8 +1,11 @@
 import 'package:commons/commons.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_doctors_apps/global_variable.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
+import 'package:mobile_doctors_apps/screens/share/health_record_page.dart';
 import 'package:mobile_doctors_apps/screens/share/popup_info_patient_page.dart';
 import 'package:mobile_doctors_apps/screens/view_model/schedule_page_view_model.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -45,8 +48,8 @@ class SchedulePage extends StatelessWidget {
                         startingDayOfWeek: StartingDayOfWeek.monday,
                         formatAnimation: FormatAnimation.slide,
                         headerStyle: HeaderStyle(
-                          centerHeaderTitle: true,
-                          formatButtonVisible: false,
+                          centerHeaderTitle: false,
+                          formatButtonVisible: true,
                           titleTextStyle:
                               TextStyle(color: Colors.white, fontSize: 16),
                           leftChevronIcon: Icon(
@@ -54,6 +57,14 @@ class SchedulePage extends StatelessWidget {
                             color: Colors.white,
                             size: 15,
                           ),
+                          formatButtonTextStyle: TextStyle(color: Colors.white),
+                          formatButtonDecoration: BoxDecoration(
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          formatButtonShowsNext: true,
                           rightChevronIcon: Icon(
                             Icons.arrow_forward_ios,
                             color: Colors.white,
@@ -140,7 +151,8 @@ class SchedulePage extends StatelessWidget {
                                                 onTap: () async {
                                                   await model
                                                       .selectTime(context);
-                                                  await model.confirmDateTime();
+                                                  await model
+                                                      .confirmDateTime(context);
                                                 },
                                               ),
                                             ),
@@ -159,75 +171,101 @@ class SchedulePage extends StatelessWidget {
                                         alignment: Alignment.center,
                                         child: CircularProgressIndicator(),
                                       )
-                                    : ListView.builder(
-                                        physics: NeverScrollableScrollPhysics(),
-                                        scrollDirection: Axis.vertical,
-                                        shrinkWrap: true,
-                                        itemCount: model.selectedEvents.length,
-                                        itemBuilder: (context, index) {
-                                          return (model
-                                                  .selectedEvents[index].status)
-                                              ? (() {
-                                                  int indexTransaction = model
-                                                      .listBookingTransaction
-                                                      .indexWhere((element) =>
-                                                          element.dateStart ==
-                                                          model
-                                                              .selectedEvents[
-                                                                  index]
-                                                              .updDatetime);
-                                                  print(
-                                                      'indexTransaction ${model.listBookingTransaction[indexTransaction].patientId}');
+                                    : (model.selectedEvents == null)
+                                        ? Container()
+                                        : ListView.builder(
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            scrollDirection: Axis.vertical,
+                                            shrinkWrap: true,
+                                            itemCount:
+                                                model.selectedEvents.length,
+                                            itemBuilder: (context, index) {
+                                              return (model
+                                                      .selectedEvents[index]
+                                                      .status)
+                                                  ? (() {
+                                                      // print('updBy: ' +
+                                                      //     model
+                                                      //         .selectedEvents[
+                                                      //             index]
+                                                      //         .updBy);
 
-                                                  return _buildDayTask(
-                                                    context,
-                                                    DateFormat('hh:mm a')
-                                                        .format(
-                                                      DateTime.parse(model
-                                                          .selectedEvents[index]
-                                                          .appointmentTime),
-                                                    ),
-                                                    model
-                                                        .listBookingTransaction[
-                                                            indexTransaction]
-                                                        .patientName,
-                                                    model
-                                                        .listBookingTransaction[
-                                                            indexTransaction]
-                                                        .relationShip,
-                                                    model
-                                                        .listBookingTransaction[
-                                                            indexTransaction]
-                                                        .serviceName,
-                                                    model
-                                                        .listBookingTransaction[
-                                                            indexTransaction]
-                                                        .location
-                                                        .split(';')[1]
-                                                        .split(':')[1],
-                                                    NumberFormat.currency(
-                                                            locale: 'vi')
-                                                        .format(model
+                                                      int indexTransaction = model
+                                                          .listBookingTransaction
+                                                          .indexWhere((element) =>
+                                                              element
+                                                                  .dateStart ==
+                                                              model
+                                                                  .selectedEvents[
+                                                                      index]
+                                                                  .updDatetime);
+                                                      print(
+                                                          'TransactionId ${model.listBookingTransaction[indexTransaction].transactionId}');
+
+                                                      return _buildDayTask(
+                                                        context,
+                                                        model
+                                                            .selectedEvents[
+                                                                index]
+                                                            .appointmentTime,
+                                                        model
                                                             .listBookingTransaction[
                                                                 indexTransaction]
-                                                            .servicePrice),
-                                                    model
-                                                        .listBookingTransaction[
-                                                            indexTransaction]
-                                                        .patientId,
-                                                    model,
-                                                  );
-                                                }())
-                                              : _buildDayNoTask(
-                                                  context,
-                                                  DateFormat('hh:mm a').format(
-                                                    DateTime.parse(model
-                                                        .selectedEvents[index]
-                                                        .appointmentTime),
-                                                  ),
-                                                );
-                                        },
-                                      )
+                                                            .patientName,
+                                                        model
+                                                            .listBookingTransaction[
+                                                                indexTransaction]
+                                                            .relationShip,
+                                                        model
+                                                            .listBookingTransaction[
+                                                                indexTransaction]
+                                                            .serviceName,
+                                                        model
+                                                            .listBookingTransaction[
+                                                                indexTransaction]
+                                                            .location,
+                                                        NumberFormat.currency(
+                                                                locale: 'vi')
+                                                            .format(model
+                                                                .listBookingTransaction[
+                                                                    indexTransaction]
+                                                                .servicePrice),
+                                                        model
+                                                            .listBookingTransaction[
+                                                                indexTransaction]
+                                                            .patientId,
+                                                        model,
+                                                        model
+                                                            .selectedEvents[
+                                                                index]
+                                                            .scheduleId,
+                                                        model
+                                                            .listBookingTransaction[
+                                                                indexTransaction]
+                                                            .note,
+                                                        model
+                                                            .listBookingTransaction[
+                                                                indexTransaction]
+                                                            .transactionId,
+                                                      );
+                                                    }())
+                                                  : _buildDayNoTask(
+                                                      context,
+                                                      DateFormat('hh:mm a')
+                                                          .format(
+                                                        DateTime.parse(model
+                                                            .selectedEvents[
+                                                                index]
+                                                            .appointmentTime),
+                                                      ),
+                                                      model,
+                                                      model
+                                                          .selectedEvents[index]
+                                                          .scheduleId,
+                                                    );
+                                            },
+                                          )
                               ],
                             ),
                           ),
@@ -251,7 +289,7 @@ class SchedulePage extends StatelessWidget {
     );
   }
 
-  Row _buildDayTask(
+  Padding _buildDayTask(
       BuildContext context,
       String time,
       String name,
@@ -260,217 +298,379 @@ class SchedulePage extends StatelessWidget {
       String location,
       String servicePrice,
       int patientId,
-      SchedulePageViewModel model) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: EdgeInsets.fromLTRB(10, 20, 20, 20),
-          width: MediaQuery.of(context).size.width * 0.25,
-          child: Text(
-            time,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
-            textAlign: TextAlign.right,
-          ),
-        ),
-        Expanded(
-          child: Container(
-            margin: EdgeInsets.only(bottom: 20),
-            padding: EdgeInsets.all(20),
-            color: Colors.blue[100].withOpacity(0.3),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '$name ($relation)',
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xff0d47a1),
-                      fontWeight: FontWeight.w700),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  serviceName,
-                  style: TextStyle(
-                      color: Colors.grey[700], fontWeight: FontWeight.w500),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      EvaIcons.pin,
-                      color: Color(0xff0d47a1),
-                      size: 20,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Expanded(
-                      child: Text(
+      SchedulePageViewModel model,
+      int scheduleId,
+      String note,
+      String transactionId) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Slidable(
+        actionPane: SlidableDrawerActionPane(),
+        actionExtentRatio: 0.25,
+        secondaryActions: (!model.isDelete)
+            ? []
+            : [
+                IconSlideAction(
+                  caption: 'Delete',
+                  color: Colors.red,
+                  icon: Icons.delete,
+                  onTap: () async {
+                    //Delete transaction
+                    await _confirmCancelBookingDialog(
+                        context,
+                        model,
+                        scheduleId,
+                        time,
                         location,
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  height: 0.5,
-                  color: Colors.grey,
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  children: [
-                    ClipOval(
-                      child: Material(
-                        color: Color(0xff0d47a1), // button color
-                        child: InkWell(
-                          splashColor: Colors.grey, // inkwell color
-                          child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: Icon(
-                              EvaIcons.phone,
-                              color: Colors.white,
-                            ),
-                          ),
-                          onTap: () {
-                            model.callPhone(patientId);
-                          },
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    ClipOval(
-                      child: Material(
-                        color: Color(0xff0d47a1), // button color
-                        child: InkWell(
-                          splashColor: Colors.grey, // inkwell color
-                          child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: Icon(
-                              EvaIcons.activity,
-                              color: Colors.white,
-                            ),
-                          ),
-                          onTap: () {},
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    ClipOval(
-                      child: Material(
-                        color: Color(0xff0d47a1), // button color
-                        child: InkWell(
-                          splashColor: Colors.grey, // inkwell color
-                          child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: Icon(
-                              EvaIcons.clock,
-                              color: Colors.white,
-                            ),
-                          ),
-                          onTap: () {},
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    ClipOval(
-                      child: Material(
-                        color: Color(0xff0d47a1), // button color
-                        child: InkWell(
-                          splashColor: Colors.grey, // inkwell color
-                          child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: Icon(
-                              EvaIcons.person,
-                              color: Colors.white,
-                            ),
-                          ),
-                          onTap: () {
-                            PatientDialog()
-                                .showCustomDialog(context, patientId);
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    servicePrice.toString(),
-                    style: TextStyle(
-                        color: Colors.green,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600),
-                  ),
+                        note,
+                        patientId,
+                        transactionId,
+                        true);
+                  },
                 ),
               ],
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.fromLTRB(10, 20, 20, 20),
+              width: MediaQuery.of(context).size.width * 0.25,
+              child: Text(
+                DateFormat('hh:mm a').format(DateTime.parse(time)),
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+                textAlign: TextAlign.right,
+              ),
             ),
-          ),
+            Expanded(
+              child: Container(
+                // margin: EdgeInsets.only(bottom: 20),
+                padding: EdgeInsets.all(20),
+                color: Colors.blue[100].withOpacity(0.3),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '$name ($relation)',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xff0d47a1),
+                          fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          serviceName,
+                          style: TextStyle(
+                              color: Colors.grey[700],
+                              fontWeight: FontWeight.w500),
+                        ),
+                        (timeCheckFormater
+                                .parse(DateTime.now().toString())
+                                .isBefore(DateTime.parse(time)))
+                            ? Container(
+                                child: Text(
+                                  "Not yet time",
+                                  style: TextStyle(
+                                      color: Colors.green,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              )
+                            : Container(
+                                child: Text("OverTime",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.w700)),
+                              ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          EvaIcons.pin,
+                          color: Color(0xff0d47a1),
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Expanded(
+                          child: Text(
+                            location.split(';')[1].split(':')[1],
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      height: 0.5,
+                      color: Colors.grey,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      children: [
+                        ClipOval(
+                          child: Material(
+                            color: Color(0xff0d47a1), // button color
+                            child: InkWell(
+                              splashColor: Colors.grey, // inkwell color
+                              child: SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: Icon(
+                                  EvaIcons.phone,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onTap: () {
+                                model.callPhone(patientId, time);
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        ClipOval(
+                          child: Material(
+                            color: Color(0xff0d47a1), // button color
+                            child: InkWell(
+                              splashColor: Colors.grey, // inkwell color
+                              child: SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: Icon(
+                                  EvaIcons.activity,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HealthRecordScreen(
+                                        patientId: patientId,
+                                        patientName: name),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        ClipOval(
+                          child: Material(
+                            color: Color(0xff0d47a1), // button color
+                            child: InkWell(
+                              splashColor: Colors.grey, // inkwell color
+                              child: SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: Icon(
+                                  EvaIcons.clock,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onTap: () {},
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        ClipOval(
+                          child: Material(
+                            color: Color(0xff0d47a1), // button color
+                            child: InkWell(
+                              splashColor: Colors.grey, // inkwell color
+                              child: SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: Icon(
+                                  EvaIcons.person,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onTap: () {
+                                PatientDialog()
+                                    .showCustomDialog(context, patientId);
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        servicePrice.toString(),
+                        style: TextStyle(
+                            color: Colors.green,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        (timeCheckFormater
+                                    .parse(DateTime.now().toString())
+                                    .isAfter(DateTime.parse(time)
+                                        .add(Duration(minutes: 30))) &&
+                                timeCheckFormater
+                                    .parse(DateTime.now().toString())
+                                    .isBefore(DateTime.parse(time)
+                                        .subtract(Duration(minutes: 30))))
+                            ? RaisedButton(
+                                child: Icon(Icons.timer),
+                                color: Colors.green,
+                                textColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                ),
+                                onPressed: () async {
+                                  //time arrived
+                                  await model.arrivedTime(
+                                      context,
+                                      patientId,
+                                      location,
+                                      note,
+                                      transactionId,
+                                      scheduleId,
+                                      time);
+                                },
+                              )
+                            : (timeCheckFormater
+                                    .parse(DateTime.now().toString())
+                                    .isBefore(DateTime.parse(time)))
+                                ? RaisedButton(
+                                    child: Icon(Icons.timer),
+                                    color: Colors.grey,
+                                    textColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ),
+                                    onPressed: () {})
+                                : Container(),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        (timeCheckFormater
+                                .parse(DateTime.now().toString())
+                                .isBefore(DateTime.parse(time)))
+                            ? RaisedButton(
+                                child: Icon(Icons.block),
+                                color: Colors.red,
+                                textColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                ),
+                                onPressed: () async {
+                                  await _confirmCancelBookingDialog(
+                                      context,
+                                      model,
+                                      scheduleId,
+                                      time,
+                                      location,
+                                      note,
+                                      patientId,
+                                      transactionId,
+                                      false);
+                                },
+                              )
+                            : Container(),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
-  Row _buildDayNoTask(BuildContext context, String time) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: EdgeInsets.fromLTRB(10, 20, 20, 20),
-          width: MediaQuery.of(context).size.width * 0.25,
-          child: Text(
-            time,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
-            textAlign: TextAlign.right,
-          ),
-        ),
-        Expanded(
-          child: Container(
-            margin: EdgeInsets.only(bottom: 20),
-            padding: EdgeInsets.all(20),
-            color: Colors.blue[100].withOpacity(0.3),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "No one have booked yet",
-                  style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontSize: 16,
-                      color: Color(0xff0d47a1),
-                      fontWeight: FontWeight.w700),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
+  Padding _buildDayNoTask(BuildContext context, String time,
+      SchedulePageViewModel model, int scheduleId) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Slidable(
+        actionPane: SlidableDrawerActionPane(),
+        actionExtentRatio: 0.25,
+        secondaryActions: (!model.isDelete)
+            ? []
+            : [
+                IconSlideAction(
+                  caption: 'Delete',
+                  color: Colors.red,
+                  icon: Icons.delete,
+                  onTap: () {
+                    model.deleteScheduleNoTask(scheduleId, context);
+                  },
+                )
               ],
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.fromLTRB(10, 20, 20, 20),
+              width: MediaQuery.of(context).size.width * 0.25,
+              child: Text(
+                time,
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+                textAlign: TextAlign.right,
+              ),
             ),
-          ),
+            Expanded(
+              child: Container(
+                // margin: EdgeInsets.only(bottom: 20),
+                padding: EdgeInsets.all(20),
+                color: Colors.blue[100].withOpacity(0.3),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "No one have booked yet",
+                      style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontSize: 16,
+                          color: Color(0xff0d47a1),
+                          fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -497,6 +697,137 @@ class SchedulePage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Future _confirmCancelBookingDialog(
+      BuildContext context,
+      SchedulePageViewModel model,
+      scheduleId,
+      time,
+      location,
+      note,
+      patientId,
+      transactionId,
+      bool isDelete) {
+    return showDialog(
+      context: context,
+      builder: (bookingContext) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+          ),
+          child: Container(
+            height: 345,
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 25,
+                ),
+                Icon(
+                  Icons.info,
+                  color: Color(0xff4ee1c7),
+                  size: 90,
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Text(
+                  "Confirmation?",
+                  style: TextStyle(
+                    fontSize: 27,
+                    fontWeight: FontWeight.w800,
+                    fontFamily: 'avenir',
+                    color: Color(0xff0d47a1),
+                  ),
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Text(
+                  'Are you sure want to Cancel this?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'avenir',
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(
+                  height: 45,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                      customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      onTap: () async {
+                        Navigator.pop(bookingContext);
+                        (!isDelete)
+                            ? await model.cancelBooking(context, scheduleId,
+                                time, location, note, patientId, transactionId)
+                            : model.deleteTaskSchedule(scheduleId, context,
+                                location, note, patientId, transactionId);
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 50,
+                        width: MediaQuery.of(bookingContext).size.width * 0.3,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(color: Colors.blueAccent),
+                        ),
+                        child: Text(
+                          "Yes",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'avenir',
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      onTap: () {
+                        Navigator.pop(bookingContext);
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 50,
+                        width: MediaQuery.of(bookingContext).size.width * 0.3,
+                        decoration: BoxDecoration(
+                          color: Colors.blueAccent,
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(color: Colors.blueAccent),
+                        ),
+                        child: Text(
+                          "No",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'avenir',
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

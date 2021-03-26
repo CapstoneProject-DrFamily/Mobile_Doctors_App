@@ -353,9 +353,9 @@ class _ArticleDescription extends StatelessWidget {
           child: Text(
             '$price',
             textAlign: TextAlign.right,
-            style: const TextStyle(
+            style: TextStyle(
                 fontSize: 18.0,
-                color: Colors.green,
+                color: (status == 4) ? Color(0xff0d47a1) : Colors.green,
                 fontWeight: FontWeight.bold),
           ),
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_doctors_apps/helper/app_image.dart';
 import 'package:mobile_doctors_apps/helper/common.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/transaction_detail_view_model.dart';
@@ -147,71 +148,85 @@ class TransactionDetailPage extends StatelessWidget {
                         SizedBox(
                           height: 10,
                         ),
-                        RatingBar.builder(
-                          ignoreGestures: true,
-                          initialRating: model.feedback == null
-                              ? 0
-                              : model.feedback.ratingPoint,
-                          minRating: 1,
-                          direction: Axis.horizontal,
-                          allowHalfRating: false,
-                          itemCount: 5,
-                          glowColor: Colors.amber,
-                          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                          itemBuilder: (context, _) => Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                          ),
-                          onRatingUpdate: (rating) {
-                            // model.changeRating(rating);
-                          },
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              model.feedback == null
-                                  ? Flexible(
-                                      child: Container(
-                                        child: Text(
-                                            'This transaction has no feedback'),
-                                      ),
-                                    )
-                                  : Flexible(
-                                      child: Container(
-                                        child: Center(
-                                            child: model.feedback.ratingPoint ==
-                                                    5
-                                                ? Text(
-                                                    model.feedback.note == null
-                                                        ? ""
-                                                        : 'User like most : ' +
-                                                            model.feedback.note)
-                                                : Text(model.feedback.note ==
-                                                        null
-                                                    ? ""
-                                                    : 'Need to improve : ' +
-                                                        model.feedback.note)),
-                                      ),
-                                    )
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Divider(
-                          thickness: 1,
-                          indent: 50,
-                          endIndent: 50,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        (model.transaction.status == 4)
+                            ? Container()
+                            : Column(
+                                children: [
+                                  RatingBar.builder(
+                                    ignoreGestures: true,
+                                    initialRating: model.feedback == null
+                                        ? 0
+                                        : model.feedback.ratingPoint,
+                                    minRating: 1,
+                                    direction: Axis.horizontal,
+                                    allowHalfRating: false,
+                                    itemCount: 5,
+                                    glowColor: Colors.amber,
+                                    itemPadding:
+                                        EdgeInsets.symmetric(horizontal: 4.0),
+                                    itemBuilder: (context, _) => Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (rating) {
+                                      // model.changeRating(rating);
+                                    },
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        model.feedback == null
+                                            ? Flexible(
+                                                child: Container(
+                                                  child: Text(
+                                                      'This transaction has no feedback'),
+                                                ),
+                                              )
+                                            : Flexible(
+                                                child: Container(
+                                                  child: Center(
+                                                      child: model.feedback
+                                                                  .ratingPoint ==
+                                                              5
+                                                          ? Text(model.feedback
+                                                                      .note ==
+                                                                  null
+                                                              ? ""
+                                                              : 'User like most : ' +
+                                                                  model.feedback
+                                                                      .note)
+                                                          : Text(model.feedback
+                                                                      .note ==
+                                                                  null
+                                                              ? ""
+                                                              : 'Need to improve : ' +
+                                                                  model.feedback
+                                                                      .note)),
+                                                ),
+                                              )
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Divider(
+                                    thickness: 1,
+                                    indent: 50,
+                                    endIndent: 50,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              ),
                         Container(
                           padding: EdgeInsets.only(left: 20),
                           child: Row(
@@ -220,7 +235,9 @@ class TransactionDetailPage extends StatelessWidget {
                               CircleAvatar(
                                 radius: 30.0,
                                 backgroundImage:
-                                    NetworkImage(model.profileUser.image),
+                                    (model.profileUser.image == null)
+                                        ? NetworkImage(DEFAULT_IMG)
+                                        : NetworkImage(model.profileUser.image),
                                 backgroundColor: Colors.transparent,
                               ),
                               SizedBox(
@@ -236,8 +253,23 @@ class TransactionDetailPage extends StatelessWidget {
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    Text(Common.getLocationName(
-                                        model.transaction.location)),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.location_on,
+                                          color: Colors.black54,
+                                          size: 17,
+                                        ),
+                                        Padding(
+                                            padding:
+                                                EdgeInsets.only(right: 7.0)),
+                                        Expanded(
+                                          child: Text(Common.getLocationName(
+                                                  model.transaction.location)
+                                              .trim()),
+                                        ),
+                                      ],
+                                    ),
                                     Row(
                                       children: [
                                         Expanded(

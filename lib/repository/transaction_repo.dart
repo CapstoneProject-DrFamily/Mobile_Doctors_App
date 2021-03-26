@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_doctors_apps/helper/api_helper.dart';
+import 'package:mobile_doctors_apps/model/feedback/feedback_model.dart';
 import 'package:mobile_doctors_apps/model/profile/profile_model.dart';
 import 'package:mobile_doctors_apps/model/service/service_model.dart';
 import 'package:mobile_doctors_apps/model/symptom/symptom_model.dart';
@@ -23,7 +24,7 @@ abstract class ITransactionRepo {
       String doctorId, int status);
   Future<TransactionBasicModel> getTransactionDetailMap(String transactionId);
   Future<List<TransactionBookingModel>> getListTransactionBookingInDay(
-      int doctorId, String dateTime);
+      int doctorId);
 }
 
 class TransactionRepo extends ITransactionRepo {
@@ -193,10 +194,20 @@ class TransactionRepo extends ITransactionRepo {
         listSymptom.add(symp);
       }
 
+      // FEEDBACK
+      FeedbackModel feedback;
+      urlAPI = APIHelper.FEEDBACK_API;
+      response = await http.get(urlAPI + "/$transactionId", headers: header);
+      if (response.statusCode == 200) {
+        data = jsonDecode(response.body);
+        feedback = FeedbackModel.fromJson(data);
+      }
+
       list.add(transaction);
       list.add(profileUser);
       list.add(service);
       list.add(listSymptom);
+      list.add(feedback);
     }
 
     return list;
@@ -335,9 +346,8 @@ class TransactionRepo extends ITransactionRepo {
 
   @override
   Future<List<TransactionBookingModel>> getListTransactionBookingInDay(
-      int doctorId, String dateTime) async {
-    String urlAPI = APIHelper.TRANSACTION_DOCTOR_API +
-        '$doctorId?status=-1&dateStart=$dateTime';
+      int doctorId) async {
+    String urlAPI = APIHelper.TRANSACTION_DOCTOR_API + '$doctorId?status=0';
     Map<String, String> header = {
       HttpHeaders.contentTypeHeader: "application/json",
     };
@@ -350,7 +360,7 @@ class TransactionRepo extends ITransactionRepo {
       _listTransactionBooking = (json.decode(response.body) as List)
           .map((data) => TransactionBookingModel.fromJson(data))
           .toList();
-
+      print('booking List ${_listTransactionBooking.length}');
       if (_listTransactionBooking.isEmpty) return null;
 
       return _listTransactionBooking;
