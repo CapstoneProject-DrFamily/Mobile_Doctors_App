@@ -9,6 +9,8 @@ abstract class IScheduleRepo {
   Future<bool> createSchedule(String jsonSchedule);
   Future<List<ScheduleModel>> loadListSchedule(
       String dateStart, String dateEnd, int doctorId);
+  Future<bool> deleteScheduleNoTask(int scheduleId);
+  Future<bool> updateSchedule(String scheduleUpdateJson);
 }
 
 class ScheduleRepo extends IScheduleRepo {
@@ -49,7 +51,6 @@ class ScheduleRepo extends IScheduleRepo {
     List<ScheduleModel> _listSchedule = [];
 
     if (response.statusCode == 200) {
-      
       _listSchedule = (json.decode(response.body) as List)
           .map((data) => ScheduleModel.fromJson(data))
           .toList();
@@ -59,5 +60,42 @@ class ScheduleRepo extends IScheduleRepo {
       return _listSchedule;
     } else
       return null;
+  }
+
+  @override
+  Future<bool> deleteScheduleNoTask(int scheduleId) async {
+    String urlAPI = APIHelper.SCHEDULE_API + '/$scheduleId';
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    var response = await http.delete(urlAPI, headers: header);
+    print("Status code: " + response.statusCode.toString());
+    bool isCreated = true;
+
+    if (response.statusCode == 204) {
+      return isCreated;
+    } else {
+      isCreated = false;
+      return isCreated;
+    }
+  }
+
+  @override
+  Future<bool> updateSchedule(String scheduleUpdateJson) async {
+    bool isSuccess = false;
+    String urlAPI = APIHelper.SCHEDULE_API;
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    var response =
+        await http.put(urlAPI, headers: header, body: scheduleUpdateJson);
+
+    if (response.statusCode == 200) {
+      isSuccess = true;
+    }
+
+    return isSuccess;
   }
 }

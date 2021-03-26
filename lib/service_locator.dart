@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:mobile_doctors_apps/screens/view_model/health_record_page_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/medical_care_history_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/popup_info_patient_page.dart';
 import 'package:mobile_doctors_apps/screens/view_model/schedule_page_view_model.dart';
@@ -52,4 +53,5 @@ void setupLocator() {
       () => MedicalCareHistoryViewModel());
   locator.registerFactory<SchedulePageViewModel>(() => SchedulePageViewModel());
   locator.registerFactory<PopupInfoPatientPage>(() => PopupInfoPatientPage());
+  locator.registerFactory<HealthRecordViewModel>(() => HealthRecordViewModel());
 }

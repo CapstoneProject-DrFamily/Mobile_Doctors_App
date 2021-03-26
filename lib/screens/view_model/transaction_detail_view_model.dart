@@ -28,8 +28,8 @@ class TransactionDetailViewModel extends BaseModel {
         profileUser = result[1];
         service = result[2];
         listSymp = result[3];
+        feedback = result[4];
 
-        feedback = await _feedbackRepo.getFeedback(transactionId);
         print(feedback.toString());
       }
       this.init = false;
