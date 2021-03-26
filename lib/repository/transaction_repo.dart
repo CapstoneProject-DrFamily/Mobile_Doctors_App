@@ -5,6 +5,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_doctors_apps/helper/api_helper.dart';
 import 'package:mobile_doctors_apps/model/feedback/feedback_model.dart';
+import 'package:mobile_doctors_apps/model/patient_transacion/examination_history_model.dart';
+import 'package:mobile_doctors_apps/model/patient_transacion/patient_transaction_model.dart';
 import 'package:mobile_doctors_apps/model/profile/profile_model.dart';
 import 'package:mobile_doctors_apps/model/service/service_model.dart';
 import 'package:mobile_doctors_apps/model/symptom/symptom_model.dart';
@@ -25,6 +27,8 @@ abstract class ITransactionRepo {
   Future<TransactionBasicModel> getTransactionDetailMap(String transactionId);
   Future<List<TransactionBookingModel>> getListTransactionBookingInDay(
       int doctorId);
+  Future<List<dynamic>> getTransactionPatientDetail(String transactionId);
+  Future<List<String>> getListPatientTransactionId(int patientId);
 }
 
 class TransactionRepo extends ITransactionRepo {
@@ -364,6 +368,84 @@ class TransactionRepo extends ITransactionRepo {
       if (_listTransactionBooking.isEmpty) return null;
 
       return _listTransactionBooking;
+    } else
+      return null;
+  }
+
+  @override
+  Future<List> getTransactionPatientDetail(String transactionId) async {
+    List<dynamic> list = [];
+    String urlAPI = APIHelper.TRANSACTION_API + "/" + transactionId.trim();
+    print('transactionID $transactionId');
+
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+    var response = await http.get(urlAPI, headers: header);
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = jsonDecode(response.body);
+      PatientTransactionModel transaction =
+          PatientTransactionModel.fromJson(data);
+
+      ProfileModel profilePatient =
+          ProfileModel.fromJson(data['patient']['patientNavigation']);
+      String doctorSpeciality = data['doctor']['specialty']['name'];
+
+      ProfileModel profileDoctor =
+          ProfileModel.fromJson(data['doctor']['doctorNavigation']);
+
+      ServiceModel service = ServiceModel.fromJson(data['service']);
+      ExaminationHistoryModel examination =
+          ExaminationHistoryModel.fromJson(data['examinationHistory']);
+
+      // FEEDBACK
+      FeedbackModel feedback;
+      urlAPI = APIHelper.FEEDBACK_API;
+      response = await http.get(urlAPI + "/$transactionId", headers: header);
+      if (response.statusCode == 200) {
+        data = jsonDecode(response.body);
+        feedback = FeedbackModel.fromJson(data);
+      }
+
+      list.add(transaction);
+      list.add(profilePatient);
+      list.add(doctorSpeciality);
+      list.add(service);
+      list.add(examination);
+      list.add(feedback);
+      list.add(profileDoctor);
+    }
+
+    return list;
+  }
+
+  @override
+  Future<List<String>> getListPatientTransactionId(int patientId) async {
+    String urlAPI =
+        APIHelper.TRANSACTION_PATIENT_API + patientId.toString() + "?status=3";
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    List<String> listTransactionId = [];
+
+    var response = await http.get(urlAPI, headers: header);
+    print('respose status ${response.statusCode}');
+    if (response.statusCode == 200) {
+      var listTransactionJson = (json.decode(response.body) as List).toList();
+
+      for (int i = 0; i < listTransactionJson.length; i++) {
+        var transactionId = listTransactionJson[i]['transactionId'];
+        print(transactionId);
+        listTransactionId.add(transactionId);
+        print(listTransactionId.length);
+      }
+
+      if (listTransactionId.isEmpty)
+        return null;
+      else
+        return listTransactionId;
     } else
       return null;
   }

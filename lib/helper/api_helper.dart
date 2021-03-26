@@ -19,4 +19,6 @@ class APIHelper {
   static const String FEEDBACK_API = '$Prefix_API/api/v1/Feedbacks';
   static const String GET_HEALTHRECORD_BY_ID_API =
       '$Prefix_API/api/v1/HealthRecords';
+  static const String TRANSACTION_PATIENT_API =
+      '$Prefix_API/api/v1/Transactions/patients/';
 }

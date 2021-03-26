@@ -1,6 +1,9 @@
+import 'package:mobile_doctors_apps/model/patient_transacion/additional_info.dart';
+
 class ProfileModel {
   int profileId;
   String fullName, dob, gender, phone, image, email, idCard;
+  AdditionInfoModel additionInfoModel;
 
   ProfileModel(
       {this.profileId,
