@@ -368,11 +368,7 @@ class AnalyzePage extends StatelessWidget {
                               onChanged: (value) {
                                 model.changeFieldText(index, model, value);
                               },
-                              maxLines: 3,
-                              decoration: InputDecoration(
-                                  hintText: 'Enter text',
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12))),
+                                
                             ),
                           ),
                           SizedBox(
@@ -447,7 +443,7 @@ class AnalyzePage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Text(
-                '2. Thăm khám lâm sàng',
+                '2. Clinical Diagnosis',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
@@ -462,7 +458,7 @@ class AnalyzePage extends StatelessWidget {
                   ),
                   Flexible(
                     child: Text(
-                      'Dấu hiệu sinh tồn, chỉ số nhân trắc học',
+                      'Vital Signs',
                       style: TextStyle(
                         fontSize: 18,
                       ),
@@ -474,17 +470,19 @@ class AnalyzePage extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            buildAnthropometricIndex("Mạch", "nhịp/phút", model, "pulseRate"),
+            buildAnthropometricIndex("Pulse", "...", model, "pulseRate"),
             // buildErrorMessage(),
-            buildAnthropometricIndex("Nhiệt độ", "độ C", model, "temperature"),
-            buildAnthropometricIndex("Huyết áp", "...", model, "bloodPressure"),
             buildAnthropometricIndex(
-                "Nhịp thở", "...", model, "respiratoryRate"),
-            buildAnthropometricIndex("Cân nặng", "kg", model, "weight"),
-            buildAnthropometricIndex("Chiều cao", "cm", model, "height"),
+                "Temperature", "Celsius", model, "temperature"),
+            buildAnthropometricIndex(
+                "Blood Pressure", "...", model, "bloodPressure"),
+            buildAnthropometricIndex(
+                "Respiratory Rate", "...", model, "respiratoryRate"),
+            buildAnthropometricIndex("Weight", "kg", model, "weight"),
+            buildAnthropometricIndex("Height", "cm", model, "height"),
             buildAnthropometricIndex("BMI", "...", model, "BMI"),
             buildAnthropometricIndex(
-                "Vòng bụng", "...", model, "waistCircumference"),
+                "Hips", "...", model, "waistCircumference"),
           ],
         ),
         Divider(
@@ -535,7 +533,7 @@ class AnalyzePage extends StatelessWidget {
               ),
               Flexible(
                 child: Text(
-                  'Khám lâm sàng',
+                  'Paraclinical',
                   style: TextStyle(
                     fontSize: 18,
                   ),
@@ -554,7 +552,7 @@ class AnalyzePage extends StatelessWidget {
               ),
               Flexible(
                 child: Text(
-                  'Toàn thân',
+                  'Full body',
                   style: TextStyle(
                     fontSize: 18,
                   ),
@@ -566,7 +564,7 @@ class AnalyzePage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            'Da, niêm mạc',
+            'Mucosocutaneous',
             style: TextStyle(fontSize: 18),
           ),
         ),
@@ -587,7 +585,7 @@ class AnalyzePage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            'Khác',
+            'Other',
             style: TextStyle(fontSize: 18),
           ),
         ),
@@ -763,7 +761,7 @@ class AnalyzePage extends StatelessWidget {
               ),
               Flexible(
                 child: Text(
-                  'Thị lực',
+                  'Eye Sight',
                   style: TextStyle(
                     fontSize: 18,
                   ),
@@ -778,19 +776,19 @@ class AnalyzePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Không kính ',
+                'No glasses',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              buildEyeExaminationForm("Mắt trái", "0 ~ 10", model, "leftEye"),
-              buildEyeExaminationForm("Mắt phải", "0 ~ 10", model, "rightEye"),
+              buildEyeExaminationForm("Left Eye", "0 ~ 10", model, "leftEye"),
+              buildEyeExaminationForm("Right Eye", "0 ~ 10", model, "rightEye"),
               Text(
-                'Có kính',
+                'With glasses',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               buildEyeExaminationForm(
-                  "Mắt trái", "0 ~ 10", model, "leftEyeGlassed"),
+                  "Left Eye", "0 ~ 10", model, "leftEyeGlassed"),
               buildEyeExaminationForm(
-                  "Mắt phải", "0 ~ 10", model, "rightEyeGlassed"),
+                  "Right Eye", "0 ~ 10", model, "rightEyeGlassed"),
             ],
           ),
         ),
