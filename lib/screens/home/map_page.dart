@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile_doctors_apps/helper/app_image.dart';
 import 'package:mobile_doctors_apps/screens/share/health_record_page.dart';
+import 'package:mobile_doctors_apps/screens/share/patient_transaction/patient_base_transaction.dart';
 import 'package:mobile_doctors_apps/screens/share/popup_info_patient_page.dart';
 import 'package:mobile_doctors_apps/screens/view_model/map_page_view_model.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -304,7 +305,18 @@ class MapPage extends StatelessWidget {
                   },
                   child:
                       _button("Health Record", EvaIcons.activity, Colors.red)),
-              _button("History", EvaIcons.clock, Colors.amber),
+              InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PatientBaseTransaction(
+                          patientId: model.basicTransaction.patientId,
+                        ),
+                      ),
+                    );
+                  },
+                  child: _button("History", EvaIcons.clock, Colors.amber)),
             ],
           ),
           SizedBox(
