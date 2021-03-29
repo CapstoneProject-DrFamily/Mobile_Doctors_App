@@ -5,13 +5,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:mobile_doctors_apps/model/schedule_add_model.dart';
 import 'package:mobile_doctors_apps/model/schedule_model.dart';
 import 'package:mobile_doctors_apps/model/transaction.dart';
-import 'package:mobile_doctors_apps/model/transaction_booking_model.dart';
+import 'package:mobile_doctors_apps/repository/doctor_repo.dart';
+import 'package:mobile_doctors_apps/repository/examination_repo.dart';
 import 'package:mobile_doctors_apps/repository/patient_repo.dart';
 import 'package:mobile_doctors_apps/repository/schedule_repo.dart';
+import 'package:mobile_doctors_apps/repository/sign_up/specialty_repo.dart';
 import 'package:mobile_doctors_apps/repository/transaction_repo.dart';
 import 'package:mobile_doctors_apps/screens/share/base_timeline.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
@@ -23,6 +24,9 @@ class SchedulePageViewModel extends BaseModel {
   final IScheduleRepo _scheduleRepo = ScheduleRepo();
   final ITransactionRepo _transactionRepo = TransactionRepo();
   final IPatientRepo _patientRepo = PatientRepo();
+  final IDoctorRepo _doctorRepo = DoctorRepo();
+  final ISpecialtyRepo _specialtyRepo = SpecialtyRepo();
+  final IExaminationRepo _examinationRepo = ExaminationRepo();
 
   bool isLoading = true;
   bool isFirst = true;
@@ -35,12 +39,8 @@ class SchedulePageViewModel extends BaseModel {
 
   Map<DateTime, List> _events = {};
   Map<DateTime, List> get events => _events;
-  List _selectedEvents;
+  List _selectedEvents = [];
   List get selectedEvents => _selectedEvents;
-
-  List<TransactionBookingModel> _listBookingTransaction;
-  List<TransactionBookingModel> get listBookingTransaction =>
-      _listBookingTransaction;
 
   final _selectedDay = serverFormater.parse(DateTime.now().toString());
   TimeOfDay selectedTime = TimeOfDay.now();
@@ -73,6 +73,8 @@ class SchedulePageViewModel extends BaseModel {
   DatabaseReference _transactionRequest;
   FirebaseUser _firebaseuser;
   String userId;
+  int specialtyId;
+  int serviceId;
 
   Future<void> initScheduleToday() async {
     if (isFirst) {
@@ -80,6 +82,10 @@ class SchedulePageViewModel extends BaseModel {
       doctorId = prefs.getInt("doctorId");
       doctorName = prefs.getString("usName");
       loadingListTransaction = true;
+
+      specialtyId = await _doctorRepo.getSpecialtyId(doctorId);
+      serviceId = await _specialtyRepo.getServiceIdBySpecialtyId(specialtyId);
+      print("oke");
 
       _transactionRequest =
           FirebaseDatabase.instance.reference().child("Transaction");
@@ -97,7 +103,6 @@ class SchedulePageViewModel extends BaseModel {
 
       _calendarController = CalendarController();
 
-      await getScheduleBooking();
       isNotHave = false;
       //init
       isLoading = false;
@@ -223,6 +228,7 @@ class SchedulePageViewModel extends BaseModel {
     );
   }
 
+  //add ScheduleTime
   Future<void> confirmDateTime(BuildContext context) async {
     if (selectedTime != null) {
       waitDialog(context, message: "Setting your Schedule please wait...");
@@ -278,8 +284,23 @@ class SchedulePageViewModel extends BaseModel {
             gravity: ToastGravity.CENTER,
           );
         } else {
+          //add transaction
+          String transaction = jsonEncode({
+            "doctorId": doctorId,
+            "patientId": null,
+            "status": 0,
+            "location": null,
+            "note": "Nothing",
+            "serviceId": serviceId,
+          });
+
+          print("transaction: " + transaction);
+          String transactionId =
+              await _transactionRepo.addBookingTransaction(transaction);
+
           //add schedule
-          bool status = await addSchedule(dateChoose);
+          bool status = await addSchedule(dateChoose, transactionId);
+
           if (status) {
             Navigator.pop(context);
 
@@ -297,30 +318,18 @@ class SchedulePageViewModel extends BaseModel {
     }
   }
 
-  Future<bool> addSchedule(DateTime dateChoose) async {
+  Future<bool> addSchedule(DateTime dateChoose, String transactionId) async {
     ScheduleAddModel addScheduleModel = ScheduleAddModel(
+        scheduleId: transactionId,
         appointmentTime: dateChoose.toString(),
         doctorId: doctorId,
         insBy: doctorName,
-        status: false);
+        status: false,
+        disable: false);
     String jsonSchedule = jsonEncode(addScheduleModel.toJson());
     print('jsonSchedule: $jsonSchedule');
     bool status = await _scheduleRepo.createSchedule(jsonSchedule);
     return status;
-  }
-
-  Future<void> getScheduleBooking() async {
-    _listBookingTransaction =
-        await _transactionRepo.getListTransactionBookingInDay(doctorId);
-
-    // print('list Schedule Length ${_listBookingTransaction.length}');
-  }
-
-  Future<void> callPhone(int patientId, String time) async {
-    var phone = await _patientRepo.getPatientPhone(patientId);
-    print('phone $phone');
-
-    await launch('tel://$phone');
   }
 
   bool validateDateTime(DateTime datechoose) {
@@ -413,15 +422,35 @@ class SchedulePageViewModel extends BaseModel {
 
     return isValid;
   }
+  //end Add schedule
+
+  Future<void> callPhone(int patientId, String time) async {
+    var phone = await _patientRepo.getPatientPhone(patientId);
+    print('phone $phone');
+
+    await launch('tel://$phone');
+  }
 
   Future<void> deleteScheduleNoTask(
-      int scheduleId, BuildContext context) async {
+      String scheduleId, BuildContext context) async {
     waitDialog(context, message: "Deleting your booking please wait...");
 
     bool isDelete = await _scheduleRepo.deleteScheduleNoTask(scheduleId);
-    if (isDelete) {
+    bool isDeleteTransaction =
+        await _transactionRepo.deleteTransaction(scheduleId);
+    if (isDelete && isDeleteTransaction) {
       Navigator.pop(context);
       loadBackSchedule();
+    } else {
+      Navigator.pop(context);
+
+      Fluttertoast.showToast(
+        msg: "Sorry, something is went please try again",
+        textColor: Colors.red,
+        toastLength: Toast.LENGTH_SHORT,
+        backgroundColor: Colors.white,
+        gravity: ToastGravity.CENTER,
+      );
     }
   }
 
@@ -439,7 +468,7 @@ class SchedulePageViewModel extends BaseModel {
   }
 
   void deleteTaskSchedule(
-    int scheduleId,
+    String scheduleId,
     BuildContext context,
     String location,
     String note,
@@ -449,26 +478,27 @@ class SchedulePageViewModel extends BaseModel {
     waitDialog(context, message: "Deleting your booking please wait...");
 
     bool isDelete = await _scheduleRepo.deleteScheduleNoTask(scheduleId);
-    if (isDelete) {
-      Transaction transactionTemp = new Transaction(
-          doctorId: doctorId,
-          location: location,
-          note: note,
-          patientId: patientId,
-          status: 4,
-          transactionId: transactionID,
-          estimatedTime: null);
-      bool isUpdate = await _transactionRepo.updateTransaction(transactionTemp);
-      if (isUpdate) {
-        Navigator.pop(context);
-        loadBackSchedule();
-      }
+    bool isDeleteTransaction =
+        await _transactionRepo.deleteTransaction(transactionID);
+    if (isDelete && isDeleteTransaction) {
+      Navigator.pop(context);
+      loadBackSchedule();
+    } else {
+      Navigator.pop(context);
+
+      Fluttertoast.showToast(
+        msg: "Sorry, something is went please try again",
+        textColor: Colors.red,
+        toastLength: Toast.LENGTH_SHORT,
+        backgroundColor: Colors.white,
+        gravity: ToastGravity.CENTER,
+      );
     }
   }
 
   Future<void> cancelBooking(
       BuildContext context,
-      int scheduleId,
+      String scheduleId,
       String appointmentTime,
       String location,
       String note,
@@ -488,25 +518,32 @@ class SchedulePageViewModel extends BaseModel {
 
     bool isUpdateSchedule =
         await _scheduleRepo.updateSchedule(updateScheduleJson);
+    Transaction transactionTemp = new Transaction(
+        doctorId: doctorId,
+        location: null,
+        note: "Nothing",
+        patientId: null,
+        status: 0,
+        transactionId: transactionID,
+        estimatedTime: null);
+    bool isUpdateTransaction =
+        await _transactionRepo.updateTransaction(transactionTemp);
 
-    if (isUpdateSchedule) {
-      print("oke udpate schedule");
-      Transaction transactionTemp = new Transaction(
-          doctorId: doctorId,
-          location: location,
-          note: note,
-          patientId: patientId,
-          status: 4,
-          transactionId: transactionID,
-          estimatedTime: null);
-      bool isUpdateTransaction =
-          await _transactionRepo.updateTransaction(transactionTemp);
-      if (isUpdateTransaction) {
-        print("oke udpate transaction");
+    if (isUpdateSchedule && isUpdateTransaction) {
+      print("oke udpate transaction");
 
-        Navigator.pop(context);
-        loadBackSchedule();
-      }
+      Navigator.pop(context);
+      loadBackSchedule();
+    } else {
+      Navigator.pop(context);
+
+      Fluttertoast.showToast(
+        msg: "Sorry, something is went please try again",
+        textColor: Colors.red,
+        toastLength: Toast.LENGTH_SHORT,
+        backgroundColor: Colors.white,
+        gravity: ToastGravity.CENTER,
+      );
     }
   }
 
@@ -516,7 +553,7 @@ class SchedulePageViewModel extends BaseModel {
       String location,
       String note,
       String transactionId,
-      int scheduleId,
+      String scheduleId,
       String appointmentTime) async {
     waitDialog(context, message: "Loading please wait...");
 
@@ -532,17 +569,7 @@ class SchedulePageViewModel extends BaseModel {
 
     await _transactionRequest.child(transactionId).set(transactionInfo);
 
-    String updateScheduleJson = jsonEncode({
-      "scheduleId": scheduleId,
-      "doctorId": doctorId,
-      "appointmentTime": appointmentTime,
-      "status": 1,
-      "insBy": doctorName,
-      "updBy": transactionId,
-    });
-    print('update Schedule $updateScheduleJson');
-
-    await _scheduleRepo.updateSchedule(updateScheduleJson);
+    await _examinationRepo.createNewExamination(transactionId, doctorName);
 
     Transaction transactionTemp = new Transaction(
         doctorId: doctorId,
@@ -565,7 +592,13 @@ class SchedulePageViewModel extends BaseModel {
         ),
       );
     } else {
-      print("error Transaction");
+      Fluttertoast.showToast(
+        msg: "Sorry, something is went please try again",
+        textColor: Colors.red,
+        toastLength: Toast.LENGTH_SHORT,
+        backgroundColor: Colors.white,
+        gravity: ToastGravity.CENTER,
+      );
     }
   }
 }

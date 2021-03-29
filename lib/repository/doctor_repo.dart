@@ -11,6 +11,7 @@ abstract class IDoctorRepo {
   Future<RequestDoctorModel> getSimpleInfo(int profileId);
   Future<List<dynamic>> getDoctorDetail(int doctorId);
   Future<bool> updateDoctor(DoctorDetail doctorDetail, UserProfile userProfile);
+  Future<int> getSpecialtyId(int doctorId);
 }
 
 class DoctorRepo extends IDoctorRepo {
@@ -78,5 +79,26 @@ class DoctorRepo extends IDoctorRepo {
     }
 
     return isSuccess;
+  }
+
+  @override
+  Future<int> getSpecialtyId(int doctorId) async {
+    String urlAPI = APIHelper.URI_PREFIX_API;
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    var uri = Uri.http(urlAPI, "/api/v1/Doctors/$doctorId/SimpleInfo");
+    var response = await http.get(uri, headers: header);
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> doctorSimpleInfo = jsonDecode(response.body);
+      int specialtyId = doctorSimpleInfo['doctorServiceId'];
+      print('specialtyID $specialtyId');
+      return specialtyId;
+    } else {
+      return null;
+    }
   }
 }

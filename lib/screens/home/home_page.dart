@@ -378,10 +378,12 @@ class HomePage extends StatelessWidget {
                                                                               18.0),
                                                                 ),
                                                                 onPressed: () {
-                                                                  // model.cancelTransaction(model
-                                                                  //     .listTransaction[
-                                                                  //         index]
-                                                                  //     .transactionId);
+                                                                  model.cancelTransaction(
+                                                                      model
+                                                                          .listTransaction[
+                                                                              index]
+                                                                          .transactionId,
+                                                                      context);
                                                                 }),
                                                           )
                                                         ],

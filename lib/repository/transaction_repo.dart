@@ -20,6 +20,7 @@ abstract class ITransactionRepo {
       String transactionId, double currentLongitude, double currentLatitude);
 
   Future<bool> updateTransaction(Transaction transaction);
+  Future<bool> deleteTransaction(String transactionId);
 
   Future<List<dynamic>> getTransactionHistory(String transactionId);
   Future<List<TransactionHistoryModel>> getListTransactionHistory(
@@ -29,6 +30,7 @@ abstract class ITransactionRepo {
       int doctorId);
   Future<List<dynamic>> getTransactionPatientDetail(String transactionId);
   Future<List<String>> getListPatientTransactionId(int patientId);
+  Future<String> addBookingTransaction(String transactionJson);
 }
 
 class TransactionRepo extends ITransactionRepo {
@@ -448,5 +450,48 @@ class TransactionRepo extends ITransactionRepo {
         return listTransactionId;
     } else
       return null;
+  }
+
+  @override
+  Future<String> addBookingTransaction(String transactionJson) async {
+    String transactionID;
+    String urlAPI = APIHelper.TRANSACTION_API;
+
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    http.Response response =
+        await http.post(urlAPI, headers: header, body: transactionJson);
+
+    print(response.statusCode);
+
+    print(response.body);
+    if (response.statusCode == 201) {
+      String jSonData = response.body;
+      var decodeData = jsonDecode(jSonData);
+      transactionID = decodeData["transactionId"];
+      return transactionID;
+    } else
+      return null;
+  }
+
+  @override
+  Future<bool> deleteTransaction(String transactionId) async {
+    String urlAPI = APIHelper.TRANSACTION_API + '/$transactionId';
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    var response = await http.delete(urlAPI, headers: header);
+    print("Status code: " + response.statusCode.toString());
+    bool isDelete = true;
+
+    if (response.statusCode == 204) {
+      return isDelete;
+    } else {
+      isDelete = false;
+      return isDelete;
+    }
   }
 }

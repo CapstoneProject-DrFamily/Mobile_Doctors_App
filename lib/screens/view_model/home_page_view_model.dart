@@ -191,6 +191,22 @@ class HomePageViewModel extends BaseModel {
   }
 
   Future<void> offlineDoctor() async {
+    if (_listTransaction.isNotEmpty) {
+      for (var item in _listTransaction) {
+        await _doctorRequest
+            .child(_userFBID)
+            .child("transaction")
+            .child(item.transactionId)
+            .update(
+          {
+            "status": "offline",
+          },
+        );
+      }
+      _listTransaction = [];
+      notifyListeners();
+    }
+
     await transactionBookingStreamSubscription?.cancel();
     await transactionCancelStreamSubscription?.cancel();
     await homeTabPageStreamSubscription?.cancel();
@@ -241,6 +257,30 @@ class HomePageViewModel extends BaseModel {
     notifyListeners();
   }
 
+  Future<void> cancelTransaction(
+      String transactionID, BuildContext context) async {
+    waitDialog(context, message: "Canceling request please wait...");
+    await _doctorRequest
+        .child(_userFBID)
+        .child("transaction")
+        .child(transactionID)
+        .update(
+      {
+        "status": "cancel",
+      },
+    );
+    await _doctorRequest
+        .child(_userFBID)
+        .child("transaction")
+        .child(transactionID)
+        .remove();
+
+    _listTransaction
+        .removeWhere((element) => element.transactionId == transactionID);
+    Navigator.pop(context);
+    notifyListeners();
+  }
+
   Future<void> acceptTransaction(
       String transactionID, BuildContext context) async {
     waitDialog(
@@ -263,7 +303,7 @@ class HomePageViewModel extends BaseModel {
     var firstEstimate =
         DateTime.now().add(Duration(seconds: directionDetails.durationValue));
     var secondEstimate = firstEstimate.add(Duration(minutes: 15));
-    
+
     String estimatedTime = firstEstimate.hour.toString() +
         ":" +
         firstEstimate.minute.toString() +
