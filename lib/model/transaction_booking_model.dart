@@ -9,7 +9,7 @@ class TransactionBookingModel {
       patientName;
 
   double servicePrice;
-  int patientId, status;
+  int patientId, doctorId, status;
 
   TransactionBookingModel(
       {this.dateStart,
@@ -22,7 +22,8 @@ class TransactionBookingModel {
       this.transactionId,
       this.status,
       this.patientId,
-      this.patientName});
+      this.patientName,
+      doctorId});
 
   factory TransactionBookingModel.fromJson(Map<String, dynamic> json) {
     return TransactionBookingModel(

@@ -9,7 +9,7 @@ abstract class IScheduleRepo {
   Future<bool> createSchedule(String jsonSchedule);
   Future<List<ScheduleModel>> loadListSchedule(
       String dateStart, String dateEnd, int doctorId);
-  Future<bool> deleteScheduleNoTask(int scheduleId);
+  Future<bool> deleteScheduleNoTask(String scheduleId);
   Future<bool> updateSchedule(String scheduleUpdateJson);
 }
 
@@ -63,7 +63,7 @@ class ScheduleRepo extends IScheduleRepo {
   }
 
   @override
-  Future<bool> deleteScheduleNoTask(int scheduleId) async {
+  Future<bool> deleteScheduleNoTask(String scheduleId) async {
     String urlAPI = APIHelper.SCHEDULE_API + '/$scheduleId';
     Map<String, String> header = {
       HttpHeaders.contentTypeHeader: "application/json",

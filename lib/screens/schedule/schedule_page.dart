@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_doctors_apps/global_variable.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/share/health_record_page.dart';
+import 'package:mobile_doctors_apps/screens/share/patient_transaction/patient_base_transaction.dart';
 import 'package:mobile_doctors_apps/screens/share/popup_info_patient_page.dart';
 import 'package:mobile_doctors_apps/screens/view_model/schedule_page_view_model.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -183,26 +184,14 @@ class SchedulePage extends StatelessWidget {
                                             itemBuilder: (context, index) {
                                               return (model
                                                       .selectedEvents[index]
-                                                      .status)
+                                                      .scheduleStatus)
                                                   ? (() {
-                                                      // print('updBy: ' +
-                                                      //     model
-                                                      //         .selectedEvents[
-                                                      //             index]
-                                                      //         .updBy);
-
-                                                      int indexTransaction = model
-                                                          .listBookingTransaction
-                                                          .indexWhere((element) =>
-                                                              element
-                                                                  .dateStart ==
-                                                              model
-                                                                  .selectedEvents[
-                                                                      index]
-                                                                  .updDatetime);
-                                                      print(
-                                                          'TransactionId ${model.listBookingTransaction[indexTransaction].transactionId}');
-
+                                                      print('status ' +
+                                                          model
+                                                              .selectedEvents[
+                                                                  index]
+                                                              .transactionStatus
+                                                              .toString());
                                                       return _buildDayTask(
                                                         context,
                                                         model
@@ -210,30 +199,30 @@ class SchedulePage extends StatelessWidget {
                                                                 index]
                                                             .appointmentTime,
                                                         model
-                                                            .listBookingTransaction[
-                                                                indexTransaction]
+                                                            .selectedEvents[
+                                                                index]
                                                             .patientName,
                                                         model
-                                                            .listBookingTransaction[
-                                                                indexTransaction]
-                                                            .relationShip,
+                                                            .selectedEvents[
+                                                                index]
+                                                            .relationship,
                                                         model
-                                                            .listBookingTransaction[
-                                                                indexTransaction]
+                                                            .selectedEvents[
+                                                                index]
                                                             .serviceName,
                                                         model
-                                                            .listBookingTransaction[
-                                                                indexTransaction]
+                                                            .selectedEvents[
+                                                                index]
                                                             .location,
                                                         NumberFormat.currency(
                                                                 locale: 'vi')
                                                             .format(model
-                                                                .listBookingTransaction[
-                                                                    indexTransaction]
+                                                                .selectedEvents[
+                                                                    index]
                                                                 .servicePrice),
                                                         model
-                                                            .listBookingTransaction[
-                                                                indexTransaction]
+                                                            .selectedEvents[
+                                                                index]
                                                             .patientId,
                                                         model,
                                                         model
@@ -241,13 +230,17 @@ class SchedulePage extends StatelessWidget {
                                                                 index]
                                                             .scheduleId,
                                                         model
-                                                            .listBookingTransaction[
-                                                                indexTransaction]
+                                                            .selectedEvents[
+                                                                index]
                                                             .note,
                                                         model
-                                                            .listBookingTransaction[
-                                                                indexTransaction]
+                                                            .selectedEvents[
+                                                                index]
                                                             .transactionId,
+                                                        model
+                                                            .selectedEvents[
+                                                                index]
+                                                            .transactionStatus,
                                                       );
                                                     }())
                                                   : _buildDayNoTask(
@@ -299,9 +292,10 @@ class SchedulePage extends StatelessWidget {
       String servicePrice,
       int patientId,
       SchedulePageViewModel model,
-      int scheduleId,
+      String scheduleId,
       String note,
-      String transactionId) {
+      String transactionId,
+      int transactionStatus) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Slidable(
@@ -369,25 +363,64 @@ class SchedulePage extends StatelessWidget {
                               color: Colors.grey[700],
                               fontWeight: FontWeight.w500),
                         ),
-                        (timeCheckFormater
-                                .parse(DateTime.now().toString())
-                                .isBefore(DateTime.parse(time)))
+                        (transactionStatus == 2)
                             ? Container(
                                 child: Text(
-                                  "Not yet time",
+                                  "Checking",
                                   style: TextStyle(
-                                      color: Colors.green,
+                                      color: Colors.yellow[800],
                                       fontStyle: FontStyle.italic,
                                       fontWeight: FontWeight.w700),
                                 ),
                               )
-                            : Container(
-                                child: Text("OverTime",
-                                    style: TextStyle(
-                                        color: Colors.red,
-                                        fontStyle: FontStyle.italic,
-                                        fontWeight: FontWeight.w700)),
-                              ),
+                            : (transactionStatus == 3)
+                                ? Container(
+                                    child: Text(
+                                      "Done",
+                                      style: TextStyle(
+                                          color: Colors.green,
+                                          fontStyle: FontStyle.italic,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  )
+                                : (timeCheckFormater
+                                            .parse(DateTime.now().toString())
+                                            .isBefore(DateTime.parse(time)
+                                                .add(Duration(minutes: 30))) &&
+                                        timeCheckFormater
+                                            .parse(DateTime.now().toString())
+                                            .isAfter(DateTime.parse(time)
+                                                .subtract(
+                                                    Duration(minutes: 30))))
+                                    ? Container(
+                                        child: Text(
+                                          "On-time",
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontStyle: FontStyle.italic,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      )
+                                    : (timeCheckFormater
+                                            .parse(DateTime.now().toString())
+                                            .isBefore(DateTime.parse(time)))
+                                        ? Container(
+                                            child: Text(
+                                              "Not yet time",
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontStyle: FontStyle.italic,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                          )
+                                        : Container(
+                                            child: Text("Overtime",
+                                                style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontStyle: FontStyle.italic,
+                                                    fontWeight:
+                                                        FontWeight.w700)),
+                                          ),
                       ],
                     ),
                     SizedBox(
@@ -487,7 +520,17 @@ class SchedulePage extends StatelessWidget {
                                   color: Colors.white,
                                 ),
                               ),
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        PatientBaseTransaction(
+                                      patientId: patientId,
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -535,72 +578,89 @@ class SchedulePage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        (timeCheckFormater
-                                    .parse(DateTime.now().toString())
-                                    .isAfter(DateTime.parse(time)
-                                        .add(Duration(minutes: 30))) &&
-                                timeCheckFormater
-                                    .parse(DateTime.now().toString())
-                                    .isBefore(DateTime.parse(time)
-                                        .subtract(Duration(minutes: 30))))
-                            ? RaisedButton(
-                                child: Icon(Icons.timer),
-                                color: Colors.green,
-                                textColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                ),
-                                onPressed: () async {
-                                  //time arrived
-                                  await model.arrivedTime(
-                                      context,
-                                      patientId,
-                                      location,
-                                      note,
-                                      transactionId,
-                                      scheduleId,
-                                      time);
-                                },
-                              )
-                            : (timeCheckFormater
-                                    .parse(DateTime.now().toString())
-                                    .isBefore(DateTime.parse(time)))
-                                ? RaisedButton(
-                                    child: Icon(Icons.timer),
-                                    color: Colors.grey,
-                                    textColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                    ),
-                                    onPressed: () {})
-                                : Container(),
+                        (transactionStatus == 2)
+                            ? Container()
+                            : (transactionStatus == 3)
+                                ? Container()
+                                : (timeCheckFormater
+                                            .parse(DateTime.now().toString())
+                                            .isBefore(DateTime.parse(time)
+                                                .add(Duration(minutes: 30))) &&
+                                        timeCheckFormater
+                                            .parse(DateTime.now().toString())
+                                            .isAfter(DateTime.parse(time)
+                                                .subtract(
+                                                    Duration(minutes: 30))))
+                                    ? RaisedButton(
+                                        child: Icon(Icons.timer),
+                                        color: Colors.green,
+                                        textColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(18.0),
+                                        ),
+                                        onPressed: () async {
+                                          // time arrived
+
+                                          await model.arrivedTime(
+                                              context,
+                                              patientId,
+                                              location,
+                                              note,
+                                              transactionId,
+                                              scheduleId,
+                                              time);
+                                        },
+                                      )
+                                    : (timeCheckFormater
+                                            .parse(DateTime.now().toString())
+                                            .isBefore(DateTime.parse(time)))
+                                        ? RaisedButton(
+                                            child: Icon(Icons.timer),
+                                            color: Colors.grey,
+                                            textColor: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18.0),
+                                            ),
+                                            onPressed: () {})
+                                        : Container(),
                         SizedBox(
                           width: 10,
                         ),
-                        (timeCheckFormater
-                                .parse(DateTime.now().toString())
-                                .isBefore(DateTime.parse(time)))
-                            ? RaisedButton(
-                                child: Icon(Icons.block),
-                                color: Colors.red,
-                                textColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                ),
-                                onPressed: () async {
-                                  await _confirmCancelBookingDialog(
-                                      context,
-                                      model,
-                                      scheduleId,
-                                      time,
-                                      location,
-                                      note,
-                                      patientId,
-                                      transactionId,
-                                      false);
-                                },
-                              )
-                            : Container(),
+                        (transactionStatus == 2)
+                            ? Container()
+                            : (transactionStatus == 3)
+                                ? Container()
+                                : (timeCheckFormater
+                                            .parse(DateTime.now().toString())
+                                            .isBefore(DateTime.parse(time)) ||
+                                        timeCheckFormater
+                                            .parse(DateTime.now().toString())
+                                            .isBefore(DateTime.parse(time)
+                                                .add(Duration(minutes: 30))))
+                                    ? RaisedButton(
+                                        child: Icon(Icons.block),
+                                        color: Colors.red,
+                                        textColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(18.0),
+                                        ),
+                                        onPressed: () async {
+                                          await _confirmCancelBookingDialog(
+                                              context,
+                                              model,
+                                              scheduleId,
+                                              time,
+                                              location,
+                                              note,
+                                              patientId,
+                                              transactionId,
+                                              false);
+                                        },
+                                      )
+                                    : Container(),
                       ],
                     ),
                   ],
@@ -614,7 +674,7 @@ class SchedulePage extends StatelessWidget {
   }
 
   Padding _buildDayNoTask(BuildContext context, String time,
-      SchedulePageViewModel model, int scheduleId) {
+      SchedulePageViewModel model, String scheduleId) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Slidable(

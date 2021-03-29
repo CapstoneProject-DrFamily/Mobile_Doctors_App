@@ -21,22 +21,22 @@ class LandingPageViewModel extends BaseModel {
   ];
 
   LandingPageViewModel() {
-    // init();
+    init();
   }
 
-  // Future<void> init() async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String phone = prefs.getString("usPhone");
-  //   int profileID = prefs.get("usProfileID");
-  //   int userID = prefs.get("usAccountID");
+  Future<void> init() async {
+    // final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String phone = prefs.getString("usPhone");
+    // int profileID = prefs.get("usProfileID");
+    // int userID = prefs.get("usAccountID");
 
-  //   print("Phone: " +
-  //       phone +
-  //       " ProfileID: " +
-  //       profileID.toString() +
-  //       " AccountID: " +
-  //       userID.toString());
-  // }
+    // print("Phone: " +
+    //     phone +
+    //     " ProfileID: " +
+    //     profileID.toString() +
+    //     " AccountID: " +
+    //     userID.toString());
+  }
 
   List<BottomNavyBarItem> _listItem = [
     BottomNavyBarItem(

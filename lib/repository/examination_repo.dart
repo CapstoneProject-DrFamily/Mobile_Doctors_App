@@ -59,6 +59,7 @@ class ExaminationRepo extends IExaminationRepo {
     Map<String, String> header = {
       HttpHeaders.contentTypeHeader: "application/json",
     };
+    print("json $examinationJson");
     var response1 =
         await http.put(urlAPI, headers: header, body: examinationJson);
 
