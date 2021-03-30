@@ -13,7 +13,7 @@ abstract class ISignUpRepo {
 }
 
 class SignUpRepo extends ISignUpRepo {
-  UpdateUserModel _updateUserModel;
+  // UpdateUserModel _updateUserModel;
   int profileId, accountId, healthRecordId;
   String phone, formatPhone;
 

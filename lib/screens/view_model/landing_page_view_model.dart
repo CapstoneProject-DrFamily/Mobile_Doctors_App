@@ -2,6 +2,8 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_doctors_apps/helper/pushnotifycation_service.dart';
+import 'package:mobile_doctors_apps/repository/user_repo.dart';
 import 'package:mobile_doctors_apps/screens/history/medical_care_history.dart';
 import 'package:mobile_doctors_apps/screens/home/home_page.dart';
 import 'package:mobile_doctors_apps/screens/schedule/schedule_page.dart';
@@ -9,6 +11,7 @@ import 'package:mobile_doctors_apps/screens/setting/setting_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 
 class LandingPageViewModel extends BaseModel {
+  final IUserRepo _userRepo = UserRepo();
   PageController _pageController = PageController();
 
   int _currentIndex = 0;
@@ -25,6 +28,9 @@ class LandingPageViewModel extends BaseModel {
   }
 
   Future<void> init() async {
+    PushNotifycationService pushNotifycationService = PushNotifycationService();
+    String tokenNoti = await pushNotifycationService.getToken();
+    _userRepo.updateUser(tokenNoti);
     // final SharedPreferences prefs = await SharedPreferences.getInstance();
     // String phone = prefs.getString("usPhone");
     // int profileID = prefs.get("usProfileID");
