@@ -30,6 +30,7 @@ class ProfilePageViewModel extends BaseModel {
 
   List<String> degrees = [];
 
+  String _currentImage = "";
   String _dob = "";
   String _fullName = "";
   String _phoneNum = "";
@@ -81,6 +82,7 @@ class ProfilePageViewModel extends BaseModel {
   TextEditingController get descriptionController => _descriptionController;
   TextEditingController get degreeController => _degreeController;
 
+  String get currentImage => _currentImage;
   String get fullName => _fullName;
   String get dob => _dob;
   String get phoneNum => _phoneNum;
@@ -183,7 +185,7 @@ class ProfilePageViewModel extends BaseModel {
     phoneNumController.text = userProfile.phone;
     emailController.text = userProfile.email;
     identityNumberController.text = userProfile.idCard;
-
+    _currentImage = userProfile.image;
     degreeController.text = doctorDetail.degree;
     specialtyId = doctorDetail.specialtyId;
     experienceTypeController.text = doctorDetail.experience;

@@ -803,7 +803,7 @@ class ProfilePage extends StatelessWidget {
       clipper: MyClipper(),
       child: GestureDetector(
         onTap: () {
-          print('Select Image');
+          model.getUserImage();
         },
         child: Container(
           padding: EdgeInsets.only(top: 70, bottom: 50),
@@ -823,9 +823,9 @@ class ProfilePage extends StatelessWidget {
               child: CircleAvatar(
                 radius: 50,
                 backgroundColor: Colors.blue,
-                backgroundImage: NetworkImage(model.defaultImage == ""
-                    ? 'https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg'
-                    : model.defaultImage),
+                backgroundImage: (model.image != null
+                    ? FileImage(model.image)
+                    : NetworkImage(model.currentImage)),
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: CircleAvatar(
