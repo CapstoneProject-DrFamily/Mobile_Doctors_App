@@ -16,50 +16,6 @@ class SettingPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      color: Colors.white,
-                      child: ListTile(
-                        leading: Icon(Icons.people),
-                        title: Text("Dependent"),
-                        trailing: Icon(Icons.keyboard_arrow_right),
-                      ),
-                    ),
-                    Divider(
-                      height: 2,
-                    ),
-                    Container(
-                      color: Colors.white,
-                      child: ListTile(
-                        leading: Icon(Icons.people),
-                        title: Text("Dependent"),
-                        trailing: Icon(Icons.keyboard_arrow_right),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      color: Colors.white,
-                      child: ListTile(
-                        leading: Icon(Icons.people),
-                        title: Text("Dependent"),
-                        trailing: Icon(Icons.keyboard_arrow_right),
-                      ),
-                    ),
-                    Divider(
-                      height: 2,
-                    ),
-                    Container(
-                      color: Colors.white,
-                      child: ListTile(
-                        leading: Icon(Icons.people),
-                        title: Text("Dependent"),
-                        trailing: Icon(Icons.keyboard_arrow_right),
-                      ),
-                    ),
-                    SizedBox(
                       height: 50,
                     ),
                     Row(
