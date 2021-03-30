@@ -4,8 +4,10 @@ import 'package:commons/commons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobile_doctors_apps/helper/pushnotifycation_service.dart';
 import 'package:mobile_doctors_apps/model/login/user_model.dart';
 import 'package:mobile_doctors_apps/repository/sign_in_repo.dart';
+import 'package:mobile_doctors_apps/repository/user_repo.dart';
 import 'package:mobile_doctors_apps/screens/landing/landing_page.dart';
 import 'package:mobile_doctors_apps/screens/login/login_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
@@ -13,7 +15,9 @@ import 'package:mobile_doctors_apps/screens/sign_up/sign_up.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VerifyOTPViewModel extends BaseModel {
+  final PushNotifycationService pushNoti = PushNotifycationService();
   final ISignInRepo _signInRepo = SignInRepo();
+  final IUserRepo _userRepo = UserRepo();
 
   UserModel _userModel;
 
@@ -206,6 +210,9 @@ class VerifyOTPViewModel extends BaseModel {
               var waiting = _userModel.waiting;
 
               if (waiting == false && _userModel.profileId != 0) {
+                String tokenNoti = await pushNoti.getToken();
+                _userRepo.updateUser(tokenNoti);
+
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => LandingScreen()),
                     (Route<dynamic> route) => false);
