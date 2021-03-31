@@ -28,7 +28,7 @@ class HealthRecordScreen extends StatelessWidget {
                   elevation: 0,
                   centerTitle: true,
                   title: Text(
-                    "$patientName Health Record",
+                    "Personal Health Record",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Color(0xff0d47a1),
