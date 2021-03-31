@@ -516,7 +516,7 @@ class SchedulePage extends StatelessWidget {
                                 width: 30,
                                 height: 30,
                                 child: Icon(
-                                  EvaIcons.clock,
+                                  Icons.assignment_rounded,
                                   color: Colors.white,
                                 ),
                               ),
