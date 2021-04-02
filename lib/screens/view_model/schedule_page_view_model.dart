@@ -69,6 +69,7 @@ class SchedulePageViewModel extends BaseModel {
   int doctorId;
   String doctorName;
   DateTime _changeDate = DateTime.now();
+  DateTime get changeDate => _changeDate;
 
   DatabaseReference _transactionRequest;
   FirebaseUser _firebaseuser;
@@ -424,6 +425,86 @@ class SchedulePageViewModel extends BaseModel {
   }
   //end Add schedule
 
+  //addMultipleShedule
+  void addMultipleSchedule(
+      List<DateTime> timeChoose, BuildContext context) async {
+    waitDialog(context, message: "Setting your Schedule please wait...");
+
+    var listTimeChoose = timeChoose;
+    List<TransactionTemp> listTransaction = [];
+    List<ScheduleAddModel> listSchedule = [];
+    for (var item in listTimeChoose) {
+      listTransaction
+          .add(TransactionTemp(doctorId: doctorId, serviceID: serviceId));
+    }
+
+    String transactionJson = jsonEncode(listTransaction);
+
+    print("transactionjson $transactionJson");
+
+    List<String> transactionId =
+        await _transactionRepo.addListTransaction(transactionJson);
+    print("listTransactionIdAPI: $transactionId");
+
+    if (transactionId == null) {
+      //error
+      Navigator.pop(context);
+      Navigator.pop(context);
+
+      Fluttertoast.showToast(
+        msg: "Error please try agian.",
+        textColor: Colors.red,
+        toastLength: Toast.LENGTH_LONG,
+        backgroundColor: Colors.white,
+        gravity: ToastGravity.CENTER,
+      );
+    }
+
+    for (int i = 0; i < listTimeChoose.length; i++) {
+      ScheduleAddModel addScheduleModel = ScheduleAddModel(
+          scheduleId: transactionId[i],
+          appointmentTime: listTimeChoose[i].toString(),
+          doctorId: doctorId,
+          insBy: doctorName,
+          status: false,
+          disable: false);
+      listSchedule.add(addScheduleModel);
+    }
+
+    String scheduleJson = jsonEncode(listSchedule);
+
+    print("listScheduleJson: $scheduleJson");
+
+    bool isAdd = await _scheduleRepo.createSchedule(scheduleJson);
+
+    if (isAdd) {
+      //oke
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Fluttertoast.showToast(
+        msg: "Update schedule Success.",
+        textColor: Colors.green,
+        toastLength: Toast.LENGTH_LONG,
+        backgroundColor: Colors.white,
+        gravity: ToastGravity.CENTER,
+      );
+
+      loadBackSchedule();
+    } else {
+      Navigator.pop(context);
+      Navigator.pop(context);
+
+      Fluttertoast.showToast(
+        msg: "Error please try agian.",
+        textColor: Colors.red,
+        toastLength: Toast.LENGTH_LONG,
+        backgroundColor: Colors.white,
+        gravity: ToastGravity.CENTER,
+      );
+      //error
+    }
+  }
+
   Future<void> callPhone(int patientId, String time) async {
     var phone = await _patientRepo.getPatientPhone(patientId);
     print('phone $phone');
@@ -601,4 +682,18 @@ class SchedulePageViewModel extends BaseModel {
       );
     }
   }
+}
+
+class TransactionTemp {
+  final int doctorId, serviceID;
+  TransactionTemp({this.doctorId, this.serviceID});
+
+  Map<String, dynamic> toJson() => {
+        "doctorId": this.doctorId,
+        "patientId": null,
+        "status": 0,
+        "location": null,
+        "note": "Nothing",
+        "serviceId": this.serviceID,
+      };
 }

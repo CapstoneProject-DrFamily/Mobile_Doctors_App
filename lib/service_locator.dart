@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:mobile_doctors_apps/screens/view_model/add_time_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/health_record_page_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/medical_care_history_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/patient_base_transaction_view_model.dart';
@@ -66,4 +67,5 @@ void setupLocator() {
       () => PatientTransactionDetailViewModel());
   locator.registerFactory<PatientTransactionFormViewModel>(
       () => PatientTransactionFormViewModel());
+  locator.registerFactory<AddTimeViewModel>(() => AddTimeViewModel());
 }
