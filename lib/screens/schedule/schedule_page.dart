@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_doctors_apps/global_variable.dart';
+import 'package:mobile_doctors_apps/screens/schedule/add_time.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/share/health_record_page.dart';
 import 'package:mobile_doctors_apps/screens/share/patient_transaction/patient_base_transaction.dart';
@@ -150,10 +151,16 @@ class SchedulePage extends StatelessWidget {
                                                   ),
                                                 ),
                                                 onTap: () async {
-                                                  await model
-                                                      .selectTime(context);
-                                                  await model
-                                                      .confirmDateTime(context);
+                                                  AddTimeDialog()
+                                                      .showCustomDialog(
+                                                          context,
+                                                          model.changeDate,
+                                                          model.selectedEvents,
+                                                          model);
+                                                  // await model
+                                                  //     .selectTime(context);
+                                                  // await model
+                                                  //     .confirmDateTime(context);
                                                 },
                                               ),
                                             ),
@@ -454,111 +461,135 @@ class SchedulePage extends StatelessWidget {
                     SizedBox(
                       height: 15,
                     ),
-                    Row(
-                      children: [
-                        ClipOval(
-                          child: Material(
-                            color: Color(0xff0d47a1), // button color
-                            child: InkWell(
-                              splashColor: Colors.grey, // inkwell color
-                              child: SizedBox(
-                                width: 30,
-                                height: 30,
-                                child: Icon(
-                                  EvaIcons.phone,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              onTap: () {
-                                model.callPhone(patientId, time);
-                              },
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        ClipOval(
-                          child: Material(
-                            color: Color(0xff0d47a1), // button color
-                            child: InkWell(
-                              splashColor: Colors.grey, // inkwell color
-                              child: SizedBox(
-                                width: 30,
-                                height: 30,
-                                child: Icon(
-                                  EvaIcons.activity,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HealthRecordScreen(
-                                        patientId: patientId,
-                                        patientName: name),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        ClipOval(
-                          child: Material(
-                            color: Color(0xff0d47a1), // button color
-                            child: InkWell(
-                              splashColor: Colors.grey, // inkwell color
-                              child: SizedBox(
-                                width: 30,
-                                height: 30,
-                                child: Icon(
-                                  Icons.assignment_rounded,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        PatientBaseTransaction(
-                                      patientId: patientId,
+                    (timeCheckFormater.parse(DateTime.now().toString()).isAfter(
+                            DateTime.parse(time).add(Duration(minutes: 30))))
+                        ? Container(
+                            child: ClipOval(
+                              child: Material(
+                                color: Color(0xff0d47a1), // button color
+                                child: InkWell(
+                                  splashColor: Colors.grey, // inkwell color
+                                  child: SizedBox(
+                                    width: 30,
+                                    height: 30,
+                                    child: Icon(
+                                      EvaIcons.phone,
+                                      color: Colors.white,
                                     ),
                                   ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        ClipOval(
-                          child: Material(
-                            color: Color(0xff0d47a1), // button color
-                            child: InkWell(
-                              splashColor: Colors.grey, // inkwell color
-                              child: SizedBox(
-                                width: 30,
-                                height: 30,
-                                child: Icon(
-                                  EvaIcons.person,
-                                  color: Colors.white,
+                                  onTap: () {
+                                    model.callPhone(patientId, time);
+                                  },
                                 ),
                               ),
-                              onTap: () {
-                                PatientDialog()
-                                    .showCustomDialog(context, patientId);
-                              },
                             ),
+                          )
+                        : Row(
+                            children: [
+                              ClipOval(
+                                child: Material(
+                                  color: Color(0xff0d47a1), // button color
+                                  child: InkWell(
+                                    splashColor: Colors.grey, // inkwell color
+                                    child: SizedBox(
+                                      width: 30,
+                                      height: 30,
+                                      child: Icon(
+                                        EvaIcons.phone,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      model.callPhone(patientId, time);
+                                    },
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              ClipOval(
+                                child: Material(
+                                  color: Color(0xff0d47a1), // button color
+                                  child: InkWell(
+                                    splashColor: Colors.grey, // inkwell color
+                                    child: SizedBox(
+                                      width: 30,
+                                      height: 30,
+                                      child: Icon(
+                                        EvaIcons.activity,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              HealthRecordScreen(
+                                                  patientId: patientId,
+                                                  patientName: name),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              ClipOval(
+                                child: Material(
+                                  color: Color(0xff0d47a1), // button color
+                                  child: InkWell(
+                                    splashColor: Colors.grey, // inkwell color
+                                    child: SizedBox(
+                                      width: 30,
+                                      height: 30,
+                                      child: Icon(
+                                        Icons.assignment_rounded,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              PatientBaseTransaction(
+                                            patientId: patientId,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              ClipOval(
+                                child: Material(
+                                  color: Color(0xff0d47a1), // button color
+                                  child: InkWell(
+                                    splashColor: Colors.grey, // inkwell color
+                                    child: SizedBox(
+                                      width: 30,
+                                      height: 30,
+                                      child: Icon(
+                                        EvaIcons.person,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      PatientDialog()
+                                          .showCustomDialog(context, patientId);
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                     SizedBox(
                       height: 15,
                     ),

@@ -1,7 +1,6 @@
 import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mobile_doctors_apps/global_variable.dart';
 import 'package:mobile_doctors_apps/helper/app_image.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/popup_info_patient_page.dart';

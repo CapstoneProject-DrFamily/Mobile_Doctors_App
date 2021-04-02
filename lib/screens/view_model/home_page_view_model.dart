@@ -161,6 +161,10 @@ class HomePageViewModel extends BaseModel {
       "doctor_name": _doctorModel.doctorName,
       "doctor_image": _doctorModel.doctorImage,
       "doctor_specialty": _doctorModel.doctorSpecialty,
+      "doctor_service_id": _doctorModel.doctorServiceId,
+      "doctor_raiting_point": _doctorModel.doctorRatingPoint,
+      "doctor_feedback_count": _doctorModel.doctorFeedBackCount,
+      "doctor_booked_count": _doctorModel.doctorbooked,
       "doctor_status": "waiting",
       "token": tokenNoti,
     };
@@ -266,7 +270,7 @@ class HomePageViewModel extends BaseModel {
         .child(transactionID)
         .update(
       {
-        "status": "cancel",
+        "status": "notbook",
       },
     );
     await _doctorRequest

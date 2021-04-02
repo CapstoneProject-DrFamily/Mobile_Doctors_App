@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile_doctors_apps/helper/app_image.dart';
+import 'package:mobile_doctors_apps/helper/common.dart';
 import 'package:mobile_doctors_apps/screens/share/health_record_page.dart';
 import 'package:mobile_doctors_apps/screens/share/patient_transaction/patient_base_transaction.dart';
 import 'package:mobile_doctors_apps/screens/share/popup_info_patient_page.dart';
@@ -397,7 +398,7 @@ class MapPage extends StatelessWidget {
                 ),
                 Container(
                   child: Text(
-                    '${model.basicTransaction.serviceName} - ${model.basicTransaction.servicePrice}',
+                    '${model.basicTransaction.serviceName} - ${Common.convertPrice(model.basicTransaction.servicePrice)}',
                     softWrap: true,
                   ),
                 )

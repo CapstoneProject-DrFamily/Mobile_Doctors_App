@@ -31,6 +31,7 @@ abstract class ITransactionRepo {
   Future<List<dynamic>> getTransactionPatientDetail(String transactionId);
   Future<List<String>> getListPatientTransactionId(int patientId);
   Future<String> addBookingTransaction(String transactionJson);
+  Future<List<String>> addListTransaction(String transactionJson);
 }
 
 class TransactionRepo extends ITransactionRepo {
@@ -82,6 +83,8 @@ class TransactionRepo extends ITransactionRepo {
 
       latitude = locationTemp.split(',')[0].split(':')[1];
 
+      print('longitude: $longitude, latitude $latitude');
+
       String url =
           'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=AIzaSyDFd7ZNm2BL2JREvk32NZJ0wHzUn2fjw4A';
 
@@ -92,14 +95,14 @@ class TransactionRepo extends ITransactionRepo {
         placeName = decodeData["results"][0]["formatted_address"];
       } else {}
 
-      double distance = await Geolocator.distanceBetween(currentLatitude,
+      double distance = Geolocator.distanceBetween(currentLatitude,
           currentLongitude, double.parse(latitude), double.parse(longitude));
 
       distanceKM = double.parse((distance / 1000).toStringAsFixed(1));
 
       if (listSymptom != null) {
         for (int i = 0; i < listSymptom.length; i++) {
-          if (i == listSymptom.length) {
+          if (i == listSymptom.length - 1) {
             symptomName = symptomName + listSymptom[i].symptomName.toString();
           } else {
             symptomName =
@@ -493,5 +496,36 @@ class TransactionRepo extends ITransactionRepo {
       isDelete = false;
       return isDelete;
     }
+  }
+
+  @override
+  Future<List<String>> addListTransaction(String transactionJson) async {
+    List<String> listTransactionID = [];
+    String urlAPI = APIHelper.TRANSACTION_API + "/GeneratedSchedule";
+
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    http.Response response =
+        await http.post(urlAPI, headers: header, body: transactionJson);
+
+    print(response.statusCode);
+
+    print(response.body);
+    if (response.statusCode == 201) {
+      String jSonData = response.body;
+      var list = (json.decode(response.body) as List);
+      if (list.isEmpty) {
+        return null;
+      } else {
+        for (int i = 0; i < list.length; i++) {
+          var transactionId = list[i]["transactionId"];
+          listTransactionID.add(transactionId);
+        }
+        return listTransactionID;
+      }
+    } else
+      return null;
   }
 }

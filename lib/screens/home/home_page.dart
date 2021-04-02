@@ -402,8 +402,8 @@ class HomePage extends StatelessWidget {
                                                     Icon(Icons.location_on,
                                                         color:
                                                             MainColors.blueEnd),
-                                                    Text('km',
-                                                        // '${model.listTransaction[index].distance} km',
+                                                    Text(
+                                                        '${model.listTransaction[index].distance} km',
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontSize: 14,
