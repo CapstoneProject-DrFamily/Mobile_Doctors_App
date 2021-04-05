@@ -42,9 +42,12 @@ class SamplePageViewModel extends BaseModel {
   fetchData(transactionId, TimeLineViewModel model) async {
     if (init) {
       this.transactionId = transactionId;
+      _examinationHistory =
+          await _examinationRepo.getExaminationHistory(transactionId);
       if (model.currentIndex < model.index) {
         _examinationHistory =
             await _examinationRepo.getExaminationHistory(transactionId);
+        print("exam $_examinationHistory");
         imageHematology = _examinationHistory.hematology;
         imageSerumbiochemistry = _examinationHistory.bloodChemistry;
         imageUrinebiochemistry = _examinationHistory.urineBiochemistry;
@@ -67,6 +70,8 @@ class SamplePageViewModel extends BaseModel {
   }
 
   Future getImageFromGallery(String field) async {
+    isLoading = true;
+    notifyListeners();
     switch (field) {
       case "Hematology":
         var pickedImage =
@@ -74,6 +79,8 @@ class SamplePageViewModel extends BaseModel {
         imageHematologyFile = File(pickedImage.path);
         imageHematology = await upLoadImage(imageHematologyFile);
         print(imageHematology);
+        isLoading = false;
+        notifyListeners();
 
         break;
       case "Serum biochemistry":
@@ -81,14 +88,16 @@ class SamplePageViewModel extends BaseModel {
             await ImagePicker().getImage(source: ImageSource.gallery);
         imageSerumbiochemistryFile = File(pickedImage.path);
         imageSerumbiochemistry = await upLoadImage(imageSerumbiochemistryFile);
-
+        isLoading = false;
+        notifyListeners();
         break;
       case "Urine biochemistry":
         var pickedImage =
             await ImagePicker().getImage(source: ImageSource.gallery);
         imageUrinebiochemistryFile = File(pickedImage.path);
         imageUrinebiochemistry = await upLoadImage(imageUrinebiochemistryFile);
-
+        isLoading = false;
+        notifyListeners();
         break;
       case "Abdominal ultrasound":
         var pickedImage =
@@ -96,7 +105,8 @@ class SamplePageViewModel extends BaseModel {
         imageAbdominalultrasoundFile = File(pickedImage.path);
         imageAbdominalultrasound =
             await upLoadImage(imageAbdominalultrasoundFile);
-
+        isLoading = false;
+        notifyListeners();
         break;
       default:
     }
@@ -105,27 +115,32 @@ class SamplePageViewModel extends BaseModel {
   }
 
   Future getImageFromCamera(String field) async {
+    isLoading = true;
+    notifyListeners();
     switch (field) {
       case "Hematology":
         var pickedImage =
             await ImagePicker().getImage(source: ImageSource.camera);
         imageHematologyFile = File(pickedImage.path);
         imageHematology = await upLoadImage(imageHematologyFile);
-
+        isLoading = false;
+        notifyListeners();
         break;
       case "Serum biochemistry":
         var pickedImage =
             await ImagePicker().getImage(source: ImageSource.camera);
         imageSerumbiochemistryFile = File(pickedImage.path);
         imageSerumbiochemistry = await upLoadImage(imageSerumbiochemistryFile);
-
+        isLoading = false;
+        notifyListeners();
         break;
       case "Urine biochemistry":
         var pickedImage =
             await ImagePicker().getImage(source: ImageSource.camera);
         imageUrinebiochemistryFile = File(pickedImage.path);
         imageUrinebiochemistry = await upLoadImage(imageUrinebiochemistryFile);
-
+        isLoading = false;
+        notifyListeners();
         break;
       case "Abdominal ultrasound":
         var pickedImage =
@@ -133,7 +148,38 @@ class SamplePageViewModel extends BaseModel {
         imageAbdominalultrasoundFile = File(pickedImage.path);
         imageAbdominalultrasound =
             await upLoadImage(imageAbdominalultrasoundFile);
+        isLoading = false;
+        notifyListeners();
+        break;
+      default:
+    }
 
+    notifyListeners();
+  }
+
+  Future deleteImage(String field) async {
+    isLoading = true;
+    notifyListeners();
+    switch (field) {
+      case "Hematology":
+        imageHematology = null;
+        isLoading = false;
+        notifyListeners();
+        break;
+      case "Serum biochemistry":
+        imageSerumbiochemistry = null;
+        isLoading = false;
+        notifyListeners();
+        break;
+      case "Urine biochemistry":
+        imageUrinebiochemistry = null;
+        isLoading = false;
+        notifyListeners();
+        break;
+      case "Abdominal ultrasound":
+        imageAbdominalultrasound = null;
+        isLoading = false;
+        notifyListeners();
         break;
       default:
     }
@@ -154,10 +200,18 @@ class SamplePageViewModel extends BaseModel {
   void saveSample(BuildContext context, TimeLineViewModel model) async {
     isLoading = true;
     notifyListeners();
-    _examinationHistory.hematology = imageHematology;
-    _examinationHistory.bloodChemistry = imageSerumbiochemistry;
-    _examinationHistory.urineBiochemistry = imageUrinebiochemistry;
-    _examinationHistory.abdominalUltrasound = imageAbdominalultrasound;
+    if (imageHematology != null) {
+      _examinationHistory.hematology = imageHematology;
+    }
+    if (imageSerumbiochemistry != null) {
+      _examinationHistory.bloodChemistry = imageSerumbiochemistry;
+    }
+    if (imageUrinebiochemistry != null) {
+      _examinationHistory.urineBiochemistry = imageUrinebiochemistry;
+    }
+    if (imageAbdominalultrasound != null) {
+      _examinationHistory.abdominalUltrasound = imageAbdominalultrasound;
+    }
 
     String jsonExaminationHistory = jsonEncode(_examinationHistory);
 

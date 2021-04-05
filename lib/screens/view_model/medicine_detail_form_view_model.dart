@@ -76,7 +76,7 @@ class MedicineDetailFormViewModel extends BaseModel {
       });
       _morningQuantityController.addListener(() {
         if (_morningQuantityController.text.isEmpty ||
-            int.parse(_morningQuantityController.text) < 1) {
+            int.parse(_morningQuantityController.text) < 0) {
           isValidQuantity = false;
         } else {
           isValidQuantity = true;
@@ -102,7 +102,7 @@ class MedicineDetailFormViewModel extends BaseModel {
       });
       _noonQuantityController.addListener(() {
         if (_noonQuantityController.text.isEmpty ||
-            int.parse(_noonQuantityController.text) < 1) {
+            int.parse(_noonQuantityController.text) < 0) {
           isValidQuantity = false;
         } else {
           isValidQuantity = true;
@@ -128,7 +128,7 @@ class MedicineDetailFormViewModel extends BaseModel {
       });
       _afternoonQuantityController.addListener(() {
         if (_afternoonQuantityController.text.isEmpty ||
-            int.parse(_afternoonQuantityController.text) < 1) {
+            int.parse(_afternoonQuantityController.text) < 0) {
           isValidQuantity = false;
         } else {
           isValidQuantity = true;

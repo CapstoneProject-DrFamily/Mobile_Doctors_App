@@ -1,3 +1,4 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/timeline_view_model.dart';
@@ -115,21 +116,14 @@ class DiagnosePage extends StatelessWidget {
                                                                       .length ==
                                                                   0)
                                                               ? Container()
-                                                              : Expanded(
-                                                                  child: ListView
-                                                                      .builder(
-                                                                    physics:
-                                                                        NeverScrollableScrollPhysics(),
-                                                                    shrinkWrap:
-                                                                        true,
-                                                                    scrollDirection:
-                                                                        Axis.horizontal,
-                                                                    itemCount:
-                                                                        1,
-                                                                    itemBuilder:
-                                                                        (context,
-                                                                            index) {
-                                                                      return Container(
+                                                              : Wrap(
+                                                                  direction: Axis
+                                                                      .horizontal,
+                                                                  children: [
+                                                                    for (var item
+                                                                        in model
+                                                                            .listChooseModel)
+                                                                      Container(
                                                                         margin: EdgeInsets.only(
                                                                             bottom:
                                                                                 10,
@@ -149,16 +143,33 @@ class DiagnosePage extends StatelessWidget {
                                                                             BoxDecoration(
                                                                           borderRadius:
                                                                               BorderRadius.circular(30),
-                                                                          border:
-                                                                              Border.all(color: Colors.yellow[900]),
+                                                                          color:
+                                                                              Color(0xff0d47a1),
                                                                         ),
                                                                         child:
-                                                                            Text(
-                                                                          "On Going",
+                                                                            Row(
+                                                                          mainAxisSize:
+                                                                              MainAxisSize.min,
+                                                                          children: [
+                                                                            Flexible(
+                                                                              child: Text(
+                                                                                item,
+                                                                                style: TextStyle(color: Colors.white),
+                                                                              ),
+                                                                            ),
+                                                                            InkWell(
+                                                                              onTap: () {
+                                                                                model.removeDisease(item);
+                                                                              },
+                                                                              child: Icon(
+                                                                                EvaIcons.closeOutline,
+                                                                                color: Colors.white,
+                                                                              ),
+                                                                            )
+                                                                          ],
                                                                         ),
-                                                                      );
-                                                                    },
-                                                                  ),
+                                                                      ),
+                                                                  ],
                                                                 ),
                                                           Padding(
                                                             padding:
@@ -168,9 +179,11 @@ class DiagnosePage extends StatelessWidget {
                                                                 TextFormField(
                                                               validator:
                                                                   (value) {
-                                                                if (value
-                                                                    .isEmpty) {
-                                                                  return "Please enter your conclusion";
+                                                                if (model
+                                                                        .listChooseModel
+                                                                        .length ==
+                                                                    0) {
+                                                                  return "Please enter your Diagnose";
                                                                 }
                                                                 return null;
                                                               },
@@ -199,91 +212,89 @@ class DiagnosePage extends StatelessWidget {
                                                       ),
                                                     ),
                                                   ),
-                                                  (model.keyboard &&
-                                                          (model.listDiseaseModel
-                                                                  .isNotEmpty ||
-                                                              model
-                                                                  .listDiseaseSearchModel
-                                                                  .isNotEmpty))
+                                                  (model.isLoading)
                                                       ? Container(
-                                                          margin:
-                                                              EdgeInsets.only(
-                                                                  left: 25,
-                                                                  right: 25),
-                                                          child: MediaQuery
-                                                              .removePadding(
-                                                            context: context,
-                                                            removeTop: true,
-                                                            child: ListView
-                                                                .separated(
-                                                              separatorBuilder:
-                                                                  (context,
-                                                                          index) =>
-                                                                      Divider(
-                                                                height: 0.01,
-                                                              ),
-                                                              primary: false,
-                                                              shrinkWrap: true,
-                                                              itemCount: (model
-                                                                      .changeList)
-                                                                  ? model
-                                                                      .listDiseaseSearchModel
-                                                                      .length
-                                                                  : model
-                                                                      .listDiseaseModel
-                                                                      .length,
-                                                              itemBuilder:
-                                                                  (context,
-                                                                      index) {
-                                                                return Container(
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(5),
-                                                                  ),
-                                                                  child:
-                                                                      ListTile(
-                                                                    title: Transform
-                                                                        .translate(
-                                                                      offset:
-                                                                          Offset(
-                                                                              -7,
-                                                                              0),
-                                                                      child: Text((model
-                                                                              .changeList)
-                                                                          ? model
-                                                                              .listDiseaseSearchModel[
-                                                                                  index]
-                                                                              .diseaseName
-                                                                          : model
-                                                                              .listDiseaseModel[index]
-                                                                              .diseaseName),
-                                                                    ),
-                                                                    onTap: () {
-                                                                      print(
-                                                                          "choose");
-                                                                      FocusScope.of(
-                                                                              context)
-                                                                          .requestFocus(
-                                                                              new FocusNode());
-                                                                      model.changeList
-                                                                          ? model.chooseDisease(model.listDiseaseSearchModel[
-                                                                              index])
-                                                                          : model
-                                                                              .chooseDisease(model.listDiseaseModel[index]);
-                                                                    },
-                                                                  ),
-                                                                );
-                                                              },
-                                                            ),
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            backgroundColor:
+                                                                Colors.white,
                                                           ),
                                                         )
-                                                      : Container(
-                                                          child: Text(""),
-                                                        ),
+                                                      : (model.keyboard &&
+                                                              (model.listDiseaseModel
+                                                                      .isNotEmpty ||
+                                                                  model
+                                                                      .listDiseaseSearchModel
+                                                                      .isNotEmpty))
+                                                          ? Container(
+                                                              margin: EdgeInsets
+                                                                  .only(
+                                                                      left: 25,
+                                                                      right:
+                                                                          25),
+                                                              child: MediaQuery
+                                                                  .removePadding(
+                                                                context:
+                                                                    context,
+                                                                removeTop: true,
+                                                                child: ListView
+                                                                    .separated(
+                                                                  separatorBuilder:
+                                                                      (context,
+                                                                              index) =>
+                                                                          Divider(
+                                                                    height:
+                                                                        0.01,
+                                                                  ),
+                                                                  primary:
+                                                                      false,
+                                                                  shrinkWrap:
+                                                                      true,
+                                                                  itemCount: model
+                                                                      .listDiseaseModel
+                                                                      .length,
+                                                                  itemBuilder:
+                                                                      (context,
+                                                                          index) {
+                                                                    return Container(
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                                      child:
+                                                                          ListTile(
+                                                                        title: Transform
+                                                                            .translate(
+                                                                          offset: Offset(
+                                                                              -7,
+                                                                              0),
+                                                                          child: Text(model
+                                                                              .listDiseaseModel[index]
+                                                                              .diseaseName),
+                                                                        ),
+                                                                        onTap:
+                                                                            () {
+                                                                          print(
+                                                                              "choose");
+                                                                          FocusScope.of(context)
+                                                                              .requestFocus(new FocusNode());
+                                                                          model.diagnoseConclusionController.text =
+                                                                              "";
+
+                                                                          model.chooseDisease(model
+                                                                              .listDiseaseModel[index]
+                                                                              .diseaseName);
+                                                                        },
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            )
+                                                          : Container(
+                                                              child: Text(""),
+                                                            ),
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.all(

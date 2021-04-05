@@ -94,11 +94,26 @@ class MedicineListPage extends StatelessWidget {
                                                   model.finishTransaction(
                                                       context);
                                                 },
-                                                child: Text(
-                                                  'Finish',
-                                                  style:
-                                                      TextStyle(fontSize: 20),
-                                                )),
+                                                child: model.isLoading
+                                                    ? Container(
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(2),
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            backgroundColor:
+                                                                Colors.white,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Text(
+                                                        'Finish',
+                                                        style: TextStyle(
+                                                            fontSize: 20,
+                                                            color:
+                                                                Colors.white),
+                                                      )),
                                           ),
                                         )),
                                   ),

@@ -1,3 +1,4 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
@@ -162,6 +163,23 @@ class SamplePage extends StatelessWidget {
                                                               print("oke");
                                                             },
                                                           ),
+                                                          (model.imageHematology !=
+                                                                  null)
+                                                              ? new ListTile(
+                                                                  leading: new Icon(
+                                                                      EvaIcons
+                                                                          .closeOutline),
+                                                                  title: new Text(
+                                                                      'Delete Image'),
+                                                                  onTap:
+                                                                      () async {
+                                                                    model.deleteImage(
+                                                                        "Hematology");
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                )
+                                                              : Container()
                                                         ],
                                                       ),
                                                     );
@@ -262,6 +280,23 @@ class SamplePage extends StatelessWidget {
                                                               print("oke");
                                                             },
                                                           ),
+                                                          (model.imageSerumbiochemistry !=
+                                                                  null)
+                                                              ? new ListTile(
+                                                                  leading: new Icon(
+                                                                      EvaIcons
+                                                                          .closeOutline),
+                                                                  title: new Text(
+                                                                      'Delete Image'),
+                                                                  onTap:
+                                                                      () async {
+                                                                    model.deleteImage(
+                                                                        "Serum biochemistry");
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                )
+                                                              : Container()
                                                         ],
                                                       ),
                                                     );
@@ -364,6 +399,23 @@ class SamplePage extends StatelessWidget {
                                                               print("oke");
                                                             },
                                                           ),
+                                                          (model.imageUrinebiochemistry !=
+                                                                  null)
+                                                              ? new ListTile(
+                                                                  leading: new Icon(
+                                                                      EvaIcons
+                                                                          .closeOutline),
+                                                                  title: new Text(
+                                                                      'Delete Image'),
+                                                                  onTap:
+                                                                      () async {
+                                                                    model.deleteImage(
+                                                                        "Urine biochemistry");
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                )
+                                                              : Container()
                                                         ],
                                                       ),
                                                     );
@@ -466,6 +518,23 @@ class SamplePage extends StatelessWidget {
                                                               print("oke");
                                                             },
                                                           ),
+                                                          (model.imageAbdominalultrasound !=
+                                                                  null)
+                                                              ? new ListTile(
+                                                                  leading: new Icon(
+                                                                      EvaIcons
+                                                                          .closeOutline),
+                                                                  title: new Text(
+                                                                      'Delete Image'),
+                                                                  onTap:
+                                                                      () async {
+                                                                    model.deleteImage(
+                                                                        "Abdominal ultrasound");
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                )
+                                                              : Container()
                                                         ],
                                                       ),
                                                     );

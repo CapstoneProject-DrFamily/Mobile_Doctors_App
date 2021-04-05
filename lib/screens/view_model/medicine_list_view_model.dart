@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,7 +11,6 @@ import 'package:mobile_doctors_apps/model/transaction.dart';
 import 'package:mobile_doctors_apps/repository/prescription_repo.dart';
 import 'package:mobile_doctors_apps/repository/transaction_repo.dart';
 import 'package:mobile_doctors_apps/screens/history/transaction_detail_page.dart';
-import 'package:mobile_doctors_apps/screens/landing/landing_page.dart';
 import 'package:mobile_doctors_apps/screens/medicine/medicine_detail_form.dart';
 import 'package:mobile_doctors_apps/screens/medicine/medicine_search_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
@@ -33,6 +33,8 @@ class MedicineListViewModel extends BaseModel {
 
   String transactionId, estimateTime, location, note;
   int doctorId, examId, patientId;
+
+  bool isLoading = false;
 
   MedicineListViewModel() {
     isUpdate = false;
@@ -103,6 +105,9 @@ class MedicineListViewModel extends BaseModel {
   }
 
   void finishTransaction(BuildContext context) async {
+    isLoading = true;
+    notifyListeners();
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String doctor = prefs.getString("usName");
     isUpdate = false;
@@ -139,19 +144,21 @@ class MedicineListViewModel extends BaseModel {
         "rating": false,
       });
 
-      Fluttertoast.showToast(
-        msg: "Your have done this transaction",
-        textColor: Colors.green,
-        toastLength: Toast.LENGTH_SHORT,
-        backgroundColor: Colors.white,
-        gravity: ToastGravity.CENTER,
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              TransactionDetailPage(transactionId: transactionId),
-        ),
+      await CoolAlert.show(
+        barrierDismissible: false,
+        context: context,
+        type: CoolAlertType.success,
+        text: "You have finish this Record",
+        backgroundColor: Colors.lightBlue[200],
+        onConfirmBtnTap: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  TransactionDetailPage(transactionId: transactionId),
+            ),
+          );
+        },
       );
     }
   }
