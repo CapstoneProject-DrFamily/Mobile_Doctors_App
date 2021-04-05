@@ -221,7 +221,7 @@ class AnalyzePage extends StatelessWidget {
             header: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Text(
-                'Khám lâm sàng',
+                'Clinical Diagnosis',
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
@@ -252,7 +252,7 @@ class AnalyzePage extends StatelessWidget {
             header: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Text(
-                'Cơ quan',
+                'Organs',
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
@@ -284,6 +284,7 @@ class AnalyzePage extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       child: Card(
+        color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
@@ -300,7 +301,7 @@ class AnalyzePage extends StatelessWidget {
                   ),
                   Flexible(
                     child: Text(
-                      'Cơ quan',
+                      'Organs',
                       style: TextStyle(
                         fontSize: 18,
                       ),
@@ -364,11 +365,15 @@ class AnalyzePage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              decoration: InputDecoration(
+                                  hintText: 'Enter text',
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12))),
+                              maxLines: 3,
                               initialValue: model.getTextData(index),
                               onChanged: (value) {
                                 model.changeFieldText(index, model, value);
                               },
-                                
                             ),
                           ),
                           SizedBox(
@@ -480,7 +485,54 @@ class AnalyzePage extends StatelessWidget {
                 "Respiratory Rate", "...", model, "respiratoryRate"),
             buildAnthropometricIndex("Weight", "kg", model, "weight"),
             buildAnthropometricIndex("Height", "cm", model, "height"),
-            buildAnthropometricIndex("BMI", "...", model, "BMI"),
+            Row(
+              children: [
+                SizedBox(width: 15),
+                Expanded(
+                    child: Text(
+                  'BMI',
+                  style: TextStyle(fontSize: 18),
+                )),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      child: TextFormField(
+                        readOnly: true,
+                        controller: model.BMIController,
+                        textAlign: TextAlign.center,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: Colors.grey, width: 2),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: MainColors.blueBegin, width: 2),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: Colors.red, width: 2),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: Colors.red, width: 2),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // )
+                ),
+              ],
+            ),
+
+            // buildAnthropometricIndex("BMI", "...", model, "BMI"),
             buildAnthropometricIndex(
                 "Hips", "...", model, "waistCircumference"),
           ],
