@@ -1,8 +1,8 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_doctors_apps/screens/record/sample_pop_up.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/sample_page_view_model.dart';
-import 'package:mobile_doctors_apps/screens/view_model/sample_pop_up_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/timeline_view_model.dart';
 import 'package:mobile_doctors_apps/themes/colors.dart';
 
@@ -14,7 +14,7 @@ class SamplePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseView<SamplePageViewModel>(builder: (context, child, model) {
       return FutureBuilder(
-        future: model.fetchData(transactionId),
+        future: model.fetchData(transactionId, timelineModel),
         builder: (context, snapshot) {
           return Padding(
             padding: const EdgeInsets.only(top: 30),
@@ -30,20 +30,6 @@ class SamplePage extends StatelessWidget {
                 resizeToAvoidBottomInset: false,
                 backgroundColor: Colors.transparent,
                 body: buildListParameter(context, model),
-                floatingActionButton: FloatingActionButton(
-                  child: Icon(Icons.add),
-                  backgroundColor: Colors.lightBlue[600],
-                  onPressed: () async {
-                    List<BloodParameter> values = await showDialog(
-                        context: context,
-                        builder: (dialogContext) => SamplePopUp(
-                              list: model.listCheck,
-                            ));
-                    if (values != null) {
-                      model.loadParameter(values);
-                    }
-                  },
-                ),
               ),
             ),
           );
@@ -74,87 +60,520 @@ class SamplePage extends StatelessWidget {
                             topLeft: Radius.circular(40),
                             topRight: Radius.circular(40))),
                   ),
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: 100,
-                      ),
-                      Container(
-                        color: MainColors.blueBegin.withOpacity(1),
-                        child: Row(
-                          children: [
-                            Expanded(
-                                flex: 2,
-                                child: Center(
-                                    child: Text(
-                                  'Xét nghiệm',
+                  Padding(
+                    padding: const EdgeInsets.only(top: 85),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: ExpandablePanel(
+                              header: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text(
+                                  'Take Sample',
                                   style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 18,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.bold),
-                                ))),
-                            Expanded(
-                                child: Center(
-                                    child: Text('Kết quả',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold)))),
-                            Expanded(
-                                flex: 2,
-                                child: Center(
-                                    child: Text('Trị số BT',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold)))),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          child: ListView.builder(
-                            itemCount: model.listParameter.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                color: index % 2 == 0
-                                    ? MainColors.blueBegin.withOpacity(0.1)
-                                    : MainColors.blueBegin.withOpacity(1),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(children: [
-                                    Expanded(
-                                        flex: 2,
-                                        child: Center(
-                                            child: Text(
-                                          model.listParameter[index].name,
-                                          style: TextStyle(fontSize: 18),
-                                        ))),
-                                    Expanded(
-                                        child: Center(
-                                            child: TextField(
-                                      keyboardType: TextInputType.number,
-                                      decoration: InputDecoration(
-                                          hintText: '0.0',
-                                          border: InputBorder.none),
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize:
-                                            18, // This is not so important
-                                      ),
-                                    ))),
-                                    Expanded(
-                                        flex: 2,
-                                        child: Center(
-                                            child: Text(
-                                          model.listParameter[index].normal,
-                                          style: TextStyle(fontSize: 18),
-                                        ))),
-                                  ]),
                                 ),
-                              );
-                            },
+                              ),
+                              // collapsed: Text('See details'),
+                              expanded: Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 10, left: 10, right: 10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              '1.Hematology test',
+                                              style: TextStyle(
+                                                  color: Color(0xff0d47a1),
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Flexible(
+                                              child: Checkbox(
+                                                value: model.listCheck
+                                                        .contains("Hematology")
+                                                    ? true
+                                                    : false,
+                                                onChanged: (value) {
+                                                  model.changeCheck(
+                                                      "Hematology");
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Visibility(
+                                        visible: model.listCheck
+                                                .contains("Hematology")
+                                            ? true
+                                            : false,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(bottom: 10),
+                                          child: InkWell(
+                                            onTap: () {
+                                              showModalBottomSheet(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return SafeArea(
+                                                      child: new Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          new ListTile(
+                                                            leading: new Icon(
+                                                                Icons.camera),
+                                                            title: new Text(
+                                                                'Camera'),
+                                                            onTap: () async {
+                                                              Navigator.pop(
+                                                                  context);
+
+                                                              await model
+                                                                  .getImageFromCamera(
+                                                                      "Hematology");
+                                                            },
+                                                          ),
+                                                          new ListTile(
+                                                            leading: new Icon(
+                                                                Icons.image),
+                                                            title: new Text(
+                                                                'Gallery'),
+                                                            onTap: () async {
+                                                              Navigator.pop(
+                                                                  context);
+
+                                                              await model
+                                                                  .getImageFromGallery(
+                                                                      "Hematology");
+                                                              print("oke");
+                                                            },
+                                                          ),
+                                                          (model.imageHematology !=
+                                                                  null)
+                                                              ? new ListTile(
+                                                                  leading: new Icon(
+                                                                      EvaIcons
+                                                                          .closeOutline),
+                                                                  title: new Text(
+                                                                      'Delete Image'),
+                                                                  onTap:
+                                                                      () async {
+                                                                    model.deleteImage(
+                                                                        "Hematology");
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                )
+                                                              : Container()
+                                                        ],
+                                                      ),
+                                                    );
+                                                  });
+                                            },
+                                            child: (model.imageHematology !=
+                                                    null)
+                                                ? Image.network(
+                                                    model.imageHematology,
+                                                    width: 200,
+                                                    height: 250,
+                                                    fit: BoxFit.fill)
+                                                : Container(
+                                                    width: 200,
+                                                    height: 250,
+                                                    color: Colors.grey,
+                                                    child:
+                                                        Icon(Icons.camera_alt),
+                                                  ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 10, left: 10, right: 10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              '2.Serum biochemistry',
+                                              style: TextStyle(
+                                                  color: Color(0xff0d47a1),
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Flexible(
+                                              child: Checkbox(
+                                                value: model.listCheck.contains(
+                                                        "Serum biochemistry")
+                                                    ? true
+                                                    : false,
+                                                onChanged: (value) {
+                                                  print(value);
+
+                                                  model.changeCheck(
+                                                      "Serum biochemistry");
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Visibility(
+                                        visible: model.listCheck
+                                                .contains("Serum biochemistry")
+                                            ? true
+                                            : false,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(bottom: 10),
+                                          child: InkWell(
+                                            onTap: () {
+                                              showModalBottomSheet(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return SafeArea(
+                                                      child: new Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          new ListTile(
+                                                            leading: new Icon(
+                                                                Icons.camera),
+                                                            title: new Text(
+                                                                'Camera'),
+                                                            onTap: () async {
+                                                              Navigator.pop(
+                                                                  context);
+
+                                                              await model
+                                                                  .getImageFromCamera(
+                                                                      "Serum biochemistry");
+                                                            },
+                                                          ),
+                                                          new ListTile(
+                                                            leading: new Icon(
+                                                                Icons.image),
+                                                            title: new Text(
+                                                                'Gallery'),
+                                                            onTap: () async {
+                                                              Navigator.pop(
+                                                                  context);
+
+                                                              await model
+                                                                  .getImageFromGallery(
+                                                                      "Serum biochemistry");
+                                                              print("oke");
+                                                            },
+                                                          ),
+                                                          (model.imageSerumbiochemistry !=
+                                                                  null)
+                                                              ? new ListTile(
+                                                                  leading: new Icon(
+                                                                      EvaIcons
+                                                                          .closeOutline),
+                                                                  title: new Text(
+                                                                      'Delete Image'),
+                                                                  onTap:
+                                                                      () async {
+                                                                    model.deleteImage(
+                                                                        "Serum biochemistry");
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                )
+                                                              : Container()
+                                                        ],
+                                                      ),
+                                                    );
+                                                  });
+                                            },
+                                            child: (model
+                                                        .imageSerumbiochemistry !=
+                                                    null)
+                                                ? Image.network(
+                                                    model
+                                                        .imageSerumbiochemistry,
+                                                    width: 200,
+                                                    height: 250,
+                                                    fit: BoxFit.fill)
+                                                : Container(
+                                                    width: 200,
+                                                    height: 250,
+                                                    color: Colors.grey,
+                                                    child:
+                                                        Icon(Icons.camera_alt),
+                                                  ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 10, left: 10, right: 10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              '3.Urine biochemistry',
+                                              style: TextStyle(
+                                                  color: Color(0xff0d47a1),
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Flexible(
+                                              child: Checkbox(
+                                                value: model.listCheck.contains(
+                                                        "Urine biochemistry")
+                                                    ? true
+                                                    : false,
+                                                onChanged: (value) {
+                                                  print(value);
+
+                                                  model.changeCheck(
+                                                      "Urine biochemistry");
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Visibility(
+                                        visible: model.listCheck
+                                                .contains("Urine biochemistry")
+                                            ? true
+                                            : false,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(bottom: 10),
+                                          child: InkWell(
+                                            onTap: () {
+                                              showModalBottomSheet(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return SafeArea(
+                                                      child: new Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          new ListTile(
+                                                            leading: new Icon(
+                                                                Icons.camera),
+                                                            title: new Text(
+                                                                'Camera'),
+                                                            onTap: () async {
+                                                              Navigator.pop(
+                                                                  context);
+
+                                                              await model
+                                                                  .getImageFromCamera(
+                                                                      "Urine biochemistry");
+                                                            },
+                                                          ),
+                                                          new ListTile(
+                                                            leading: new Icon(
+                                                                Icons.image),
+                                                            title: new Text(
+                                                                'Gallery'),
+                                                            onTap: () async {
+                                                              Navigator.pop(
+                                                                  context);
+
+                                                              await model
+                                                                  .getImageFromGallery(
+                                                                      "Urine biochemistry");
+                                                              print("oke");
+                                                            },
+                                                          ),
+                                                          (model.imageUrinebiochemistry !=
+                                                                  null)
+                                                              ? new ListTile(
+                                                                  leading: new Icon(
+                                                                      EvaIcons
+                                                                          .closeOutline),
+                                                                  title: new Text(
+                                                                      'Delete Image'),
+                                                                  onTap:
+                                                                      () async {
+                                                                    model.deleteImage(
+                                                                        "Urine biochemistry");
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                )
+                                                              : Container()
+                                                        ],
+                                                      ),
+                                                    );
+                                                  });
+                                            },
+                                            child: (model
+                                                        .imageUrinebiochemistry !=
+                                                    null)
+                                                ? Image.network(
+                                                    model
+                                                        .imageUrinebiochemistry,
+                                                    width: 200,
+                                                    height: 250,
+                                                    fit: BoxFit.fill)
+                                                : Container(
+                                                    width: 200,
+                                                    height: 250,
+                                                    color: Colors.grey,
+                                                    child:
+                                                        Icon(Icons.camera_alt),
+                                                  ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 10, left: 10, right: 10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              '4.Abdominal ultrasound',
+                                              style: TextStyle(
+                                                  color: Color(0xff0d47a1),
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Flexible(
+                                              child: Checkbox(
+                                                value: model.listCheck.contains(
+                                                        "Abdominal ultrasound")
+                                                    ? true
+                                                    : false,
+                                                onChanged: (value) {
+                                                  print(value);
+
+                                                  model.changeCheck(
+                                                      "Abdominal ultrasound");
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Visibility(
+                                        visible: model.listCheck.contains(
+                                                "Abdominal ultrasound")
+                                            ? true
+                                            : false,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(bottom: 10),
+                                          child: InkWell(
+                                            onTap: () {
+                                              showModalBottomSheet(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return SafeArea(
+                                                      child: new Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          new ListTile(
+                                                            leading: new Icon(
+                                                                Icons.camera),
+                                                            title: new Text(
+                                                                'Camera'),
+                                                            onTap: () async {
+                                                              Navigator.pop(
+                                                                  context);
+
+                                                              await model
+                                                                  .getImageFromCamera(
+                                                                      "Abdominal ultrasound");
+                                                            },
+                                                          ),
+                                                          new ListTile(
+                                                            leading: new Icon(
+                                                                Icons.image),
+                                                            title: new Text(
+                                                                'Gallery'),
+                                                            onTap: () async {
+                                                              Navigator.pop(
+                                                                  context);
+
+                                                              await model
+                                                                  .getImageFromGallery(
+                                                                      "Abdominal ultrasound");
+                                                              print("oke");
+                                                            },
+                                                          ),
+                                                          (model.imageAbdominalultrasound !=
+                                                                  null)
+                                                              ? new ListTile(
+                                                                  leading: new Icon(
+                                                                      EvaIcons
+                                                                          .closeOutline),
+                                                                  title: new Text(
+                                                                      'Delete Image'),
+                                                                  onTap:
+                                                                      () async {
+                                                                    model.deleteImage(
+                                                                        "Abdominal ultrasound");
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                )
+                                                              : Container()
+                                                        ],
+                                                      ),
+                                                    );
+                                                  });
+                                            },
+                                            child: (model
+                                                        .imageAbdominalultrasound !=
+                                                    null)
+                                                ? Image.network(
+                                                    model
+                                                        .imageAbdominalultrasound,
+                                                    width: 200,
+                                                    height: 250,
+                                                    fit: BoxFit.fill)
+                                                : Container(
+                                                    width: 200,
+                                                    height: 250,
+                                                    color: Colors.grey,
+                                                    child:
+                                                        Icon(Icons.camera_alt),
+                                                  ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              tapHeaderToExpand: true,
+                              hasIcon: true,
+                              iconColor: Colors.white,
+                            ),
                           ),
-                        ),
-                      )
-                    ],
+                          SizedBox(
+                            height: 70,
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                   Positioned(
                     top: -66,
@@ -176,6 +595,39 @@ class SamplePage extends StatelessWidget {
                           //   height: 80,
                           //   width: 80,
                           // ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 10,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FlatButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          color: MainColors.blueBegin.withOpacity(0.8),
+                          onPressed: () async {
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode());
+                            model.saveSample(context, timelineModel);
+                          },
+                          child: !model.isLoading
+                              ? Text(
+                                  'Next',
+                                  style: TextStyle(color: Colors.white),
+                                )
+                              : Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2),
+                                    child: CircularProgressIndicator(
+                                      backgroundColor: Colors.white,
+                                    ),
+                                  ),
+                                ),
                         ),
                       ),
                     ),

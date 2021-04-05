@@ -32,6 +32,7 @@ class DoctorRepo extends IDoctorRepo {
     if (response.statusCode == 200) {
       Map<String, dynamic> doctorSimpleInfo = jsonDecode(response.body);
       doctorInfo = RequestDoctorModel.fromJson(doctorSimpleInfo);
+      print("doctorInfo ${doctorInfo.doctorRatingPoint}");
       return doctorInfo;
     } else {
       return null;

@@ -431,6 +431,7 @@ class AnalyzePageViewModel extends BaseModel {
         .updateExaminationHistory(jsonEncode(examinationForm));
 
     if (isSuccess && timelineModel.currentIndex == timelineModel.index) {
+      print("in");
       _transactionRequest = FirebaseDatabase.instance
           .reference()
           .child("Transaction")

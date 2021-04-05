@@ -56,14 +56,14 @@ class HomePage extends StatelessWidget {
                             CoolAlert.show(
                                 context: context,
                                 type: CoolAlertType.error,
-                                text: "Your transaction was successful!",
+                                text: "Something is ERROR please try again!",
                                 backgroundColor: Colors.lightBlue[200]);
                           }
                         } else {
                           CoolAlert.show(
                               context: context,
                               type: CoolAlertType.confirm,
-                              text: "Your transaction was successful!",
+                              text: "Are you sure want to offline!",
                               backgroundColor: Colors.lightBlue[200],
                               onConfirmBtnTap: () {
                                 model.offlineDoctor();
@@ -422,11 +422,12 @@ class HomePage extends StatelessWidget {
                                                                 .length >
                                                             0) {
                                                           print("time cancel");
-                                                          // await model
-                                                          //     .cancelTransaction(model
-                                                          //         .listTransaction[
-                                                          //             index]
-                                                          //         .transactionId);
+                                                          await model.cancelTransaction(
+                                                              model
+                                                                  .listTransaction[
+                                                                      index]
+                                                                  .transactionId,
+                                                              context);
                                                         }
                                                       },
                                                       widgetBuilder: (_, time) {
@@ -439,7 +440,9 @@ class HomePage extends StatelessWidget {
                                                           );
                                                         }
                                                         return Text(
-                                                            '0:${time.sec}',
+                                                            (time.min == null)
+                                                                ? '0:${time.sec}'
+                                                                : '${time.min}:${time.sec}',
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .white));

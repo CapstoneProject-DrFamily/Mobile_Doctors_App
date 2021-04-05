@@ -13,6 +13,7 @@ import 'package:mobile_doctors_apps/helper/pushnotifycation_service.dart';
 import 'package:mobile_doctors_apps/model/request_doctor_model.dart';
 import 'package:mobile_doctors_apps/model/transaction.dart';
 import 'package:mobile_doctors_apps/model/transaction_basic_model.dart';
+import 'package:mobile_doctors_apps/repository/appconfig_repo.dart';
 import 'package:mobile_doctors_apps/repository/doctor_repo.dart';
 import 'package:mobile_doctors_apps/repository/examination_repo.dart';
 import 'package:mobile_doctors_apps/repository/map_repo.dart';
@@ -30,6 +31,8 @@ class HomePageViewModel extends BaseModel {
   final ITransactionRepo _transactionRepo = TransactionRepo();
   final IExaminationRepo _examinationRepo = ExaminationRepo();
   final IMapRepo _mapRepo = MapRepo();
+  final IAppConfigRepo _appConfigRepo = AppConfigRepo();
+  static int timeOut = 0;
 
   FirebaseUser _firebaseuser;
   DatabaseReference _doctorRequest;
@@ -79,6 +82,10 @@ class HomePageViewModel extends BaseModel {
     String phone = prefs.getString("usPhone");
     int profileID = prefs.get("usProfileID");
     int userID = prefs.get("usAccountID");
+
+    var timeOutVar = await _appConfigRepo.appConfigTimeOut();
+    timeOut = timeOutVar;
+    print("timeOut $timeOut");
 
     _doctorModel = await _doctorRepo.getSimpleInfo(profileID);
     prefs.setString("usImage", _doctorModel.doctorImage);

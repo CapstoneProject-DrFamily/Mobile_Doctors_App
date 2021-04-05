@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -126,19 +127,33 @@ class AnalyzePage extends StatelessWidget {
                                                         transactionId,
                                                         timelineModel);
                                                 if (isSuccess) {
+                                                  await CoolAlert.show(
+                                                    barrierDismissible: false,
+                                                    context: contextB,
+                                                    type: CoolAlertType.success,
+                                                    text:
+                                                        "Update Record Success",
+                                                    backgroundColor:
+                                                        Colors.lightBlue[200],
+                                                    onConfirmBtnTap: () {
+                                                      Navigator.of(contextB)
+                                                          .pop();
+                                                    },
+                                                  );
                                                   timelineModel.changeIndex(1);
                                                 } else {
-                                                  Fluttertoast.showToast(
-                                                    msg:
-                                                        "Error. Please try again",
-                                                    textColor: Colors.red,
-                                                    toastLength:
-                                                        Toast.LENGTH_SHORT,
-                                                    backgroundColor:
-                                                        Colors.white,
-                                                    gravity:
-                                                        ToastGravity.CENTER,
-                                                  );
+                                                  await CoolAlert.show(
+                                                      barrierDismissible: false,
+                                                      context: contextB,
+                                                      type: CoolAlertType.error,
+                                                      text:
+                                                          "Update Record Fail!",
+                                                      backgroundColor:
+                                                          Colors.lightBlue[200],
+                                                      onConfirmBtnTap: () {
+                                                        Navigator.of(contextB)
+                                                            .pop();
+                                                      });
                                                 }
                                               } else {
                                                 Fluttertoast.showToast(
@@ -155,7 +170,8 @@ class AnalyzePage extends StatelessWidget {
                                             child: !model.isLoading
                                                 ? Text(
                                                     'Next',
-                                                    // style: TextStyle(fontSize: 20),
+                                                    style: TextStyle(
+                                                        color: Colors.white),
                                                   )
                                                 : Container(
                                                     child: Padding(
@@ -199,8 +215,10 @@ class AnalyzePage extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: Text(
                 'Medical History',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
               ),
             ),
             // collapsed: Text('See details'),
@@ -222,8 +240,10 @@ class AnalyzePage extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: Text(
                 'Clinical Diagnosis',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
               ),
             ),
             // collapsed: Text('See details'),
@@ -252,9 +272,11 @@ class AnalyzePage extends StatelessWidget {
             header: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Text(
-                'Organs',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                'Organ Diagnose',
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
               ),
             ),
             // collapsed: Text('See details'),
@@ -297,14 +319,18 @@ class AnalyzePage extends StatelessWidget {
                 children: [
                   Text(
                     '2.3.2 ',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Color(0xff0d47a1),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
                   ),
                   Flexible(
                     child: Text(
                       'Organs',
                       style: TextStyle(
-                        fontSize: 18,
-                      ),
+                          fontSize: 16,
+                          color: Color(0xff0d47a1),
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -330,7 +356,8 @@ class AnalyzePage extends StatelessWidget {
                                   alignment: Alignment.centerLeft,
                                   child: Text(
                                     model.listSpeciality[index].name,
-                                    style: TextStyle(fontSize: 18),
+                                    style: TextStyle(
+                                        fontSize: 16, color: Color(0xff0d47a1)),
                                   ),
                                 ),
                               ],
@@ -407,7 +434,11 @@ class AnalyzePage extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: Text(
                 '1. Medical History',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff0d47a1),
+                ),
               ),
             ),
             SizedBox(
@@ -449,7 +480,10 @@ class AnalyzePage extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: Text(
                 '2. Clinical Diagnosis',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Color(0xff0d47a1),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
@@ -459,13 +493,18 @@ class AnalyzePage extends StatelessWidget {
                 children: [
                   Text(
                     '2.1 ',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Color(0xff0d47a1),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
                   ),
                   Flexible(
                     child: Text(
                       'Vital Signs',
                       style: TextStyle(
-                        fontSize: 18,
+                        color: Color(0xff0d47a1),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -581,13 +620,18 @@ class AnalyzePage extends StatelessWidget {
             children: [
               Text(
                 '2.3 ',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Color(0xff0d47a1),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
               ),
               Flexible(
                 child: Text(
                   'Paraclinical',
                   style: TextStyle(
-                    fontSize: 18,
+                    color: Color(0xff0d47a1),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -600,14 +644,18 @@ class AnalyzePage extends StatelessWidget {
             children: [
               Text(
                 '2.3.1 ',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xff0d47a1),
+                    fontWeight: FontWeight.bold),
               ),
               Flexible(
                 child: Text(
                   'Full body',
                   style: TextStyle(
-                    fontSize: 18,
-                  ),
+                      color: Color(0xff0d47a1),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ],
@@ -617,7 +665,7 @@ class AnalyzePage extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             'Mucosocutaneous',
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(fontSize: 16, color: Color(0xff0d47a1)),
           ),
         ),
         Padding(
@@ -638,7 +686,7 @@ class AnalyzePage extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             'Other',
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(fontSize: 16, color: Color(0xff0d47a1)),
           ),
         ),
         Padding(
@@ -667,7 +715,7 @@ class AnalyzePage extends StatelessWidget {
         Expanded(
             child: Text(
           label,
-          style: TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: 16, color: Color(0xff0d47a1)),
         )),
         Expanded(
           //   child: Container(
@@ -741,7 +789,8 @@ class AnalyzePage extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              fontSize: 18,
+              color: Color(0xff0d47a1),
+              fontSize: 16,
             ),
           ),
         ),
@@ -809,13 +858,18 @@ class AnalyzePage extends StatelessWidget {
             children: [
               Text(
                 '2.2 ',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xff0d47a1),
+                    fontWeight: FontWeight.bold),
               ),
               Flexible(
                 child: Text(
                   'Eye Sight',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff0d47a1),
+                    fontSize: 16,
                   ),
                 ),
               ),
@@ -829,13 +883,19 @@ class AnalyzePage extends StatelessWidget {
             children: [
               Text(
                 'No glasses',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Color(0xff0d47a1),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
               ),
               buildEyeExaminationForm("Left Eye", "0 ~ 10", model, "leftEye"),
               buildEyeExaminationForm("Right Eye", "0 ~ 10", model, "rightEye"),
               Text(
                 'With glasses',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Color(0xff0d47a1),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
               ),
               buildEyeExaminationForm(
                   "Left Eye", "0 ~ 10", model, "leftEyeGlassed"),

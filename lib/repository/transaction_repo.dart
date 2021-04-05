@@ -14,6 +14,8 @@ import 'package:mobile_doctors_apps/model/transaction.dart';
 import 'package:mobile_doctors_apps/model/transaction_basic_model.dart';
 import 'package:mobile_doctors_apps/model/transaction_booking_model.dart';
 import 'package:mobile_doctors_apps/model/transaction_history_model.dart';
+import 'package:mobile_doctors_apps/screens/view_model/home_page_view_model.dart';
+import 'package:mobile_doctors_apps/screens/view_model/landing_page_view_model.dart';
 
 abstract class ITransactionRepo {
   Future<TransactionBasicModel> getTransactionDetail(
@@ -86,7 +88,7 @@ class TransactionRepo extends ITransactionRepo {
       print('longitude: $longitude, latitude $latitude');
 
       String url =
-          'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=AIzaSyDFd7ZNm2BL2JREvk32NZJ0wHzUn2fjw4A';
+          'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=AIzaSyDccJwe-72W30lGDAhHM98DHjqESsfInUg';
 
       http.Response responseMap = await http.get(url);
       if (responseMap.statusCode == 200) {
@@ -127,7 +129,8 @@ class TransactionRepo extends ITransactionRepo {
       accountId = transactionSimpleInfo['patient']['accountId'];
 
       print('$serviceName - $symptomName');
-      int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 30;
+      int endTime = DateTime.now().millisecondsSinceEpoch +
+          1000 * HomePageViewModel.timeOut;
 
       transactionBasic = TransactionBasicModel(
         transactionId: transactionId,
