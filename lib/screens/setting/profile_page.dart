@@ -53,7 +53,22 @@ class ProfilePage extends StatelessWidget {
                                   SizedBox(
                                     height: 15,
                                   ),
-                                  _buildTitle('Full Name'),
+                                  Row(
+                                    children: [
+                                      _buildTitle('Full Name'),
+                                      SizedBox(
+                                        width: 2.0,
+                                      ),
+                                      Text(
+                                        "(*)",
+                                        style: TextStyle(
+                                          color: Colors.red.shade300,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   SizedBox(
                                     height: 5,
                                   ),
@@ -61,7 +76,22 @@ class ProfilePage extends StatelessWidget {
                                   SizedBox(
                                     height: 15,
                                   ),
-                                  _buildTitle('Gender'),
+                                  Row(
+                                    children: [
+                                      _buildTitle('Gender'),
+                                      SizedBox(
+                                        width: 2.0,
+                                      ),
+                                      Text(
+                                        "(*)",
+                                        style: TextStyle(
+                                          color: Colors.red.shade300,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   SizedBox(
                                     height: 5,
                                   ),
@@ -69,7 +99,22 @@ class ProfilePage extends StatelessWidget {
                                   SizedBox(
                                     height: 15,
                                   ),
-                                  _buildTitle('Date of Birth'),
+                                  Row(
+                                    children: [
+                                      _buildTitle('Date of Birth'),
+                                      SizedBox(
+                                        width: 2.0,
+                                      ),
+                                      Text(
+                                        "(*)",
+                                        style: TextStyle(
+                                          color: Colors.red.shade300,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   SizedBox(
                                     height: 5,
                                   ),
@@ -77,7 +122,22 @@ class ProfilePage extends StatelessWidget {
                                   SizedBox(
                                     height: 15,
                                   ),
-                                  _buildTitle('Phone Number'),
+                                  Row(
+                                    children: [
+                                      _buildTitle('Phone Number'),
+                                      SizedBox(
+                                        width: 2.0,
+                                      ),
+                                      Text(
+                                        "(*)",
+                                        style: TextStyle(
+                                          color: Colors.red.shade300,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   SizedBox(
                                     height: 5,
                                   ),
@@ -85,7 +145,22 @@ class ProfilePage extends StatelessWidget {
                                   SizedBox(
                                     height: 15,
                                   ),
-                                  _buildTitle('Email'),
+                                  Row(
+                                    children: [
+                                      _buildTitle('Email'),
+                                      SizedBox(
+                                        width: 2.0,
+                                      ),
+                                      Text(
+                                        "(*)",
+                                        style: TextStyle(
+                                          color: Colors.red.shade300,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   SizedBox(
                                     height: 5,
                                   ),
@@ -93,7 +168,22 @@ class ProfilePage extends StatelessWidget {
                                   SizedBox(
                                     height: 15,
                                   ),
-                                  _buildTitle('ID Card'),
+                                  Row(
+                                    children: [
+                                      _buildTitle('Social Security Number'),
+                                      SizedBox(
+                                        width: 2.0,
+                                      ),
+                                      Text(
+                                        "(*)",
+                                        style: TextStyle(
+                                          color: Colors.red.shade300,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   SizedBox(
                                     height: 5,
                                   ),
@@ -136,16 +226,24 @@ class ProfilePage extends StatelessWidget {
                                   ),
                                   Row(
                                     children: [
-                                      Expanded(child: _buildTitle('Degree')),
-                                      // InkWell(
-                                      //   onTap: () {
-                                      //     model.addListDegrees();
-                                      //   },
-                                      //   child: Padding(
-                                      //     padding: const EdgeInsets.all(8.0),
-                                      //     child: Icon(Icons.add),
-                                      //   ),
-                                      // )
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            _buildTitle('Degree'),
+                                            SizedBox(
+                                              width: 2.0,
+                                            ),
+                                            Text(
+                                              "(*)",
+                                              style: TextStyle(
+                                                color: Colors.red.shade300,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
                                   SizedBox(
@@ -153,7 +251,22 @@ class ProfilePage extends StatelessWidget {
                                   ),
                                   _buildDegreeTypeField(model, context),
                                   buildListViewDegree(model),
-                                  _buildTitle('Speciality'),
+                                  Row(
+                                    children: [
+                                      _buildTitle('Speciality'),
+                                      SizedBox(
+                                        width: 2.0,
+                                      ),
+                                      Text(
+                                        "(*)",
+                                        style: TextStyle(
+                                          color: Colors.red.shade300,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   SizedBox(
                                     height: 15,
                                   ),
@@ -161,7 +274,22 @@ class ProfilePage extends StatelessWidget {
                                   SizedBox(
                                     height: 15,
                                   ),
-                                  _buildTitle('Experience'),
+                                  Row(
+                                    children: [
+                                      _buildTitle('Experience'),
+                                      SizedBox(
+                                        width: 2.0,
+                                      ),
+                                      Text(
+                                        "(*)",
+                                        style: TextStyle(
+                                          color: Colors.red.shade300,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   SizedBox(
                                     height: 15,
                                   ),
@@ -172,7 +300,22 @@ class ProfilePage extends StatelessWidget {
                                   SizedBox(
                                     height: 15,
                                   ),
-                                  _buildTitle('Graduated'),
+                                  Row(
+                                    children: [
+                                      _buildTitle('School'),
+                                      SizedBox(
+                                        width: 2.0,
+                                      ),
+                                      Text(
+                                        "(*)",
+                                        style: TextStyle(
+                                          color: Colors.red.shade300,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   SizedBox(
                                     height: 15,
                                   ),
@@ -183,7 +326,22 @@ class ProfilePage extends StatelessWidget {
                                   SizedBox(
                                     height: 15,
                                   ),
-                                  _buildTitle('Description'),
+                                  Row(
+                                    children: [
+                                      _buildTitle('Extra infomation'),
+                                      SizedBox(
+                                        width: 2.0,
+                                      ),
+                                      Text(
+                                        "(*)",
+                                        style: TextStyle(
+                                          color: Colors.red.shade300,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   buildDescriptionForm(model),
                                 ],
                               ),
@@ -219,7 +377,7 @@ class ProfilePage extends StatelessWidget {
           hintStyle: TextStyle(
             color: MainColors.hintTextColor,
           ),
-          hintText: "Enter description",
+          hintText: "Enter extra information",
           filled: true,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
@@ -236,12 +394,6 @@ class ProfilePage extends StatelessWidget {
           fillColor: Colors.white,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
-          suffixIcon: model.descriptionController.text.isEmpty
-              ? null
-              : InkWell(
-                  onTap: () => model.descriptionController.clear(),
-                  child: Icon(Icons.clear),
-                ),
         ),
       ),
     );
@@ -252,9 +404,8 @@ class ProfilePage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8),
       child: TextFormField(
-        // keyboardType: TextInputType.emailAddress,
         controller: controller,
-        // onChanged: (value) => model.changePhoneNum(value),
+        readOnly: true,
         style: GoogleFonts.varelaRound(
           fontWeight: FontWeight.normal,
           fontSize: 16,
@@ -280,12 +431,6 @@ class ProfilePage extends StatelessWidget {
           fillColor: Colors.white,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
-          suffixIcon: controller.text.isEmpty
-              ? null
-              : InkWell(
-                  onTap: () => controller.clear(),
-                  child: Icon(Icons.clear),
-                ),
         ),
       ),
     );
@@ -372,9 +517,8 @@ class ProfilePage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8),
       child: TextFormField(
-        // keyboardType: TextInputType.emailAddress,
+        readOnly: true,
         controller: model.degreeController,
-        // onChanged: (value) => model.changePhoneNum(value),
         style: GoogleFonts.varelaRound(
           fontWeight: FontWeight.normal,
           fontSize: 16,
@@ -400,12 +544,6 @@ class ProfilePage extends StatelessWidget {
           fillColor: Colors.white,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
-          suffixIcon: model.degreeController.text.isEmpty
-              ? null
-              : InkWell(
-                  onTap: () => model.degreeController.clear(),
-                  child: Icon(Icons.clear),
-                ),
         ),
       ),
     );
@@ -426,7 +564,7 @@ class ProfilePage extends StatelessWidget {
           hintStyle: TextStyle(
             color: MainColors.hintTextColor,
           ),
-          hintText: "Enter your ID Card",
+          hintText: "Enter your Social Security Number",
           filled: true,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
@@ -443,12 +581,6 @@ class ProfilePage extends StatelessWidget {
           fillColor: Colors.white,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
-          suffixIcon: model.identityNumberController.text.isEmpty
-              ? null
-              : InkWell(
-                  onTap: () => model.identityNumberController.clear(),
-                  child: Icon(Icons.clear),
-                ),
         ),
       ),
     );
@@ -486,12 +618,6 @@ class ProfilePage extends StatelessWidget {
           fillColor: Colors.white,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
-          suffixIcon: model.emailController.text.isEmpty
-              ? null
-              : InkWell(
-                  onTap: () => model.emailController.clear(),
-                  child: Icon(Icons.clear),
-                ),
         ),
       ),
     );
@@ -508,6 +634,7 @@ class ProfilePage extends StatelessWidget {
           fontWeight: FontWeight.normal,
           fontSize: 16,
         ),
+        readOnly: true,
         decoration: InputDecoration(
           hintStyle: TextStyle(
             color: MainColors.hintTextColor,
@@ -529,12 +656,6 @@ class ProfilePage extends StatelessWidget {
           fillColor: Colors.white,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
-          suffixIcon: model.phoneNumController.text.isEmpty
-              ? null
-              : InkWell(
-                  onTap: () => model.phoneNumController.clear(),
-                  child: Icon(Icons.clear),
-                ),
         ),
       ),
     );
@@ -635,12 +756,6 @@ class ProfilePage extends StatelessWidget {
           fillColor: Colors.white,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
-          suffixIcon: model.fullNameController.text.isEmpty
-              ? null
-              : InkWell(
-                  onTap: () => model.fullNameController.clear(),
-                  child: Icon(Icons.clear),
-                ),
         ),
       ),
     );

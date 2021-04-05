@@ -10,6 +10,7 @@ import 'package:mobile_doctors_apps/screens/schedule/schedule_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_timeline.dart';
 import 'package:mobile_doctors_apps/screens/share/health_record_page.dart';
 import 'package:mobile_doctors_apps/screens/share/patient_transaction/patient_base_transaction.dart';
+import 'package:mobile_doctors_apps/screens/sign_up/sign_up.dart';
 
 import 'package:mobile_doctors_apps/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,13 +28,7 @@ Future<void> main() async {
         theme: ThemeData(fontFamily: 'VarelaRound'),
         debugShowCheckedModeBanner: false,
         home: profileID == null ? LoginScreen() : LandingScreen()
-        // home: PatientBaseTransaction(
-        //   patientId: 25,
-        // )
-
-        // home: TransactionDetailPage(
-        //   transactionId: "TS-5e83bdc8-a3e0-48f8-a155-82ef819c09b4",
-        // ),
+        // home: SignUpPage(),
         ),
   );
 }
