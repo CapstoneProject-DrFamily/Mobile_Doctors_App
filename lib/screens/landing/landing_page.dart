@@ -1,4 +1,5 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/home_page_view_model.dart';
@@ -29,7 +30,12 @@ class LandingScreen extends StatelessWidget {
             showElevation: true,
             onItemSelected: (index) {
               if (HomePageViewModel.checkStatus) {
-                print("Block");
+                CoolAlert.show(
+                  context: context,
+                  type: CoolAlertType.error,
+                  text: "You have to Disconnect first!",
+                  backgroundColor: Colors.lightBlue[200],
+                );
               } else {
                 model.changeTab(index);
                 model.pageController.jumpToPage(index);

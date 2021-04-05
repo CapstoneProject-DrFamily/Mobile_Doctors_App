@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -126,19 +127,33 @@ class AnalyzePage extends StatelessWidget {
                                                         transactionId,
                                                         timelineModel);
                                                 if (isSuccess) {
+                                                  await CoolAlert.show(
+                                                    barrierDismissible: false,
+                                                    context: contextB,
+                                                    type: CoolAlertType.success,
+                                                    text:
+                                                        "Update Record Success",
+                                                    backgroundColor:
+                                                        Colors.lightBlue[200],
+                                                    onConfirmBtnTap: () {
+                                                      Navigator.of(contextB)
+                                                          .pop();
+                                                    },
+                                                  );
                                                   timelineModel.changeIndex(1);
                                                 } else {
-                                                  Fluttertoast.showToast(
-                                                    msg:
-                                                        "Error. Please try again",
-                                                    textColor: Colors.red,
-                                                    toastLength:
-                                                        Toast.LENGTH_SHORT,
-                                                    backgroundColor:
-                                                        Colors.white,
-                                                    gravity:
-                                                        ToastGravity.CENTER,
-                                                  );
+                                                  await CoolAlert.show(
+                                                      barrierDismissible: false,
+                                                      context: contextB,
+                                                      type: CoolAlertType.error,
+                                                      text:
+                                                          "Update Record Fail!",
+                                                      backgroundColor:
+                                                          Colors.lightBlue[200],
+                                                      onConfirmBtnTap: () {
+                                                        Navigator.of(contextB)
+                                                            .pop();
+                                                      });
                                                 }
                                               } else {
                                                 Fluttertoast.showToast(
@@ -155,7 +170,8 @@ class AnalyzePage extends StatelessWidget {
                                             child: !model.isLoading
                                                 ? Text(
                                                     'Next',
-                                                    // style: TextStyle(fontSize: 20),
+                                                    style: TextStyle(
+                                                        color: Colors.white),
                                                   )
                                                 : Container(
                                                     child: Padding(
@@ -290,6 +306,7 @@ class AnalyzePage extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       child: Card(
+        color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
@@ -309,7 +326,7 @@ class AnalyzePage extends StatelessWidget {
                   ),
                   Flexible(
                     child: Text(
-                      'Organ',
+                      'Organs',
                       style: TextStyle(
                           fontSize: 16,
                           color: Color(0xff0d47a1),
@@ -375,6 +392,11 @@ class AnalyzePage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              decoration: InputDecoration(
+                                  hintText: 'Enter text',
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12))),
+                              maxLines: 3,
                               initialValue: model.getTextData(index),
                               onChanged: (value) {
                                 model.changeFieldText(index, model, value);
@@ -502,7 +524,54 @@ class AnalyzePage extends StatelessWidget {
                 "Respiratory Rate", "...", model, "respiratoryRate"),
             buildAnthropometricIndex("Weight", "kg", model, "weight"),
             buildAnthropometricIndex("Height", "cm", model, "height"),
-            buildAnthropometricIndex("BMI", "...", model, "BMI"),
+            Row(
+              children: [
+                SizedBox(width: 15),
+                Expanded(
+                    child: Text(
+                  'BMI',
+                  style: TextStyle(fontSize: 18),
+                )),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      child: TextFormField(
+                        readOnly: true,
+                        controller: model.BMIController,
+                        textAlign: TextAlign.center,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: Colors.grey, width: 2),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: MainColors.blueBegin, width: 2),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: Colors.red, width: 2),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: Colors.red, width: 2),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // )
+                ),
+              ],
+            ),
+
+            // buildAnthropometricIndex("BMI", "...", model, "BMI"),
             buildAnthropometricIndex(
                 "Hips", "...", model, "waistCircumference"),
           ],

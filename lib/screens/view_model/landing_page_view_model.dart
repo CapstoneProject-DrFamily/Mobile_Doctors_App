@@ -12,6 +12,7 @@ import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 
 class LandingPageViewModel extends BaseModel {
   final IUserRepo _userRepo = UserRepo();
+
   PageController _pageController = PageController();
 
   int _currentIndex = 0;
@@ -30,6 +31,7 @@ class LandingPageViewModel extends BaseModel {
   Future<void> init() async {
     PushNotifycationService pushNotifycationService = PushNotifycationService();
     String tokenNoti = await pushNotifycationService.getToken();
+
     _userRepo.updateUser(tokenNoti);
     // final SharedPreferences prefs = await SharedPreferences.getInstance();
     // String phone = prefs.getString("usPhone");

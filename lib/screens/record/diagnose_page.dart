@@ -76,8 +76,11 @@ class DiagnosePage extends StatelessWidget {
                                                 children: [
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsets.all(
-                                                            20.0),
+                                                        const EdgeInsets.only(
+                                                            bottom: 0,
+                                                            left: 20,
+                                                            right: 20,
+                                                            top: 20),
                                                     child: Card(
                                                       shape:
                                                           RoundedRectangleBorder(
@@ -97,7 +100,9 @@ class DiagnosePage extends StatelessWidget {
                                                             child: Text(
                                                               'Diagnose / Conclusion',
                                                               style: TextStyle(
-                                                                  fontSize: 18,
+                                                                  fontSize: 15,
+                                                                  color: Color(
+                                                                      0xff0d47a1),
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold),
@@ -106,6 +111,55 @@ class DiagnosePage extends StatelessWidget {
                                                           SizedBox(
                                                             height: 10,
                                                           ),
+                                                          (model.listChooseModel
+                                                                      .length ==
+                                                                  0)
+                                                              ? Container()
+                                                              : Expanded(
+                                                                  child: ListView
+                                                                      .builder(
+                                                                    physics:
+                                                                        NeverScrollableScrollPhysics(),
+                                                                    shrinkWrap:
+                                                                        true,
+                                                                    scrollDirection:
+                                                                        Axis.horizontal,
+                                                                    itemCount:
+                                                                        1,
+                                                                    itemBuilder:
+                                                                        (context,
+                                                                            index) {
+                                                                      return Container(
+                                                                        margin: EdgeInsets.only(
+                                                                            bottom:
+                                                                                10,
+                                                                            left:
+                                                                                5),
+                                                                        padding: EdgeInsets.symmetric(
+                                                                            vertical:
+                                                                                5,
+                                                                            horizontal:
+                                                                                10),
+                                                                        constraints:
+                                                                            BoxConstraints(
+                                                                          maxWidth:
+                                                                              MediaQuery.of(context).size.width * 0.7,
+                                                                        ),
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(30),
+                                                                          border:
+                                                                              Border.all(color: Colors.yellow[900]),
+                                                                        ),
+                                                                        child:
+                                                                            Text(
+                                                                          "On Going",
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ),
                                                           Padding(
                                                             padding:
                                                                 const EdgeInsets
@@ -122,17 +176,114 @@ class DiagnosePage extends StatelessWidget {
                                                               },
                                                               controller: model
                                                                   .diagnoseConclusionController,
-                                                              maxLines: 5,
+                                                              maxLines: 1,
                                                               decoration: InputDecoration
                                                                   .collapsed(
                                                                       hintText:
                                                                           'Enter your text'),
+                                                              onTap: () {
+                                                                model
+                                                                    .initSearch();
+                                                              },
+                                                              onChanged:
+                                                                  (query) {
+                                                                model
+                                                                    .searchDiagnoseFunc(
+                                                                        query);
+                                                              },
+                                                              onSaved:
+                                                                  (query) {},
                                                             ),
                                                           ),
                                                         ],
                                                       ),
                                                     ),
                                                   ),
+                                                  (model.keyboard &&
+                                                          (model.listDiseaseModel
+                                                                  .isNotEmpty ||
+                                                              model
+                                                                  .listDiseaseSearchModel
+                                                                  .isNotEmpty))
+                                                      ? Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  left: 25,
+                                                                  right: 25),
+                                                          child: MediaQuery
+                                                              .removePadding(
+                                                            context: context,
+                                                            removeTop: true,
+                                                            child: ListView
+                                                                .separated(
+                                                              separatorBuilder:
+                                                                  (context,
+                                                                          index) =>
+                                                                      Divider(
+                                                                height: 0.01,
+                                                              ),
+                                                              primary: false,
+                                                              shrinkWrap: true,
+                                                              itemCount: (model
+                                                                      .changeList)
+                                                                  ? model
+                                                                      .listDiseaseSearchModel
+                                                                      .length
+                                                                  : model
+                                                                      .listDiseaseModel
+                                                                      .length,
+                                                              itemBuilder:
+                                                                  (context,
+                                                                      index) {
+                                                                return Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(5),
+                                                                  ),
+                                                                  child:
+                                                                      ListTile(
+                                                                    title: Transform
+                                                                        .translate(
+                                                                      offset:
+                                                                          Offset(
+                                                                              -7,
+                                                                              0),
+                                                                      child: Text((model
+                                                                              .changeList)
+                                                                          ? model
+                                                                              .listDiseaseSearchModel[
+                                                                                  index]
+                                                                              .diseaseName
+                                                                          : model
+                                                                              .listDiseaseModel[index]
+                                                                              .diseaseName),
+                                                                    ),
+                                                                    onTap: () {
+                                                                      print(
+                                                                          "choose");
+                                                                      FocusScope.of(
+                                                                              context)
+                                                                          .requestFocus(
+                                                                              new FocusNode());
+                                                                      model.changeList
+                                                                          ? model.chooseDisease(model.listDiseaseSearchModel[
+                                                                              index])
+                                                                          : model
+                                                                              .chooseDisease(model.listDiseaseModel[index]);
+                                                                    },
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : Container(
+                                                          child: Text(""),
+                                                        ),
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.all(
@@ -156,7 +307,9 @@ class DiagnosePage extends StatelessWidget {
                                                             child: Text(
                                                               'Doctor Advice',
                                                               style: TextStyle(
-                                                                  fontSize: 18,
+                                                                  fontSize: 16,
+                                                                  color: Color(
+                                                                      0xff0d47a1),
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold),
@@ -170,6 +323,10 @@ class DiagnosePage extends StatelessWidget {
                                                                 const EdgeInsets
                                                                     .all(8.0),
                                                             child: TextField(
+                                                              onTap: () {
+                                                                model
+                                                                    .changeField();
+                                                              },
                                                               controller: model
                                                                   .doctorAdviceController,
                                                               maxLines: 5,
@@ -218,39 +375,57 @@ class DiagnosePage extends StatelessWidget {
                                           visible:
                                               !model.keyboard ? true : false,
                                           child: Positioned(
-                                              bottom: 10,
-                                              child: Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.6,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: FlatButton(
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(18.0),
-                                                      ),
-                                                      color: MainColors
-                                                          .blueBegin
-                                                          .withOpacity(0.8),
-                                                      onPressed: () async {
-                                                        if (_formKey
-                                                            .currentState
-                                                            .validate()) {
-                                                          await model
-                                                              .confirmDiagnose(
-                                                                  timelineModel);
-                                                          timelineModel
-                                                              .changeIndex(3);
-                                                        }
-                                                      },
-                                                      child: Text('Next')),
+                                            bottom: 10,
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.6,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: FlatButton(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            18.0),
+                                                  ),
+                                                  color: MainColors.blueBegin
+                                                      .withOpacity(0.8),
+                                                  onPressed: () async {
+                                                    if (_formKey.currentState
+                                                        .validate()) {
+                                                      await model
+                                                          .confirmDiagnose(
+                                                              timelineModel,
+                                                              context);
+                                                      timelineModel
+                                                          .changeIndex(3);
+                                                    }
+                                                  },
+                                                  child: !model.loadingNext
+                                                      ? Text(
+                                                          'Next',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        )
+                                                      : Container(
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(2),
+                                                            child:
+                                                                CircularProgressIndicator(
+                                                              backgroundColor:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
                                                 ),
-                                              )),
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),

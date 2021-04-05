@@ -13,7 +13,7 @@ class MapRepo extends IMapRepo {
   Future<DirectionDetails> getDirectionDetails(
       LatLng startPosition, LatLng endPosition) async {
     String url =
-        'https://maps.googleapis.com/maps/api/directions/json?origin=${startPosition.latitude},${startPosition.longitude}&destination=${endPosition.latitude},${endPosition.longitude}&mode=driving&key=AIzaSyDFd7ZNm2BL2JREvk32NZJ0wHzUn2fjw4A';
+        'https://maps.googleapis.com/maps/api/directions/json?origin=${startPosition.latitude},${startPosition.longitude}&destination=${endPosition.latitude},${endPosition.longitude}&mode=driving&key=AIzaSyDccJwe-72W30lGDAhHM98DHjqESsfInUg';
 
     var response = await RequestHealper.getRequest(url);
 

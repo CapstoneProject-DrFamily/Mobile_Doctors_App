@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:mobile_doctors_apps/enums/processState.dart';
 import 'package:mobile_doctors_apps/model/examination_history.dart';
@@ -14,8 +15,10 @@ class AnalyzePageViewModel extends BaseModel {
   String transactionId;
   ExaminationHistory examinationForm = ExaminationHistory();
   final IExaminationRepo _examinationRepo = ExaminationRepo();
+  var BMIController = TextEditingController();
   bool isLoading = false;
   bool init = true;
+  double BMI = 0;
 
   String _exam_id;
 
@@ -68,6 +71,16 @@ class AnalyzePageViewModel extends BaseModel {
 
         examinationForm =
             await _examinationRepo.getExaminationHistory(_exam_id);
+
+        if (this.examinationForm.height != 0 &&
+            this.examinationForm.height != null &&
+            this.examinationForm.weight != null) {
+          double height = this.examinationForm.height / 100;
+          this.BMI = this.examinationForm.weight / (height * height);
+          BMIController.text = this.BMI.toStringAsFixed(1);
+        } else {
+          BMIController.text = this.BMI.toStringAsFixed(1);
+        }
 
         initCheck(listCheck);
       }
@@ -244,6 +257,14 @@ class AnalyzePageViewModel extends BaseModel {
         break;
       case 'height':
         model.examinationForm.height = num;
+        if (model.examinationForm.height != 0 &&
+            model.examinationForm.height != null &&
+            model.examinationForm.weight != null) {
+          double height = this.examinationForm.height / 100;
+          this.BMI = this.examinationForm.weight / (height * height);
+          BMIController.text = this.BMI.toStringAsFixed(1);
+        }
+
         break;
       case 'waistCircumference':
         model.examinationForm.waistCircumference = num;
@@ -261,6 +282,8 @@ class AnalyzePageViewModel extends BaseModel {
         model.examinationForm.leftEyeGlassed = num;
         break;
     }
+
+    notifyListeners();
   }
 
   double getFieldNumber(String field) {
@@ -297,6 +320,10 @@ class AnalyzePageViewModel extends BaseModel {
         break;
       case 'leftEyeGlassed':
         return this.examinationForm.leftEyeGlassed;
+        break;
+      case 'BMI':
+        return this.BMI;
+
         break;
     }
   }
@@ -404,6 +431,7 @@ class AnalyzePageViewModel extends BaseModel {
         .updateExaminationHistory(jsonEncode(examinationForm));
 
     if (isSuccess && timelineModel.currentIndex == timelineModel.index) {
+      print("in");
       _transactionRequest = FirebaseDatabase.instance
           .reference()
           .child("Transaction")

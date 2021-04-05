@@ -193,9 +193,9 @@ class MedicineFormDetail extends StatelessWidget {
                                       child: Text(
                                         'Name',
                                         style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white),
                                       )),
                                   SizedBox(
                                     width: 5,
@@ -204,8 +204,9 @@ class MedicineFormDetail extends StatelessWidget {
                                       child: Text(
                                     'Total',
                                     style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
                                   )),
                                   SizedBox(width: 10),
                                   Expanded(
@@ -214,8 +215,9 @@ class MedicineFormDetail extends StatelessWidget {
                                         child: Text(
                                           'Period',
                                           style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
                                         ),
                                       ))
                                 ],
@@ -482,7 +484,8 @@ class MedicineFormDetail extends StatelessWidget {
       padding: const EdgeInsets.only(left: 15.0),
       child: Text(
         title,
-        style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+        style: TextStyle(
+            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
       ),
     );
   }
@@ -493,16 +496,18 @@ class MedicineFormDetail extends StatelessWidget {
       child: TextFormField(
         controller: model.notecontroller,
         keyboardType: TextInputType.multiline,
-        maxLength: null,
-        maxLines: null,
+        maxLength: 255,
+        maxLines: 4,
         // onChanged: (value) => model.changePhoneNum(value),
         style: GoogleFonts.varelaRound(
           fontWeight: FontWeight.normal,
           fontSize: 16,
         ),
+
         decoration: InputDecoration(
           hintText: "Write some note for patient!",
           filled: true,
+          counterText: "",
           hintStyle: TextStyle(
             color: MainColors.hintTextColor,
           ),
