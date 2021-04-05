@@ -1,3 +1,5 @@
+import 'package:commons/commons.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -33,13 +35,28 @@ class SignUpPage extends StatelessWidget {
                   Container(
                     alignment: Alignment.topLeft,
                     margin: EdgeInsets.only(top: 30.0, left: 30.0),
-                    child: const Text(
-                      "Basic Infomation",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Basic Infomation",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 2.0,
+                        ),
+                        Text(
+                          "(*)",
+                          style: TextStyle(
+                            color: Colors.red.shade300,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   _nameField(context, model),
@@ -55,30 +72,69 @@ class SignUpPage extends StatelessWidget {
                   Container(
                     alignment: Alignment.topLeft,
                     margin: EdgeInsets.only(top: 15.0, left: 30.0),
-                    child: const Text(
-                      "Professional Infomation",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Professional Infomation",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 2.0,
+                        ),
+                        Text(
+                          "(*)",
+                          style: TextStyle(
+                            color: Colors.red.shade300,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   _degreeField(context, model),
                   _experienceField(context, model),
-                  _descriptionField(context, model),
                   _buildListSpecialty(context, model),
                   _schoolField(context, model),
+                  _descriptionField(context, model),
                   GestureDetector(
                     onTap: () async {
-                      // model.printCheck();
+                      model.printCheck();
+                      waitDialog(context);
+
                       bool check = await model.createNewDoctorAccount();
                       print("Check: " + check.toString());
                       if (check) {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) => LoginScreen()),
-                            (Route<dynamic> route) => false);
+                        Navigator.of(context).pop();
+                        await CoolAlert.show(
+                          context: context,
+                          type: CoolAlertType.success,
+                          text: "Sign Up success",
+                          backgroundColor: Colors.lightBlue[200],
+                          onConfirmBtnTap: () {
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => LoginScreen()),
+                                (Route<dynamic> route) => false);
+                          },
+                        );
+                        Navigator.of(context).pop();
+                      } else {
+                        Navigator.of(context).pop();
+
+                        await CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.error,
+                            text: "Sign Up Fail!",
+                            backgroundColor: Colors.lightBlue[200],
+                            onConfirmBtnTap: () {
+                              Navigator.of(context).pop();
+                            });
+                        Navigator.of(context).pop();
                       }
                     },
                     child: Container(
@@ -161,13 +217,14 @@ class SignUpPage extends StatelessWidget {
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
-          hintText: 'Enter name..',
+          labelText: 'Enter fullname',
           hintStyle: TextStyle(
             color: MainColors.hintTextColor,
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
+          errorText: model.fullName.error,
         ),
       ),
     );
@@ -191,13 +248,14 @@ class SignUpPage extends StatelessWidget {
           counterText: "",
           filled: true,
           fillColor: Colors.white,
-          hintText: 'Enter ID Card..',
+          labelText: 'Enter Social Security Number',
           hintStyle: TextStyle(
             color: MainColors.hintTextColor,
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
+          errorText: model.idCard.error,
         ),
       ),
     );
@@ -229,12 +287,19 @@ class SignUpPage extends StatelessWidget {
           ).showModal(context);
         },
         child: TextFormField(
+          validator: (value) {
+            if (value.isEmpty) {
+              print("gender: " + model.genderController.text);
+              return "Please enter your conclusion";
+            }
+            return null;
+          },
           controller: model.genderController,
           decoration: InputDecoration(
             filled: true,
             enabled: false,
             fillColor: Colors.white,
-            hintText: 'Choose Gender',
+            labelText: 'Choose Gender',
             hintStyle: TextStyle(
               color: MainColors.hintTextColor,
             ),
@@ -251,6 +316,7 @@ class SignUpPage extends StatelessWidget {
                 color: Colors.grey,
               ),
             ),
+            errorText: model.gender.error,
           ),
         ),
       ),
@@ -259,6 +325,7 @@ class SignUpPage extends StatelessWidget {
 
   Widget _dobField(BuildContext context, SignUpViewModel model) {
     return Container(
+      // width: MediaQuery.of(context).size.width * 0.6,
       margin: const EdgeInsets.only(
         top: 15.0,
         left: 30.0,
@@ -268,8 +335,8 @@ class SignUpPage extends StatelessWidget {
         onTap: () {
           DatePicker.showDatePicker(context,
               showTitleActions: true,
-              minTime: DateTime(1900, 1, 1),
-              maxTime: DateTime(2099, 12, 31),
+              minTime: DateTime(1961, 1, 1),
+              maxTime: DateTime(1997, 12, 31),
               theme: DatePickerTheme(
                   cancelStyle: TextStyle(color: Colors.black, fontSize: 16),
                   itemStyle: TextStyle(
@@ -293,7 +360,7 @@ class SignUpPage extends StatelessWidget {
             fontSize: 16,
           ),
           decoration: InputDecoration(
-            hintText: "Choose Your Birthday",
+            labelText: 'Choose Your Birthday',
             hintStyle: TextStyle(
               color: MainColors.hintTextColor,
             ),
@@ -341,7 +408,8 @@ class SignUpPage extends StatelessWidget {
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
-          hintText: 'Enter email..',
+          labelText: 'Enter email',
+          hintText: 'example@gmail.com',
           hintStyle: TextStyle(
             color: MainColors.hintTextColor,
           ),
@@ -360,22 +428,49 @@ class SignUpPage extends StatelessWidget {
         left: 30.0,
         right: 20.0,
       ),
-      child: TextFormField(
-        controller: model.degreeController,
-        onChanged: (text) {
-          model.checkDegree(text);
+      child: GestureDetector(
+        onTap: () {
+          Picker(
+            adapter: PickerDataAdapter<String>(pickerdata: model.listDegree),
+            changeToFirst: false,
+            selecteds: [0],
+            hideHeader: false,
+            textAlign: TextAlign.center,
+            textStyle: const TextStyle(color: Colors.black, fontSize: 22),
+            selectedTextStyle: TextStyle(color: Colors.blue),
+            columnPadding: const EdgeInsets.all(8.0),
+            onConfirm: (Picker picker, List value) {
+              print(value.toString());
+              print(picker.adapter.text);
+              model.chooseDegree(picker.getSelectedValues().first);
+            },
+          ).showModal(context);
         },
-        keyboardType: TextInputType.text,
-        textCapitalization: TextCapitalization.none,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          hintText: 'Enter degree..',
-          hintStyle: TextStyle(
-            color: MainColors.hintTextColor,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
+        child: TextFormField(
+          controller: model.degreeController,
+          keyboardType: TextInputType.phone,
+          textCapitalization: TextCapitalization.none,
+          decoration: InputDecoration(
+            filled: true,
+            enabled: false,
+            fillColor: Colors.white,
+            labelText: 'Choose Degree',
+            hintStyle: TextStyle(
+              color: MainColors.hintTextColor,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            suffixIcon: Icon(
+              Icons.arrow_drop_down,
+              color: Colors.blue,
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(
+                color: Colors.grey,
+              ),
+            ),
           ),
         ),
       ),
@@ -399,7 +494,7 @@ class SignUpPage extends StatelessWidget {
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
-          hintText: 'Enter experience..',
+          labelText: 'Enter experience',
           hintStyle: TextStyle(
             color: MainColors.hintTextColor,
           ),
@@ -420,6 +515,7 @@ class SignUpPage extends StatelessWidget {
       ),
       child: TextFormField(
         controller: model.descriptionController,
+        maxLines: 2,
         onChanged: (text) {
           model.checkDescription(text);
         },
@@ -428,7 +524,7 @@ class SignUpPage extends StatelessWidget {
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
-          hintText: 'Enter extra information about you..',
+          labelText: 'Enter extra information about you',
           hintStyle: TextStyle(
             color: MainColors.hintTextColor,
           ),
@@ -472,7 +568,7 @@ class SignUpPage extends StatelessWidget {
             filled: true,
             enabled: false,
             fillColor: Colors.white,
-            hintText: 'Choose Specialty',
+            labelText: 'Choose Specialty',
             hintStyle: TextStyle(
               color: MainColors.hintTextColor,
             ),
@@ -502,22 +598,48 @@ class SignUpPage extends StatelessWidget {
         left: 30.0,
         right: 20.0,
       ),
-      child: TextFormField(
-        controller: model.schoolController,
-        onChanged: (text) {
-          model.checkSchool(text);
+      child: GestureDetector(
+        onTap: () {
+          Picker(
+            adapter: PickerDataAdapter<String>(pickerdata: model.listSchool),
+            changeToFirst: false,
+            selecteds: [0],
+            hideHeader: false,
+            textAlign: TextAlign.center,
+            textStyle: const TextStyle(color: Colors.black, fontSize: 22),
+            selectedTextStyle: TextStyle(color: Colors.blue),
+            columnPadding: const EdgeInsets.all(8.0),
+            onConfirm: (Picker picker, List value) {
+              print(value.toString());
+              print(picker.adapter.text);
+              model.chooseSchool(picker.getSelectedValues().first);
+            },
+          ).showModal(context);
         },
-        keyboardType: TextInputType.text,
-        textCapitalization: TextCapitalization.none,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          hintText: 'Enter school..',
-          hintStyle: TextStyle(
-            color: MainColors.hintTextColor,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
+        child: TextFormField(
+          controller: model.schoolController,
+          maxLines: 2,
+          decoration: InputDecoration(
+            filled: true,
+            enabled: false,
+            fillColor: Colors.white,
+            labelText: 'Choose School',
+            hintStyle: TextStyle(
+              color: MainColors.hintTextColor,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            suffixIcon: Icon(
+              Icons.arrow_drop_down,
+              color: Colors.blue,
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(
+                color: Colors.grey,
+              ),
+            ),
           ),
         ),
       ),

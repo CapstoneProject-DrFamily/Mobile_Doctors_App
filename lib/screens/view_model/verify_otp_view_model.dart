@@ -232,14 +232,6 @@ class VerifyOTPViewModel extends BaseModel {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => SignUpPage()),
                     (Route<dynamic> route) => false);
-
-                Fluttertoast.showToast(
-                  msg: "Createing your account",
-                  textColor: Colors.red,
-                  toastLength: Toast.LENGTH_SHORT,
-                  backgroundColor: Colors.white,
-                  gravity: ToastGravity.CENTER,
-                );
               }
             } else {
               await prefs.clear();
