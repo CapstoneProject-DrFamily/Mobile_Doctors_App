@@ -416,6 +416,7 @@ class SignUpPage extends StatelessWidget {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
+          errorText: model.email.error,
         ),
       ),
     );
@@ -501,6 +502,7 @@ class SignUpPage extends StatelessWidget {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
+          errorText: model.experience.error,
         ),
       ),
     );
@@ -531,6 +533,7 @@ class SignUpPage extends StatelessWidget {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
+          errorText: model.description.error,
         ),
       ),
     );

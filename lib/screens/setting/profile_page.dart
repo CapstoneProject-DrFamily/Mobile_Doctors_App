@@ -406,6 +406,8 @@ class ProfilePage extends StatelessWidget {
       child: TextFormField(
         controller: controller,
         readOnly: true,
+        maxLines: 2,
+        keyboardType: TextInputType.number,
         style: GoogleFonts.varelaRound(
           fontWeight: FontWeight.normal,
           fontSize: 16,
@@ -527,7 +529,6 @@ class ProfilePage extends StatelessWidget {
           hintStyle: TextStyle(
             color: MainColors.hintTextColor,
           ),
-          hintText: "Enter your degree",
           filled: true,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
@@ -555,7 +556,7 @@ class ProfilePage extends StatelessWidget {
       child: TextFormField(
         keyboardType: TextInputType.number,
         controller: model.identityNumberController,
-        // onChanged: (value) => model.changePhoneNum(value),
+        readOnly: true,
         style: GoogleFonts.varelaRound(
           fontWeight: FontWeight.normal,
           fontSize: 16,
@@ -564,7 +565,6 @@ class ProfilePage extends StatelessWidget {
           hintStyle: TextStyle(
             color: MainColors.hintTextColor,
           ),
-          hintText: "Enter your Social Security Number",
           filled: true,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
@@ -629,7 +629,6 @@ class ProfilePage extends StatelessWidget {
       child: TextFormField(
         keyboardType: TextInputType.phone,
         controller: model.phoneNumController,
-        // onChanged: (value) => model.changePhoneNum(value),
         style: GoogleFonts.varelaRound(
           fontWeight: FontWeight.normal,
           fontSize: 16,
@@ -668,8 +667,8 @@ class ProfilePage extends StatelessWidget {
         onTap: () {
           DatePicker.showDatePicker(context,
               showTitleActions: true,
-              minTime: DateTime(1900, 1, 1),
-              maxTime: DateTime(2099, 12, 31),
+              minTime: DateTime(1961, 1, 1),
+              maxTime: DateTime(1997, 12, 31),
               theme: DatePickerTheme(
                   cancelStyle: TextStyle(color: Colors.black, fontSize: 16),
                   itemStyle: TextStyle(
@@ -730,13 +729,12 @@ class ProfilePage extends StatelessWidget {
       padding: const EdgeInsets.only(left: 8.0, right: 8),
       child: TextFormField(
         controller: model.fullNameController,
-        // onChanged: (value) => model.changePhoneNum(value),
+        readOnly: true,
         style: GoogleFonts.varelaRound(
           fontWeight: FontWeight.normal,
           fontSize: 16,
         ),
         decoration: InputDecoration(
-          hintText: "Enter your full name",
           filled: true,
           hintStyle: TextStyle(
             color: MainColors.hintTextColor,
@@ -1024,27 +1022,27 @@ class ProfilePage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: GestureDetector(
-        onTap: () {
-          Picker(
-              adapter:
-                  PickerDataAdapter<String>(pickerdata: model.listSpeciality),
-              changeToFirst: false,
-              selecteds: [0],
-              hideHeader: false,
-              textAlign: TextAlign.center,
-              textStyle: const TextStyle(color: Colors.black, fontSize: 22),
-              selectedTextStyle: TextStyle(color: Colors.blue),
-              columnPadding: const EdgeInsets.all(8.0),
-              onConfirm: (Picker picker, List value) {
-                print(value.toString());
-                print(picker.adapter.text);
-                print(picker.getSelectedValues().first);
-                model.changeSpecialityType(picker.getSelectedValues().first);
-              }).showModal(context);
-        },
+        // onTap: () {
+        //   Picker(
+        //       adapter:
+        //           PickerDataAdapter<String>(pickerdata: model.listSpeciality),
+        //       changeToFirst: false,
+        //       selecteds: [0],
+        //       hideHeader: false,
+        //       textAlign: TextAlign.center,
+        //       textStyle: const TextStyle(color: Colors.black, fontSize: 22),
+        //       selectedTextStyle: TextStyle(color: Colors.blue),
+        //       columnPadding: const EdgeInsets.all(8.0),
+        //       onConfirm: (Picker picker, List value) {
+        //         print(value.toString());
+        //         print(picker.adapter.text);
+        //         print(picker.getSelectedValues().first);
+        //         model.changeSpecialityType(picker.getSelectedValues().first);
+        //       }).showModal(context);
+        // },
         child: TextFormField(
           controller: model.specialityTpeController,
-          // onChanged: (value) => model.changePhoneNum(value),
+          readOnly: true,
           style: GoogleFonts.varelaRound(
             fontWeight: FontWeight.normal,
             fontSize: 16,
@@ -1071,10 +1069,6 @@ class ProfilePage extends StatelessWidget {
             fillColor: Colors.white,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
-            suffixIcon: Icon(
-              Icons.arrow_drop_down,
-              color: Colors.blue,
-            ),
           ),
         ),
       ),
