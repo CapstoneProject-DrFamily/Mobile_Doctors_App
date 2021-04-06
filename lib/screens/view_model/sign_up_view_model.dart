@@ -56,7 +56,7 @@ class SignUpViewModel extends BaseModel {
   String _degree;
   Validate _experience = Validate(null, null);
   Validate _description = Validate(null, null);
-  String _school;
+  Validate _school = Validate(null, null);
 
   Validate get fullName => _fullName;
   Validate get email => _email;
@@ -68,7 +68,7 @@ class SignUpViewModel extends BaseModel {
   String get degree => _degree;
   Validate get experience => _experience;
   Validate get description => _description;
-  String get school => _school;
+  Validate get school => _school;
 
   File _image;
   File get image => _image;
@@ -283,7 +283,14 @@ class SignUpViewModel extends BaseModel {
 
   void checkGender() {
     if (_genderController.text.isEmpty) {
-      _error = "Gender is require.";
+      _gender = Validate(null, "Gender is require.");
+    }
+    notifyListeners();
+  }
+
+  void checkSchool() {
+    if (_schoolController.text.isEmpty) {
+      _school = Validate(null, "School is require.");
     }
     notifyListeners();
   }
@@ -308,6 +315,7 @@ class SignUpViewModel extends BaseModel {
     if (_description.value == null) {
       checkDescription(null);
     }
+
     // print("ok1");
     if (_genderController.text.isEmpty) {
       print("Gender: " + _genderController.text);
@@ -350,6 +358,7 @@ class SignUpViewModel extends BaseModel {
 
   Future<bool> createNewDoctorAccount() async {
     _isReady = true;
+
     if (_fullName.value == null) {
       checkFullName(null);
       _isReady = false;
