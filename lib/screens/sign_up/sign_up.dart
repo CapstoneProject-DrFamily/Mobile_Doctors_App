@@ -103,38 +103,39 @@ class SignUpPage extends StatelessWidget {
                   _descriptionField(context, model),
                   GestureDetector(
                     onTap: () async {
-                      model.printCheck();
-                      waitDialog(context);
+                      bool isConfirm = await _confirmDialog(context);
 
-                      bool check = await model.createNewDoctorAccount();
-                      print("Check: " + check.toString());
-                      if (check) {
-                        Navigator.of(context).pop();
-                        await CoolAlert.show(
-                          context: context,
-                          type: CoolAlertType.success,
-                          text: "Sign Up success",
-                          backgroundColor: Colors.lightBlue[200],
-                          onConfirmBtnTap: () {
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) => LoginScreen()),
-                                (Route<dynamic> route) => false);
-                          },
-                        );
-                        Navigator.of(context).pop();
-                      } else {
-                        Navigator.of(context).pop();
-
-                        await CoolAlert.show(
+                      if (isConfirm) {
+                        bool check = await model.createNewDoctorAccount();
+                        print("Check: " + check.toString());
+                        if (check) {
+                          Navigator.of(context).pop();
+                          await CoolAlert.show(
                             context: context,
-                            type: CoolAlertType.error,
-                            text: "Sign Up Fail!",
+                            type: CoolAlertType.success,
+                            text: "Sign Up success",
                             backgroundColor: Colors.lightBlue[200],
                             onConfirmBtnTap: () {
-                              Navigator.of(context).pop();
-                            });
-                        Navigator.of(context).pop();
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginScreen()),
+                                  (Route<dynamic> route) => false);
+                            },
+                          );
+                          Navigator.of(context).pop();
+                        } else {
+                          Navigator.of(context).pop();
+
+                          await CoolAlert.show(
+                              context: context,
+                              type: CoolAlertType.error,
+                              text: "Sign Up Fail!",
+                              backgroundColor: Colors.lightBlue[200],
+                              onConfirmBtnTap: () {
+                                Navigator.of(context).pop();
+                              });
+                          Navigator.of(context).pop();
+                        }
                       }
                     },
                     child: Container(
@@ -162,6 +163,128 @@ class SignUpPage extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future _confirmDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (alertContext) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+          ),
+          child: Container(
+            height: 380,
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 25,
+                ),
+                Icon(
+                  Icons.info,
+                  color: Color(0xff4ee1c7),
+                  size: 90,
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Text(
+                  "Confirm action",
+                  style: TextStyle(
+                    fontSize: 27,
+                    fontWeight: FontWeight.w800,
+                    fontFamily: 'avenir',
+                    color: Color(0xff0d47a1),
+                  ),
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Expanded(
+                  child: Text(
+                    'Are you sure you want to perform this action ?',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      fontFamily: 'avenir',
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 45,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                      customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      onTap: () {
+                        Navigator.of(alertContext).pop(true);
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 50,
+                        width: MediaQuery.of(alertContext).size.width * 0.3,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(color: Colors.blueAccent),
+                        ),
+                        child: Text(
+                          "Yes",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'avenir',
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      onTap: () {
+                        Navigator.pop(alertContext);
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 50,
+                        width: MediaQuery.of(alertContext).size.width * 0.3,
+                        decoration: BoxDecoration(
+                          color: Colors.blueAccent,
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(color: Colors.blueAccent),
+                        ),
+                        child: Text(
+                          "No",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'avenir',
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15,
+                )
+              ],
             ),
           ),
         );
@@ -317,6 +440,13 @@ class SignUpPage extends StatelessWidget {
               ),
             ),
             errorText: model.gender.error,
+            errorStyle: TextStyle(color: Colors.red),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(
+                color: Colors.red,
+              ),
+            ),
           ),
         ),
       ),
