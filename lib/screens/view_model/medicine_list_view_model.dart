@@ -151,6 +151,7 @@ class MedicineListViewModel extends BaseModel {
         text: "You have finish this Record",
         backgroundColor: Colors.lightBlue[200],
         onConfirmBtnTap: () {
+          Navigator.pop(context);
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(

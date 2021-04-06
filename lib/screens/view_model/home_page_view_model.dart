@@ -280,6 +280,7 @@ class HomePageViewModel extends BaseModel {
         "status": "notbook",
       },
     );
+    print("transactionId $transactionID");
     await _doctorRequest
         .child(_userFBID)
         .child("transaction")
