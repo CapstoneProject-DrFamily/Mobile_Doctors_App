@@ -103,6 +103,7 @@ class SignUpPage extends StatelessWidget {
                   _descriptionField(context, model),
                   GestureDetector(
                     onTap: () async {
+                      // model.printCheck();
                       bool isConfirm = await _confirmDialog(context);
 
                       if (isConfirm) {
@@ -210,10 +211,10 @@ class SignUpPage extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    'Are you sure you want to perform this action ?',
+                    'Are you sure all your information are correct?',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
                       fontWeight: FontWeight.normal,
                       fontFamily: 'avenir',
                       color: Colors.black,
@@ -515,6 +516,14 @@ class SignUpPage extends StatelessWidget {
               EvaIcons.calendar,
               color: Colors.blue,
             ),
+            errorText: model.checkDOB.error,
+            errorStyle: TextStyle(color: Colors.red),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(
+                color: Colors.red,
+              ),
+            ),
           ),
         ),
       ),
@@ -600,6 +609,14 @@ class SignUpPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(
                 color: Colors.grey,
+              ),
+            ),
+            errorText: model.degree.error,
+            errorStyle: TextStyle(color: Colors.red),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(
+                color: Colors.red,
               ),
             ),
           ),
@@ -718,6 +735,14 @@ class SignUpPage extends StatelessWidget {
                 color: Colors.grey,
               ),
             ),
+            errorText: model.specialty.error,
+            errorStyle: TextStyle(color: Colors.red),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(
+                color: Colors.red,
+              ),
+            ),
           ),
         ),
       ),
@@ -771,6 +796,14 @@ class SignUpPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(
                 color: Colors.grey,
+              ),
+            ),
+            errorText: model.school.error,
+            errorStyle: TextStyle(color: Colors.red),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(
+                color: Colors.red,
               ),
             ),
           ),

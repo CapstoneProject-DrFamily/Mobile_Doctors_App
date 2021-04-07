@@ -49,25 +49,29 @@ class SignUpViewModel extends BaseModel {
   Validate _fullName = Validate(null, null);
   Validate _email = Validate(null, null);
   Validate _idCard = Validate(null, null);
+  Validate _checkDOB = Validate(null, null);
   String _dob;
   // String _gender;
   Validate _gender = Validate(null, null);
   String _defaultImage = DEFAULT_IMG;
-  String _degree;
+  Validate _degree = Validate(null, null);
   Validate _experience = Validate(null, null);
   Validate _description = Validate(null, null);
+  Validate _specialty = Validate(null, null);
   Validate _school = Validate(null, null);
 
   Validate get fullName => _fullName;
   Validate get email => _email;
   Validate get idCard => _idCard;
+  Validate get checkDOB => _checkDOB;
   String get dob => _dob;
   // String get gender => _gender;
   Validate get gender => _gender;
   String get defaultImage => _defaultImage;
-  String get degree => _degree;
+  Validate get degree => _degree;
   Validate get experience => _experience;
   Validate get description => _description;
+  Validate get specialty => _specialty;
   Validate get school => _school;
 
   File _image;
@@ -170,6 +174,7 @@ class SignUpViewModel extends BaseModel {
   //function choose gender
   void chooseGender(String newValue) {
     _genderController.text = newValue;
+    _gender = Validate(newValue, null);
     notifyListeners();
   }
 
@@ -194,6 +199,7 @@ class SignUpViewModel extends BaseModel {
         _months[datetime.month - 1] +
         '-' +
         datetime.day.toString();
+    _checkDOB = Validate(_dob, null);
     notifyListeners();
   }
 
@@ -219,6 +225,7 @@ class SignUpViewModel extends BaseModel {
   //function choose degree
   void chooseDegree(String newValue) {
     _degreeController.text = newValue;
+    _degree = Validate(newValue, null);
     print("Degree: " + _degreeController.text);
     notifyListeners();
   }
@@ -238,6 +245,7 @@ class SignUpViewModel extends BaseModel {
     _specialtyController.text = newValue;
     _idSpecialty =
         _listSpecialty[_listSpecialtyName.indexOf(newValue)].specialtyId;
+    _specialty = Validate(newValue, null);
     print(_idSpecialty);
     notifyListeners();
   }
@@ -245,6 +253,7 @@ class SignUpViewModel extends BaseModel {
   //function choose school
   void chooseSchool(String newValue) {
     _schoolController.text = newValue;
+    _school = Validate(newValue, null);
     print("School: " + _schoolController.text);
     notifyListeners();
   }
@@ -288,6 +297,27 @@ class SignUpViewModel extends BaseModel {
     notifyListeners();
   }
 
+  void checkDob() {
+    if (_dobController.text.isEmpty) {
+      _checkDOB = Validate(null, "Birthday is require.");
+    }
+    notifyListeners();
+  }
+
+  void checkDegree() {
+    if (_degreeController.text.isEmpty) {
+      _degree = Validate(null, "Degree is require.");
+    }
+    notifyListeners();
+  }
+
+  void checkSpecialty() {
+    if (_specialtyController.text.isEmpty) {
+      _specialty = Validate(null, "Specialty is require.");
+    }
+    notifyListeners();
+  }
+
   void checkSchool() {
     if (_schoolController.text.isEmpty) {
       _school = Validate(null, "School is require.");
@@ -296,45 +326,40 @@ class SignUpViewModel extends BaseModel {
   }
 
   void printCheck() {
-    print("Image1: " + _image.toString());
+    _isReady = true;
+    checkGender();
+    checkDob();
+    checkDegree();
+    checkSpecialty();
+    checkSchool();
+
     if (_fullName.value == null) {
       checkFullName(null);
+      _isReady = false;
     }
     if (_idCard.value == null) {
       checkIDCard(null);
+      _isReady = false;
     }
-
     if (_email.value == null) {
       checkEmail(null);
+      _isReady = false;
     }
-
     if (_experience.value == null) {
       checkExperience(null);
+      _isReady = false;
     }
-
     if (_description.value == null) {
       checkDescription(null);
+      _isReady = false;
     }
+    if (_gender.value == null) _isReady = false;
+    if (_checkDOB.value == null) _isReady = false;
+    if (_degree.value == null) _isReady = false;
+    if (_specialty.value == null) _isReady = false;
+    if (_specialty.value == null) _isReady = false;
 
-    // print("ok1");
-    if (_genderController.text.isEmpty) {
-      print("Gender: " + _genderController.text);
-      _gender = Validate(null, "Gender is require.");
-      print(_gender.error);
-      notifyListeners();
-    }
-    // print("ok2");
-    // notifyListeners();
-    // print("name: " + _fullName.value);
-    // print("id: " + _idCard.value);
-    // print("gender: " + _genderController.text);
-    print("dob: " + _dob);
-    // print("email: " + _email.value);
-    // print("degree: " + _degreeController.text);
-    // print("experi: " + _experience.value);
-    // print("special: " + _specialtyController.text);
-    // print("school: " + _schoolController.text);
-    // print("des: " + _description.value);
+    print("_isReady: " + _isReady.toString());
   }
 
   Future getUserImage() async {
@@ -358,31 +383,37 @@ class SignUpViewModel extends BaseModel {
 
   Future<bool> createNewDoctorAccount() async {
     _isReady = true;
+    checkGender();
+    checkDob();
+    checkDegree();
+    checkSpecialty();
+    checkSchool();
 
     if (_fullName.value == null) {
       checkFullName(null);
       _isReady = false;
     }
-
     if (_idCard.value == null) {
       checkIDCard(null);
       _isReady = false;
     }
-
     if (_email.value == null) {
       checkEmail(null);
       _isReady = false;
     }
-
     if (_experience.value == null) {
       checkExperience(null);
       _isReady = false;
     }
-
     if (_description.value == null) {
       checkDescription(null);
       _isReady = false;
     }
+    if (_gender.value == null) _isReady = false;
+    if (_checkDOB.value == null) _isReady = false;
+    if (_degree.value == null) _isReady = false;
+    if (_specialty.value == null) _isReady = false;
+    if (_specialty.value == null) _isReady = false;
 
     bool check;
     if (_isReady == true) {
