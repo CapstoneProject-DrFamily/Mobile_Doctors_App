@@ -51,7 +51,6 @@ class SignUpViewModel extends BaseModel {
   Validate _idCard = Validate(null, null);
   Validate _checkDOB = Validate(null, null);
   String _dob;
-  // String _gender;
   Validate _gender = Validate(null, null);
   String _defaultImage = DEFAULT_IMG;
   Validate _degree = Validate(null, null);
@@ -65,7 +64,6 @@ class SignUpViewModel extends BaseModel {
   Validate get idCard => _idCard;
   Validate get checkDOB => _checkDOB;
   String get dob => _dob;
-  // String get gender => _gender;
   Validate get gender => _gender;
   String get defaultImage => _defaultImage;
   Validate get degree => _degree;
@@ -96,7 +94,6 @@ class SignUpViewModel extends BaseModel {
   List<String> _genderList = [
     'Male',
     'Female',
-    'Other',
   ];
   List<String> get genderList => _genderList;
 
