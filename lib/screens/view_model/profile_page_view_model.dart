@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_doctors_apps/model/doctor_detail.dart';
 import 'package:mobile_doctors_apps/model/sign_up/specialty_sign_up_model.dart';
-import 'package:mobile_doctors_apps/model/specialty_model.dart';
 import 'package:mobile_doctors_apps/model/user_profile.dart';
 import 'package:mobile_doctors_apps/repository/doctor_repo.dart';
 import 'package:mobile_doctors_apps/repository/sign_up/specialty_repo.dart';
@@ -281,8 +280,6 @@ class ProfilePageViewModel extends BaseModel {
       userProfile.gender = "Male";
     } else if (_gender == 1) {
       userProfile.gender = "Female";
-    } else {
-      userProfile.gender = "Other";
     }
 
     userProfile.image = defaultImage;

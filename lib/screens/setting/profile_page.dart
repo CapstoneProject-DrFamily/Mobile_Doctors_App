@@ -1,7 +1,6 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_picker/flutter_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
@@ -430,7 +429,7 @@ class ProfilePage extends StatelessWidget {
               color: Colors.blue,
             ),
           ),
-          fillColor: Colors.white,
+          fillColor: Colors.grey.shade100,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
         ),
@@ -542,7 +541,7 @@ class ProfilePage extends StatelessWidget {
               color: Colors.blue,
             ),
           ),
-          fillColor: Colors.white,
+          fillColor: Colors.grey.shade100,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
         ),
@@ -578,7 +577,7 @@ class ProfilePage extends StatelessWidget {
               color: Colors.blue,
             ),
           ),
-          fillColor: Colors.white,
+          fillColor: Colors.grey.shade100,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
         ),
@@ -652,7 +651,7 @@ class ProfilePage extends StatelessWidget {
               color: Colors.blue,
             ),
           ),
-          fillColor: Colors.white,
+          fillColor: Colors.grey.shade100,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
         ),
@@ -663,61 +662,38 @@ class ProfilePage extends StatelessWidget {
   Padding _buildDOBFIeld(BuildContext context, ProfilePageViewModel model) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8),
-      child: GestureDetector(
-        onTap: () {
-          DatePicker.showDatePicker(context,
-              showTitleActions: true,
-              minTime: DateTime(1961, 1, 1),
-              maxTime: DateTime(1997, 12, 31),
-              theme: DatePickerTheme(
-                  cancelStyle: TextStyle(color: Colors.black, fontSize: 16),
-                  itemStyle: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
-                  doneStyle: TextStyle(color: Colors.black, fontSize: 16)),
-              onChanged: (date) {
-            model.changeDOB(date);
-            print('change $date in time zone ' +
-                date.timeZoneOffset.inHours.toString());
-          }, onConfirm: (date) {
-            model.changeDOB(date);
-            print('confirm $date');
-          }, currentTime: DateTime.now(), locale: LocaleType.en);
-        },
-        child: TextFormField(
-          controller: model.dobController,
-          // onChanged: (value) => model.changePhoneNum(value),
-          style: GoogleFonts.varelaRound(
-            fontWeight: FontWeight.normal,
-            fontSize: 16,
+      child: TextFormField(
+        controller: model.dobController,
+        readOnly: true,
+        style: GoogleFonts.varelaRound(
+          fontWeight: FontWeight.normal,
+          fontSize: 16,
+        ),
+        decoration: InputDecoration(
+          hintStyle: TextStyle(
+            color: MainColors.hintTextColor,
           ),
-          decoration: InputDecoration(
-            hintStyle: TextStyle(
-              color: MainColors.hintTextColor,
-            ),
-            hintText: "Choose Your Birthday",
-            filled: true,
-            enabled: false,
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: BorderSide(
-                color: Colors.blue,
-              ),
-            ),
-            disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: BorderSide(
-                color: Colors.blue,
-              ),
-            ),
-            fillColor: Colors.white,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
-            suffixIcon: Icon(
-              EvaIcons.calendar,
+          hintText: "Choose Your Birthday",
+          filled: true,
+          enabled: false,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(
               color: Colors.blue,
             ),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(
+              color: Colors.blue,
+            ),
+          ),
+          fillColor: Colors.grey.shade100,
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
+          suffixIcon: Icon(
+            EvaIcons.calendar,
+            color: Colors.blue,
           ),
         ),
       ),
@@ -751,7 +727,7 @@ class ProfilePage extends StatelessWidget {
               color: Colors.blue,
             ),
           ),
-          fillColor: Colors.white,
+          fillColor: Colors.grey.shade100,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
         ),
@@ -827,9 +803,9 @@ class ProfilePage extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () {
-            model.changeGender(1);
-          },
+          // onTap: () {
+          //   model.changeGender(1);
+          // },
           child: Container(
             child: Row(
               children: [
@@ -841,6 +817,7 @@ class ProfilePage extends StatelessWidget {
                       )
                     : Icon(
                         EvaIcons.radioButtonOffOutline,
+                        color: Colors.grey.shade300,
                         size: 25,
                       ),
                 SizedBox(
@@ -849,36 +826,9 @@ class ProfilePage extends StatelessWidget {
                 Text(
                   'Female',
                   style: GoogleFonts.varelaRound(
-                      fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-              ],
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            model.changeGender(2);
-          },
-          child: Container(
-            child: Row(
-              children: [
-                model.gender == 2
-                    ? Icon(
-                        EvaIcons.radioButtonOn,
-                        color: Colors.blue,
-                        size: 25,
-                      )
-                    : Icon(
-                        EvaIcons.radioButtonOffOutline,
-                        size: 25,
-                      ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Other',
-                  style: GoogleFonts.varelaRound(
-                      fontWeight: FontWeight.bold, fontSize: 16),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.grey.shade300),
                 ),
               ],
             ),
@@ -973,9 +923,9 @@ class ProfilePage extends StatelessWidget {
         if (isUpdated) {
           Fluttertoast.showToast(
             msg: "Update Successfull",
-            textColor: Colors.green,
+            textColor: Colors.white,
             toastLength: Toast.LENGTH_SHORT,
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.green,
             gravity: ToastGravity.CENTER,
           );
         }
@@ -1022,24 +972,6 @@ class ProfilePage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: GestureDetector(
-        // onTap: () {
-        //   Picker(
-        //       adapter:
-        //           PickerDataAdapter<String>(pickerdata: model.listSpeciality),
-        //       changeToFirst: false,
-        //       selecteds: [0],
-        //       hideHeader: false,
-        //       textAlign: TextAlign.center,
-        //       textStyle: const TextStyle(color: Colors.black, fontSize: 22),
-        //       selectedTextStyle: TextStyle(color: Colors.blue),
-        //       columnPadding: const EdgeInsets.all(8.0),
-        //       onConfirm: (Picker picker, List value) {
-        //         print(value.toString());
-        //         print(picker.adapter.text);
-        //         print(picker.getSelectedValues().first);
-        //         model.changeSpecialityType(picker.getSelectedValues().first);
-        //       }).showModal(context);
-        // },
         child: TextFormField(
           controller: model.specialityTpeController,
           readOnly: true,
@@ -1066,7 +998,7 @@ class ProfilePage extends StatelessWidget {
                 color: Colors.blue,
               ),
             ),
-            fillColor: Colors.white,
+            fillColor: Colors.grey.shade100,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
           ),
