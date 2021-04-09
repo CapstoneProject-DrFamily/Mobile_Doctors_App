@@ -23,7 +23,7 @@ class TransactionDetailPage extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(),
             ),
             title: Text(
-              'Transaction Detail',
+              'Record Detail',
               style: TextStyle(color: Color(0xff0d47a1)),
             ),
           ),
@@ -78,36 +78,54 @@ class TransactionDetailPage extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 10),
-                                  constraints: BoxConstraints(
-                                    maxWidth:
-                                        MediaQuery.of(context).size.width * 0.7,
+                                Padding(
+                                  padding: (model.transaction.status == 5)
+                                      ? EdgeInsets.only(left: 10)
+                                      : EdgeInsets.all(0),
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 10),
+                                    constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.7,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: (model.transaction.status == 3)
+                                          ? Border.all(color: Colors.green)
+                                          : (model.transaction.status == 4)
+                                              ? Border.all(color: Colors.red)
+                                              : Border.all(
+                                                  color: Colors.orange),
+                                    ),
+                                    child: (model.transaction.status == 3)
+                                        ? Text(
+                                            "Done",
+                                            style: GoogleFonts.varelaRound(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 13,
+                                              color: Colors.green,
+                                            ),
+                                          )
+                                        : (model.transaction.status == 4)
+                                            ? Text(
+                                                "Cancel",
+                                                style: GoogleFonts.varelaRound(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 13,
+                                                  color: Colors.red,
+                                                ),
+                                              )
+                                            : Text(
+                                                "Awaiting Payment",
+                                                style: GoogleFonts.varelaRound(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 13,
+                                                  color: Colors.orange,
+                                                ),
+                                              ),
                                   ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    border: (model.transaction.status == 3)
-                                        ? Border.all(color: Colors.green)
-                                        : Border.all(color: Colors.red),
-                                  ),
-                                  child: (model.transaction.status == 3)
-                                      ? Text(
-                                          "Done",
-                                          style: GoogleFonts.varelaRound(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 13,
-                                            color: Colors.green,
-                                          ),
-                                        )
-                                      : Text(
-                                          "Cancel",
-                                          style: GoogleFonts.varelaRound(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 13,
-                                            color: Colors.red,
-                                          ),
-                                        ),
                                 ),
                               ],
                             ),

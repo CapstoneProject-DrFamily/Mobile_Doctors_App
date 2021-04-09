@@ -116,8 +116,8 @@ class DiagnosePageViewModel extends BaseModel {
       TimeLineViewModel model, BuildContext context) async {
     loadingNext = true;
     notifyListeners();
-    print(
-        'conclusion: ${_diagnoseConclusionController.text}, advice: ${_doctorAdviceController.text}');
+    // print(
+    //     'conclusion: ${_diagnoseConclusionController.text}, advice: ${_doctorAdviceController.text}');
     String conclusion = "";
     for (int i = 0; i < _listChooseModel.length; i++) {
       if (i == _listChooseModel.length - 1) {
@@ -175,9 +175,10 @@ class DiagnosePageViewModel extends BaseModel {
   void initSearch() async {
     isLoading = true;
     _pagingDiseaseModel =
-        await _diseaseRepo.getPagingDisease(_indexListDiagnose, 20, null);
+        await _diseaseRepo.getPagingDisease(_indexListDiagnose, 5, null);
     if (_pagingDiseaseModel == null) {
       _listDiseaseModel = [];
+      isLoading = false;
       notifyListeners();
       return;
     } else {
@@ -195,17 +196,18 @@ class DiagnosePageViewModel extends BaseModel {
       // _isNotHave = false;
       isLoading = true;
       _searchValue = value;
+      _changeList = true;
 
       _pagingDiseaseModel = await _diseaseRepo.getPagingDisease(
-          _indexSearchListDiagnose, 20, value);
+          _indexSearchListDiagnose, 5, value);
       if (_pagingDiseaseModel == null) {
-        _listDiseaseModel = [];
+        _listDiseaseSearchModel = [];
         print("notFound");
         isLoading = false;
         notifyListeners();
         return;
       } else {
-        _listDiseaseModel = _pagingDiseaseModel.listDisease;
+        _listDiseaseSearchModel = _pagingDiseaseModel.listDisease;
         hasSearchNextPage = _pagingDiseaseModel.hasNextPage;
         print("listDisease $_listDiseaseModel");
         isLoading = false;
@@ -214,25 +216,22 @@ class DiagnosePageViewModel extends BaseModel {
         notifyListeners();
       }
     } else if (value.length == 0) {
-      _pagingDiseaseModel =
-          await _diseaseRepo.getPagingDisease(_indexListDiagnose, 20, null);
-      _listDiseaseModel = _pagingDiseaseModel.listDisease;
-      hasSearchNextPage = _pagingDiseaseModel.hasNextPage;
-      isLoading = false;
+      _changeList = false;
 
       notifyListeners();
     }
   }
 
-  void chooseDisease(String diseaseName) {
-    print("diseaseName $diseaseName");
+  void chooseDisease(String diseaseCode, String diseaseName, int index) {
+    String disease = '$diseaseCode-$diseaseName';
+
+    print("diseaseName $diseaseName - $index");
     if (_listChooseModel.length == 0) {
-      _listChooseModel.add(diseaseName);
+      _listChooseModel.add(disease);
     } else {
-      int index =
-          _listChooseModel.indexWhere((element) => element == diseaseName);
+      int index = _listChooseModel.indexWhere((element) => element == disease);
       if (index == -1) {
-        _listChooseModel.add(diseaseName);
+        _listChooseModel.add(disease);
       } else {
         Fluttertoast.showToast(
           msg: "You have choose this Disease",

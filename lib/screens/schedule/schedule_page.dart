@@ -784,7 +784,7 @@ class SchedulePage extends StatelessWidget {
           '${events.length}',
           style: TextStyle().copyWith(
             color: Colors.white,
-            fontSize: 12.0,
+            fontSize: 11.0,
           ),
         ),
       ),
