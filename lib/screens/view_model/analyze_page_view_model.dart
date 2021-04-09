@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:mobile_doctors_apps/enums/processState.dart';
 import 'package:mobile_doctors_apps/model/examination_history.dart';
@@ -87,6 +88,11 @@ class AnalyzePageViewModel extends BaseModel {
       this.init = false;
       notifyListeners();
     }
+  }
+
+  void changebloodPressure(AnalyzePageViewModel model, value) {
+    model.examinationForm.bloodPressure = value;
+    notifyListeners();
   }
 
   void resetField(String field, AnalyzePageViewModel model) {
@@ -293,9 +299,6 @@ class AnalyzePageViewModel extends BaseModel {
         break;
       case 'temperature':
         return this.examinationForm.temperature;
-        break;
-      case 'bloodPressure':
-        return this.examinationForm.bloodPressure;
         break;
       case 'respiratoryRate':
         return this.examinationForm.respiratoryRate;

@@ -1,5 +1,6 @@
 class ExaminationHistory {
   String id,
+      bloodPressure,
       history,
       mucosa,
       otherBody,
@@ -31,7 +32,6 @@ class ExaminationHistory {
 
   double pulseRate,
       temperature,
-      bloodPressure,
       respiratoryRate,
       weight,
       height,
@@ -90,7 +90,7 @@ class ExaminationHistory {
       history: json['history'] as String,
       pulseRate: json['pulseRate'] as double,
       temperature: json['temperature'] as double,
-      bloodPressure: json['bloodPressure'] as double,
+      bloodPressure: json['bloodPressure'] as String,
       respiratoryRate: json['respiratoryRate'] as double,
       weight: json['weight'] as double,
       height: json['height'] as double,

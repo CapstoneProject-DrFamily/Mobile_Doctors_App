@@ -54,7 +54,7 @@ class LandingPageViewModel extends BaseModel {
         activeColor: Colors.blue[400]),
     BottomNavyBarItem(
         icon: Icon(EvaIcons.calendarOutline),
-        title: Text('Appointment'),
+        title: Text('Schedule'),
         textAlign: TextAlign.center,
         activeColor: Colors.blue[400]),
     BottomNavyBarItem(
