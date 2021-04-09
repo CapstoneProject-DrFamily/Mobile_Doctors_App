@@ -210,23 +210,12 @@ class TransactionDetailPage extends StatelessWidget {
                                             : Flexible(
                                                 child: Container(
                                                   child: Center(
-                                                      child: model.feedback
-                                                                  .ratingPoint ==
-                                                              5
-                                                          ? Text(model.feedback
-                                                                      .note ==
+                                                      child: Text(
+                                                          model.feedback.note ==
                                                                   null
                                                               ? ""
-                                                              : 'User like most : ' +
-                                                                  model.feedback
-                                                                      .note)
-                                                          : Text(model.feedback
-                                                                      .note ==
-                                                                  null
-                                                              ? ""
-                                                              : 'Need to improve : ' +
-                                                                  model.feedback
-                                                                      .note)),
+                                                              : model.feedback
+                                                                  .note)),
                                                 ),
                                               )
                                       ],

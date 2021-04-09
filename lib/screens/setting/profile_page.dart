@@ -617,6 +617,10 @@ class ProfilePage extends StatelessWidget {
           fillColor: Colors.white,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
+          prefixIcon: Icon(
+            Icons.mail,
+            color: Colors.blue,
+          ),
         ),
       ),
     );
@@ -654,6 +658,10 @@ class ProfilePage extends StatelessWidget {
           fillColor: Colors.grey.shade100,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
+          prefixIcon: Icon(
+            Icons.phone,
+            color: Colors.blue,
+          ),
         ),
       ),
     );
@@ -691,7 +699,7 @@ class ProfilePage extends StatelessWidget {
           fillColor: Colors.grey.shade100,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
-          suffixIcon: Icon(
+          prefixIcon: Icon(
             EvaIcons.calendar,
             color: Colors.blue,
           ),

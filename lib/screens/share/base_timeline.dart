@@ -24,32 +24,30 @@ class BaseTimeLine extends StatelessWidget {
                   backgroundColor: Colors.white,
                   elevation: 0,
                   actions: [
-                    //end soon or information of patient
-
-                    // model.index == 1
-                    //     ? Container(
-                    //         child: Center(
-                    //         child: Padding(
-                    //           padding: const EdgeInsets.all(10.0),
-                    //           child: InkWell(
-                    //             onTap: () async {
-                    //               await model.skipTransaction(transactionId);
-                    //               model.changeIndex(2);
-                    //             },
-                    //             child: Padding(
-                    //               padding: const EdgeInsets.all(8.0),
-                    //               child: Text(
-                    //                 'Skip this step',
-                    //                 style: TextStyle(
-                    //                     color: MainColors.blueBegin,
-                    //                     fontWeight: FontWeight.bold,
-                    //                     fontSize: 18),
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       ))
-                    //     : Container(),
+                    model.index == 1 && model.currentIndex == 1
+                        ? Container(
+                            child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: InkWell(
+                                onTap: () async {
+                                  await model.skipTransaction(transactionId);
+                                  model.changeIndex(2);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Skip this step',
+                                    style: TextStyle(
+                                        color: MainColors.blueBegin,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ))
+                        : Container(),
                   ],
                 ),
                 body: Container(

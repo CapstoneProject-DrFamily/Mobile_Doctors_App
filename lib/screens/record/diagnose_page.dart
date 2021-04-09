@@ -250,9 +250,13 @@ class DiagnosePage extends StatelessWidget {
                                                                       false,
                                                                   shrinkWrap:
                                                                       true,
-                                                                  itemCount: model
-                                                                      .listDiseaseModel
-                                                                      .length,
+                                                                  itemCount: (model.changeList)
+                                                                      ? model
+                                                                          .listDiseaseSearchModel
+                                                                          .length
+                                                                      : model
+                                                                          .listDiseaseModel
+                                                                          .length,
                                                                   itemBuilder:
                                                                       (context,
                                                                           index) {
@@ -269,22 +273,21 @@ class DiagnosePage extends StatelessWidget {
                                                                           offset: Offset(
                                                                               -7,
                                                                               0),
-                                                                          child: Text(model
-                                                                              .listDiseaseModel[index]
-                                                                              .diseaseName),
+                                                                          child: Text((model.changeList)
+                                                                              ? '${model.listDiseaseSearchModel[index].diseaseCode}-${model.listDiseaseSearchModel[index].diseaseName}'
+                                                                              : '${model.listDiseaseModel[index].diseaseCode} - ${model.listDiseaseModel[index].diseaseName}'),
                                                                         ),
                                                                         onTap:
                                                                             () {
+                                                                          (model.changeList)
+                                                                              ? model.chooseDisease(model.listDiseaseSearchModel[index].diseaseCode, model.listDiseaseSearchModel[index].diseaseName, 1)
+                                                                              : model.chooseDisease(model.listDiseaseModel[index].diseaseCode, model.listDiseaseModel[index].diseaseName, 2);
                                                                           print(
-                                                                              "choose");
-                                                                          FocusScope.of(context)
-                                                                              .requestFocus(new FocusNode());
+                                                                              "choose ${model.changeList}");
                                                                           model.diagnoseConclusionController.text =
                                                                               "";
-
-                                                                          model.chooseDisease(model
-                                                                              .listDiseaseModel[index]
-                                                                              .diseaseName);
+                                                                          FocusScope.of(context)
+                                                                              .requestFocus(new FocusNode());
                                                                         },
                                                                       ),
                                                                     );

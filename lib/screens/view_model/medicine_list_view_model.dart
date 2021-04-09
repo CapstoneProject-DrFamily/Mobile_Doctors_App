@@ -3,11 +3,14 @@ import 'dart:convert';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:mobile_doctors_apps/model/examination_history.dart';
 import 'package:mobile_doctors_apps/model/medicine_detail_model.dart';
+import 'package:mobile_doctors_apps/model/medicine_template_model.dart';
 import 'package:mobile_doctors_apps/model/prescription_model.dart';
 import 'package:mobile_doctors_apps/model/transaction.dart';
+import 'package:mobile_doctors_apps/repository/appconfig_repo.dart';
+import 'package:mobile_doctors_apps/repository/examination_repo.dart';
 import 'package:mobile_doctors_apps/repository/prescription_repo.dart';
 import 'package:mobile_doctors_apps/repository/transaction_repo.dart';
 import 'package:mobile_doctors_apps/screens/history/transaction_detail_page.dart';
@@ -17,8 +20,10 @@ import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MedicineListViewModel extends BaseModel {
+  final IExaminationRepo _examinationRepo = ExaminationRepo();
   final IPrescriptionRepo _prescriptionRepo = PrescriptionRepo();
   final ITransactionRepo _transactionRepo = TransactionRepo();
+  final IAppConfigRepo _appConfigRepo = AppConfigRepo();
   bool init = true;
 
   static bool isUpdate = false;
@@ -36,15 +41,89 @@ class MedicineListViewModel extends BaseModel {
 
   bool isLoading = false;
 
+  ExaminationHistory _examinationHistory;
+  ExaminationHistory get examinationHistory => _examinationHistory;
+
+  List<String> _listChooseModel = [];
+  List<String> get listChooseModel => _listChooseModel;
+
+  List<MedicineTemplateModel> _listTemplate = [];
+
+  List<MedicineTemplateModel> _listTemplateDisplay = [];
+  List<MedicineTemplateModel> get listTemplateDisplay => _listTemplateDisplay;
+
+  List<DropdownMenuItem<MedicineTemplateModel>> listDropdownMenuItems = [];
+
+  int initTemplate = 0;
+
+  MedicineTemplateModel template;
+
+  bool isNew = false;
+
+  String diseaseId;
+
   MedicineListViewModel() {
     isUpdate = false;
     listMedicine = [];
     initMedicineList();
   }
 
-  fetchData(transactionId) {
+  fetchData(transactionId) async {
     if (init) {
       this.transactionId = transactionId;
+      _examinationHistory =
+          await _examinationRepo.getExaminationHistory(transactionId);
+      List<String> slitText = _examinationHistory.conclusion.split(";");
+
+      for (int i = 0; i < slitText.length; i++) {
+        _listChooseModel.add(slitText[i].split("-")[0].trim());
+      }
+
+      print("list $_listChooseModel");
+
+      _listTemplate = await _appConfigRepo.appConfigPrescriptionTemplate();
+
+      for (var item in _listChooseModel) {
+        var itemTemplate = _listTemplate
+            .where((element) => element.diseaseId == item)
+            .toList();
+        _listTemplateDisplay = _listTemplateDisplay + itemTemplate;
+      }
+
+      listMedicine = _listTemplateDisplay[initTemplate].listMedicine;
+
+      print("init medicine ${_listTemplateDisplay[initTemplate].templateName}");
+
+      print(_listTemplateDisplay.length);
+
+      for (var item in _listTemplateDisplay) {
+        print("okle");
+        listDropdownMenuItems.add(
+          DropdownMenuItem(
+            child: Text(
+              item.templateName,
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+            value: item,
+          ),
+        );
+      }
+
+      listDropdownMenuItems.add(
+        DropdownMenuItem(
+          child: Text(
+            "Create New",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          value: MedicineTemplateModel(templateName: "Create New"),
+        ),
+      );
+
+      print("listTest ${listDropdownMenuItems.length}");
+
+      template = _listTemplateDisplay[initTemplate];
+
       init = false;
       print("load transaction");
       getTransactionFireBase();
@@ -117,6 +196,7 @@ class MedicineListViewModel extends BaseModel {
             (_noteController.text == "") ? null : _noteController.text,
         insBy: doctor,
         updateBy: doctor,
+        diseaseId: diseaseId,
         listMedicine: listMedicine);
 
     String prescriptionJson = jsonEncode(prescriptionModel.toJson());
@@ -132,7 +212,7 @@ class MedicineListViewModel extends BaseModel {
         estimatedTime: estimateTime,
         location: location,
         note: note,
-        status: 3);
+        status: 5);
 
     bool statusUpdate = await _transactionRepo.updateTransaction(transaction);
 
@@ -162,5 +242,26 @@ class MedicineListViewModel extends BaseModel {
         },
       );
     }
+  }
+
+  void onChangeButtom(MedicineTemplateModel model, int index) {
+    if (index == -1) {
+      isNew = true;
+      listMedicine = [];
+      template = model;
+      diseaseId = null;
+    } else {
+      isNew = false;
+      diseaseId = model.diseaseId;
+      template = model;
+      initTemplate = index;
+      listMedicine = _listTemplateDisplay[initTemplate].listMedicine;
+    }
+    notifyListeners();
+  }
+
+  void deleteMedicine(int medicineID) {
+    listMedicine.removeWhere((element) => element.medicineId == medicineID);
+    notifyListeners();
   }
 }
