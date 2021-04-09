@@ -290,41 +290,55 @@ class TransactionFormScreen extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Diagnose / Conclusion',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff0d47a1),
+                  child: Container(
+                    width: double.infinity,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Diagnose / Conclusion',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xff0d47a1),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            initialValue: this.model.examinationForm.conclusion,
-                            maxLines: 5,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Color(0xff0d47a1),
-                            ),
-                            decoration: InputDecoration.collapsed(
-                                hintText: 'Enter your text'),
+                          SizedBox(
+                            height: 10,
                           ),
-                        ),
-                      ],
+                          Wrap(
+                            direction: Axis.horizontal,
+                            children: [
+                              for (var item in this.model.diagnoseList)
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      bottom: 10, left: 5, right: 5),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 10),
+                                  // constraints: BoxConstraints(
+                                  //   maxWidth:
+                                  //       MediaQuery.of(context).size.width * 0.7,
+                                  // ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                    color: Color(0xff0d47a1),
+                                  ),
+                                  child: Text(
+                                    item.trim(),
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
