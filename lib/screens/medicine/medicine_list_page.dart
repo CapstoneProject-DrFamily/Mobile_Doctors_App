@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
@@ -92,7 +93,8 @@ class MedicineListPage extends StatelessWidget {
                                                     .withOpacity(0.8),
                                                 onPressed: () async {
                                                   model.finishTransaction(
-                                                      context);
+                                                    context,
+                                                  );
                                                 },
                                                 child: model.isLoading
                                                     ? Container(
@@ -165,6 +167,23 @@ class MedicineFormDetail extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white, width: 1),
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.white),
+                child: DropdownButton(
+                  underline: SizedBox(),
+                  value: model.template,
+                  items: model.listDropdownMenuItems,
+                  isExpanded: true,
+                  onChanged: (value) {
+                    model.onChangeButtom(
+                        value, model.listTemplateDisplay.indexOf(value));
+                  },
+                ),
+              ),
               DefaultTabController(
                 length: 2,
                 child: Column(
@@ -195,6 +214,7 @@ class MedicineFormDetail extends StatelessWidget {
                     Container(
                       height: MediaQuery.of(context).size.height * 0.5,
                       child: TabBarView(
+                        physics: NeverScrollableScrollPhysics(),
                         children: [
                           Column(
                             children: [
@@ -262,203 +282,232 @@ class MedicineFormDetail extends StatelessWidget {
                                               color: Colors.white,
                                               borderRadius:
                                                   BorderRadius.circular(12)),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
+                                          child: Slidable(
+                                            actionPane:
+                                                SlidableDrawerActionPane(),
+                                            actionExtentRatio: 0.25,
+                                            secondaryActions: [
+                                              IconSlideAction(
+                                                caption: 'Delete',
+                                                color: Colors.red,
+                                                icon: Icons.delete,
+                                                onTap: () async {
+                                                  // //Delete transaction
+                                                  model.deleteMedicine(
+                                                      MedicineListViewModel
+                                                          .listMedicine[index]
+                                                          .medicineId);
+                                                },
+                                              ),
+                                            ],
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                    flex: 3,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Text(
+                                                        MedicineListViewModel
+                                                            .listMedicine[index]
+                                                            .medicineName,
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                        ),
+                                                      ),
+                                                    )),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Expanded(
+                                                    child: Text(
+                                                  MedicineListViewModel
+                                                          .listMedicine[index]
+                                                          .totalQuantity
+                                                          .toString() +
+                                                      " " +
+                                                      MedicineListViewModel
+                                                          .listMedicine[index]
+                                                          .medicineType,
+                                                  style:
+                                                      TextStyle(fontSize: 14),
+                                                )),
+                                                SizedBox(width: 20),
+                                                Expanded(
                                                   flex: 3,
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      MedicineListViewModel
-                                                          .listMedicine[index]
-                                                          .medicineName,
-                                                      style: TextStyle(
-                                                        fontSize: 14,
-                                                      ),
-                                                    ),
-                                                  )),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Expanded(
-                                                  child: Text(
-                                                MedicineListViewModel
-                                                        .listMedicine[index]
-                                                        .totalQuantity
-                                                        .toString() +
-                                                    " " +
-                                                    MedicineListViewModel
-                                                        .listMedicine[index]
-                                                        .medicineType,
-                                                style: TextStyle(fontSize: 14),
-                                              )),
-                                              SizedBox(width: 20),
-                                              Expanded(
-                                                flex: 3,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 6),
-                                                  child: Column(
-                                                    children: [
-                                                      Row(
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 5,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(3.0),
-                                                              child: SvgPicture
-                                                                  .asset(
-                                                                'assets/icons/sunrise.svg',
-                                                                width: 20,
-                                                                height: 20,
+                                                        const EdgeInsets.only(
+                                                            top: 6),
+                                                    child: Column(
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Expanded(
+                                                              flex: 5,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        3.0),
+                                                                child:
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                  'assets/icons/sunrise.svg',
+                                                                  width: 20,
+                                                                  height: 20,
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Center(
-                                                              child: Text(
-                                                                MedicineListViewModel
-                                                                    .listMedicine[
-                                                                        index]
-                                                                    .morningQuantity
-                                                                    .toString(),
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        14),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Center(
+                                                                child: Text(
+                                                                  MedicineListViewModel
+                                                                      .listMedicine[
+                                                                          index]
+                                                                      .morningQuantity
+                                                                      .toString(),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          14),
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Text(
-                                                              MedicineListViewModel
-                                                                  .listMedicine[
-                                                                      index]
-                                                                  .medicineType,
-                                                              style: TextStyle(
-                                                                  fontSize: 14),
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 5,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(3.0),
-                                                              child: SvgPicture
-                                                                  .asset(
-                                                                'assets/icons/sun.svg',
-                                                                width: 20,
-                                                                height: 20,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            child: Center(
-                                                              child: Text(
-                                                                MedicineListViewModel
-                                                                    .listMedicine[
-                                                                        index]
-                                                                    .noonQuantity
-                                                                    .toString(),
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        14),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Text(
-                                                              MedicineListViewModel
-                                                                  .listMedicine[
-                                                                      index]
-                                                                  .medicineType,
-                                                              style: TextStyle(
-                                                                  fontSize: 14),
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 5,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      top: 3,
-                                                                      left: 3,
-                                                                      right: 3,
-                                                                      bottom:
-                                                                          10),
-                                                              child: SvgPicture
-                                                                  .asset(
-                                                                'assets/icons/moon.svg',
-                                                                width: 15,
-                                                                height: 15,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            child: Center(
-                                                              child: Text(
-                                                                MedicineListViewModel
-                                                                    .listMedicine[
-                                                                        index]
-                                                                    .afternoonQuantity
-                                                                    .toString(),
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        14),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
+                                                            Expanded(
                                                               flex: 2,
                                                               child: Text(
                                                                 MedicineListViewModel
                                                                     .listMedicine[
                                                                         index]
                                                                     .medicineType,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        14),
                                                                 overflow:
                                                                     TextOverflow
                                                                         .ellipsis,
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 14,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Expanded(
+                                                              flex: 5,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        3.0),
+                                                                child:
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                  'assets/icons/sun.svg',
+                                                                  width: 20,
+                                                                  height: 20,
                                                                 ),
-                                                              ))
-                                                        ],
-                                                      ),
-                                                    ],
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              child: Center(
+                                                                child: Text(
+                                                                  MedicineListViewModel
+                                                                      .listMedicine[
+                                                                          index]
+                                                                      .noonQuantity
+                                                                      .toString(),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          14),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 2,
+                                                              child: Text(
+                                                                MedicineListViewModel
+                                                                    .listMedicine[
+                                                                        index]
+                                                                    .medicineType,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        14),
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Expanded(
+                                                              flex: 5,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        top: 3,
+                                                                        left: 3,
+                                                                        right:
+                                                                            3,
+                                                                        bottom:
+                                                                            10),
+                                                                child:
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                  'assets/icons/moon.svg',
+                                                                  width: 15,
+                                                                  height: 15,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              child: Center(
+                                                                child: Text(
+                                                                  MedicineListViewModel
+                                                                      .listMedicine[
+                                                                          index]
+                                                                      .afternoonQuantity
+                                                                      .toString(),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          14),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                                flex: 2,
+                                                                child: Text(
+                                                                  MedicineListViewModel
+                                                                      .listMedicine[
+                                                                          index]
+                                                                      .medicineType,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                  ),
+                                                                ))
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                              )
-                                            ],
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
                                         Divider(

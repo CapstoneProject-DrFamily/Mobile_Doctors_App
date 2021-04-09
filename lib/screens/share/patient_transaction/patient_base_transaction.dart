@@ -23,7 +23,7 @@ class PatientBaseTransaction extends StatelessWidget {
             onPressed: () => Navigator.of(context).pop(),
           ),
           title: Text(
-            'Transaction Detail',
+            'Record Detail',
             style: TextStyle(color: Color(0xff0d47a1)),
           ),
         ),

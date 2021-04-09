@@ -38,7 +38,14 @@ class MedicalCareHistoryViewModel extends BaseModel {
   List<TransactionHistoryModel> _listTransaction = [];
   List<TransactionHistoryModel> get listTransaction => _listTransaction;
 
-  List _historyTime = ['All', 'On Going', 'Checking', 'Done', 'Cancel'];
+  List _historyTime = [
+    'All',
+    'On Going',
+    'Checking',
+    "Awaiting Payment",
+    'Done',
+    'Cancel'
+  ];
   List get historyTime => _historyTime;
 
   Future<void> initHistory() async {
@@ -125,7 +132,7 @@ class MedicalCareHistoryViewModel extends BaseModel {
           _status = status;
           notifyListeners();
           _listTransaction = await transactionRepo.getListTransactionHistory(
-              _doctorId.toString(), 3);
+              _doctorId.toString(), 5);
           _loadingList = false;
 
           if (_listTransaction == null) {
@@ -144,6 +151,23 @@ class MedicalCareHistoryViewModel extends BaseModel {
           _status = status;
           notifyListeners();
           _listTransaction = await transactionRepo.getListTransactionHistory(
+              _doctorId.toString(), 3);
+          _loadingList = false;
+          if (_listTransaction == null) {
+            _isNotHave = true;
+          }
+
+          notifyListeners();
+        }
+        break;
+      case 5:
+        {
+          _isNotHave = false;
+
+          _loadingList = true;
+          _status = status;
+          notifyListeners();
+          _listTransaction = await transactionRepo.getListTransactionHistory(
               _doctorId.toString(), 4);
           _loadingList = false;
           if (_listTransaction == null) {
@@ -152,7 +176,6 @@ class MedicalCareHistoryViewModel extends BaseModel {
 
           notifyListeners();
         }
-
         break;
       default:
     }
@@ -227,6 +250,22 @@ class MedicalCareHistoryViewModel extends BaseModel {
         }
         break;
       case 4:
+        {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  TransactionDetailPage(transactionId: transactionId),
+            ),
+          ).then((value) async {
+            _status = 0;
+            _isFirst = true;
+            print('init5 $_isFirst');
+            await initHistory();
+          });
+        }
+        break;
+      case 5:
         {
           Navigator.push(
             context,
