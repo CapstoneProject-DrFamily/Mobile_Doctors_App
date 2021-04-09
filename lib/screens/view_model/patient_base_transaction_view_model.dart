@@ -55,21 +55,25 @@ class TransactionBaseViewModel extends BaseModel {
       listTransaction =
           await _transactionRepo.getListPatientTransactionId(patientId);
 
-      this.transactionId = listTransaction[0];
-      List<dynamic> results = await _transactionRepo
-          .getTransactionPatientDetail(listTransaction[0]);
-      patientTransaction = results[0];
-      profilePatient = results[1];
-      doctorSpeciality = results[2];
-      service = results[3];
-      examinationForm = results[4];
-      feedback = results[5];
-      profileDoctor = results[6];
+      if (listTransaction != null) {
+        this.transactionId = listTransaction[0];
+        List<dynamic> results = await _transactionRepo
+            .getTransactionPatientDetail(listTransaction[0]);
+        patientTransaction = results[0];
+        profilePatient = results[1];
+        doctorSpeciality = results[2];
+        service = results[3];
+        examinationForm = results[4];
+        feedback = results[5];
+        profileDoctor = results[6];
 
-      initCheck(this.listCheck);
-      this.init = false;
+        initCheck(this.listCheck);
+        this.init = false;
 
-      notifyListeners();
+        notifyListeners();
+      } else {
+        this.init = false;
+      }
     }
   }
 
@@ -80,9 +84,6 @@ class TransactionBaseViewModel extends BaseModel {
         break;
       case 'temperature':
         return this.examinationForm.temperature;
-        break;
-      case 'bloodPressure':
-        return this.examinationForm.bloodPressure;
         break;
       case 'respiratoryRate':
         return this.examinationForm.respiratoryRate;

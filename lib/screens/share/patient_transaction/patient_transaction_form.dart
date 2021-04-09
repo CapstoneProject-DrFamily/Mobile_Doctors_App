@@ -63,19 +63,197 @@ class TransactionFormScreen extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: Text(
                 'Examination',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
               ),
             ),
             // collapsed: Text('See details'),
-            expanded: Center(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'No data',
-                style: TextStyle(color: Colors.white),
+            expanded: Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 10, left: 10, right: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '1.Hematology test',
+                            style: TextStyle(
+                                color: Color(0xff0d47a1),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Flexible(
+                            child: Checkbox(
+                              value: this.model.listCheck.contains("Hematology")
+                                  ? true
+                                  : false,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: this.model.listCheck.contains("Hematology")
+                          ? true
+                          : false,
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: this.model.listCheck.contains("Hematology")
+                            ? Image.network(
+                                this.model.examinationForm.hematology,
+                                width: 200,
+                                height: 250,
+                                fit: BoxFit.fill)
+                            : Text("No data"),
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 10, left: 10, right: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '2.Serum biochemistry',
+                            style: TextStyle(
+                                color: Color(0xff0d47a1),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Flexible(
+                            child: Checkbox(
+                              value: this
+                                      .model
+                                      .listCheck
+                                      .contains("Serum biochemistry")
+                                  ? true
+                                  : false,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible:
+                          this.model.listCheck.contains("Serum biochemistry")
+                              ? true
+                              : false,
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child:
+                            this.model.listCheck.contains("Serum biochemistry")
+                                ? Image.network(
+                                    this.model.examinationForm.bloodChemistry,
+                                    width: 200,
+                                    height: 250,
+                                    fit: BoxFit.fill)
+                                : Text("No data"),
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 10, left: 10, right: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '3.Urine biochemistry',
+                            style: TextStyle(
+                                color: Color(0xff0d47a1),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Flexible(
+                            child: Checkbox(
+                              value: this
+                                      .model
+                                      .listCheck
+                                      .contains("Urine biochemistry")
+                                  ? true
+                                  : false,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible:
+                          this.model.listCheck.contains("Urine biochemistry")
+                              ? true
+                              : false,
+                      child: Padding(
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: this
+                                  .model
+                                  .listCheck
+                                  .contains("Urine biochemistry")
+                              ? Image.network(
+                                  this.model.examinationForm.urineBiochemistry,
+                                  width: 200,
+                                  height: 250,
+                                  fit: BoxFit.fill)
+                              : Text("No data")),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 10, left: 10, right: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '4.Abdominal ultrasound',
+                            style: TextStyle(
+                                color: Color(0xff0d47a1),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Flexible(
+                            child: Checkbox(
+                              value: this
+                                      .model
+                                      .listCheck
+                                      .contains("Abdominal ultrasound")
+                                  ? true
+                                  : false,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible:
+                          this.model.listCheck.contains("Abdominal ultrasound")
+                              ? true
+                              : false,
+                      child: Padding(
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: this
+                                  .model
+                                  .listCheck
+                                  .contains("Abdominal ultrasound")
+                              ? Image.network(
+                                  this
+                                      .model
+                                      .examinationForm
+                                      .abdominalUltrasound,
+                                  width: 200,
+                                  height: 250,
+                                  fit: BoxFit.fill)
+                              : Text("No data")),
+                    ),
+                  ],
+                ),
               ),
-            )),
+            ),
             tapHeaderToExpand: true,
             hasIcon: true,
             iconColor: Colors.white,
@@ -101,8 +279,10 @@ class TransactionFormScreen extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: Text(
                 'Diagnose',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
               ),
             ),
             // collapsed: Text('See details'),
@@ -122,7 +302,10 @@ class TransactionFormScreen extends StatelessWidget {
                           child: Text(
                             'Diagnose / Conclusion',
                             style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff0d47a1),
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -133,6 +316,10 @@ class TransactionFormScreen extends StatelessWidget {
                           child: TextFormField(
                             initialValue: this.model.examinationForm.conclusion,
                             maxLines: 5,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xff0d47a1),
+                            ),
                             decoration: InputDecoration.collapsed(
                                 hintText: 'Enter your text'),
                           ),
@@ -155,7 +342,10 @@ class TransactionFormScreen extends StatelessWidget {
                           child: Text(
                             'Doctor Advice',
                             style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff0d47a1),
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -164,6 +354,10 @@ class TransactionFormScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xff0d47a1),
+                            ),
                             initialValue: this.model.examinationForm.advisory,
                             maxLines: 5,
                             decoration: InputDecoration.collapsed(
@@ -202,8 +396,10 @@ class TransactionFormScreen extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: Text(
                 'Organs',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
               ),
             ),
             // collapsed: Text('See details'),
@@ -231,7 +427,11 @@ class TransactionFormScreen extends StatelessWidget {
                                   alignment: Alignment.centerLeft,
                                   child: Text(
                                     this.model.listSpeciality[index].name,
-                                    style: TextStyle(fontSize: 18),
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff0d47a1),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -315,8 +515,10 @@ class TransactionFormScreen extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: Text(
                 'Clinical Diagnosis',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
               ),
             ),
             // collapsed: Text('See details'),
@@ -347,8 +549,10 @@ class TransactionFormScreen extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: Text(
                 'Medical History',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
               ),
             ),
             expanded: buildMedicalHistory(context, model),
@@ -378,7 +582,10 @@ class TransactionFormScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: Text(
                   '2. Clinical Diagnosis',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
                 ),
               ),
               Padding(
@@ -388,14 +595,19 @@ class TransactionFormScreen extends StatelessWidget {
                   children: [
                     Text(
                       '2.1 ',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff0d47a1),
+                      ),
                     ),
                     Flexible(
                       child: Text(
                         'Vital Signs',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff0d47a1),
                         ),
                       ),
                     ),
@@ -405,19 +617,19 @@ class TransactionFormScreen extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              buildAnthropometricIndex("Pulse", "...", model, "pulseRate"),
+              buildAnthropometricIndex("Pulse", "BPM", model, "pulseRate"),
               // buildErrorMessage(),
               buildAnthropometricIndex(
                   "Temperature", "Celsius", model, "temperature"),
               buildAnthropometricIndex(
-                  "Blood Pressure", "...", model, "bloodPressure"),
+                  "Blood Pressure", "mm/Hg", model, "bloodPressure"),
               buildAnthropometricIndex(
-                  "Respiratory Rate", "...", model, "respiratoryRate"),
+                  "Respiratory Rate", "BRPM", model, "respiratoryRate"),
               buildAnthropometricIndex("Weight", "kg", model, "weight"),
               buildAnthropometricIndex("Height", "cm", model, "height"),
-              buildAnthropometricIndex("BMI", "...", model, "BMI"),
+              buildAnthropometricIndex("BMI", "kg/m2", model, "BMI"),
               buildAnthropometricIndex(
-                  "Hips", "...", model, "waistCircumference"),
+                  "Hips", "cm", model, "waistCircumference"),
               Divider(
                 thickness: 0.5,
               ),
@@ -453,8 +665,11 @@ class TransactionFormScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
                       '1. Medical History',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff0d47a1),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -470,6 +685,9 @@ class TransactionFormScreen extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: TextFormField(
+                            style: TextStyle(
+                              color: Color(0xff0d47a1),
+                            ),
                             initialValue: model.examinationForm.history,
                             maxLines: 5,
                             decoration: InputDecoration.collapsed(),
@@ -499,7 +717,10 @@ class TransactionFormScreen extends StatelessWidget {
         Expanded(
             child: Text(
           label,
-          style: TextStyle(fontSize: 18),
+          style: TextStyle(
+            fontSize: 16,
+            color: Color(0xff0d47a1),
+          ),
         )),
         Expanded(
           //   child: Container(
@@ -511,12 +732,24 @@ class TransactionFormScreen extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             child: Container(
               child: TextFormField(
-                initialValue: this.model.getFieldNumber(field) != null
-                    ? this.model.getFieldNumber(field).toStringAsFixed(1)
-                    : null,
+                initialValue: field == "bloodPressure"
+                    ? this.model.examinationForm.bloodPressure != null
+                        ? this.model.examinationForm.bloodPressure +
+                            " " +
+                            hintText
+                        : null
+                    : this.model.getFieldNumber(field) != null
+                        ? this.model.getFieldNumber(field).toStringAsFixed(0) +
+                            " " +
+                            hintText
+                        : null,
                 enabled: false,
                 textAlign: TextAlign.center,
                 keyboardType: TextInputType.number,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xff0d47a1),
+                ),
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.grey, width: 2),
@@ -556,12 +789,17 @@ class TransactionFormScreen extends StatelessWidget {
             children: [
               Text(
                 '2.2 ',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff0d47a1),
+                ),
               ),
               Flexible(
                 child: Text(
                   'Eye Sight',
                   style: TextStyle(
+                    color: Color(0xff0d47a1),
                     fontSize: 18,
                   ),
                 ),
@@ -576,13 +814,21 @@ class TransactionFormScreen extends StatelessWidget {
             children: [
               Text(
                 'No glasses',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff0d47a1),
+                ),
               ),
               buildEyeExaminationForm("Left Eye", "0 ~ 10", model, "leftEye"),
               buildEyeExaminationForm("Right Eye", "0 ~ 10", model, "rightEye"),
               Text(
                 'With glasses',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff0d47a1),
+                ),
               ),
               buildEyeExaminationForm(
                   "Left Eye", "0 ~ 10", model, "leftEyeGlassed"),
@@ -606,6 +852,7 @@ class TransactionFormScreen extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
+              color: Color(0xff0d47a1),
               fontSize: 18,
             ),
           ),
@@ -658,13 +905,19 @@ class TransactionFormScreen extends StatelessWidget {
             children: [
               Text(
                 '2.3 ',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff0d47a1),
+                ),
               ),
               Flexible(
                 child: Text(
                   'Paraclinical',
                   style: TextStyle(
                     fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff0d47a1),
                   ),
                 ),
               ),
@@ -677,13 +930,19 @@ class TransactionFormScreen extends StatelessWidget {
             children: [
               Text(
                 '2.3.1 ',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff0d47a1),
+                ),
               ),
               Flexible(
                 child: Text(
                   'Full body',
                   style: TextStyle(
                     fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff0d47a1),
                   ),
                 ),
               ),
@@ -694,7 +953,11 @@ class TransactionFormScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             'Mucosocutaneous',
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color(0xff0d47a1),
+            ),
           ),
         ),
         Padding(
@@ -713,7 +976,11 @@ class TransactionFormScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             'Other',
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color(0xff0d47a1),
+            ),
           ),
         ),
         Padding(

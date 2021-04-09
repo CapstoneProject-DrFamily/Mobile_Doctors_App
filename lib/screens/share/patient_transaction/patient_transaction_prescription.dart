@@ -89,9 +89,9 @@ class TransactionPrescriptionScreen extends StatelessWidget {
                               child: Text(
                                 model.list[index].medicine.medicineName,
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 20),
+                                    color: Colors.white),
                               ),
                             ),
                             // collapsed: Text('See details'),

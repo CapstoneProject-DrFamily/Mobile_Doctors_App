@@ -25,13 +25,13 @@ class ExaminationHistoryModel {
       urineBiochemistry,
       abdominalUltrasound,
       conclusion,
+      bloodPressure,
       advisory;
 
   String insBy, updBy;
 
   double pulseRate,
       temperature,
-      bloodPressure,
       respiratoryRate,
       weight,
       height,
@@ -90,7 +90,7 @@ class ExaminationHistoryModel {
       history: json['history'] as String,
       pulseRate: json['pulseRate'] as double,
       temperature: json['temperature'] as double,
-      bloodPressure: json['bloodPressure'] as double,
+      bloodPressure: json['bloodPressure'] as String,
       respiratoryRate: json['respiratoryRate'] as double,
       weight: json['weight'] as double,
       height: json['height'] as double,
