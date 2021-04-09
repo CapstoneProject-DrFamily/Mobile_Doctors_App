@@ -24,7 +24,7 @@ class BaseTimeLine extends StatelessWidget {
                   backgroundColor: Colors.white,
                   elevation: 0,
                   actions: [
-                    model.index == 1
+                    model.index == 1 && model.currentIndex == 1
                         ? Container(
                             child: Center(
                             child: Padding(

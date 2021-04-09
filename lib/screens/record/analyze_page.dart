@@ -159,10 +159,10 @@ class AnalyzePage extends StatelessWidget {
                                                 Fluttertoast.showToast(
                                                   msg:
                                                       "Error. Please check your field again",
-                                                  textColor: Colors.red,
+                                                  textColor: Colors.white,
                                                   toastLength:
                                                       Toast.LENGTH_SHORT,
-                                                  backgroundColor: Colors.white,
+                                                  backgroundColor: Colors.red,
                                                   gravity: ToastGravity.CENTER,
                                                 );
                                               }
@@ -514,25 +514,27 @@ class AnalyzePage extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            buildAnthropometricIndex("Pulse", "...", model, "pulseRate"),
+            buildAnthropometricIndex("Pulse", "BPM", model, "pulseRate"),
             // buildErrorMessage(),
             buildAnthropometricIndex(
                 "Temperature", "Celsius", model, "temperature"),
             buildAnthropometricIndex(
-                "Blood Pressure", "...", model, "bloodPressure"),
+                "Blood Pressure", "mm/Hg", model, "bloodPressure"),
             buildAnthropometricIndex(
-                "Respiratory Rate", "...", model, "respiratoryRate"),
+                "Respiratory Rate", "BRPM", model, "respiratoryRate"),
             buildAnthropometricIndex("Weight", "kg", model, "weight"),
             buildAnthropometricIndex("Height", "cm", model, "height"),
             Row(
               children: [
                 SizedBox(width: 15),
                 Expanded(
+                    flex: 3,
                     child: Text(
-                  'BMI',
-                  style: TextStyle(fontSize: 18),
-                )),
+                      'BMI',
+                      style: TextStyle(fontSize: 16, color: Color(0xff0d47a1)),
+                    )),
                 Expanded(
+                  flex: 2,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Container(
@@ -568,12 +570,17 @@ class AnalyzePage extends StatelessWidget {
                   ),
                   // )
                 ),
+                Expanded(
+                  child: Text(
+                    'kg/m2',
+                    style: TextStyle(color: Color(0xff0d47a1)),
+                  ),
+                )
               ],
             ),
 
             // buildAnthropometricIndex("BMI", "...", model, "BMI"),
-            buildAnthropometricIndex(
-                "Hips", "...", model, "waistCircumference"),
+            buildAnthropometricIndex("Hips", "cm", model, "waistCircumference"),
           ],
         ),
         Divider(
@@ -713,11 +720,13 @@ class AnalyzePage extends StatelessWidget {
       children: [
         SizedBox(width: 15),
         Expanded(
+            flex: 3,
             child: Text(
-          label,
-          style: TextStyle(fontSize: 16, color: Color(0xff0d47a1)),
-        )),
+              label,
+              style: TextStyle(fontSize: 16, color: Color(0xff0d47a1)),
+            )),
         Expanded(
+          flex: 2,
           //   child: Container(
           // margin: EdgeInsets.only(right: 10, bottom: 10),
           // decoration: BoxDecoration(
@@ -726,54 +735,103 @@ class AnalyzePage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
-              child: TextFormField(
-                validator: (value) {
-                  if (value.isNotEmpty) {
-                    try {
-                      double num = double.parse(value);
-                      if (num < 0 || num > 999) {
-                        return "Range 0 ~ 999";
-                      }
-                    } catch (e) {
-                      return "Must be a number";
-                    }
-                  }
+              child: field == "bloodPressure"
+                  ? TextFormField(
+                      validator: (value) {
+                        if (value.isNotEmpty) {
+                          RegExp bloodPressure = RegExp(r'^\d{1,3}\/\d{1,3}$');
+                          if (!bloodPressure.hasMatch(value)) {
+                            return 'Invalid format';
+                          }
+                        }
 
-                  return null;
-                },
-                initialValue: model.getFieldNumber(field) != null
-                    ? model.getFieldNumber(field).toString()
-                    : null,
-                onChanged: (value) {
-                  model.changeFieldNumber(field, model, value);
-                },
-                textAlign: TextAlign.center,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.grey, width: 2),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: MainColors.blueBegin, width: 2),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.red, width: 2),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.red, width: 2),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  hintText: hintText,
-                ),
-              ),
+                        return null;
+                      },
+                      initialValue: model.examinationForm.bloodPressure != null
+                          ? model.examinationForm.bloodPressure
+                          : null,
+                      onChanged: (value) {
+                        model.changebloodPressure(model, value);
+                      },
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Colors.grey, width: 2),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: MainColors.blueBegin, width: 2),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Colors.red, width: 2),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Colors.red, width: 2),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                    )
+                  : TextFormField(
+                      validator: (value) {
+                        if (value.isNotEmpty) {
+                          try {
+                            double num = double.parse(value);
+                            if (num < 0 || num > 999) {
+                              return "0 ~ 999";
+                            }
+                          } catch (e) {
+                            return "Must be a number";
+                          }
+                        }
+
+                        return null;
+                      },
+                      initialValue: model.getFieldNumber(field) != null
+                          ? model.getFieldNumber(field).toString()
+                          : null,
+                      onChanged: (value) {
+                        model.changeFieldNumber(field, model, value);
+                      },
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Colors.grey, width: 2),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: MainColors.blueBegin, width: 2),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Colors.red, width: 2),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Colors.red, width: 2),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                    ),
             ),
           ),
           // )
         ),
+        Expanded(
+            child: Text(
+          hintText,
+          style: TextStyle(color: Color(0xff0d47a1)),
+        ))
       ],
     );
   }
