@@ -36,187 +36,220 @@ class PatientBaseTransaction extends StatelessWidget {
               );
             } else
               return Container(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        (model.inList == model.listTransaction.length - 1)
-                            ? Container(
-                                width: 10,
-                              )
-                            : IconButton(
-                                icon: new Icon(Icons.arrow_back_ios,
-                                    color: Color(0xff0d47a1)),
-                                onPressed: () {
-                                  model.previousTransaction(context);
-                                },
-                              ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              right: 8, top: 8, bottom: 8, left: 0),
-                          child: Text('ID:'),
-                        ),
-                        Flexible(
-                          child: Chip(
-                            label: Text(model.transactionId),
-                          ),
-                        ),
-                        (model.inList != 0 ||
-                                model.inList >= model.listTransaction.length)
-                            ? IconButton(
-                                icon: new Icon(Icons.arrow_forward_ios,
-                                    color: Color(0xff0d47a1)),
-                                onPressed: () {
-                                  model.nextTransaction(context);
-                                },
-                              )
-                            : Container(
-                                width: 10,
-                              ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
+                child: model.listTransaction == null
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 8, right: 8, left: 20),
-                                  child: Container(
+                            ClipOval(
+                              child: Material(
+                                color: Color(0xff0d47a1), // button color
+                                child: InkWell(
+                                  splashColor: Colors.grey, // inkwell color
+                                  child: SizedBox(
                                     width: 50,
                                     height: 50,
-                                    child: Image.asset(
-                                      'assets/logo_doctor.png',
-                                      fit: BoxFit.contain,
+                                    child: Icon(
+                                      Icons.assignment_rounded,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 8, right: 8),
-                                  child: Text('FD System'),
-                                ),
-                              ],
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 10),
-                              constraints: BoxConstraints(
-                                maxWidth:
-                                    MediaQuery.of(context).size.width * 0.7,
                               ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                border: (model.patientTransaction.status == 3)
-                                    ? Border.all(color: Colors.green)
-                                    : Border.all(color: Colors.red),
-                              ),
-                              child: (model.patientTransaction.status == 3)
-                                  ? Text(
-                                      "Done",
-                                      style: GoogleFonts.varelaRound(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 13,
-                                        color: Colors.green,
-                                      ),
-                                    )
-                                  : Text(
-                                      "Cancel",
-                                      style: GoogleFonts.varelaRound(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 13,
-                                        color: Colors.red,
-                                      ),
-                                    ),
                             ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text('No history record')
                           ],
                         ),
-                        Flexible(
-                          child: Column(
+                      )
+                    : Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              (model.inList == model.listTransaction.length - 1)
+                                  ? Container(
+                                      width: 10,
+                                    )
+                                  : IconButton(
+                                      icon: new Icon(Icons.arrow_back_ios,
+                                          color: Color(0xff0d47a1)),
+                                      onPressed: () {
+                                        model.previousTransaction(context);
+                                      },
+                                    ),
                               Padding(
                                 padding: const EdgeInsets.only(
-                                    top: 8, right: 20, left: 8),
-                                child: Text(
-                                  Common.convertDate(
-                                      model.patientTransaction.dateStart),
+                                    right: 8, top: 8, bottom: 8, left: 0),
+                                child: Text('ID:'),
+                              ),
+                              Flexible(
+                                child: Chip(
+                                  label: Text(model.transactionId),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8),
-                                child: Icon(Icons.keyboard_arrow_down),
-                              ),
-                              Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 8, right: 20, left: 8),
-                                  child: Text(
-                                    Common.convertDate(
-                                        model.patientTransaction.dateEnd),
-                                  )),
+                              (model.inList != 0 ||
+                                      model.inList >=
+                                          model.listTransaction.length)
+                                  ? IconButton(
+                                      icon: new Icon(Icons.arrow_forward_ios,
+                                          color: Color(0xff0d47a1)),
+                                      onPressed: () {
+                                        model.nextTransaction(context);
+                                      },
+                                    )
+                                  : Container(
+                                      width: 10,
+                                    ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Divider(
-                      thickness: 1,
-                      indent: 50,
-                      endIndent: 50,
-                    ),
-                    Expanded(
-                      child: Container(
-                        child: DefaultTabController(
-                            length: 3,
-                            child: Scaffold(
-                              appBar: AppBar(
-                                backgroundColor: Colors.transparent,
-                                elevation: 0,
-                                centerTitle: true,
-                                title: Text('Addtional Information',
-                                    style: TextStyle(color: Color(0xff0d47a1))),
-                                bottom: TabBar(
-                                  labelColor: Color(0xff0d47a1),
-                                  labelStyle:
-                                      TextStyle(fontWeight: FontWeight.bold),
-                                  indicatorColor: Color(0xff0d47a1),
-                                  unselectedLabelColor: Colors.grey,
-                                  tabs: [
-                                    Tab(
-                                      text: 'Service',
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 8, right: 8, left: 20),
+                                        child: Container(
+                                          width: 50,
+                                          height: 50,
+                                          child: Image.asset(
+                                            'assets/logo_doctor.png',
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 8, right: 8),
+                                        child: Text('FD System'),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 10),
+                                    constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.7,
                                     ),
-                                    Tab(
-                                      text: 'Form',
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      border:
+                                          (model.patientTransaction.status == 3)
+                                              ? Border.all(color: Colors.green)
+                                              : Border.all(color: Colors.red),
                                     ),
-                                    Tab(
-                                      text: 'Prescription',
+                                    child:
+                                        (model.patientTransaction.status == 3)
+                                            ? Text(
+                                                "Done",
+                                                style: GoogleFonts.varelaRound(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 13,
+                                                  color: Colors.green,
+                                                ),
+                                              )
+                                            : Text(
+                                                "Cancel",
+                                                style: GoogleFonts.varelaRound(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 13,
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                  ),
+                                ],
+                              ),
+                              Flexible(
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 8, right: 20, left: 8),
+                                      child: Text(
+                                        Common.convertDate(
+                                            model.patientTransaction.dateStart),
+                                      ),
                                     ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8),
+                                      child: Icon(Icons.keyboard_arrow_down),
+                                    ),
+                                    Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 8, right: 20, left: 8),
+                                        child: Text(
+                                          Common.convertDate(
+                                              model.patientTransaction.dateEnd),
+                                        )),
                                   ],
                                 ),
                               ),
-                              body: TabBarView(
-                                children: [
-                                  PatientTransactionDetailScreen(
-                                    model: model,
-                                  ),
-                                  TransactionFormScreen(
-                                    model: model,
-                                  ),
-                                  TransactionPrescriptionScreen(
-                                      transactionId: model.transactionId),
-                                ],
-                              ),
-                            )),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Divider(
+                            thickness: 1,
+                            indent: 50,
+                            endIndent: 50,
+                          ),
+                          Expanded(
+                            child: Container(
+                              child: DefaultTabController(
+                                  length: 3,
+                                  child: Scaffold(
+                                    appBar: AppBar(
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      centerTitle: true,
+                                      title: Text('Addtional Information',
+                                          style: TextStyle(
+                                              color: Color(0xff0d47a1))),
+                                      bottom: TabBar(
+                                        labelColor: Color(0xff0d47a1),
+                                        labelStyle: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                        indicatorColor: Color(0xff0d47a1),
+                                        unselectedLabelColor: Colors.grey,
+                                        tabs: [
+                                          Tab(
+                                            text: 'Service',
+                                          ),
+                                          Tab(
+                                            text: 'Form',
+                                          ),
+                                          Tab(
+                                            text: 'Prescription',
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    body: TabBarView(
+                                      children: [
+                                        PatientTransactionDetailScreen(
+                                          model: model,
+                                        ),
+                                        TransactionFormScreen(
+                                          model: model,
+                                        ),
+                                        TransactionPrescriptionScreen(
+                                            transactionId: model.transactionId),
+                                      ],
+                                    ),
+                                  )),
+                            ),
+                          )
+                        ],
                       ),
-                    )
-                  ],
-                ),
               );
           },
         ),
