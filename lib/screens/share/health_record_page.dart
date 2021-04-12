@@ -8,10 +8,7 @@ import 'package:mobile_doctors_apps/screens/view_model/health_record_page_view_m
 
 class HealthRecordScreen extends StatelessWidget {
   final int patientId;
-  final String patientName;
-  HealthRecordScreen(
-      {Key key, @required this.patientId, @required this.patientName})
-      : super(key: key);
+  HealthRecordScreen({Key key, @required this.patientId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

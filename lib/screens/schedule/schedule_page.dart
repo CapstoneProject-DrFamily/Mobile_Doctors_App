@@ -527,8 +527,8 @@ class SchedulePage extends StatelessWidget {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               HealthRecordScreen(
-                                                  patientId: patientId,
-                                                  patientName: name),
+                                            patientId: patientId,
+                                          ),
                                         ),
                                       );
                                     },

@@ -12,7 +12,7 @@ class BaseTimeLine extends StatelessWidget {
   Widget build(BuildContext contextA) {
     return BaseView<TimeLineViewModel>(builder: (contextB, child, model) {
       return FutureBuilder(
-          future: model.fetchData(transactionId),
+          future: model.fetchData(transactionId, contextA),
           builder: (contextC, snapshop) {
             if (model.init) {
               return Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -24,30 +24,50 @@ class BaseTimeLine extends StatelessWidget {
                   backgroundColor: Colors.white,
                   elevation: 0,
                   actions: [
-                    model.index == 1 && model.currentIndex == 1
-                        ? Container(
-                            child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: InkWell(
-                                onTap: () async {
-                                  await model.skipTransaction(transactionId);
-                                  model.changeIndex(2);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Skip this step',
-                                    style: TextStyle(
-                                        color: MainColors.blueBegin,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                  ),
-                                ),
-                              ),
+                    PopupMenuButton<String>(
+                      onSelected: model.handleClick,
+                      itemBuilder: (context) {
+                        return {
+                          'Patient Profile',
+                          'Patient Health Record',
+                          'Waiting Examination',
+                          'End Transaction',
+                        }.map((String choice) {
+                          return PopupMenuItem<String>(
+                            value: choice,
+                            child: ListTile(
+                              leading: model.getIcon(choice),
+                              title: Text(choice),
                             ),
-                          ))
-                        : Container(),
+                          );
+                        }).toList();
+                      },
+                    ),
+
+                    // model.index == 1 && model.currentIndex == 1
+                    //     ? Container(
+                    //         child: Center(
+                    //         child: Padding(
+                    //           padding: const EdgeInsets.all(10.0),
+                    //           child: InkWell(
+                    //             onTap: () async {
+                    //               await model.skipTransaction(transactionId);
+                    //               model.changeIndex(2);
+                    //             },
+                    //             child: Padding(
+                    //               padding: const EdgeInsets.all(8.0),
+                    //               child: Text(
+                    //                 'Skip this step',
+                    //                 style: TextStyle(
+                    //                     color: MainColors.blueBegin,
+                    //                     fontWeight: FontWeight.bold,
+                    //                     fontSize: 18),
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ))
+                    //     : Container(),
                   ],
                 ),
                 body: Container(
