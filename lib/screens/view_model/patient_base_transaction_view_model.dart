@@ -24,6 +24,8 @@ class TransactionBaseViewModel extends BaseModel {
 
   List<String> listCheck = List();
 
+  List<String> diagnoseList = [];
+
   int inList = 0;
 
   List<String> listTransaction;
@@ -66,6 +68,8 @@ class TransactionBaseViewModel extends BaseModel {
         examinationForm = results[4];
         feedback = results[5];
         profileDoctor = results[6];
+
+        diagnoseList = examinationForm.conclusion.split(";");
 
         initCheck(this.listCheck);
         this.init = false;
