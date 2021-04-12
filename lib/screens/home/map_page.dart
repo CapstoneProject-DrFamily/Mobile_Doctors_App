@@ -300,8 +300,8 @@ class MapPage extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => HealthRecordScreen(
-                            patientId: model.basicTransaction.patientId,
-                            patientName: model.basicTransaction.patientName),
+                          patientId: model.basicTransaction.patientId,
+                        ),
                       ),
                     );
                   },
