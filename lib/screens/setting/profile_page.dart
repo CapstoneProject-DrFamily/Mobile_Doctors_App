@@ -915,16 +915,19 @@ class ProfilePage extends StatelessWidget {
       ProfilePageViewModel model, BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        bool isUpdated = await model.updateProfile();
-        print(isUpdated);
-        if (isUpdated) {
-          Fluttertoast.showToast(
-            msg: "Update Successfull",
-            textColor: Colors.white,
-            toastLength: Toast.LENGTH_SHORT,
-            backgroundColor: Colors.green,
-            gravity: ToastGravity.CENTER,
-          );
+        bool confirm = await _confirmDialog(context);
+        if (confirm) {
+          bool isUpdated = await model.updateProfile();
+          print(isUpdated);
+          if (isUpdated) {
+            Fluttertoast.showToast(
+              msg: "Update Successfull",
+              textColor: Colors.white,
+              toastLength: Toast.LENGTH_SHORT,
+              backgroundColor: Colors.green,
+              gravity: ToastGravity.CENTER,
+            );
+          }
         }
       },
       child: model.loadingProfile
@@ -942,20 +945,15 @@ class ProfilePage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        "Save",
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.all(6),
-                          child: model.isLoading
-                              ? CircularProgressIndicator(
-                                  backgroundColor: Colors.white,
-                                )
-                              : Container(),
-                        ),
-                      )
+                      model.isLoading
+                          ? CircularProgressIndicator(
+                              backgroundColor: Colors.white,
+                            )
+                          : Text(
+                              "Save",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
                     ],
                   ),
                 ),
@@ -1007,7 +1005,7 @@ class ProfilePage extends StatelessWidget {
   Future _confirmDialog(BuildContext context) {
     return showDialog(
       context: context,
-      builder: (alertContext) {
+      builder: (bookingContext) {
         return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
@@ -1015,9 +1013,9 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
           child: Container(
-            height: 380,
             width: MediaQuery.of(context).size.width * 0.8,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
                   height: 25,
@@ -1031,7 +1029,7 @@ class ProfilePage extends StatelessWidget {
                   height: 25,
                 ),
                 Text(
-                  "Confirm action",
+                  "Confirmation?",
                   style: TextStyle(
                     fontSize: 27,
                     fontWeight: FontWeight.w800,
@@ -1042,7 +1040,8 @@ class ProfilePage extends StatelessWidget {
                 SizedBox(
                   height: 25,
                 ),
-                Expanded(
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
                   child: Text(
                     'Are you sure all your information are correct?',
                     textAlign: TextAlign.center,
@@ -1065,14 +1064,13 @@ class ProfilePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       onTap: () {
-                        Navigator.pop(alertContext);
+                        Navigator.of(bookingContext).pop(true);
                       },
                       child: Container(
                         alignment: Alignment.center,
                         height: 50,
-                        width: MediaQuery.of(alertContext).size.width * 0.3,
+                        width: MediaQuery.of(bookingContext).size.width * 0.3,
                         decoration: BoxDecoration(
-                          color: Colors.blueAccent,
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(color: Colors.blueAccent),
                         ),
@@ -1082,7 +1080,7 @@ class ProfilePage extends StatelessWidget {
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'avenir',
-                            color: Colors.white,
+                            color: Colors.blueAccent,
                           ),
                         ),
                       ),
@@ -1092,13 +1090,14 @@ class ProfilePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       onTap: () {
-                        Navigator.of(alertContext).pop(true);
+                        Navigator.of(bookingContext).pop(false);
                       },
                       child: Container(
                         alignment: Alignment.center,
                         height: 50,
-                        width: MediaQuery.of(alertContext).size.width * 0.3,
+                        width: MediaQuery.of(bookingContext).size.width * 0.3,
                         decoration: BoxDecoration(
+                          color: Colors.blueAccent,
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(color: Colors.blueAccent),
                         ),
@@ -1108,7 +1107,7 @@ class ProfilePage extends StatelessWidget {
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'avenir',
-                            color: Colors.blueAccent,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -1116,8 +1115,8 @@ class ProfilePage extends StatelessWidget {
                   ],
                 ),
                 SizedBox(
-                  height: 15,
-                )
+                  height: 45,
+                ),
               ],
             ),
           ),
