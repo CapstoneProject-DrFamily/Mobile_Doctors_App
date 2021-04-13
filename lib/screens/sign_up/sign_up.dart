@@ -105,7 +105,7 @@ class SignUpPage extends StatelessWidget {
                     onTap: () async {
                       // model.printCheck();
                       bool isConfirm = await _confirmDialog(context);
-                      waitDialog(context, message: "Createing your account...");
+                      waitDialog(context, message: "Creating your account...");
 
                       if (isConfirm) {
                         Navigator.of(context).pop();
@@ -138,6 +138,8 @@ class SignUpPage extends StatelessWidget {
                                 Navigator.of(context).pop();
                               });
                         }
+                      } else {
+                        Navigator.of(context).pop();
                       }
                     },
                     child: Container(
@@ -259,7 +261,7 @@ class SignUpPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       onTap: () {
-                        Navigator.pop(alertContext);
+                        Navigator.of(alertContext).pop(false);
                       },
                       child: Container(
                         alignment: Alignment.center,
