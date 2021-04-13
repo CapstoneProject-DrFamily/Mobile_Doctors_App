@@ -18,6 +18,7 @@ import 'package:mobile_doctors_apps/repository/doctor_repo.dart';
 import 'package:mobile_doctors_apps/repository/examination_repo.dart';
 import 'package:mobile_doctors_apps/repository/map_repo.dart';
 import 'package:mobile_doctors_apps/repository/notify_repo.dart';
+import 'package:mobile_doctors_apps/repository/schedule_repo.dart';
 import 'package:mobile_doctors_apps/repository/transaction_repo.dart';
 import 'package:mobile_doctors_apps/screens/home/map_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
@@ -32,6 +33,7 @@ class HomePageViewModel extends BaseModel {
   final IExaminationRepo _examinationRepo = ExaminationRepo();
   final IMapRepo _mapRepo = MapRepo();
   final IAppConfigRepo _appConfigRepo = AppConfigRepo();
+  final IScheduleRepo _scheduleRepo = ScheduleRepo();
   static int timeOut = 0;
 
   FirebaseUser _firebaseuser;
@@ -49,6 +51,9 @@ class HomePageViewModel extends BaseModel {
   bool finding = false;
 
   int sltransaction = 1;
+
+  bool isChecking = false;
+  bool isOverTime = false;
 
   geolocator.Position _currentPosition;
 
@@ -127,61 +132,76 @@ class HomePageViewModel extends BaseModel {
 
   Future<bool> activeDoc() async {
     print('Firebase ID $_userFBID');
-    PushNotifycationService pushNotifycationService = PushNotifycationService();
+    List checkStatus =
+        await _scheduleRepo.checkIsActiveOk(_doctorModel.doctorId);
 
-    _doctorRequest =
-        FirebaseDatabase.instance.reference().child("Doctor Request");
+    isChecking = checkStatus[0];
+    isOverTime = checkStatus[1];
 
-    geolocator.Position position;
-    try {
-      position = await geolocator.Geolocator.getCurrentPosition(
-          desiredAccuracy: geolocator.LocationAccuracy.high);
-    } catch (e) {
-      print("error");
-    }
-
-    var status = await Permission.location.status;
-
-    if (status.isUndetermined) {
+    if (isChecking || isOverTime) {
       this.active = false;
       this.finding = false;
       this.connecting = false;
       notifyListeners();
       return false;
+    } else {
+      PushNotifycationService pushNotifycationService =
+          PushNotifycationService();
+
+      _doctorRequest =
+          FirebaseDatabase.instance.reference().child("Doctor Request");
+
+      geolocator.Position position;
+      try {
+        position = await geolocator.Geolocator.getCurrentPosition(
+            desiredAccuracy: geolocator.LocationAccuracy.high);
+      } catch (e) {
+        print("error");
+      }
+
+      var status = await Permission.location.status;
+
+      if (status.isUndetermined) {
+        this.active = false;
+        this.finding = false;
+        this.connecting = false;
+        notifyListeners();
+        return false;
+      }
+
+      _currentPosition = position;
+
+      await pushNotifycationService.initialize();
+
+      String tokenNoti = await pushNotifycationService.getToken();
+
+      Map doctorLocation = {
+        "latitude": position.latitude.toString(),
+        "longtitude": position.longitude.toString(),
+      };
+
+      Map doctorRequestInfo = {
+        "pickup": doctorLocation,
+        "created_at": DateTime.now().toString(),
+        "doctor_id": _doctorModel.doctorId.toString(),
+        "doctor_name": _doctorModel.doctorName,
+        "doctor_image": _doctorModel.doctorImage,
+        "doctor_specialty": _doctorModel.doctorSpecialty,
+        "doctor_service_id": _doctorModel.doctorServiceId,
+        "doctor_raiting_point": _doctorModel.doctorRatingPoint,
+        "doctor_feedback_count": _doctorModel.doctorFeedBackCount,
+        "doctor_booked_count": _doctorModel.doctorbooked,
+        "doctor_status": "waiting",
+        "token": tokenNoti,
+      };
+
+      _doctorRequest.child(_userFBID).set(doctorRequestInfo);
+
+      getTransactionBookingListen();
+      cancelTransactionListen();
+
+      return true;
     }
-
-    _currentPosition = position;
-
-    await pushNotifycationService.initialize();
-
-    String tokenNoti = await pushNotifycationService.getToken();
-
-    Map doctorLocation = {
-      "latitude": position.latitude.toString(),
-      "longtitude": position.longitude.toString(),
-    };
-
-    Map doctorRequestInfo = {
-      "pickup": doctorLocation,
-      "created_at": DateTime.now().toString(),
-      "doctor_id": _doctorModel.doctorId.toString(),
-      "doctor_name": _doctorModel.doctorName,
-      "doctor_image": _doctorModel.doctorImage,
-      "doctor_specialty": _doctorModel.doctorSpecialty,
-      "doctor_service_id": _doctorModel.doctorServiceId,
-      "doctor_raiting_point": _doctorModel.doctorRatingPoint,
-      "doctor_feedback_count": _doctorModel.doctorFeedBackCount,
-      "doctor_booked_count": _doctorModel.doctorbooked,
-      "doctor_status": "waiting",
-      "token": tokenNoti,
-    };
-
-    _doctorRequest.child(_userFBID).set(doctorRequestInfo);
-
-    getTransactionBookingListen();
-    cancelTransactionListen();
-
-    return true;
   }
 
   Future<void> getLocationLiveUpdates() async {

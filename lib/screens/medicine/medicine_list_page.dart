@@ -167,23 +167,25 @@ class MedicineFormDetail extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                padding: EdgeInsets.only(left: 16, right: 16),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 1),
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white),
-                child: DropdownButton(
-                  underline: SizedBox(),
-                  value: model.template,
-                  items: model.listDropdownMenuItems,
-                  isExpanded: true,
-                  onChanged: (value) {
-                    model.onChangeButtom(
-                        value, model.listTemplateDisplay.indexOf(value));
-                  },
-                ),
-              ),
+              (model.template == null)
+                  ? Container()
+                  : Container(
+                      padding: EdgeInsets.only(left: 16, right: 16),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white, width: 1),
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.white),
+                      child: DropdownButton(
+                        underline: SizedBox(),
+                        value: model.template,
+                        items: model.listDropdownMenuItems,
+                        isExpanded: true,
+                        onChanged: (value) {
+                          model.onChangeButtom(
+                              value, model.listTemplateDisplay.indexOf(value));
+                        },
+                      ),
+                    ),
               DefaultTabController(
                 length: 2,
                 child: Column(
@@ -485,34 +487,34 @@ class MedicineFormDetail extends StatelessWidget {
                                                               ),
                                                             ),
                                                             Expanded(
-                                                                flex: 2,
-                                                                child: Text(
-                                                                  MedicineListViewModel
-                                                                      .listMedicine[
-                                                                          index]
-                                                                      .medicineType,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        14,
-                                                                  ),
-                                                                ))
+                                                              flex: 2,
+                                                              child: Text(
+                                                                MedicineListViewModel
+                                                                    .listMedicine[
+                                                                        index]
+                                                                    .medicineType,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 14,
+                                                                ),
+                                                              ),
+                                                            )
                                                           ],
                                                         ),
                                                       ],
                                                     ),
                                                   ),
-                                                )
+                                                ),
                                               ],
                                             ),
                                           ),
                                         ),
                                         Divider(
                                           color: Colors.lightBlue[100],
-                                        )
+                                        ),
                                       ],
                                     ),
                                   ),

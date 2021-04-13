@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile_doctors_apps/helper/app_image.dart';
 import 'package:mobile_doctors_apps/helper/common.dart';
+import 'package:mobile_doctors_apps/screens/history/medical_care_history.dart';
+import 'package:mobile_doctors_apps/screens/history/medical_record_patient_page.dart';
 import 'package:mobile_doctors_apps/screens/share/health_record_page.dart';
 import 'package:mobile_doctors_apps/screens/share/patient_transaction/patient_base_transaction.dart';
 import 'package:mobile_doctors_apps/screens/share/popup_info_patient_page.dart';
@@ -163,7 +165,7 @@ class MapPage extends StatelessWidget {
                 "Booking Infomation",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue,
+                  color: Color(0xff374ABE),
                   fontSize: 24.0,
                 ),
               ),
@@ -224,7 +226,7 @@ class MapPage extends StatelessWidget {
                   model.durationString,
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
-                    color: Colors.blueAccent,
+                    color: Color(0xff374ABE),
                     fontSize: 14.0,
                   ),
                 ),
@@ -240,7 +242,7 @@ class MapPage extends StatelessWidget {
               children: [
                 Icon(
                   Icons.location_on,
-                  color: Colors.blue,
+                  color: Color(0xff374ABE),
                   size: 30,
                 ),
                 Expanded(
@@ -271,6 +273,7 @@ class MapPage extends StatelessWidget {
                 Text("Patient Image",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
+                      color: Color(0xff374ABE),
                     )),
                 SizedBox(
                   height: 12.0,
@@ -311,7 +314,7 @@ class MapPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PatientBaseTransaction(
+                        builder: (context) => MedicalCarePatientHistory(
                           patientId: model.basicTransaction.patientId,
                         ),
                       ),
@@ -319,67 +322,6 @@ class MapPage extends StatelessWidget {
                   },
                   child: _button("History", EvaIcons.clock, Colors.amber)),
             ],
-          ),
-          SizedBox(
-            height: 36.0,
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "Symptoms",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(
-                  height: 12.0,
-                ),
-                model.symptomsDisplay.length != 0
-                    ? ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: model.symptomsDisplay.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: Text(
-                                  model.symptomsDisplay[index].symptomtype,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 25),
-                                child: Text(
-                                  model.symptomsDisplay[index].symptomName,
-                                  softWrap: true,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 12.0,
-                              ),
-                            ],
-                          );
-                        },
-                      )
-                    : Text(
-                        "Nothing",
-                        style: GoogleFonts.varelaRound(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
-                      )
-              ],
-            ),
           ),
           SizedBox(
             height: 36,
@@ -392,6 +334,7 @@ class MapPage extends StatelessWidget {
                 Text("Service",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
+                      color: Color(0xff374ABE),
                     )),
                 SizedBox(
                   height: 12.0,
@@ -416,13 +359,16 @@ class MapPage extends StatelessWidget {
                 Text("Note",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
+                      color: Color(0xff374ABE),
                     )),
                 SizedBox(
                   height: 12.0,
                 ),
                 Container(
                   child: Text(
-                    model.basicTransaction.patientNote,
+                    (model.basicTransaction.patientNote == null)
+                        ? "Nothing"
+                        : model.basicTransaction.patientNote,
                     softWrap: true,
                   ),
                 )

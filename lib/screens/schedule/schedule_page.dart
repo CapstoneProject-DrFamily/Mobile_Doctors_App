@@ -1,13 +1,15 @@
+import 'package:badges/badges.dart';
 import 'package:commons/commons.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_doctors_apps/global_variable.dart';
+import 'package:mobile_doctors_apps/screens/history/medical_record_patient_page.dart';
 import 'package:mobile_doctors_apps/screens/schedule/add_time.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/share/health_record_page.dart';
-import 'package:mobile_doctors_apps/screens/share/patient_transaction/patient_base_transaction.dart';
 import 'package:mobile_doctors_apps/screens/share/popup_info_patient_page.dart';
 import 'package:mobile_doctors_apps/screens/view_model/schedule_page_view_model.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -40,6 +42,23 @@ class SchedulePage extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
+                    actions: <Widget>[
+                      InkWell(
+                        onTap: () {
+                          model.loadBackSchedule();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: Center(
+                            child: Icon(
+                              EvaIcons.refreshOutline,
+                              color: Colors.white,
+                              size: 23,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   body: Column(
                     children: [
@@ -179,8 +198,37 @@ class SchedulePage extends StatelessWidget {
                                         alignment: Alignment.center,
                                         child: CircularProgressIndicator(),
                                       )
-                                    : (model.selectedEvents == null)
-                                        ? Container()
+                                    : (model.selectedEvents == null ||
+                                            model.selectedEvents.length == 0)
+                                        ? Container(
+                                            alignment: Alignment.center,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                SvgPicture.asset(
+                                                  'assets/prescription.svg',
+                                                  width: 80,
+                                                  height: 80,
+                                                ),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                  "Don't have any schedule",
+                                                  style:
+                                                      GoogleFonts.varelaRound(
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          fontSize: 14,
+                                                          color:
+                                                              Color(0xff0d47a1),
+                                                          fontStyle:
+                                                              FontStyle.italic),
+                                                ),
+                                              ],
+                                            ),
+                                          )
                                         : ListView.builder(
                                             physics:
                                                 NeverScrollableScrollPhysics(),
@@ -248,6 +296,10 @@ class SchedulePage extends StatelessWidget {
                                                             .selectedEvents[
                                                                 index]
                                                             .transactionStatus,
+                                                        model
+                                                            .selectedEvents[
+                                                                index]
+                                                            .isOldPatient,
                                                       );
                                                     }())
                                                   : _buildDayNoTask(
@@ -302,7 +354,8 @@ class SchedulePage extends StatelessWidget {
       String scheduleId,
       String note,
       String transactionId,
-      int transactionStatus) {
+      int transactionStatus,
+      bool isOldPatient) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Slidable(
@@ -330,163 +383,160 @@ class SchedulePage extends StatelessWidget {
                   },
                 ),
               ],
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.fromLTRB(10, 20, 20, 20),
-              width: MediaQuery.of(context).size.width * 0.25,
-              child: Text(
-                DateFormat('hh:mm a').format(DateTime.parse(time)),
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
-                textAlign: TextAlign.right,
+        child: Badge(
+          position: BadgePosition.topEnd(top: 0, end: 0),
+          toAnimate: false,
+          shape: BadgeShape.square,
+          badgeColor: (isOldPatient) ? Color(0xff0d47a1) : Colors.green,
+          badgeContent: Text(
+            (isOldPatient) ? 'OLD PATIENT' : "NEW PATIENT",
+            style: TextStyle(color: Colors.white, fontSize: 13),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.fromLTRB(10, 20, 20, 20),
+                width: MediaQuery.of(context).size.width * 0.25,
+                child: Text(
+                  DateFormat('hh:mm a').format(DateTime.parse(time)),
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.w700),
+                  textAlign: TextAlign.right,
+                ),
               ),
-            ),
-            Expanded(
-              child: Container(
-                // margin: EdgeInsets.only(bottom: 20),
-                padding: EdgeInsets.all(20),
-                color: Colors.blue[100].withOpacity(0.3),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '$name ($relation)',
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xff0d47a1),
-                          fontWeight: FontWeight.w700),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          serviceName,
-                          style: TextStyle(
-                              color: Colors.grey[700],
-                              fontWeight: FontWeight.w500),
-                        ),
-                        (transactionStatus == 2)
-                            ? Container(
-                                child: Text(
-                                  "Checking",
-                                  style: TextStyle(
-                                      color: Colors.yellow[800],
-                                      fontStyle: FontStyle.italic,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              )
-                            : (transactionStatus == 3)
-                                ? Container(
-                                    child: Text(
-                                      "Done",
-                                      style: TextStyle(
-                                          color: Colors.green,
-                                          fontStyle: FontStyle.italic,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  )
-                                : (timeCheckFormater
-                                            .parse(DateTime.now().toString())
-                                            .isBefore(DateTime.parse(time)
-                                                .add(Duration(minutes: 30))) &&
-                                        timeCheckFormater
-                                            .parse(DateTime.now().toString())
-                                            .isAfter(DateTime.parse(time)
-                                                .subtract(
-                                                    Duration(minutes: 30))))
-                                    ? Container(
-                                        child: Text(
-                                          "On-time",
-                                          style: TextStyle(
-                                              color: Colors.green,
-                                              fontStyle: FontStyle.italic,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                      )
-                                    : (timeCheckFormater
-                                            .parse(DateTime.now().toString())
-                                            .isBefore(DateTime.parse(time)))
-                                        ? Container(
-                                            child: Text(
-                                              "Not yet time",
-                                              style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontStyle: FontStyle.italic,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                          )
-                                        : Container(
-                                            child: Text("Overtime",
+              Expanded(
+                child: Container(
+                  // margin: EdgeInsets.only(bottom: 20),
+                  padding: EdgeInsets.all(20),
+                  color: Colors.blue[100].withOpacity(0.3),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        '$name',
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xff0d47a1),
+                            fontWeight: FontWeight.w700),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              (note != null) ? note : "Nothing",
+                              style: TextStyle(
+                                  color: Colors.grey[700],
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          (transactionStatus == 2)
+                              ? Container(
+                                  child: Text(
+                                    "Checking",
+                                    style: TextStyle(
+                                        color: Colors.yellow[800],
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                )
+                              : (transactionStatus == 3)
+                                  ? Container(
+                                      child: Text(
+                                        "Done",
+                                        style: TextStyle(
+                                            color: Colors.green,
+                                            fontStyle: FontStyle.italic,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                    )
+                                  : (timeCheckFormater
+                                              .parse(DateTime.now().toString())
+                                              .isBefore(DateTime.parse(time)
+                                                  .add(
+                                                      Duration(minutes: 30))) &&
+                                          timeCheckFormater
+                                              .parse(DateTime.now().toString())
+                                              .isAfter(DateTime.parse(time)
+                                                  .subtract(
+                                                      Duration(minutes: 30))))
+                                      ? Container(
+                                          child: Text(
+                                            "On-time",
+                                            style: TextStyle(
+                                                color: Colors.green,
+                                                fontStyle: FontStyle.italic,
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                        )
+                                      : (timeCheckFormater
+                                              .parse(DateTime.now().toString())
+                                              .isBefore(DateTime.parse(time)))
+                                          ? Container(
+                                              child: Text(
+                                                "Not yet time",
                                                 style: TextStyle(
-                                                    color: Colors.red,
+                                                    color: Colors.green,
                                                     fontStyle: FontStyle.italic,
                                                     fontWeight:
-                                                        FontWeight.w700)),
-                                          ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          EvaIcons.pin,
-                          color: Color(0xff0d47a1),
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Expanded(
-                          child: Text(
-                            location.split(';')[1].split(':')[1],
+                                                        FontWeight.w700),
+                                              ),
+                                            )
+                                          : Container(
+                                              child: Text("Overtime",
+                                                  style: TextStyle(
+                                                      color: Colors.red,
+                                                      fontStyle:
+                                                          FontStyle.italic,
+                                                      fontWeight:
+                                                          FontWeight.w700)),
+                                            ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            EvaIcons.pin,
+                            color: Color(0xff0d47a1),
+                            size: 20,
                           ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Container(
-                      height: 0.5,
-                      color: Colors.grey,
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    (timeCheckFormater.parse(DateTime.now().toString()).isAfter(
-                            DateTime.parse(time).add(Duration(minutes: 30))))
-                        ? Container(
-                            child: ClipOval(
-                              child: Material(
-                                color: Color(0xff0d47a1), // button color
-                                child: InkWell(
-                                  splashColor: Colors.grey, // inkwell color
-                                  child: SizedBox(
-                                    width: 30,
-                                    height: 30,
-                                    child: Icon(
-                                      EvaIcons.phone,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    model.callPhone(patientId, time);
-                                  },
-                                ),
-                              ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Expanded(
+                            child: Text(
+                              location.split(';')[1].split(':')[1],
                             ),
                           )
-                        : Row(
-                            children: [
-                              ClipOval(
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        height: 0.5,
+                        color: Colors.grey,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      (timeCheckFormater
+                              .parse(DateTime.now().toString())
+                              .isAfter(DateTime.parse(time)
+                                  .add(Duration(minutes: 30))))
+                          ? Container(
+                              child: ClipOval(
                                 child: Material(
                                   color: Color(0xff0d47a1), // button color
                                   child: InkWell(
@@ -505,200 +555,224 @@ class SchedulePage extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              ClipOval(
-                                child: Material(
-                                  color: Color(0xff0d47a1), // button color
-                                  child: InkWell(
-                                    splashColor: Colors.grey, // inkwell color
-                                    child: SizedBox(
-                                      width: 30,
-                                      height: 30,
-                                      child: Icon(
-                                        EvaIcons.activity,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              HealthRecordScreen(
-                                            patientId: patientId,
-                                          ),
+                            )
+                          : Row(
+                              children: [
+                                ClipOval(
+                                  child: Material(
+                                    color: Color(0xff0d47a1), // button color
+                                    child: InkWell(
+                                      splashColor: Colors.grey, // inkwell color
+                                      child: SizedBox(
+                                        width: 30,
+                                        height: 30,
+                                        child: Icon(
+                                          EvaIcons.phone,
+                                          color: Colors.white,
                                         ),
-                                      );
-                                    },
+                                      ),
+                                      onTap: () {
+                                        model.callPhone(patientId, time);
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              ClipOval(
-                                child: Material(
-                                  color: Color(0xff0d47a1), // button color
-                                  child: InkWell(
-                                    splashColor: Colors.grey, // inkwell color
-                                    child: SizedBox(
-                                      width: 30,
-                                      height: 30,
-                                      child: Icon(
-                                        Icons.assignment_rounded,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              PatientBaseTransaction(
-                                            patientId: patientId,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                SizedBox(
+                                  width: 15,
                                 ),
-                              ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              ClipOval(
-                                child: Material(
-                                  color: Color(0xff0d47a1), // button color
-                                  child: InkWell(
-                                    splashColor: Colors.grey, // inkwell color
-                                    child: SizedBox(
-                                      width: 30,
-                                      height: 30,
-                                      child: Icon(
-                                        EvaIcons.person,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      PatientDialog()
-                                          .showCustomDialog(context, patientId);
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Container(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        servicePrice.toString(),
-                        style: TextStyle(
-                            color: Colors.green,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        (transactionStatus == 2)
-                            ? Container()
-                            : (transactionStatus == 3)
-                                ? Container()
-                                : (timeCheckFormater
-                                            .parse(DateTime.now().toString())
-                                            .isBefore(DateTime.parse(time)
-                                                .add(Duration(minutes: 30))) &&
-                                        timeCheckFormater
-                                            .parse(DateTime.now().toString())
-                                            .isAfter(DateTime.parse(time)
-                                                .subtract(
-                                                    Duration(minutes: 30))))
-                                    ? RaisedButton(
-                                        child: Icon(Icons.timer),
-                                        color: Colors.green,
-                                        textColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0),
+                                ClipOval(
+                                  child: Material(
+                                    color: Color(0xff0d47a1), // button color
+                                    child: InkWell(
+                                      splashColor: Colors.grey, // inkwell color
+                                      child: SizedBox(
+                                        width: 30,
+                                        height: 30,
+                                        child: Icon(
+                                          EvaIcons.activity,
+                                          color: Colors.white,
                                         ),
-                                        onPressed: () async {
-                                          // time arrived
-
-                                          await model.arrivedTime(
-                                              context,
-                                              patientId,
-                                              location,
-                                              note,
-                                              transactionId,
-                                              scheduleId,
-                                              time);
-                                        },
-                                      )
-                                    : (timeCheckFormater
-                                            .parse(DateTime.now().toString())
-                                            .isBefore(DateTime.parse(time)))
-                                        ? RaisedButton(
-                                            child: Icon(Icons.timer),
-                                            color: Colors.grey,
-                                            textColor: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(18.0),
+                                      ),
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                HealthRecordScreen(
+                                              patientId: patientId,
                                             ),
-                                            onPressed: () {})
-                                        : Container(),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        (transactionStatus == 2)
-                            ? Container()
-                            : (transactionStatus == 3)
-                                ? Container()
-                                : (timeCheckFormater
-                                            .parse(DateTime.now().toString())
-                                            .isBefore(DateTime.parse(time)) ||
-                                        timeCheckFormater
-                                            .parse(DateTime.now().toString())
-                                            .isBefore(DateTime.parse(time)
-                                                .add(Duration(minutes: 30))))
-                                    ? RaisedButton(
-                                        child: Icon(Icons.block),
-                                        color: Colors.red,
-                                        textColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                ClipOval(
+                                  child: Material(
+                                    color: Color(0xff0d47a1), // button color
+                                    child: InkWell(
+                                      splashColor: Colors.grey, // inkwell color
+                                      child: SizedBox(
+                                        width: 30,
+                                        height: 30,
+                                        child: Icon(
+                                          Icons.assignment_rounded,
+                                          color: Colors.white,
                                         ),
-                                        onPressed: () async {
-                                          await _confirmCancelBookingDialog(
-                                              context,
-                                              model,
-                                              scheduleId,
-                                              time,
-                                              location,
-                                              note,
-                                              patientId,
-                                              transactionId,
-                                              false);
-                                        },
-                                      )
-                                    : Container(),
-                      ],
-                    ),
-                  ],
+                                      ),
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                MedicalCarePatientHistory(
+                                              patientId: patientId,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                ClipOval(
+                                  child: Material(
+                                    color: Color(0xff0d47a1), // button color
+                                    child: InkWell(
+                                      splashColor: Colors.grey, // inkwell color
+                                      child: SizedBox(
+                                        width: 30,
+                                        height: 30,
+                                        child: Icon(
+                                          EvaIcons.person,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        PatientDialog().showCustomDialog(
+                                            context, patientId);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          servicePrice.toString(),
+                          style: TextStyle(
+                              color: Colors.green,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          (transactionStatus == 2)
+                              ? Container()
+                              : (transactionStatus == 3)
+                                  ? Container()
+                                  : (timeCheckFormater
+                                              .parse(DateTime.now().toString())
+                                              .isBefore(DateTime.parse(time)
+                                                  .add(
+                                                      Duration(minutes: 30))) &&
+                                          timeCheckFormater
+                                              .parse(DateTime.now().toString())
+                                              .isAfter(DateTime.parse(time)
+                                                  .subtract(
+                                                      Duration(minutes: 30))))
+                                      ? RaisedButton(
+                                          child: Icon(Icons.timer),
+                                          color: Colors.green,
+                                          textColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                          ),
+                                          onPressed: () async {
+                                            // time arrived
+
+                                            await model.arrivedTime(
+                                                context,
+                                                patientId,
+                                                location,
+                                                note,
+                                                transactionId,
+                                                scheduleId,
+                                                time);
+                                          },
+                                        )
+                                      : (timeCheckFormater
+                                              .parse(DateTime.now().toString())
+                                              .isBefore(DateTime.parse(time)))
+                                          ? RaisedButton(
+                                              child: Icon(Icons.timer),
+                                              color: Colors.grey,
+                                              textColor: Colors.white,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18.0),
+                                              ),
+                                              onPressed: () {})
+                                          : Container(),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          (transactionStatus == 2)
+                              ? Container()
+                              : (transactionStatus == 3)
+                                  ? Container()
+                                  : (timeCheckFormater
+                                              .parse(DateTime.now().toString())
+                                              .isBefore(DateTime.parse(time)) ||
+                                          timeCheckFormater
+                                              .parse(DateTime.now().toString())
+                                              .isBefore(DateTime.parse(time)
+                                                  .add(Duration(minutes: 30))))
+                                      ? RaisedButton(
+                                          child: Icon(Icons.block),
+                                          color: Colors.red,
+                                          textColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                          ),
+                                          onPressed: () async {
+                                            await _confirmCancelBookingDialog(
+                                                context,
+                                                model,
+                                                scheduleId,
+                                                time,
+                                                location,
+                                                note,
+                                                patientId,
+                                                transactionId,
+                                                false);
+                                          },
+                                        )
+                                      : Container(),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

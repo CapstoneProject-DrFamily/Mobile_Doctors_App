@@ -19,7 +19,9 @@ Future<void> main() async {
     GetMaterialApp(
         theme: ThemeData(fontFamily: 'VarelaRound'),
         debugShowCheckedModeBanner: false,
-        home: profileID == null ? LoginScreen() : LandingScreen()
+        home: (profileID == 0 || profileID == null)
+            ? LoginScreen()
+            : LandingScreen()
         // home: SignUpPage(),
         ),
   );

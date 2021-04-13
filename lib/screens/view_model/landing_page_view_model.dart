@@ -31,6 +31,16 @@ class LandingPageViewModel extends BaseModel {
   Future<void> init() async {
     PushNotifycationService pushNotifycationService = PushNotifycationService();
     String tokenNoti = await pushNotifycationService.getToken();
+    pushNotifycationService.initialize();
+    print("isSchedule ${PushNotifycationService.isSchedule}");
+    if (PushNotifycationService.isSchedule != null) {
+      if (PushNotifycationService.isSchedule) {
+        print("in update schedule");
+        _pageController.jumpToPage(1);
+        changeTab(1);
+        PushNotifycationService.isSchedule = false;
+      }
+    }
 
     _userRepo.updateUser(tokenNoti);
     // final SharedPreferences prefs = await SharedPreferences.getInstance();

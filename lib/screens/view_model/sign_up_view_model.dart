@@ -412,7 +412,7 @@ class SignUpViewModel extends BaseModel {
     if (_specialty.value == null) _isReady = false;
     if (_specialty.value == null) _isReady = false;
 
-    bool check;
+    bool check = false;
     if (_isReady == true) {
       String currentImage;
 

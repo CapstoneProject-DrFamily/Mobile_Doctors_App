@@ -138,6 +138,8 @@ class SignUpPage extends StatelessWidget {
                                 Navigator.of(context).pop();
                               });
                         }
+                      } else {
+                        Navigator.of(context).pop();
                       }
                     },
                     child: Container(
@@ -233,7 +235,7 @@ class SignUpPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       onTap: () {
-                        Navigator.pop(alertContext);
+                        Navigator.of(alertContext).pop(true);
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -260,7 +262,7 @@ class SignUpPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       onTap: () {
-                        Navigator.of(alertContext).pop(true);
+                        Navigator.of(alertContext).pop(false);
                       },
                       child: Container(
                         alignment: Alignment.center,

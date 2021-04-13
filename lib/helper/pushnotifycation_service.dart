@@ -1,8 +1,11 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobile_doctors_apps/screens/landing/landing_page.dart';
 
 class PushNotifycationService {
   // static List<TransactionNoti> transaction = [];
-  // static String transactionRemove;
+  static bool isSchedule = false;
   final FirebaseMessaging fcm = FirebaseMessaging();
 
   Future initialize() async {
@@ -26,6 +29,97 @@ class PushNotifycationService {
             // endTransaction();
           }
           print('booking');
+        } else if (typeNoti.endsWith("schedule")) {
+          isSchedule = true;
+          String info = message['notification']['body'];
+          String formatInfo = info.substring(0, info.length - 1);
+          print("in schedule");
+          Get.dialog(
+            Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(12),
+                ),
+              ),
+              child: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 25,
+                    ),
+                    Icon(
+                      Icons.info,
+                      color: Color(0xff4ee1c7),
+                      size: 90,
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    Text(
+                      "New Appointment!",
+                      style: TextStyle(
+                        fontSize: 27,
+                        fontWeight: FontWeight.w800,
+                        fontFamily: 'avenir',
+                        color: Color(0xff0d47a1),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    Text(
+                      '$formatInfo!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'avenir',
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 45,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        InkWell(
+                          customBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          onTap: () {
+                            Get.back();
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 50,
+                            width: 120,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              border: Border.all(color: Colors.blueAccent),
+                            ),
+                            child: Text(
+                              "Oke",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'avenir',
+                                color: Colors.blueAccent,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
         }
       },
       // onBackgroundMessage: myBackgroundMessageHandler,

@@ -53,11 +53,26 @@ class HomePage extends StatelessWidget {
                             model.isActive(false);
                             model.isConnecting(false);
                             model.isFinding(false);
-                            CoolAlert.show(
-                                context: context,
-                                type: CoolAlertType.error,
-                                text: "Something is ERROR please try again!",
-                                backgroundColor: Colors.lightBlue[200]);
+                            if (model.isChecking) {
+                              CoolAlert.show(
+                                  context: context,
+                                  type: CoolAlertType.error,
+                                  text:
+                                      "You still have a Record is checking please try to done that Record!",
+                                  backgroundColor: Colors.lightBlue[200]);
+                            } else if (model.isOverTime) {
+                              CoolAlert.show(
+                                  context: context,
+                                  type: CoolAlertType.error,
+                                  text:
+                                      "You have a Appoiment please check it first!",
+                                  backgroundColor: Colors.lightBlue[200]);
+                            } else
+                              CoolAlert.show(
+                                  context: context,
+                                  type: CoolAlertType.error,
+                                  text: "Something is ERROR please try again!",
+                                  backgroundColor: Colors.lightBlue[200]);
                           }
                         } else {
                           CoolAlert.show(
@@ -292,19 +307,13 @@ class HomePage extends StatelessWidget {
                                                                     0),
                                                             child: Text(
                                                                 // 'symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom',
-                                                                model
-                                                                        .listTransaction[
-                                                                            index]
-                                                                        .symptomName
-                                                                        .isEmpty
-                                                                    ? model
-                                                                        .listTransaction[
-                                                                            index]
-                                                                        .serviceName
+                                                                model.listTransaction[index].patientNote ==
+                                                                        null
+                                                                    ? "Nothing"
                                                                     : model
                                                                         .listTransaction[
                                                                             index]
-                                                                        .symptomName,
+                                                                        .patientNote,
                                                                 overflow:
                                                                     TextOverflow
                                                                         .ellipsis,

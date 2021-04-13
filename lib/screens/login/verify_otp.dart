@@ -210,7 +210,7 @@ class VerifyOtpScreen extends StatelessWidget {
           style: TextStyle(color: Colors.grey[600]),
         ),
         Text(
-          "00:${model.start}",
+          (model.start < 10) ? "00:0${model.start}" : "00:${model.start}",
           style: TextStyle(color: Colors.lightBlue),
         ),
       ],

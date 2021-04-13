@@ -483,9 +483,9 @@ class SchedulePageViewModel extends BaseModel {
       Navigator.pop(context);
       Fluttertoast.showToast(
         msg: "Update schedule Success.",
-        textColor: Colors.green,
+        textColor: Colors.white,
         toastLength: Toast.LENGTH_LONG,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.green,
         gravity: ToastGravity.CENTER,
       );
 
@@ -496,9 +496,9 @@ class SchedulePageViewModel extends BaseModel {
 
       Fluttertoast.showToast(
         msg: "Error please try agian.",
-        textColor: Colors.red,
+        textColor: Colors.white,
         toastLength: Toast.LENGTH_LONG,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.red,
         gravity: ToastGravity.CENTER,
       );
       //error
