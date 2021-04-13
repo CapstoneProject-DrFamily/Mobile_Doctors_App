@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile_doctors_apps/helper/app_image.dart';
 import 'package:mobile_doctors_apps/helper/common.dart';
+import 'package:mobile_doctors_apps/screens/history/medical_care_history.dart';
+import 'package:mobile_doctors_apps/screens/history/medical_record_patient_page.dart';
 import 'package:mobile_doctors_apps/screens/share/health_record_page.dart';
 import 'package:mobile_doctors_apps/screens/share/patient_transaction/patient_base_transaction.dart';
 import 'package:mobile_doctors_apps/screens/share/popup_info_patient_page.dart';
@@ -312,7 +314,7 @@ class MapPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PatientBaseTransaction(
+                        builder: (context) => MedicalCarePatientHistory(
                           patientId: model.basicTransaction.patientId,
                         ),
                       ),

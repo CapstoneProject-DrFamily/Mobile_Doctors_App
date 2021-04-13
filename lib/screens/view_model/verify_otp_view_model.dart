@@ -248,7 +248,8 @@ class VerifyOTPViewModel extends BaseModel {
                 gravity: ToastGravity.CENTER,
               );
             }
-          }
+          } else
+            print("verify ERROR");
         },
       );
     } catch (e) {

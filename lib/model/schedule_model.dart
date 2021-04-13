@@ -10,7 +10,7 @@ class ScheduleModel {
       relationship,
       serviceName,
       scheduleId;
-  bool scheduleStatus;
+  bool scheduleStatus, isOldPatient;
   int patientId, transactionStatus;
   double servicePrice;
 
@@ -29,7 +29,8 @@ class ScheduleModel {
       this.serviceName,
       this.servicePrice,
       this.transactionId,
-      this.transactionStatus});
+      this.transactionStatus,
+      this.isOldPatient});
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) {
     return ScheduleModel(
@@ -48,6 +49,7 @@ class ScheduleModel {
       relationship: json['scheduleNavigation']['relationship'] as String,
       serviceName: json['scheduleNavigation']['serviceName'] as String,
       servicePrice: json['scheduleNavigation']['servicePrice'] as double,
+      isOldPatient: json['scheduleNavigation']['isOldPatient'] as bool,
     );
   }
 }

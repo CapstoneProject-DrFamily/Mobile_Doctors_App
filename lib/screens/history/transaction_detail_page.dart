@@ -66,7 +66,7 @@ class TransactionDetailPage extends StatelessWidget {
                                         width: 50,
                                         height: 50,
                                         child: Image.asset(
-                                          'assets/logo_doctor.png',
+                                          'assets/logo_doctor_1.jpg',
                                           fit: BoxFit.contain,
                                         ),
                                       ),

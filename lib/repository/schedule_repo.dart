@@ -11,6 +11,7 @@ abstract class IScheduleRepo {
       String dateStart, String dateEnd, int doctorId);
   Future<bool> deleteScheduleNoTask(String scheduleId);
   Future<bool> updateSchedule(String scheduleUpdateJson);
+  Future<List<bool>> checkIsActiveOk(int doctorId);
 }
 
 class ScheduleRepo extends IScheduleRepo {
@@ -97,5 +98,28 @@ class ScheduleRepo extends IScheduleRepo {
     }
 
     return isSuccess;
+  }
+
+  @override
+  Future<List<bool>> checkIsActiveOk(int doctorId) async {
+    String urlAPI = APIHelper.SCHEDULE_API + '/Checking?doctorId=$doctorId';
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    var response = await http.get(urlAPI, headers: header);
+
+    List<bool> checkIsActive = [];
+
+    if (response.statusCode == 200) {
+      bool isCheckingStatus = json.decode(response.body)['isCheckingStatus'];
+      bool isOvertime = json.decode(response.body)['isOvertime'];
+
+      checkIsActive.add(isCheckingStatus);
+      checkIsActive.add(isOvertime);
+
+      return checkIsActive;
+    } else
+      return null;
   }
 }

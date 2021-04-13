@@ -51,33 +51,24 @@ class TransactionBaseViewModel extends BaseModel {
     FormParameterModel(name: 'Evaluation', description: ""),
   ];
 
-  Future<void> fetchData(int patientId) async {
+  Future<void> fetchData(String transactionId) async {
     if (init) {
-      print("patientId " + patientId.toString());
-      listTransaction =
-          await _transactionRepo.getListPatientTransactionId(patientId);
+      List<dynamic> results =
+          await _transactionRepo.getTransactionPatientDetail(transactionId);
+      patientTransaction = results[0];
+      profilePatient = results[1];
+      doctorSpeciality = results[2];
+      service = results[3];
+      examinationForm = results[4];
+      feedback = results[5];
+      profileDoctor = results[6];
 
-      if (listTransaction != null) {
-        this.transactionId = listTransaction[0];
-        List<dynamic> results = await _transactionRepo
-            .getTransactionPatientDetail(listTransaction[0]);
-        patientTransaction = results[0];
-        profilePatient = results[1];
-        doctorSpeciality = results[2];
-        service = results[3];
-        examinationForm = results[4];
-        feedback = results[5];
-        profileDoctor = results[6];
+      diagnoseList = examinationForm.conclusion.split(";");
 
-        diagnoseList = examinationForm.conclusion.split(";");
+      initCheck(this.listCheck);
+      this.init = false;
 
-        initCheck(this.listCheck);
-        this.init = false;
-
-        notifyListeners();
-      } else {
-        this.init = false;
-      }
+      notifyListeners();
     }
   }
 

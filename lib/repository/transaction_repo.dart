@@ -33,6 +33,8 @@ abstract class ITransactionRepo {
   Future<List<String>> getListPatientTransactionId(int patientId);
   Future<String> addBookingTransaction(String transactionJson);
   Future<List<String>> addListTransaction(String transactionJson);
+  Future<List<TransactionHistoryModel>> getListPatientRecord(
+      int patientId, int status);
 }
 
 class TransactionRepo extends ITransactionRepo {
@@ -527,6 +529,32 @@ class TransactionRepo extends ITransactionRepo {
         }
         return listTransactionID;
       }
+    } else
+      return null;
+  }
+
+  @override
+  Future<List<TransactionHistoryModel>> getListPatientRecord(
+      int patientId, int status) async {
+    String urlAPI = APIHelper.TRANSACTION_PATIENT_API +
+        patientId.toString() +
+        "?status=" +
+        status.toString();
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    List<TransactionHistoryModel> listTransactionHistoryModel;
+
+    var response = await http.get(urlAPI, headers: header);
+    if (response.statusCode == 200) {
+      listTransactionHistoryModel = (json.decode(response.body) as List)
+          .map((data) => TransactionHistoryModel.fromJson(data))
+          .toList();
+      if (listTransactionHistoryModel.isEmpty)
+        return null;
+      else
+        return listTransactionHistoryModel;
     } else
       return null;
   }

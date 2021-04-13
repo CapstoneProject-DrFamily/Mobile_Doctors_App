@@ -14,34 +14,36 @@ class TransactionFormScreen extends StatelessWidget {
       builder: (context, child, model) {
         return Scaffold(
           body: SingleChildScrollView(
-              child: Container(
-                  child: Column(
-            children: [
-              SizedBox(
-                height: 20,
+            child: Container(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  buildMedicalHistoryExpand(context, this.model),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  buildExaminationExpand(context, model),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  buildOrganismExpand(context, model),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  buildDiagnoseExpand(context),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  buildExaminationExperimentExpand(context),
+                  SizedBox(
+                    height: 10,
+                  ),
+                ],
               ),
-              buildMedicalHistoryExpand(context, this.model),
-              SizedBox(
-                height: 10,
-              ),
-              buildExaminationExpand(context, model),
-              SizedBox(
-                height: 10,
-              ),
-              buildOrganismExpand(context, model),
-              SizedBox(
-                height: 10,
-              ),
-              buildDiagnoseExpand(context),
-              SizedBox(
-                height: 10,
-              ),
-              buildExaminationExperimentExpand(context),
-              SizedBox(
-                height: 10,
-              ),
-            ],
-          ))),
+            ),
+          ),
         );
       },
     );

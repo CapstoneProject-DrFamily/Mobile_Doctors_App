@@ -6,10 +6,10 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_doctors_apps/global_variable.dart';
+import 'package:mobile_doctors_apps/screens/history/medical_record_patient_page.dart';
 import 'package:mobile_doctors_apps/screens/schedule/add_time.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/share/health_record_page.dart';
-import 'package:mobile_doctors_apps/screens/share/patient_transaction/patient_base_transaction.dart';
 import 'package:mobile_doctors_apps/screens/share/popup_info_patient_page.dart';
 import 'package:mobile_doctors_apps/screens/view_model/schedule_page_view_model.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -417,7 +417,7 @@ class SchedulePage extends StatelessWidget {
                         height: 15,
                       ),
                       Text(
-                        '$name ($relation)',
+                        '$name',
                         style: TextStyle(
                             fontSize: 16,
                             color: Color(0xff0d47a1),
@@ -628,7 +628,7 @@ class SchedulePage extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                PatientBaseTransaction(
+                                                MedicalCarePatientHistory(
                                               patientId: patientId,
                                             ),
                                           ),

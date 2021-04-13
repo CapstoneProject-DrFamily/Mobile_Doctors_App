@@ -5,15 +5,17 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
-import 'package:mobile_doctors_apps/screens/view_model/medical_care_history_view_model.dart';
+import 'package:mobile_doctors_apps/screens/view_model/medical_care_patient_history_view_model.dart';
 
-class MedicalCareHistory extends StatelessWidget {
+class MedicalCarePatientHistory extends StatelessWidget {
+  final int patientId;
+  MedicalCarePatientHistory({@required this.patientId});
   @override
   Widget build(BuildContext context) {
-    return BaseView<MedicalCareHistoryViewModel>(
+    return BaseView<MedicalCarePatientHistoryViewModel>(
       builder: (context, child, model) {
         return FutureBuilder(
-          future: model.initHistory(),
+          future: model.initHistory(patientId),
           builder: (context, snapshot) {
             if (!model.isFirst) {
               if (model.isLoading) {
@@ -26,8 +28,13 @@ class MedicalCareHistory extends StatelessWidget {
                     backgroundColor: Colors.white,
                     elevation: 0,
                     centerTitle: true,
+                    leading: new IconButton(
+                      icon: new Icon(Icons.arrow_back_ios,
+                          color: Color(0xff0d47a1)),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
                     title: Text(
-                      "History Record",
+                      "Patient History Record",
                       textAlign: TextAlign.center,
                       style: GoogleFonts.varelaRound(
                         fontWeight: FontWeight.w600,
@@ -38,42 +45,6 @@ class MedicalCareHistory extends StatelessWidget {
                   ),
                   body: Column(
                     children: [
-                      Container(
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        height: 35,
-                        color: Colors.transparent,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: model.historyTime.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                model.changeStatus(index);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 15),
-                                alignment: Alignment.center,
-                                margin: EdgeInsets.symmetric(horizontal: 10),
-                                decoration: (model.status == index)
-                                    ? BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        color: Color(0xff0d47a1),
-                                      )
-                                    : BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        color: Colors.white,
-                                      ),
-                                child: Text(
-                                  model.historyTime[index],
-                                  style: (model.status == index)
-                                      ? TextStyle(color: Colors.white)
-                                      : TextStyle(color: Color(0xff0d47a1)),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
                       Expanded(
                         child: Container(
                           // height: MediaQuery.of(context).size.height,
@@ -117,7 +88,8 @@ class MedicalCareHistory extends StatelessWidget {
                                                 model.listTransaction[index]
                                                     .transactionID,
                                                 model.listTransaction[index]
-                                                    .status);
+                                                    .status,
+                                                patientId);
                                           },
                                           child: Container(
                                             padding: EdgeInsets.fromLTRB(
@@ -133,7 +105,7 @@ class MedicalCareHistory extends StatelessWidget {
                                                       "dd-MM-yyyy - HH:mm")
                                                   .format(DateTime.parse(model
                                                       .listTransaction[index]
-                                                      .dateTimeStart))
+                                                      .dateTimeEnd))
                                                   .toString(),
                                               location: model
                                                   .listTransaction[index]
@@ -209,106 +181,6 @@ class _ArticleDescription extends StatelessWidget {
                 color: Color(0xff0d47a1),
               ),
             ),
-            (status == 1)
-                ? Container(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.7,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: Colors.yellow[900]),
-                    ),
-                    child: Text(
-                      "On Going",
-                      style: GoogleFonts.varelaRound(
-                        fontWeight: FontWeight.normal,
-                        fontSize: 13,
-                        color: Colors.yellow[900],
-                      ),
-                    ),
-                  )
-                : (status == 2)
-                    ? Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width * 0.7,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(color: Colors.green[900]),
-                        ),
-                        child: Text(
-                          "Checking",
-                          style: GoogleFonts.varelaRound(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 13,
-                            color: Colors.green[900],
-                          ),
-                        ),
-                      )
-                    : (status == 3)
-                        ? Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10),
-                            constraints: BoxConstraints(
-                              maxWidth: MediaQuery.of(context).size.width * 0.7,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              border: Border.all(color: Colors.green),
-                            ),
-                            child: Text(
-                              "Done",
-                              style: GoogleFonts.varelaRound(
-                                fontWeight: FontWeight.normal,
-                                fontSize: 13,
-                                color: Colors.green,
-                              ),
-                            ),
-                          )
-                        : (status == 4)
-                            ? Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 10),
-                                constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * 0.7,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(color: Colors.red),
-                                ),
-                                child: Text(
-                                  "Cancel",
-                                  style: GoogleFonts.varelaRound(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 13,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              )
-                            : Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 10),
-                                constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * 0.7,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(color: Colors.orange),
-                                ),
-                                child: Text(
-                                  "Awaiting Payment",
-                                  style: GoogleFonts.varelaRound(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 13,
-                                    color: Colors.orange,
-                                  ),
-                                ),
-                              ),
           ],
         ),
         const Padding(padding: EdgeInsets.only(bottom: 2.0)),
@@ -364,22 +236,11 @@ class _ArticleDescription extends StatelessWidget {
           style: GoogleFonts.varelaRound(
             fontWeight: FontWeight.bold,
             fontSize: 14,
-            color: Colors.black,
+            color: Color(0xff0d47a1),
           ),
         ),
         SizedBox(
           height: 5,
-        ),
-        Container(
-          alignment: Alignment.centerRight,
-          child: Text(
-            '$price',
-            textAlign: TextAlign.right,
-            style: TextStyle(
-                fontSize: 18.0,
-                color: (status == 4) ? Color(0xff0d47a1) : Colors.green,
-                fontWeight: FontWeight.bold),
-          ),
         ),
       ],
     );

@@ -157,7 +157,7 @@ class PatientDialog {
                                                           height: 30)),
                                                   SizedBox(width: 10),
                                                   Text(
-                                                    DateFormat("yyyy-MM-dd")
+                                                    DateFormat("dd-MM-yyyy")
                                                         .format(
                                                       DateTime.parse(popupModel
                                                           .patientModel
