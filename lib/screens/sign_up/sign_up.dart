@@ -105,7 +105,7 @@ class SignUpPage extends StatelessWidget {
                     onTap: () async {
                       // model.printCheck();
                       bool isConfirm = await _confirmDialog(context);
-                      waitDialog(context, message: "Createing your account...");
+                      waitDialog(context, message: "Creating your account...");
 
                       if (isConfirm) {
                         Navigator.of(context).pop();
@@ -233,32 +233,6 @@ class SignUpPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       onTap: () {
-                        Navigator.of(alertContext).pop(true);
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 50,
-                        width: MediaQuery.of(alertContext).size.width * 0.3,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(color: Colors.blueAccent),
-                        ),
-                        child: Text(
-                          "Yes",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'avenir',
-                            color: Colors.blueAccent,
-                          ),
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      customBorder: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      onTap: () {
                         Navigator.pop(alertContext);
                       },
                       child: Container(
@@ -271,12 +245,38 @@ class SignUpPage extends StatelessWidget {
                           border: Border.all(color: Colors.blueAccent),
                         ),
                         child: Text(
-                          "No",
+                          "Yes",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'avenir',
                             color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      onTap: () {
+                        Navigator.of(alertContext).pop(true);
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 50,
+                        width: MediaQuery.of(alertContext).size.width * 0.3,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(color: Colors.blueAccent),
+                        ),
+                        child: Text(
+                          "No",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'avenir',
+                            color: Colors.blueAccent,
                           ),
                         ),
                       ),
