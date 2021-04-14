@@ -92,7 +92,8 @@ class MedicineListViewModel extends BaseModel {
 
       listMedicine = _listTemplateDisplay[initTemplate].listMedicine;
 
-      print("init medicine ${_listTemplateDisplay[initTemplate].templateName}");
+      print(
+          "init medicine ${_listTemplateDisplay[initTemplate].listMedicine[0].totalQuantity}");
 
       print(_listTemplateDisplay.length);
 

@@ -1,4 +1,5 @@
 import 'package:commons/commons.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -187,35 +188,45 @@ class MedicalCareHistoryViewModel extends BaseModel {
       case 1:
         {
           waitDialog(context, message: "Getting record please wait...");
+          print("id Transaction $transactionId");
           var transaction =
               await transactionRepo.getTransactionDetailMap(transactionId);
+          if (transaction == null) {
+            Navigator.pop(context);
+            CoolAlert.show(
+                context: context,
+                type: CoolAlertType.error,
+                text: "Something error!",
+                backgroundColor: Colors.lightBlue[200]);
+          } else {
+            LatLng destinationLocation =
+                LatLng(transaction.latitude, transaction.longitude);
 
-          LatLng destinationLocation =
-              LatLng(transaction.latitude, transaction.longitude);
+            var position = await Geolocator.getCurrentPosition(
+                desiredAccuracy: LocationAccuracy.high);
 
-          var position = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high);
+            LatLng positionLatLng =
+                LatLng(position.latitude, position.longitude);
 
-          LatLng positionLatLng = LatLng(position.latitude, position.longitude);
+            var directionDetails = await _mapRepo.getDirectionDetails(
+                positionLatLng, destinationLocation);
 
-          var directionDetails = await _mapRepo.getDirectionDetails(
-              positionLatLng, destinationLocation);
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MapPage(
+                    model: MapPageViewModel(transaction, directionDetails)),
+              ),
+            ).then((value) async {
+              HelperMethod.disableLiveLocationUpdates();
+              _status = 0;
+              _isFirst = true;
+              print('init2 $_isFirst');
 
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MapPage(
-                  model: MapPageViewModel(transaction, directionDetails)),
-            ),
-          ).then((value) async {
-            HelperMethod.disableLiveLocationUpdates();
-            _status = 0;
-            _isFirst = true;
-            print('init2 $_isFirst');
-
-            await initHistory();
-          });
+              await initHistory();
+            });
+          }
         }
         break;
       case 2:

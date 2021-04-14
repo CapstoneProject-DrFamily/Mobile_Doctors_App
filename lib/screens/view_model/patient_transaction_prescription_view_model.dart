@@ -10,6 +10,7 @@ class TransactionPrescriptionViewModel extends BaseModel {
 
   fetchData(String transactionId) async {
     if (init) {
+      print("transactionid $transactionId");
       List<dynamic> result =
           await _prescriptionRepo.getPrescriptionDetail(transactionId);
       list = result[0];

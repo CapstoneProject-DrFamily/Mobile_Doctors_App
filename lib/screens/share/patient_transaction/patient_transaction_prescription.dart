@@ -370,7 +370,7 @@ class TransactionPrescriptionScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  model.description == null ? '' : model.description,
+                  model.description == null ? '' : "- ${model.description}",
                   style: TextStyle(
                     color: Color(0xff0d47a1),
                     fontSize: 20,
