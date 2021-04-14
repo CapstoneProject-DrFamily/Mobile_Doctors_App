@@ -11,7 +11,7 @@ import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 
 class TransactionBaseViewModel extends BaseModel {
   ITransactionRepo _transactionRepo = TransactionRepo();
-  String transactionId;
+  String transactionIdbase;
   bool init = true;
   PatientTransactionModel patientTransaction;
   ProfileModel profilePatient;
@@ -55,6 +55,8 @@ class TransactionBaseViewModel extends BaseModel {
     if (init) {
       List<dynamic> results =
           await _transactionRepo.getTransactionPatientDetail(transactionId);
+      transactionIdbase = transactionId;
+      print("transaction $transactionIdbase ");
       patientTransaction = results[0];
       profilePatient = results[1];
       doctorSpeciality = results[2];
@@ -169,6 +171,12 @@ class TransactionBaseViewModel extends BaseModel {
     }
     if (this.examinationForm.evaluation != null) {
       listCheck.add(this.listSpeciality[16].name);
+    }
+    if (this.examinationForm.bloodChemistry != null) {
+      listCheck.add("Serum biochemistry");
+    }
+    if (this.examinationForm.urineBiochemistry != null) {
+      listCheck.add("Urine biochemistry");
     }
   }
 

@@ -265,6 +265,8 @@ class TransactionRepo extends ITransactionRepo {
 
     TransactionBasicModel transactionBasic;
 
+    print("transaction ${response.statusCode}");
+
     if (response.statusCode == 200) {
       String transactionID = "";
       String symptomName = "";

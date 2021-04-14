@@ -43,15 +43,37 @@ class AppConfigRepo extends IAppConfigRepo {
       for (String key in jsonConfigPrescription.keys) {
         print('key $key');
         List<MedicineDetailModel> listMedicineInFrom = [];
+        List<MedicineDetailModel> listMedicineInFromDisplay = [];
 
         listMedicineInFrom =
             (jsonConfigPrescription[key]['prescriptionDetails'] as List)
                 .map((data) => MedicineDetailModel.fromJson(data))
                 .toList();
+
+        print("list ${listMedicineInFrom.length}");
+        for (var item in listMedicineInFrom) {
+          MedicineDetailModel model = MedicineDetailModel(
+              afternoonQuantity: item.afternoonQuantity,
+              medicineId: item.medicineId,
+              medicineMethod: item.medicineMethod,
+              medicineName: item.medicineName,
+              medicineType: item.medicineType,
+              morningQuantity: item.morningQuantity,
+              noonQuantity: item.noonQuantity,
+              totalDays: item.totalDays,
+              totalQuantity: (item.morningQuantity +
+                      item.noonQuantity +
+                      item.afternoonQuantity) *
+                  item.totalDays);
+          listMedicineInFromDisplay.add(model);
+        }
+
+        print("total ${listMedicineInFromDisplay[0].totalQuantity}");
+
         MedicineTemplateModel templateModel = MedicineTemplateModel(
             diseaseId: jsonConfigPrescription[key]['diseaseId'],
             diseaseName: jsonConfigPrescription[key]['description'],
-            listMedicine: listMedicineInFrom,
+            listMedicine: listMedicineInFromDisplay,
             templateName: key);
         listTemplate.add(templateModel);
       }

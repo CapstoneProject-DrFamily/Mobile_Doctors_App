@@ -171,7 +171,7 @@ class PatientBaseTransaction extends StatelessWidget {
                                     model: model,
                                   ),
                                   TransactionPrescriptionScreen(
-                                      transactionId: model.transactionId),
+                                      transactionId: model.transactionIdbase),
                                 ],
                               ),
                             )),

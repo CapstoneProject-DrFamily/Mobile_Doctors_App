@@ -87,45 +87,7 @@ class TransactionFormScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '1.Hematology test',
-                            style: TextStyle(
-                                color: Color(0xff0d47a1),
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Flexible(
-                            child: Checkbox(
-                              value: this.model.listCheck.contains("Hematology")
-                                  ? true
-                                  : false,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Visibility(
-                      visible: this.model.listCheck.contains("Hematology")
-                          ? true
-                          : false,
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: 10),
-                        child: this.model.listCheck.contains("Hematology")
-                            ? Image.network(
-                                this.model.examinationForm.hematology,
-                                width: 200,
-                                height: 250,
-                                fit: BoxFit.fill)
-                            : Text("No data"),
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 10, left: 10, right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '2.Serum biochemistry',
+                            '1.Blood Test',
                             style: TextStyle(
                                 color: Color(0xff0d47a1),
                                 fontSize: 16,
@@ -168,7 +130,7 @@ class TransactionFormScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '3.Urine biochemistry',
+                            '2.Urine Test',
                             style: TextStyle(
                                 color: Color(0xff0d47a1),
                                 fontSize: 16,
@@ -200,53 +162,6 @@ class TransactionFormScreen extends StatelessWidget {
                                   .contains("Urine biochemistry")
                               ? Image.network(
                                   this.model.examinationForm.urineBiochemistry,
-                                  width: 200,
-                                  height: 250,
-                                  fit: BoxFit.fill)
-                              : Text("No data")),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 10, left: 10, right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '4.Abdominal ultrasound',
-                            style: TextStyle(
-                                color: Color(0xff0d47a1),
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Flexible(
-                            child: Checkbox(
-                              value: this
-                                      .model
-                                      .listCheck
-                                      .contains("Abdominal ultrasound")
-                                  ? true
-                                  : false,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Visibility(
-                      visible:
-                          this.model.listCheck.contains("Abdominal ultrasound")
-                              ? true
-                              : false,
-                      child: Padding(
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: this
-                                  .model
-                                  .listCheck
-                                  .contains("Abdominal ultrasound")
-                              ? Image.network(
-                                  this
-                                      .model
-                                      .examinationForm
-                                      .abdominalUltrasound,
                                   width: 200,
                                   height: 250,
                                   fit: BoxFit.fill)

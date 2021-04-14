@@ -44,9 +44,12 @@ class PrescriptionRepo extends IPrescriptionRepo {
     Map<String, String> header = {
       HttpHeaders.contentTypeHeader: "application/json",
     };
+    print("prescriptionid $prescriptionId");
 
     var response = await http.get(urlAPI + "/$prescriptionId", headers: header);
     Map<String, dynamic> data = jsonDecode(response.body);
+
+    print("status ${response.statusCode}");
     if (response.statusCode == 200) {
       for (int i = 0; i < data['prescriptionDetails'].length; i++) {
         PatientPrescriptionModel prescription =
