@@ -1,8 +1,7 @@
 import 'package:commons/commons.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/profile_page_view_model.dart';
@@ -920,12 +919,15 @@ class ProfilePage extends StatelessWidget {
           bool isUpdated = await model.updateProfile();
           print(isUpdated);
           if (isUpdated) {
-            Fluttertoast.showToast(
-              msg: "Update Successfull",
-              textColor: Colors.white,
-              toastLength: Toast.LENGTH_SHORT,
-              backgroundColor: Colors.green,
-              gravity: ToastGravity.CENTER,
+            CoolAlert.show(
+              barrierDismissible: false,
+              context: context,
+              type: CoolAlertType.success,
+              text: "Update Profile Success!",
+              backgroundColor: Colors.lightBlue[200],
+              onConfirmBtnTap: () {
+                Navigator.of(context).pop();
+              },
             );
           }
         }
@@ -1071,6 +1073,7 @@ class ProfilePage extends StatelessWidget {
                         height: 50,
                         width: MediaQuery.of(bookingContext).size.width * 0.3,
                         decoration: BoxDecoration(
+                          color: Colors.blueAccent,
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(color: Colors.blueAccent),
                         ),
@@ -1080,7 +1083,7 @@ class ProfilePage extends StatelessWidget {
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'avenir',
-                            color: Colors.blueAccent,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -1097,7 +1100,6 @@ class ProfilePage extends StatelessWidget {
                         height: 50,
                         width: MediaQuery.of(bookingContext).size.width * 0.3,
                         decoration: BoxDecoration(
-                          color: Colors.blueAccent,
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(color: Colors.blueAccent),
                         ),
@@ -1107,7 +1109,7 @@ class ProfilePage extends StatelessWidget {
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'avenir',
-                            color: Colors.white,
+                            color: Colors.blueAccent,
                           ),
                         ),
                       ),

@@ -4,12 +4,13 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:mobile_doctors_apps/helper/api_helper.dart';
 import 'package:mobile_doctors_apps/model/schedule_model.dart';
+import 'package:mobile_doctors_apps/model/transaction_schedule_model.dart';
 
 abstract class IScheduleRepo {
   Future<bool> createSchedule(String jsonSchedule);
   Future<List<ScheduleModel>> loadListSchedule(
       String dateStart, String dateEnd, int doctorId);
-  Future<bool> deleteScheduleNoTask(String scheduleId);
+  Future<bool> deleteScheduleNoTask(int scheduleId);
   Future<bool> updateSchedule(String scheduleUpdateJson);
   Future<List<bool>> checkIsActiveOk(int doctorId);
 }
@@ -52,19 +53,46 @@ class ScheduleRepo extends IScheduleRepo {
     List<ScheduleModel> _listSchedule = [];
 
     if (response.statusCode == 200) {
-      _listSchedule = (json.decode(response.body) as List)
-          .map((data) => ScheduleModel.fromJson(data))
-          .toList();
+      List<dynamic> jsonData = json.decode(response.body);
 
+      print("list schedule $jsonData");
+      for (int i = 0; i < jsonData.length; i++) {
+        print("json ${jsonData[i]['transactions']}");
+        if (jsonData[i]['transactions'].isEmpty) {
+          print("empty");
+          ScheduleModel model = ScheduleModel(
+            appointmentTime: jsonData[i]['appointmentTime'],
+            scheduleId: jsonData[i]['scheduleId'],
+            scheduleStatus: jsonData[i]['status'],
+            updBy: jsonData[i]['updBy'],
+            updDatetime: jsonData[i]['updDatetime'],
+            transactionScheduleModel: null,
+          );
+          _listSchedule.add(model);
+        } else {
+          print("not empty");
+
+          TransactionScheduleModel transactionScheduleModel =
+              TransactionScheduleModel.fromJson(jsonData[i]['transactions'][0]);
+          ScheduleModel model = ScheduleModel(
+            appointmentTime: jsonData[i]['appointmentTime'],
+            scheduleId: jsonData[i]['scheduleId'],
+            scheduleStatus: jsonData[i]['status'],
+            updBy: jsonData[i]['updBy'],
+            updDatetime: jsonData[i]['updDatetime'],
+            transactionScheduleModel: transactionScheduleModel,
+          );
+          _listSchedule.add(model);
+        }
+      }
       if (_listSchedule.isEmpty) return null;
-
       return _listSchedule;
     } else
       return null;
   }
 
   @override
-  Future<bool> deleteScheduleNoTask(String scheduleId) async {
+  Future<bool> deleteScheduleNoTask(int scheduleId) async {
     String urlAPI = APIHelper.SCHEDULE_API + '/$scheduleId';
     Map<String, String> header = {
       HttpHeaders.contentTypeHeader: "application/json",
