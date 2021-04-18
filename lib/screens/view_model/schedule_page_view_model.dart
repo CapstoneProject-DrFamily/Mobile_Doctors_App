@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:commons/commons.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -169,7 +170,8 @@ class SchedulePageViewModel extends BaseModel {
         day.year.toString();
 
     _selectedEvents = events;
-    print('selected event $_selectedEvents');
+    // print(
+    //     'selected event ${_selectedEvents[0].transactionScheduleModel.location}');
 
     loadingListTransaction = false;
     notifyListeners();
@@ -431,38 +433,38 @@ class SchedulePageViewModel extends BaseModel {
     waitDialog(context, message: "Setting your Schedule please wait...");
 
     var listTimeChoose = timeChoose;
-    List<TransactionTemp> listTransaction = [];
+    // List<TransactionTemp> listTransaction = [];
     List<ScheduleAddModel> listSchedule = [];
-    for (var item in listTimeChoose) {
-      listTransaction
-          .add(TransactionTemp(doctorId: doctorId, serviceID: serviceId));
-    }
+    // for (var item in listTimeChoose) {
+    //   listTransaction
+    //       .add(TransactionTemp(doctorId: doctorId, serviceID: serviceId));
+    // }
 
-    String transactionJson = jsonEncode(listTransaction);
+    // String transactionJson = jsonEncode(listTransaction);
 
-    print("transactionjson $transactionJson");
+    // print("transactionjson $transactionJson");
 
-    List<String> transactionId =
-        await _transactionRepo.addListTransaction(transactionJson);
-    print("listTransactionIdAPI: $transactionId");
+    // List<String> transactionId =
+    //     await _transactionRepo.addListTransaction(transactionJson);
+    // print("listTransactionIdAPI: $transactionId");
 
-    if (transactionId == null) {
-      //error
-      Navigator.pop(context);
-      Navigator.pop(context);
+    // if (transactionId == null) {
+    //   //error
+    //   Navigator.pop(context);
+    //   Navigator.pop(context);
 
-      Fluttertoast.showToast(
-        msg: "Error please try agian.",
-        textColor: Colors.red,
-        toastLength: Toast.LENGTH_LONG,
-        backgroundColor: Colors.white,
-        gravity: ToastGravity.CENTER,
-      );
-    }
+    //   Fluttertoast.showToast(
+    //     msg: "Error please try agian.",
+    //     textColor: Colors.red,
+    //     toastLength: Toast.LENGTH_LONG,
+    //     backgroundColor: Colors.white,
+    //     gravity: ToastGravity.CENTER,
+    //   );
+    // }
 
     for (int i = 0; i < listTimeChoose.length; i++) {
       ScheduleAddModel addScheduleModel = ScheduleAddModel(
-          scheduleId: transactionId[i],
+          scheduleId: "0",
           appointmentTime: listTimeChoose[i].toString(),
           doctorId: doctorId,
           insBy: doctorName,
@@ -481,26 +483,24 @@ class SchedulePageViewModel extends BaseModel {
       //oke
       Navigator.pop(context);
       Navigator.pop(context);
-      Fluttertoast.showToast(
-        msg: "Update schedule Success.",
-        textColor: Colors.white,
-        toastLength: Toast.LENGTH_LONG,
-        backgroundColor: Colors.green,
-        gravity: ToastGravity.CENTER,
-      );
+      CoolAlert.show(
+          barrierDismissible: false,
+          context: context,
+          type: CoolAlertType.success,
+          text: "Update your schedule success",
+          backgroundColor: Colors.lightBlue[200]);
 
       loadBackSchedule();
     } else {
       Navigator.pop(context);
       Navigator.pop(context);
 
-      Fluttertoast.showToast(
-        msg: "Error please try agian.",
-        textColor: Colors.white,
-        toastLength: Toast.LENGTH_LONG,
-        backgroundColor: Colors.red,
-        gravity: ToastGravity.CENTER,
-      );
+      CoolAlert.show(
+          barrierDismissible: false,
+          context: context,
+          type: CoolAlertType.error,
+          text: "False to udpate schedule!",
+          backgroundColor: Colors.lightBlue[200]);
       //error
     }
   }
@@ -513,24 +513,37 @@ class SchedulePageViewModel extends BaseModel {
   }
 
   Future<void> deleteScheduleNoTask(
-      String scheduleId, BuildContext context) async {
+      int scheduleId, BuildContext context) async {
     waitDialog(context, message: "Deleting your booking please wait...");
 
     bool isDelete = await _scheduleRepo.deleteScheduleNoTask(scheduleId);
-    bool isDeleteTransaction =
-        await _transactionRepo.deleteTransaction(scheduleId);
-    if (isDelete && isDeleteTransaction) {
+    // bool isDeleteTransaction =
+    //     await _transactionRepo.deleteTransaction(scheduleId);
+    if (isDelete) {
       Navigator.pop(context);
+      await CoolAlert.show(
+        barrierDismissible: false,
+        context: context,
+        type: CoolAlertType.success,
+        text: "Update schedule Success!",
+        backgroundColor: Colors.lightBlue[200],
+        onConfirmBtnTap: () {
+          Navigator.of(context).pop();
+        },
+      );
       loadBackSchedule();
     } else {
       Navigator.pop(context);
 
-      Fluttertoast.showToast(
-        msg: "Sorry, something is went please try again",
-        textColor: Colors.red,
-        toastLength: Toast.LENGTH_SHORT,
-        backgroundColor: Colors.white,
-        gravity: ToastGravity.CENTER,
+      CoolAlert.show(
+        barrierDismissible: false,
+        context: context,
+        type: CoolAlertType.error,
+        text: "Sorry, something is went wrong please try again!",
+        backgroundColor: Colors.lightBlue[200],
+        onConfirmBtnTap: () {
+          Navigator.of(context).pop();
+        },
       );
     }
   }
@@ -549,7 +562,7 @@ class SchedulePageViewModel extends BaseModel {
   }
 
   void deleteTaskSchedule(
-    String scheduleId,
+    int scheduleId,
     BuildContext context,
     String location,
     String note,
@@ -559,27 +572,39 @@ class SchedulePageViewModel extends BaseModel {
     waitDialog(context, message: "Deleting your booking please wait...");
 
     bool isDelete = await _scheduleRepo.deleteScheduleNoTask(scheduleId);
-    bool isDeleteTransaction =
-        await _transactionRepo.deleteTransaction(transactionID);
-    if (isDelete && isDeleteTransaction) {
+
+    if (isDelete) {
       Navigator.pop(context);
+      await CoolAlert.show(
+        barrierDismissible: false,
+        context: context,
+        type: CoolAlertType.success,
+        text: "Update schedule Success!",
+        backgroundColor: Colors.lightBlue[200],
+        onConfirmBtnTap: () {
+          Navigator.of(context).pop();
+        },
+      );
       loadBackSchedule();
     } else {
       Navigator.pop(context);
 
-      Fluttertoast.showToast(
-        msg: "Sorry, something is went please try again",
-        textColor: Colors.red,
-        toastLength: Toast.LENGTH_SHORT,
-        backgroundColor: Colors.white,
-        gravity: ToastGravity.CENTER,
+      CoolAlert.show(
+        barrierDismissible: false,
+        context: context,
+        type: CoolAlertType.error,
+        text: "Sorry, something is went wrong please try again!",
+        backgroundColor: Colors.lightBlue[200],
+        onConfirmBtnTap: () {
+          Navigator.of(context).pop();
+        },
       );
     }
   }
 
   Future<void> cancelBooking(
       BuildContext context,
-      String scheduleId,
+      int scheduleId,
       String appointmentTime,
       String location,
       String note,
@@ -604,7 +629,7 @@ class SchedulePageViewModel extends BaseModel {
         location: null,
         note: "Nothing",
         patientId: null,
-        status: 0,
+        status: 4,
         transactionId: transactionID,
         estimatedTime: null);
     bool isUpdateTransaction =
@@ -612,6 +637,16 @@ class SchedulePageViewModel extends BaseModel {
 
     if (isUpdateSchedule && isUpdateTransaction) {
       print("oke udpate transaction");
+      await CoolAlert.show(
+        barrierDismissible: false,
+        context: context,
+        type: CoolAlertType.success,
+        text: "Cancel booking Success!",
+        backgroundColor: Colors.lightBlue[200],
+        onConfirmBtnTap: () {
+          Navigator.of(context).pop();
+        },
+      );
 
       Navigator.pop(context);
       loadBackSchedule();
