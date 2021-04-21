@@ -275,7 +275,7 @@ class ProfilePage extends StatelessWidget {
                                   ),
                                   Row(
                                     children: [
-                                      _buildTitle('Experience'),
+                                      _buildTitle('Years of experience'),
                                       SizedBox(
                                         width: 2.0,
                                       ),
@@ -862,7 +862,7 @@ class ProfilePage extends StatelessWidget {
       clipper: MyClipper(),
       child: GestureDetector(
         onTap: () {
-          model.getUserImage();
+          // model.getUserImage();
         },
         child: Container(
           padding: EdgeInsets.only(top: 70, bottom: 50),
@@ -885,23 +885,23 @@ class ProfilePage extends StatelessWidget {
                 backgroundImage: (model.image != null
                     ? FileImage(model.image)
                     : NetworkImage(model.currentImage)),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.blue.shade400,
-                    radius: 20.0,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.camera_alt,
-                        size: 18.0,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        model.getUserImage();
-                      },
-                    ),
-                  ),
-                ),
+                // child: Align(
+                //   alignment: Alignment.bottomRight,
+                //   child: CircleAvatar(
+                //     backgroundColor: Colors.blue.shade400,
+                //     radius: 20.0,
+                //     // child: IconButton(
+                //     //   icon: Icon(
+                //     //     Icons.camera_alt,
+                //     //     size: 18.0,
+                //     //     color: Colors.white,
+                //     //   ),
+                //     //   onPressed: () {
+                //     //     model.getUserImage();
+                //     //   },
+                //     // ),
+                //   ),
+                // ),
               ),
             ),
           ),
