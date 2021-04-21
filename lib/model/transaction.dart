@@ -1,6 +1,6 @@
 class Transaction {
-  int doctorId, patientId, prescriptionId, status, examId;
-  String transactionId, location, note, estimatedTime;
+  int doctorId, patientId, prescriptionId, status, examId, scheduleId;
+  String transactionId, location, note, estimatedTime, reasonCancel;
   String dateStart, dateEnd;
 
   Transaction(
@@ -14,7 +14,9 @@ class Transaction {
       this.note,
       this.estimatedTime,
       this.dateStart,
-      this.dateEnd});
+      this.dateEnd,
+      this.scheduleId,
+      this.reasonCancel});
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
     return Transaction(
@@ -44,5 +46,7 @@ class Transaction {
         "estimatedTime": estimatedTime,
         "dateStart": dateStart,
         "dateEnd": dateEnd,
+        "scheduleId": scheduleId,
+        "reasonCancel": reasonCancel,
       };
 }
