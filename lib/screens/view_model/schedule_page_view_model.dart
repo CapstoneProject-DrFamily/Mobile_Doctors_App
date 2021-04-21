@@ -669,7 +669,7 @@ class SchedulePageViewModel extends BaseModel {
       String location,
       String note,
       String transactionId,
-      String scheduleId,
+      int scheduleId,
       String appointmentTime) async {
     waitDialog(context, message: "Loading please wait...");
 
@@ -694,7 +694,8 @@ class SchedulePageViewModel extends BaseModel {
         patientId: patientId,
         status: 2,
         transactionId: transactionId,
-        estimatedTime: null);
+        estimatedTime: null,
+        scheduleId: scheduleId);
     bool isUpdateTransaction =
         await _transactionRepo.updateTransaction(transactionTemp);
 

@@ -712,14 +712,14 @@ class SchedulePage extends StatelessWidget {
                                         onPressed: () async {
                                           // time arrived
 
-                                          // await model.arrivedTime(
-                                          //     context,
-                                          //     patientId,
-                                          //     location,
-                                          //     note,
-                                          //     transactionId,
-                                          //     scheduleId,
-                                          //     time);
+                                          await model.arrivedTime(
+                                              context,
+                                              patientId,
+                                              location,
+                                              note,
+                                              transactionId,
+                                              scheduleId,
+                                              time);
                                         },
                                       )
                                     : (timeCheckFormater
