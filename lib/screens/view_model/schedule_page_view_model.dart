@@ -626,11 +626,12 @@ class SchedulePageViewModel extends BaseModel {
         await _scheduleRepo.updateSchedule(updateScheduleJson);
     Transaction transactionTemp = new Transaction(
         doctorId: doctorId,
-        location: null,
-        note: "Nothing",
-        patientId: null,
+        location: location,
+        note: note,
+        patientId: patientId,
         status: 4,
         transactionId: transactionID,
+        scheduleId: scheduleId,
         estimatedTime: null);
     bool isUpdateTransaction =
         await _transactionRepo.updateTransaction(transactionTemp);
