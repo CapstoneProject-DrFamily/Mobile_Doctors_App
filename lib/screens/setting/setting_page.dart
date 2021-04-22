@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_doctors_apps/screens/setting/policy_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/setting_view_model.dart';
 
@@ -15,6 +16,27 @@ class SettingPage extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PolicyPage(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        color: Colors.white,
+                        child: ListTile(
+                          leading: Icon(Icons.policy),
+                          title: Text("Policy"),
+                          trailing: Icon(Icons.keyboard_arrow_right),
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       height: 50,
                     ),

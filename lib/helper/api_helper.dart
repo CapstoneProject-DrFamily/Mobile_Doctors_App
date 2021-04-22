@@ -21,6 +21,6 @@ class APIHelper {
       '$Prefix_API/api/v1/HealthRecords';
   static const String TRANSACTION_PATIENT_API =
       '$Prefix_API/api/v1/Transactions/patients/';
-  static const String APP_CONFIG = '$Prefix_API/api/AppConfigs/2';
+  static const String APP_CONFIG = '$Prefix_API/api/v1/AppConfigs/2';
   static const String DISEASE_API = "$Prefix_API/api/v1/Diseases";
 }

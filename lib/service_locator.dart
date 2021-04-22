@@ -7,6 +7,7 @@ import 'package:mobile_doctors_apps/screens/view_model/patient_base_transaction_
 import 'package:mobile_doctors_apps/screens/view_model/patient_transaction_detail_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/patient_transaction_form_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/patient_transaction_prescription_view_model.dart';
+import 'package:mobile_doctors_apps/screens/view_model/policy_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/popup_info_patient_page.dart';
 import 'package:mobile_doctors_apps/screens/view_model/schedule_page_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/timeline_view_model.dart';
@@ -71,4 +72,5 @@ void setupLocator() {
   locator.registerFactory<AddTimeViewModel>(() => AddTimeViewModel());
   locator.registerFactory<MedicalCarePatientHistoryViewModel>(
       () => MedicalCarePatientHistoryViewModel());
+  locator.registerFactory<PolicyViewModel>(() => PolicyViewModel());
 }
