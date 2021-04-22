@@ -8,6 +8,7 @@ import 'package:mobile_doctors_apps/model/medicine_template_model.dart';
 abstract class IAppConfigRepo {
   Future<int> appConfigTimeOut();
   Future<List<MedicineTemplateModel>> appConfigPrescriptionTemplate();
+  Future<String> getPolicy();
 }
 
 class AppConfigRepo extends IAppConfigRepo {
@@ -83,5 +84,20 @@ class AppConfigRepo extends IAppConfigRepo {
     } else {
       return null;
     }
+  }
+
+  @override
+  Future<String> getPolicy() async {
+    String urlAPI = APIHelper.APP_CONFIG;
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    var response = await http.get(urlAPI, headers: header);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = json.decode(response.body);
+      return data['policy'];
+    } else
+      return null;
   }
 }
