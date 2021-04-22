@@ -135,11 +135,16 @@ class MedicalCareHistory extends StatelessWidget {
                                                       .listTransaction[index]
                                                       .dateTimeStart))
                                                   .toString(),
-                                              location: model
-                                                  .listTransaction[index]
-                                                  .location
-                                                  .split(';')[1]
-                                                  .split(':')[1],
+                                              location: (model
+                                                          .listTransaction[
+                                                              index]
+                                                          .location ==
+                                                      null)
+                                                  ? "No Location"
+                                                  : model.listTransaction[index]
+                                                      .location
+                                                      .split(';')[1]
+                                                      .split(':')[1],
                                               price: NumberFormat.currency(
                                                       locale: 'vi')
                                                   .format(model
