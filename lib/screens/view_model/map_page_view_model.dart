@@ -44,7 +44,9 @@ class MapPageViewModel extends BaseModel {
   Position get currentPosition => _currentPosition;
 
   Completer<GoogleMapController> _controllerGoogle = Completer();
+  Completer<GoogleMapController> get controllerGoogle => _controllerGoogle;
   GoogleMapController _controller;
+  GoogleMapController get controller => _controller;
 
   CameraPosition _initPosition = CameraPosition(
     target: LatLng(10.7915178, 106.7271422),
@@ -418,7 +420,6 @@ class MapPageViewModel extends BaseModel {
 
   void callPhone(BuildContext context) async {
     await launch('tel://$_phoneNum');
-    Navigator.pop(context);
   }
 
   Future<void> cancelTransaction() async {
