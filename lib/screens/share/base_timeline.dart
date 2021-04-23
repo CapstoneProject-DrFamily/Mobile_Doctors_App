@@ -30,7 +30,7 @@ class BaseTimeLine extends StatelessWidget {
                         return {
                           'Patient Profile',
                           'Patient Health Record',
-                          'Waiting Examination',
+                          'Patient History Checking',
                           'End Transaction',
                         }.map((String choice) {
                           return PopupMenuItem<String>(

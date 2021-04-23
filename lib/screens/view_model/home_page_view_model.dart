@@ -336,13 +336,26 @@ class HomePageViewModel extends BaseModel {
         DateTime.now().add(Duration(seconds: directionDetails.durationValue));
     var secondEstimate = firstEstimate.add(Duration(minutes: 15));
 
-    String estimatedTime = firstEstimate.hour.toString() +
+    var firstHours = (firstEstimate.hour < 9)
+        ? "0" + firstEstimate.hour.toString()
+        : firstEstimate.hour.toString();
+    var firstMinute = (firstEstimate.minute < 9)
+        ? "0" + firstEstimate.minute.toString()
+        : firstEstimate.minute.toString();
+    var secondHours = (secondEstimate.hour < 9)
+        ? "0" + secondEstimate.hour.toString()
+        : secondEstimate.hour.toString();
+    var secondMinute = (secondEstimate.minute < 9)
+        ? "0" + secondEstimate.minute.toString()
+        : secondEstimate.minute.toString();
+
+    String estimatedTime = firstHours +
         ":" +
-        firstEstimate.minute.toString() +
+        firstMinute +
         " - " +
-        secondEstimate.hour.toString() +
+        secondHours +
         ":" +
-        secondEstimate.minute.toString();
+        secondMinute;
 
     String creator = prefs.getString("usName");
 

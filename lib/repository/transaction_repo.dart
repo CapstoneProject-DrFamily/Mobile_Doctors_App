@@ -127,7 +127,8 @@ class TransactionRepo extends ITransactionRepo {
       location = locationTemp;
       serviceName = transactionSimpleInfo['service']['serviceName'];
       servicePrice = transactionSimpleInfo['service']['servicePrice'];
-      accountId = transactionSimpleInfo['patient']['accountId'];
+      accountId =
+          transactionSimpleInfo['patient']['patientNavigation']['accountId'];
 
       print('$serviceName - $symptomName');
       int endTime = DateTime.now().millisecondsSinceEpoch +
