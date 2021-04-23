@@ -92,6 +92,8 @@ class MapPageViewModel extends BaseModel {
 
   DatabaseReference _transactionRequest;
 
+  String reasonCancel;
+
   MapPageViewModel(
       TransactionBasicModel transaction, DirectionDetails directionDetails) {
     _isLoading = true;
@@ -106,6 +108,9 @@ class MapPageViewModel extends BaseModel {
   }
 
   void initMap() async {
+    print("Account ID ${_basicTransaction.accountId}");
+    print("Transaction ID ${_basicTransaction.transactionId}");
+
     _phoneNum = await _userRepo.getPhoneUser(_basicTransaction.accountId);
 
     _firebaseuser = await FirebaseAuth.instance.currentUser();
@@ -433,7 +438,8 @@ class MapPageViewModel extends BaseModel {
         note: _basicTransaction.patientNote,
         patientId: _basicTransaction.patientId,
         status: 4,
-        transactionId: _basicTransaction.transactionId);
+        transactionId: _basicTransaction.transactionId,
+        reasonCancel: reasonCancel);
 
     _transactionRepo.updateTransaction(updateTransactionModel);
 

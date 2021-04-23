@@ -323,10 +323,14 @@ class TransactionDetailPage extends StatelessWidget {
                         Container(
                           child: Column(
                             children: [
-                              Text(
-                                'Service Info',
-                                style: TextStyle(
-                                    color: Color(0xff0d47a1), fontSize: 20),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                padding: EdgeInsets.only(left: 30),
+                                child: Text(
+                                  'Service Info',
+                                  style: TextStyle(
+                                      color: Color(0xff0d47a1), fontSize: 20),
+                                ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(
@@ -352,7 +356,49 @@ class TransactionDetailPage extends StatelessWidget {
                                         model.service.servicePrice))
                                   ],
                                 ),
-                              )
+                              ),
+                              (model.transaction.status == 4)
+                                  ? Container(
+                                      margin: EdgeInsets.only(top: 15),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              'Reason Cancel',
+                                              style: TextStyle(
+                                                color: Color(0xff0d47a1),
+                                                fontSize: 20,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : Container(),
+                              (model.transaction.status == 4)
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 10,
+                                          left: 30,
+                                          right: 30,
+                                          bottom: 30),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          (model.transaction.reasonCancel ==
+                                                  null)
+                                              ? Text("Nothing")
+                                              : Text(model
+                                                  .transaction.reasonCancel),
+                                        ],
+                                      ),
+                                    )
+                                  : Container(),
                             ],
                           ),
                         ),

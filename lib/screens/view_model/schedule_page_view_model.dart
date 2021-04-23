@@ -78,6 +78,8 @@ class SchedulePageViewModel extends BaseModel {
   int specialtyId;
   int serviceId;
 
+  String reasonCancel;
+
   Future<void> initScheduleToday() async {
     if (isFirst) {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -119,6 +121,7 @@ class SchedulePageViewModel extends BaseModel {
 
     List<ScheduleModel> listSchedule =
         await _scheduleRepo.loadListSchedule(dateStart, dateEnd, doctorId);
+    print("list ${listSchedule.length}");
     List<ScheduleModel> listTemp = [];
     DateTime different;
     if (listSchedule == null) {
@@ -632,7 +635,8 @@ class SchedulePageViewModel extends BaseModel {
         status: 4,
         transactionId: transactionID,
         scheduleId: scheduleId,
-        estimatedTime: null);
+        estimatedTime: null,
+        reasonCancel: reasonCancel);
     bool isUpdateTransaction =
         await _transactionRepo.updateTransaction(transactionTemp);
 
