@@ -285,6 +285,7 @@ class TransactionFormScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
+                            enabled: false,
                             style: TextStyle(
                               fontSize: 16,
                               color: Color(0xff0d47a1),

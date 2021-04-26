@@ -31,6 +31,7 @@ class Transaction {
       estimatedTime: json['estimatedTime'] as String,
       dateStart: json['dateStart'] as String,
       dateEnd: json['dateEnd'] as String,
+      reasonCancel: json['reasonCancel'] as String,
     );
   }
 

@@ -44,6 +44,7 @@ class ScheduleRepo extends IScheduleRepo {
       String dateStart, String dateEnd, int doctorId) async {
     String urlAPI = APIHelper.SCHEDULE_API +
         '?startDate=$dateStart&endDate=$dateEnd&doctorId=$doctorId';
+    print("URL $urlAPI");
     Map<String, String> header = {
       HttpHeaders.contentTypeHeader: "application/json",
     };
@@ -51,7 +52,7 @@ class ScheduleRepo extends IScheduleRepo {
     var response = await http.get(urlAPI, headers: header);
 
     List<ScheduleModel> _listSchedule = [];
-
+    print("status ${response.statusCode}");
     if (response.statusCode == 200) {
       List<dynamic> jsonData = json.decode(response.body);
 

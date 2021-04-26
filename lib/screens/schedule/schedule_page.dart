@@ -15,6 +15,8 @@ import 'package:mobile_doctors_apps/screens/view_model/schedule_page_view_model.
 import 'package:table_calendar/table_calendar.dart';
 
 class SchedulePage extends StatelessWidget {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return BaseView<SchedulePageViewModel>(
@@ -910,117 +912,173 @@ class SchedulePage extends StatelessWidget {
     return showDialog(
       context: context,
       builder: (bookingContext) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(12),
-            ),
-          ),
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+          },
           child: Container(
-            height: 345,
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 25,
-                ),
-                Icon(
-                  Icons.info,
-                  color: Color(0xff4ee1c7),
-                  size: 90,
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                Text(
-                  "Confirmation?",
-                  style: TextStyle(
-                    fontSize: 27,
-                    fontWeight: FontWeight.w800,
-                    fontFamily: 'avenir',
-                    color: Color(0xff0d47a1),
+            alignment: Alignment.center,
+            child: SingleChildScrollView(
+              child: Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
                   ),
                 ),
-                SizedBox(
-                  height: 25,
-                ),
-                Text(
-                  'Are you sure want to Cancel this?',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'avenir',
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(
-                  height: 45,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    InkWell(
-                      customBorder: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        height: 25,
                       ),
-                      onTap: () async {
-                        Navigator.pop(bookingContext);
-                        (!isDelete)
-                            ? await model.cancelBooking(context, scheduleId,
-                                time, location, note, patientId, transactionId)
-                            : model.deleteTaskSchedule(scheduleId, context,
-                                location, note, patientId, transactionId);
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 50,
-                        width: MediaQuery.of(bookingContext).size.width * 0.3,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(color: Colors.blueAccent),
+                      Icon(
+                        Icons.info,
+                        color: Color(0xff4ee1c7),
+                        size: 90,
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Text(
+                        "Confirmation?",
+                        style: TextStyle(
+                          fontSize: 27,
+                          fontWeight: FontWeight.w800,
+                          fontFamily: 'avenir',
+                          color: Color(0xff0d47a1),
                         ),
-                        child: Text(
-                          "Yes",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'avenir',
-                            color: Colors.blueAccent,
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Text(
+                        'Are you sure want to Cancel this?',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'avenir',
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Form(
+                          key: _formKey,
+                          child: TextFormField(
+                            maxLines: 5,
+                            maxLength: 255,
+                            onChanged: (value) {
+                              model.reasonCancel = value;
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your reason';
+                              }
+
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                                hintText: 'Enter your reason here',
+                                counterText: "",
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12))),
                           ),
                         ),
                       ),
-                    ),
-                    InkWell(
-                      customBorder: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                      SizedBox(
+                        height: 45,
                       ),
-                      onTap: () {
-                        Navigator.pop(bookingContext);
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 50,
-                        width: MediaQuery.of(bookingContext).size.width * 0.3,
-                        decoration: BoxDecoration(
-                          color: Colors.blueAccent,
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(color: Colors.blueAccent),
-                        ),
-                        child: Text(
-                          "No",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'avenir',
-                            color: Colors.white,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          InkWell(
+                            customBorder: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            onTap: () async {
+                              if (_formKey.currentState.validate()) {
+                                Navigator.pop(bookingContext);
+                                (!isDelete)
+                                    ? await model.cancelBooking(
+                                        context,
+                                        scheduleId,
+                                        time,
+                                        location,
+                                        note,
+                                        patientId,
+                                        transactionId)
+                                    : model.deleteTaskSchedule(
+                                        scheduleId,
+                                        context,
+                                        location,
+                                        note,
+                                        patientId,
+                                        transactionId);
+                              }
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 50,
+                              width: MediaQuery.of(bookingContext).size.width *
+                                  0.3,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(color: Colors.blueAccent),
+                              ),
+                              child: Text(
+                                "Yes",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'avenir',
+                                  color: Colors.blueAccent,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                          InkWell(
+                            customBorder: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            onTap: () {
+                              Navigator.pop(bookingContext);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 50,
+                              width: MediaQuery.of(bookingContext).size.width *
+                                  0.3,
+                              decoration: BoxDecoration(
+                                color: Colors.blueAccent,
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(color: Colors.blueAccent),
+                              ),
+                              child: Text(
+                                "No",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'avenir',
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                )
-              ],
+                      SizedBox(
+                        height: 25,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
         );

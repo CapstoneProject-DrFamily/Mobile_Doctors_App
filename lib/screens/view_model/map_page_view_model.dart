@@ -44,7 +44,9 @@ class MapPageViewModel extends BaseModel {
   Position get currentPosition => _currentPosition;
 
   Completer<GoogleMapController> _controllerGoogle = Completer();
+  Completer<GoogleMapController> get controllerGoogle => _controllerGoogle;
   GoogleMapController _controller;
+  GoogleMapController get controller => _controller;
 
   CameraPosition _initPosition = CameraPosition(
     target: LatLng(10.7915178, 106.7271422),
@@ -90,6 +92,8 @@ class MapPageViewModel extends BaseModel {
 
   DatabaseReference _transactionRequest;
 
+  String reasonCancel;
+
   MapPageViewModel(
       TransactionBasicModel transaction, DirectionDetails directionDetails) {
     _isLoading = true;
@@ -104,6 +108,9 @@ class MapPageViewModel extends BaseModel {
   }
 
   void initMap() async {
+    print("Account ID ${_basicTransaction.accountId}");
+    print("Transaction ID ${_basicTransaction.transactionId}");
+
     _phoneNum = await _userRepo.getPhoneUser(_basicTransaction.accountId);
 
     _firebaseuser = await FirebaseAuth.instance.currentUser();
@@ -418,7 +425,6 @@ class MapPageViewModel extends BaseModel {
 
   void callPhone(BuildContext context) async {
     await launch('tel://$_phoneNum');
-    Navigator.pop(context);
   }
 
   Future<void> cancelTransaction() async {
@@ -432,7 +438,8 @@ class MapPageViewModel extends BaseModel {
         note: _basicTransaction.patientNote,
         patientId: _basicTransaction.patientId,
         status: 4,
-        transactionId: _basicTransaction.transactionId);
+        transactionId: _basicTransaction.transactionId,
+        reasonCancel: reasonCancel);
 
     _transactionRepo.updateTransaction(updateTransactionModel);
 
