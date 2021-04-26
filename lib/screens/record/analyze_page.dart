@@ -22,6 +22,7 @@ class AnalyzePage extends StatelessWidget {
       return FutureBuilder(
         future: model.fetchData(transactionId, timelineModel, listCheck),
         builder: (contextC, snapshop) {
+          model.keyboard = MediaQuery.of(contextC).viewInsets.bottom != 0;
           if (!model.init) {
             return Container(
                 width: MediaQuery.of(contextB).size.width,
@@ -393,10 +394,12 @@ class AnalyzePage extends StatelessWidget {
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
                               decoration: InputDecoration(
+                                  counterText: "",
                                   hintText: 'Enter text',
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12))),
                               maxLines: 3,
+                              maxLength: 50,
                               initialValue: model.getTextData(index),
                               onChanged: (value) {
                                 model.changeFieldText(index, model, value);
@@ -747,6 +750,7 @@ class AnalyzePage extends StatelessWidget {
 
                         return null;
                       },
+                      maxLength: 7,
                       initialValue: model.examinationForm.bloodPressure != null
                           ? model.examinationForm.bloodPressure
                           : null,
@@ -755,6 +759,7 @@ class AnalyzePage extends StatelessWidget {
                       },
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
+                        counterText: "",
                         enabledBorder: OutlineInputBorder(
                           borderSide:
                               const BorderSide(color: Colors.grey, width: 2),
@@ -799,8 +804,10 @@ class AnalyzePage extends StatelessWidget {
                         model.changeFieldNumber(field, model, value);
                       },
                       textAlign: TextAlign.center,
+                      maxLength: 4,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
+                        counterText: "",
                         enabledBorder: OutlineInputBorder(
                           borderSide:
                               const BorderSide(color: Colors.grey, width: 2),
@@ -877,9 +884,11 @@ class AnalyzePage extends StatelessWidget {
               onChanged: (value) {
                 model.changeFieldNumber(field, model, value);
               },
+              maxLength: 2,
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
+                counterText: "",
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.grey, width: 2),
                   borderRadius: BorderRadius.circular(20.0),

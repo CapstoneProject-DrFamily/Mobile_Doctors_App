@@ -11,6 +11,8 @@ class MedicineForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseView<MedicineFormViewModel>(
       builder: (context, child, model) {
+        model.keyboard = MediaQuery.of(context).viewInsets.bottom != 0;
+
         if (model.isLoading) {
           return Center(
             child: CircularProgressIndicator(

@@ -17,6 +17,7 @@ class DiagnosePage extends StatelessWidget {
       return FutureBuilder(
           future: model.fetchData(transactionId, timelineModel),
           builder: (context, snapshot) {
+            model.keyboard = MediaQuery.of(context).viewInsets.bottom != 0;
             if (model.init) {
               return Container(
                 child: Center(
@@ -344,8 +345,11 @@ class DiagnosePage extends StatelessWidget {
                                                               controller: model
                                                                   .doctorAdviceController,
                                                               maxLines: 5,
-                                                              decoration: InputDecoration
-                                                                  .collapsed(
+                                                              maxLength: 255,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                      counterText:
+                                                                          "",
                                                                       hintText:
                                                                           'Enter your text'),
                                                             ),

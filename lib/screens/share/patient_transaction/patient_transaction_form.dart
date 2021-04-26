@@ -4,6 +4,7 @@ import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/patient_base_transaction_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/patient_transaction_form_view_model.dart';
 import 'package:mobile_doctors_apps/themes/colors.dart';
+import 'package:photo_view/photo_view.dart';
 
 class TransactionFormScreen extends StatelessWidget {
   final TransactionBaseViewModel model;
@@ -113,14 +114,66 @@ class TransactionFormScreen extends StatelessWidget {
                               : false,
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 10),
-                        child:
-                            this.model.listCheck.contains("Serum biochemistry")
-                                ? Image.network(
-                                    this.model.examinationForm.bloodChemistry,
-                                    width: 200,
-                                    height: 250,
-                                    fit: BoxFit.fill)
-                                : Text("No data"),
+                        child: this
+                                .model
+                                .listCheck
+                                .contains("Serum biochemistry")
+                            ? GridView.count(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                crossAxisCount: 3,
+                                childAspectRatio: 1,
+                                children: List.generate(
+                                  model.firebaseSerumImage.length,
+                                  (index) {
+                                    String viewFireabaseSerumImage =
+                                        model.firebaseSerumImage[index];
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                CommonExampleRouteWrapper(
+                                              imageProvider: NetworkImage(
+                                                viewFireabaseSerumImage,
+                                              ),
+                                              loadingBuilder: (context, event) {
+                                                if (event == null) {
+                                                  return const Center(
+                                                    child: Text("Loading"),
+                                                  );
+                                                }
+
+                                                final value = event
+                                                        .cumulativeBytesLoaded /
+                                                    (event.expectedTotalBytes ??
+                                                        event
+                                                            .cumulativeBytesLoaded);
+
+                                                final percentage =
+                                                    (100 * value).floor();
+                                                return Center(
+                                                  child: Text("$percentage%"),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Card(
+                                        clipBehavior: Clip.antiAlias,
+                                        child: Image.network(
+                                          viewFireabaseSerumImage,
+                                          width: 300,
+                                          height: 300,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
+                            : Text("No data"),
                       ),
                     ),
                     Padding(
@@ -160,11 +213,62 @@ class TransactionFormScreen extends StatelessWidget {
                                   .model
                                   .listCheck
                                   .contains("Urine biochemistry")
-                              ? Image.network(
-                                  this.model.examinationForm.urineBiochemistry,
-                                  width: 200,
-                                  height: 250,
-                                  fit: BoxFit.fill)
+                              ? GridView.count(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  crossAxisCount: 3,
+                                  childAspectRatio: 1,
+                                  children: List.generate(
+                                    model.firebaseUrineImage.length,
+                                    (index) {
+                                      String viewFireabaseUrinImage =
+                                          model.firebaseUrineImage[index];
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  CommonExampleRouteWrapper(
+                                                imageProvider: NetworkImage(
+                                                  viewFireabaseUrinImage,
+                                                ),
+                                                loadingBuilder:
+                                                    (context, event) {
+                                                  if (event == null) {
+                                                    return const Center(
+                                                      child: Text("Loading"),
+                                                    );
+                                                  }
+
+                                                  final value = event
+                                                          .cumulativeBytesLoaded /
+                                                      (event.expectedTotalBytes ??
+                                                          event
+                                                              .cumulativeBytesLoaded);
+
+                                                  final percentage =
+                                                      (100 * value).floor();
+                                                  return Center(
+                                                    child: Text("$percentage%"),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Card(
+                                          clipBehavior: Clip.antiAlias,
+                                          child: Image.network(
+                                            viewFireabaseUrinImage,
+                                            width: 300,
+                                            height: 300,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                )
                               : Text("No data")),
                     ),
                   ],
@@ -928,6 +1032,62 @@ class TransactionFormScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class CommonExampleRouteWrapper extends StatelessWidget {
+  const CommonExampleRouteWrapper({
+    this.imageProvider,
+    this.loadingBuilder,
+    this.backgroundDecoration,
+    this.minScale,
+    this.maxScale,
+    this.initialScale,
+    this.basePosition = Alignment.center,
+    this.filterQuality = FilterQuality.none,
+    this.disableGestures,
+    this.errorBuilder,
+  });
+
+  final ImageProvider imageProvider;
+  final LoadingBuilder loadingBuilder;
+  final BoxDecoration backgroundDecoration;
+  final dynamic minScale;
+  final dynamic maxScale;
+  final dynamic initialScale;
+  final Alignment basePosition;
+  final FilterQuality filterQuality;
+  final bool disableGestures;
+  final ImageErrorWidgetBuilder errorBuilder;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Color(0xff0d47a1)),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: Container(
+        constraints: BoxConstraints.expand(
+          height: MediaQuery.of(context).size.height,
+        ),
+        child: PhotoView(
+          imageProvider: imageProvider,
+          loadingBuilder: loadingBuilder,
+          backgroundDecoration: backgroundDecoration,
+          minScale: minScale,
+          maxScale: maxScale,
+          initialScale: initialScale,
+          basePosition: basePosition,
+          filterQuality: filterQuality,
+          disableGestures: disableGestures,
+          errorBuilder: errorBuilder,
+        ),
+      ),
     );
   }
 }

@@ -242,51 +242,6 @@ class AddTimeDialog {
                                   ],
                                 ),
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(EvaIcons.checkmarkCircle2Outline),
-                                      Text(
-                                        "Time available",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.normal),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(EvaIcons.checkmarkCircle2),
-                                      Text(
-                                        "Time picked",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.normal),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                children: [
-                                  Icon(EvaIcons.radioButtonOn),
-                                  Text(
-                                    "Time has schedule",
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.normal),
-                                  )
-                                ],
-                              ),
                               SizedBox(
                                 height: 5,
                               ),
@@ -388,22 +343,6 @@ class AddSchedulePage extends StatelessWidget {
                           children: [
                             SizedBox(
                               height: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Container(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "Please select time for your appoinment.",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 20.0),
@@ -645,7 +584,12 @@ class AddSchedulePage extends StatelessWidget {
                                   ),
                                   Row(
                                     children: [
-                                      Text('Repeat on next 7 days'),
+                                      Text(
+                                        'Repeat on next 7 days',
+                                        style: TextStyle(
+                                          color: Color(0xff0d47a1),
+                                        ),
+                                      ),
                                       Switch(
                                         value: addTimeModel.isRepeat,
                                         onChanged: (value) {
@@ -659,8 +603,61 @@ class AddSchedulePage extends StatelessWidget {
                                 ],
                               ),
                             ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(EvaIcons.checkmarkCircle2Outline),
+                                      Text(
+                                        "Time available",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Color(0xff0d47a1),
+                                            fontWeight: FontWeight.normal),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(EvaIcons.checkmarkCircle2),
+                                      Text(
+                                        "Time picked",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Color(0xff0d47a1),
+                                            fontWeight: FontWeight.normal),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                             SizedBox(
-                              height: 30,
+                              height: 5,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 20, left: 20),
+                              child: Row(
+                                children: [
+                                  Icon(EvaIcons.radioButtonOn),
+                                  Text(
+                                    "Time has schedule",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Color(0xff0d47a1),
+                                        fontWeight: FontWeight.normal),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
                             ),
                             InkWell(
                               onTap: () {
