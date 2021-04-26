@@ -69,7 +69,11 @@ class DiagnosePageViewModel extends BaseModel {
       notifyListeners();
     });
     KeyboardVisibilityNotification().addNewListener(
+      onShow: (bool visible) {
+        print("oke");
+      },
       onChange: (bool visible) {
+        print("visible" + visible.toString());
         keyboard = visible;
       },
     );

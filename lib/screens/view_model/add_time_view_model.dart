@@ -74,6 +74,11 @@ class AddTimeViewModel extends BaseModel {
     } else {
       this.listDaySelected.add(dateTime);
     }
+
+    if (this.listDaySelected.length == 7)
+      this.isRepeat = true;
+    else
+      this.isRepeat = false;
     notifyListeners();
   }
 

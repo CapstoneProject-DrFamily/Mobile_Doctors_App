@@ -121,7 +121,7 @@ class SchedulePageViewModel extends BaseModel {
 
     List<ScheduleModel> listSchedule =
         await _scheduleRepo.loadListSchedule(dateStart, dateEnd, doctorId);
-    print("list ${listSchedule.length}");
+
     List<ScheduleModel> listTemp = [];
     DateTime different;
     if (listSchedule == null) {
@@ -510,9 +510,10 @@ class SchedulePageViewModel extends BaseModel {
 
   Future<void> callPhone(int patientId, String time) async {
     var phone = await _patientRepo.getPatientPhone(patientId);
-    print('phone $phone');
+    String newPhone = "0" + phone.toString().substring(2);
+    print('phone $newPhone');
 
-    await launch('tel://$phone');
+    await launch('tel://$newPhone');
   }
 
   Future<void> deleteScheduleNoTask(

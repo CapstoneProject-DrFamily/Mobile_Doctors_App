@@ -56,11 +56,24 @@ class UserRepo extends IUserRepo {
         waiting: 0,
         notiToken: tokenNoti);
 
-    String updateUserJson = jsonEncode(_updateUserModel.toJson());
-    print("UpdUserJson: " + updateUserJson);
+    // String updateUserJson = jsonEncode(_updateUserModel.toJson());
+    var data = {
+      'userModel': {
+        "disable": 0,
+        "updBy": phone,
+        "updDate": DateFormat('yyyy-MM-dd').format(DateTime.now()),
+        "accountId": accountId,
+        "username": formatPhone,
+        "password": null,
+        "roleId": 3,
+        "waiting": 0,
+        "notiToken": tokenNoti,
+      }
+    };
+    print("UpdUserJson: " + jsonEncode(data));
 
     var response =
-        await http.put(urlAPI, headers: header, body: updateUserJson);
+        await http.put(urlAPI, headers: header, body: jsonEncode(data));
 
     print("Status code: " + response.statusCode.toString());
 

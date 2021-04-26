@@ -17,6 +17,8 @@ class MedicineListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseView<MedicineListViewModel>(
       builder: (context, child, model) {
+        model.keyboard = MediaQuery.of(context).viewInsets.bottom != 0;
+
         return FutureBuilder(
             future: model.fetchData(transactionId),
             builder: (context, snapshot) {

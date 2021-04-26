@@ -42,7 +42,9 @@ class LandingPageViewModel extends BaseModel {
       }
     }
 
-    _userRepo.updateUser(tokenNoti);
+    print("notiToken $tokenNoti");
+
+    await _userRepo.updateUser(tokenNoti);
     // final SharedPreferences prefs = await SharedPreferences.getInstance();
     // String phone = prefs.getString("usPhone");
     // int profileID = prefs.get("usProfileID");

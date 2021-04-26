@@ -62,9 +62,9 @@ class Common {
         "-" +
         month +
         " " +
-        dateTime.hour.toString() +
+        dateTime.hour.toString().padLeft(2, '0') +
         ":" +
-        dateTime.minute.toString();
+        dateTime.minute.toString().padLeft(2, '0');
 
     return display;
   }

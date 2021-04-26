@@ -12,7 +12,10 @@ import 'package:mobile_doctors_apps/model/examination_history.dart';
 import 'package:mobile_doctors_apps/repository/examination_repo.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/timeline_view_model.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SamplePageViewModel extends BaseModel {
   final IExaminationRepo _examinationRepo = ExaminationRepo();
@@ -32,6 +35,16 @@ class SamplePageViewModel extends BaseModel {
   File imageUrinebiochemistryFile;
   File imageAbdominalultrasoundFile;
 
+  List<Asset> imagesSerumbiochemistry = List<Asset>();
+  List<String> firebaseSerumImage = [];
+  bool hasImageSerumbiochemistry = false;
+  bool hasInitSerumImage = false;
+
+  List<Asset> imagesUrinebiochemistry = List<Asset>();
+  List<String> firebaseUrineImage = [];
+  bool hasImageUrinebiochemistry = false;
+  bool hasInitUrineImage = false;
+
   ExaminationHistory _examinationHistory;
   ExaminationHistory get examinationHistory => _examinationHistory;
 
@@ -48,10 +61,29 @@ class SamplePageViewModel extends BaseModel {
         _examinationHistory =
             await _examinationRepo.getExaminationHistory(transactionId);
         print("exam $_examinationHistory");
-        imageHematology = _examinationHistory.hematology;
+        // imageHematology = _examinationHistory.hematology;
         imageSerumbiochemistry = _examinationHistory.bloodChemistry;
+        print("blood $imageSerumbiochemistry");
+
+        if (imageSerumbiochemistry != null) {
+          hasInitSerumImage = true;
+          List slitSerumImage = imageSerumbiochemistry.split("]");
+
+          for (int i = 0; i < slitSerumImage.length - 1; i++) {
+            firebaseSerumImage.add(slitSerumImage[i]);
+          }
+        }
         imageUrinebiochemistry = _examinationHistory.urineBiochemistry;
-        imageAbdominalultrasound = _examinationHistory.abdominalUltrasound;
+        print("urin $imageUrinebiochemistry");
+        if (imageUrinebiochemistry != null) {
+          hasInitUrineImage = true;
+          List slitUrineImage = imageUrinebiochemistry.split("]");
+
+          for (int i = 0; i < slitUrineImage.length - 1; i++) {
+            firebaseUrineImage.add(slitUrineImage[i]);
+          }
+        }
+        // imageAbdominalultrasound = _examinationHistory.abdominalUltrasound;
       }
 
       init = false;
@@ -200,18 +232,83 @@ class SamplePageViewModel extends BaseModel {
   void saveSample(BuildContext context, TimeLineViewModel model) async {
     isLoading = true;
     notifyListeners();
-    if (imageHematology != null) {
-      _examinationHistory.hematology = imageHematology;
+    String imageSerum;
+    if (imagesSerumbiochemistry.isNotEmpty) {
+      List<File> fileSerum = [];
+      for (var item in imagesSerumbiochemistry) {
+        File file = await getImageFileFromAssets(item);
+        fileSerum.add(file);
+      }
+      imageSerum = "";
+      try {
+        for (var item in fileSerum) {
+          imageSerum = imageSerum + await upLoadImage(item) + "]";
+        }
+      } catch (e) {
+        print(e);
+        await CoolAlert.show(
+            barrierDismissible: false,
+            context: context,
+            type: CoolAlertType.error,
+            text: "Update Record Fail!",
+            backgroundColor: Colors.lightBlue[200],
+            onConfirmBtnTap: () {
+              Navigator.of(context).pop();
+            });
+      }
     }
-    if (imageSerumbiochemistry != null) {
+    String imageUrin;
+
+    if (imagesUrinebiochemistry.isNotEmpty) {
+      List<File> fileUrin = [];
+      for (var item in imagesUrinebiochemistry) {
+        File file = await getImageFileFromAssets(item);
+        fileUrin.add(file);
+      }
+      imageUrin = "";
+      try {
+        for (var item in fileUrin) {
+          imageUrin = imageUrin + await upLoadImage(item) + "]";
+        }
+      } catch (e) {
+        print(e);
+        await CoolAlert.show(
+            barrierDismissible: false,
+            context: context,
+            type: CoolAlertType.error,
+            text: "Update Record Fail!",
+            backgroundColor: Colors.lightBlue[200],
+            onConfirmBtnTap: () {
+              Navigator.of(context).pop();
+            });
+      }
+    }
+
+    // List slitImage = imageSerum.split("]");
+    // for (var item in slitImage) {
+    //   print("URL image $item");
+    // }
+
+    // if (imageHematology != null) {
+    //   _examinationHistory.hematology = imageHematology;
+    // }
+    print("isNull $imageSerum");
+    if (imageSerum != null) {
+      _examinationHistory.bloodChemistry = imageSerum;
+    } else {
       _examinationHistory.bloodChemistry = imageSerumbiochemistry;
     }
-    if (imageUrinebiochemistry != null) {
+    if (imageUrin != null) {
+      _examinationHistory.urineBiochemistry = imageUrin;
+    } else {
       _examinationHistory.urineBiochemistry = imageUrinebiochemistry;
     }
-    if (imageAbdominalultrasound != null) {
-      _examinationHistory.abdominalUltrasound = imageAbdominalultrasound;
-    }
+    // if (imageAbdominalultrasound != null) {
+    //   _examinationHistory.abdominalUltrasound = imageAbdominalultrasound;
+    // }
+
+    // isLoading = false;
+    // notifyListeners();
 
     String jsonExaminationHistory = jsonEncode(_examinationHistory);
 
@@ -254,6 +351,99 @@ class SamplePageViewModel extends BaseModel {
           onConfirmBtnTap: () {
             Navigator.of(context).pop();
           });
+    }
+  }
+
+  Future<File> getImageFileFromAssets(Asset asset) async {
+    final byteData = await asset.getByteData();
+
+    final tempFile =
+        File('${(await getTemporaryDirectory()).path}/${asset.name}');
+    final file = await tempFile.writeAsBytes(byteData.buffer.asUint8List(
+      byteData.offsetInBytes,
+      byteData.lengthInBytes,
+    ));
+
+    return file;
+  }
+
+  Future<void> pickImagesSerum() async {
+    List<Object> resultList = List<Asset>();
+
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 3,
+        enableCamera: true,
+        selectedAssets: imagesSerumbiochemistry,
+        materialOptions: MaterialOptions(
+          actionBarTitle: "Choose Your Image",
+        ),
+      );
+    } on Exception catch (e) {
+      print(e);
+      hasImageSerumbiochemistry = false;
+    }
+
+    imagesSerumbiochemistry = resultList;
+
+    if (imagesSerumbiochemistry.length > 0) {
+      hasImageSerumbiochemistry = true;
+    }
+
+    print("oke");
+    notifyListeners();
+  }
+
+  void removeImageSerum(Asset asset) {
+    imagesSerumbiochemistry.remove(asset);
+    print("Length ${imagesSerumbiochemistry.length}");
+    notifyListeners();
+  }
+
+  void changeStateHasNoSerum() {
+    if (imagesSerumbiochemistry.length == 0) {
+      hasImageSerumbiochemistry = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> pickImagesUrin() async {
+    List<Object> resultList = List<Asset>();
+
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 3,
+        enableCamera: true,
+        selectedAssets: imagesUrinebiochemistry,
+        materialOptions: MaterialOptions(
+          actionBarTitle: "Choose Your Image",
+        ),
+      );
+    } on Exception catch (e) {
+      print(e);
+      hasImageUrinebiochemistry = false;
+    }
+
+    imagesUrinebiochemistry = resultList;
+
+    if (imagesUrinebiochemistry.length > 0) {
+      hasImageUrinebiochemistry = true;
+    }
+
+    print("oke");
+    notifyListeners();
+  }
+
+  void removeImageUrin(Asset asset) {
+    imagesUrinebiochemistry.remove(asset);
+    print("Length ${imagesUrinebiochemistry.length}");
+    notifyListeners();
+  }
+
+  void changeStateHasNoUrin() {
+    if (imagesUrinebiochemistry.length == 0) {
+      hasImageUrinebiochemistry = false;
+      notifyListeners();
     }
   }
 }

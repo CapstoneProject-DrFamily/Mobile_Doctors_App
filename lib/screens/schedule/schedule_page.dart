@@ -71,8 +71,8 @@ class SchedulePage extends StatelessWidget {
                         startingDayOfWeek: StartingDayOfWeek.monday,
                         formatAnimation: FormatAnimation.slide,
                         headerStyle: HeaderStyle(
-                          centerHeaderTitle: false,
-                          formatButtonVisible: true,
+                          centerHeaderTitle: true,
+                          formatButtonVisible: false,
                           titleTextStyle:
                               TextStyle(color: Colors.white, fontSize: 16),
                           leftChevronIcon: Icon(
@@ -154,40 +154,40 @@ class SchedulePage extends StatelessWidget {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16),
                                     ),
-                                    Expanded(child: Container()),
-                                    (model.isAdd)
-                                        ? ClipOval(
-                                            child: Material(
-                                              color:
-                                                  Colors.white, // button color
-                                              child: InkWell(
-                                                splashColor: Colors
-                                                    .grey, // inkwell color
-                                                child: SizedBox(
-                                                  width: 35,
-                                                  height: 35,
-                                                  child: Icon(
-                                                    Icons.add,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                                onTap: () async {
-                                                  AddTimeDialog()
-                                                      .showCustomDialog(
-                                                          context,
-                                                          model.changeDate,
-                                                          model.selectedEvents,
-                                                          model);
+                                    // Expanded(child: Container()),
+                                    // (model.isAdd)
+                                    //     ? ClipOval(
+                                    //         child: Material(
+                                    //           color:
+                                    //               Colors.white, // button color
+                                    //           child: InkWell(
+                                    //             splashColor: Colors
+                                    //                 .grey, // inkwell color
+                                    //             child: SizedBox(
+                                    //               width: 35,
+                                    //               height: 35,
+                                    //               child: Icon(
+                                    //                 Icons.add,
+                                    //                 color: Colors.black,
+                                    //               ),
+                                    //             ),
+                                    //             onTap: () async {
+                                    //               AddTimeDialog()
+                                    //                   .showCustomDialog(
+                                    //                       context,
+                                    //                       model.changeDate,
+                                    //                       model.selectedEvents,
+                                    //                       model);
 
-                                                  // await model
-                                                  //     .selectTime(context);
-                                                  // await model
-                                                  //     .confirmDateTime(context);
-                                                },
-                                              ),
-                                            ),
-                                          )
-                                        : Container(),
+                                    //               // await model
+                                    //               //     .selectTime(context);
+                                    //               // await model
+                                    //               //     .confirmDateTime(context);
+                                    //             },
+                                    //           ),
+                                    //         ),
+                                    //       )
+                                    //     : Container(),
                                   ],
                                 ),
                                 SizedBox(

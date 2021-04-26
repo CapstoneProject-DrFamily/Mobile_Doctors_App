@@ -424,7 +424,8 @@ class MapPageViewModel extends BaseModel {
   }
 
   void callPhone(BuildContext context) async {
-    await launch('tel://$_phoneNum');
+    String newPhone = "0" + _phoneNum.toString().substring(2);
+    await launch('tel://$newPhone');
   }
 
   Future<void> cancelTransaction() async {

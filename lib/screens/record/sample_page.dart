@@ -5,6 +5,7 @@ import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/sample_page_view_model.dart';
 import 'package:mobile_doctors_apps/screens/view_model/timeline_view_model.dart';
 import 'package:mobile_doctors_apps/themes/colors.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 class SamplePage extends StatelessWidget {
   final TimeLineViewModel timelineModel;
@@ -123,88 +124,116 @@ class SamplePage extends StatelessWidget {
                                                 .contains("Serum biochemistry")
                                             ? true
                                             : false,
-                                        child: Padding(
-                                          padding: EdgeInsets.only(bottom: 10),
-                                          child: InkWell(
-                                            onTap: () {
-                                              showModalBottomSheet(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return SafeArea(
-                                                      child: new Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          new ListTile(
-                                                            leading: new Icon(
-                                                                Icons.camera),
-                                                            title: new Text(
-                                                                'Camera'),
-                                                            onTap: () async {
-                                                              Navigator.pop(
-                                                                  context);
-
-                                                              await model
-                                                                  .getImageFromCamera(
-                                                                      "Serum biochemistry");
-                                                            },
-                                                          ),
-                                                          new ListTile(
-                                                            leading: new Icon(
-                                                                Icons.image),
-                                                            title: new Text(
-                                                                'Gallery'),
-                                                            onTap: () async {
-                                                              Navigator.pop(
-                                                                  context);
-
-                                                              await model
-                                                                  .getImageFromGallery(
-                                                                      "Serum biochemistry");
-                                                              print("oke");
-                                                            },
-                                                          ),
-                                                          (model.imageSerumbiochemistry !=
-                                                                  null)
-                                                              ? new ListTile(
-                                                                  leading: new Icon(
-                                                                      EvaIcons
-                                                                          .closeOutline),
-                                                                  title: new Text(
-                                                                      'Delete Image'),
-                                                                  onTap:
-                                                                      () async {
-                                                                    model.deleteImage(
-                                                                        "Serum biochemistry");
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
-                                                                )
-                                                              : Container()
-                                                        ],
-                                                      ),
-                                                    );
-                                                  });
-                                            },
-                                            child: (model
-                                                        .imageSerumbiochemistry !=
-                                                    null)
-                                                ? Image.network(
-                                                    model
-                                                        .imageSerumbiochemistry,
-                                                    width: 200,
-                                                    height: 250,
-                                                    fit: BoxFit.fill)
-                                                : Container(
-                                                    width: 200,
-                                                    height: 250,
-                                                    color: Colors.grey,
-                                                    child:
-                                                        Icon(Icons.camera_alt),
-                                                  ),
+                                        child: Container(
+                                          margin: EdgeInsets.only(
+                                              top: 5, left: 10, right: 10),
+                                          padding: EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              width: 1,
+                                              color: Colors.blue,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              RaisedButton(
+                                                child: Text("Choose Image"),
+                                                onPressed: () async {
+                                                  model.pickImagesSerum();
+                                                },
+                                              ),
+                                              SizedBox(
+                                                height: 3,
+                                              ),
+                                              buildViewPickedImages(model),
+                                            ],
                                           ),
                                         ),
+                                        // Padding(
+                                        //   padding: EdgeInsets.only(bottom: 10),
+                                        //   child: InkWell(
+                                        //     onTap: () {
+                                        //       showModalBottomSheet(
+                                        //           context: context,
+                                        //           builder:
+                                        //               (BuildContext context) {
+                                        //             return SafeArea(
+                                        //               child: new Column(
+                                        //                 mainAxisSize:
+                                        //                     MainAxisSize.min,
+                                        //                 children: [
+                                        //                   new ListTile(
+                                        //                     leading: new Icon(
+                                        //                         Icons.camera),
+                                        //                     title: new Text(
+                                        //                         'Camera'),
+                                        //                     onTap: () async {
+                                        //                       Navigator.pop(
+                                        //                           context);
+                                        //                       await model
+                                        //                           .getImageFromCamera(
+                                        //                               "Serum biochemistry");
+                                        //                     },
+                                        //                   ),
+                                        //                   new ListTile(
+                                        //                     leading: new Icon(
+                                        //                         Icons.image),
+                                        //                     title: new Text(
+                                        //                         'Gallery'),
+                                        //                     onTap: () async {
+                                        //                       Navigator.pop(
+                                        //                           context);
+                                        //                       await model
+                                        //                           .getImageFromGallery(
+                                        //                               "Serum biochemistry");
+                                        //                       print("oke");
+                                        //                     },
+                                        //                   ),
+                                        //                   (model.imageSerumbiochemistry !=
+                                        //                           null)
+                                        //                       ? new ListTile(
+                                        //                           leading: new Icon(
+                                        //                               EvaIcons
+                                        //                                   .closeOutline),
+                                        //                           title: new Text(
+                                        //                               'Delete Image'),
+                                        //                           onTap:
+                                        //                               () async {
+                                        //                             model.deleteImage(
+                                        //                                 "Serum biochemistry");
+                                        //                             Navigator.pop(
+                                        //                                 context);
+                                        //                           },
+                                        //                         )
+                                        //                       : Container()
+                                        //                 ],
+                                        //               ),
+                                        //             );
+                                        //           },
+                                        // );
+                                        //     },
+                                        //     child: (model
+                                        //                 .imageSerumbiochemistry !=
+                                        //             null)
+                                        //         ? Image.network(
+                                        //             model
+                                        //                 .imageSerumbiochemistry,
+                                        //             width: 200,
+                                        //             height: 250,
+                                        //             fit: BoxFit.fill)
+                                        //         : Container(
+                                        //             width: 200,
+                                        //             height: 250,
+                                        //             color: Colors.grey,
+                                        //             child:
+                                        //                 Icon(Icons.camera_alt),
+                                        //           ),
+                                        //   ),
+                                        // ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
@@ -242,88 +271,115 @@ class SamplePage extends StatelessWidget {
                                                 .contains("Urine biochemistry")
                                             ? true
                                             : false,
-                                        child: Padding(
-                                          padding: EdgeInsets.only(bottom: 10),
-                                          child: InkWell(
-                                            onTap: () {
-                                              showModalBottomSheet(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return SafeArea(
-                                                      child: new Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          new ListTile(
-                                                            leading: new Icon(
-                                                                Icons.camera),
-                                                            title: new Text(
-                                                                'Camera'),
-                                                            onTap: () async {
-                                                              Navigator.pop(
-                                                                  context);
-
-                                                              await model
-                                                                  .getImageFromCamera(
-                                                                      "Urine biochemistry");
-                                                            },
-                                                          ),
-                                                          new ListTile(
-                                                            leading: new Icon(
-                                                                Icons.image),
-                                                            title: new Text(
-                                                                'Gallery'),
-                                                            onTap: () async {
-                                                              Navigator.pop(
-                                                                  context);
-
-                                                              await model
-                                                                  .getImageFromGallery(
-                                                                      "Urine biochemistry");
-                                                              print("oke");
-                                                            },
-                                                          ),
-                                                          (model.imageUrinebiochemistry !=
-                                                                  null)
-                                                              ? new ListTile(
-                                                                  leading: new Icon(
-                                                                      EvaIcons
-                                                                          .closeOutline),
-                                                                  title: new Text(
-                                                                      'Delete Image'),
-                                                                  onTap:
-                                                                      () async {
-                                                                    model.deleteImage(
-                                                                        "Urine biochemistry");
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
-                                                                )
-                                                              : Container()
-                                                        ],
-                                                      ),
-                                                    );
-                                                  });
-                                            },
-                                            child: (model
-                                                        .imageUrinebiochemistry !=
-                                                    null)
-                                                ? Image.network(
-                                                    model
-                                                        .imageUrinebiochemistry,
-                                                    width: 200,
-                                                    height: 250,
-                                                    fit: BoxFit.fill)
-                                                : Container(
-                                                    width: 200,
-                                                    height: 250,
-                                                    color: Colors.grey,
-                                                    child:
-                                                        Icon(Icons.camera_alt),
-                                                  ),
+                                        child: Container(
+                                          margin: EdgeInsets.only(
+                                              top: 5, left: 10, right: 10),
+                                          padding: EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              width: 1,
+                                              color: Colors.blue,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              RaisedButton(
+                                                child: Text("Choose Image"),
+                                                onPressed: () async {
+                                                  model.pickImagesUrin();
+                                                },
+                                              ),
+                                              SizedBox(
+                                                height: 3,
+                                              ),
+                                              buildViewPickedImagesUrin(model),
+                                            ],
                                           ),
                                         ),
+                                        // Padding(
+                                        //   padding: EdgeInsets.only(bottom: 10),
+                                        //   child: InkWell(
+                                        //     onTap: () {
+                                        //       showModalBottomSheet(
+                                        //           context: context,
+                                        //           builder:
+                                        //               (BuildContext context) {
+                                        //             return SafeArea(
+                                        //               child: new Column(
+                                        //                 mainAxisSize:
+                                        //                     MainAxisSize.min,
+                                        //                 children: [
+                                        //                   new ListTile(
+                                        //                     leading: new Icon(
+                                        //                         Icons.camera),
+                                        //                     title: new Text(
+                                        //                         'Camera'),
+                                        //                     onTap: () async {
+                                        //                       Navigator.pop(
+                                        //                           context);
+                                        //                       await model
+                                        //                           .getImageFromCamera(
+                                        //                               "Urine biochemistry");
+                                        //                     },
+                                        //                   ),
+                                        //                   new ListTile(
+                                        //                     leading: new Icon(
+                                        //                         Icons.image),
+                                        //                     title: new Text(
+                                        //                         'Gallery'),
+                                        //                     onTap: () async {
+                                        //                       Navigator.pop(
+                                        //                           context);
+                                        //                       await model
+                                        //                           .getImageFromGallery(
+                                        //                               "Urine biochemistry");
+                                        //                       print("oke");
+                                        //                     },
+                                        //                   ),
+                                        //                   (model.imageUrinebiochemistry !=
+                                        //                           null)
+                                        //                       ? new ListTile(
+                                        //                           leading: new Icon(
+                                        //                               EvaIcons
+                                        //                                   .closeOutline),
+                                        //                           title: new Text(
+                                        //                               'Delete Image'),
+                                        //                           onTap:
+                                        //                               () async {
+                                        //                             model.deleteImage(
+                                        //                                 "Urine biochemistry");
+                                        //                             Navigator.pop(
+                                        //                                 context);
+                                        //                           },
+                                        //                         )
+                                        //                       : Container()
+                                        //                 ],
+                                        //               ),
+                                        //             );
+                                        //           });
+                                        //     },
+                                        //     child: (model
+                                        //                 .imageUrinebiochemistry !=
+                                        //             null)
+                                        //         ? Image.network(
+                                        //             model
+                                        //                 .imageUrinebiochemistry,
+                                        //             width: 200,
+                                        //             height: 250,
+                                        //             fit: BoxFit.fill)
+                                        //         : Container(
+                                        //             width: 200,
+                                        //             height: 250,
+                                        //             color: Colors.grey,
+                                        //             child:
+                                        //                 Icon(Icons.camera_alt),
+                                        //           ),
+                                        //   ),
+                                        // ),
                                       ),
                                     ],
                                   ),
@@ -405,5 +461,178 @@ class SamplePage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget buildViewPickedImages(SamplePageViewModel model) {
+    if ((model.imagesSerumbiochemistry.length == 0 ||
+            model.hasImageSerumbiochemistry == false) &&
+        model.hasInitSerumImage == false)
+      return GridView.count(
+        physics: NeverScrollableScrollPhysics(),
+        crossAxisCount: 3,
+        shrinkWrap: true,
+        childAspectRatio: 1,
+        children: List.generate(3, (index) {
+          return Card(
+            color: Colors.grey,
+            child: Icon(
+              Icons.image,
+              color: Colors.white,
+            ),
+          );
+        }),
+      );
+    else if (model.hasInitSerumImage == true &&
+        (model.imagesSerumbiochemistry.length == 0 ||
+            model.hasImageSerumbiochemistry == false))
+      return GridView.count(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        crossAxisCount: 3,
+        childAspectRatio: 1,
+        children: List.generate(
+          model.firebaseSerumImage.length,
+          (index) {
+            String viewFireabaseSerumImage = model.firebaseSerumImage[index];
+            return Card(
+              clipBehavior: Clip.antiAlias,
+              child: Image.network(
+                viewFireabaseSerumImage,
+                width: 300,
+                height: 300,
+              ),
+            );
+          },
+        ),
+      );
+    else
+      return GridView.count(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        crossAxisCount: 3,
+        childAspectRatio: 1,
+        children: List.generate(
+          model.imagesSerumbiochemistry.length,
+          (index) {
+            Asset asset = model.imagesSerumbiochemistry[index];
+            print("asset $asset");
+            return Card(
+              clipBehavior: Clip.antiAlias,
+              child: Stack(
+                children: <Widget>[
+                  AssetThumb(
+                    asset: asset,
+                    width: 300,
+                    height: 300,
+                  ),
+                  Positioned(
+                    right: 5,
+                    top: 5,
+                    child: InkWell(
+                      child: Icon(
+                        Icons.remove_circle,
+                        size: 20,
+                        color: Colors.red,
+                      ),
+                      onTap: () {
+                        // Remove Image
+                        model.removeImageSerum(asset);
+
+                        //Not have Image
+                        model.changeStateHasNoSerum();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      );
+  }
+
+  Widget buildViewPickedImagesUrin(SamplePageViewModel model) {
+    if ((model.imagesUrinebiochemistry.length == 0 ||
+            model.hasImageUrinebiochemistry == false) &&
+        model.hasInitUrineImage == false)
+      return GridView.count(
+        physics: NeverScrollableScrollPhysics(),
+        crossAxisCount: 3,
+        shrinkWrap: true,
+        childAspectRatio: 1,
+        children: List.generate(3, (index) {
+          return Card(
+            color: Colors.grey,
+            child: Icon(
+              Icons.image,
+              color: Colors.white,
+            ),
+          );
+        }),
+      );
+    else if (model.hasInitUrineImage == true &&
+        (model.imagesUrinebiochemistry.length == 0 ||
+            model.hasImageUrinebiochemistry == false))
+      return GridView.count(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        crossAxisCount: 3,
+        childAspectRatio: 1,
+        children: List.generate(
+          model.firebaseUrineImage.length,
+          (index) {
+            String viewFireabaseUrinImage = model.firebaseUrineImage[index];
+            return Card(
+              clipBehavior: Clip.antiAlias,
+              child: Image.network(
+                viewFireabaseUrinImage,
+                width: 300,
+                height: 300,
+              ),
+            );
+          },
+        ),
+      );
+    else
+      return GridView.count(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        crossAxisCount: 3,
+        childAspectRatio: 1,
+        children: List.generate(model.imagesUrinebiochemistry.length, (index) {
+          Asset asset = model.imagesUrinebiochemistry[index];
+          print("asset $asset");
+          return Card(
+            clipBehavior: Clip.antiAlias,
+            child: Stack(
+              children: <Widget>[
+                AssetThumb(
+                  asset: asset,
+                  width: 300,
+                  height: 300,
+                ),
+                Positioned(
+                  right: 5,
+                  top: 5,
+                  child: InkWell(
+                    child: Icon(
+                      Icons.remove_circle,
+                      size: 20,
+                      color: Colors.red,
+                    ),
+                    onTap: () {
+                      // Remove Image
+                      model.removeImageUrin(asset);
+
+                      //Not have Image
+                      model.changeStateHasNoUrin();
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
+      );
   }
 }

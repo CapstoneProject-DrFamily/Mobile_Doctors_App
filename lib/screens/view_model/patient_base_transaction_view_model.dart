@@ -30,6 +30,9 @@ class TransactionBaseViewModel extends BaseModel {
 
   List<String> listTransaction;
 
+  List<String> firebaseSerumImage = [];
+  List<String> firebaseUrineImage = [];
+
   List<FormParameterModel> listSpeciality = [
     FormParameterModel(name: 'Cardiovascular', description: ""),
     FormParameterModel(name: 'Respiratory', description: ""),
@@ -65,7 +68,33 @@ class TransactionBaseViewModel extends BaseModel {
       feedback = results[5];
       profileDoctor = results[6];
 
-      diagnoseList = examinationForm.conclusion.split(";");
+      print("exam $patientTransaction");
+      print("exam $profilePatient");
+      print("exam $doctorSpeciality");
+      print("exam $service");
+      print("exam $examinationForm");
+      print("exam $feedback");
+      print("exam $profileDoctor");
+
+      if (examinationForm.conclusion != null) {
+        diagnoseList = examinationForm.conclusion.split(";");
+      }
+
+      if (examinationForm.bloodChemistry != null) {
+        List slitSerumImage = examinationForm.bloodChemistry.split("]");
+
+        for (int i = 0; i < slitSerumImage.length - 1; i++) {
+          firebaseSerumImage.add(slitSerumImage[i]);
+        }
+      }
+
+      if (examinationForm.urineBiochemistry != null) {
+        List slitUrineImage = examinationForm.urineBiochemistry.split("]");
+
+        for (int i = 0; i < slitUrineImage.length - 1; i++) {
+          firebaseUrineImage.add(slitUrineImage[i]);
+        }
+      }
 
       initCheck(this.listCheck);
       this.init = false;
