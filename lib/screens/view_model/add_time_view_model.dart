@@ -22,6 +22,10 @@ class AddTimeViewModel extends BaseModel {
 
   List<DateTime> listTimeChoose = [];
 
+  List<DateTime> listDaySelected = [];
+
+  bool isRepeat = false;
+
   Future<void> initAddTime(DateTime time, List<dynamic> listHasChoose) async {
     if (_isFirstAddTimePopUp) {
       DateFormat dateFormat = DateFormat("yyyy-MM-dd");
@@ -42,18 +46,35 @@ class AddTimeViewModel extends BaseModel {
         );
         listTimeDisplay.putIfAbsent(dateStart, () => 0);
       }
-
-      for (int i = 0; i < listHasChoose.length; i++) {
-        int index = listTimeDisplay.keys.toList().indexWhere((element) =>
-            element.isAtSameMomentAs(
-                DateTime.parse(listHasChoose[i].appointmentTime)));
-        chooseDateTimeIinit(
-            DateTime.parse(listHasChoose[i].appointmentTime), index);
+      if (listHasChoose != null) {
+        for (int i = 0; i < listHasChoose.length; i++) {
+          int index = listTimeDisplay.keys.toList().indexWhere((element) =>
+              element.isAtSameMomentAs(
+                  DateTime.parse(listHasChoose[i].appointmentTime)));
+          chooseDateTimeIinit(
+              DateTime.parse(listHasChoose[i].appointmentTime), index);
+        }
       }
+
+      listDaySelected.add(time);
+
       _isFirstAddTimePopUp = false;
       _isLoadingAddTimePopUp = false;
       notifyListeners();
     }
+  }
+
+  void changeSelectedDay(DateTime dateTime, DateTime defaultDate) {
+    if (dateTime == defaultDate) {
+      return;
+    }
+
+    if (this.listDaySelected.contains(dateTime)) {
+      this.listDaySelected.removeWhere((element) => element == dateTime);
+    } else {
+      this.listDaySelected.add(dateTime);
+    }
+    notifyListeners();
   }
 
   void chooseDateTimeIinit(DateTime chooseTime, int index) {
@@ -121,6 +142,19 @@ class AddTimeViewModel extends BaseModel {
       }
       listTimeDisplay.update(chooseTime, (value) => 2);
       print('list choose add $listChoose');
+    }
+    notifyListeners();
+  }
+
+  void changeRepeat(bool value, DateTime datetime) {
+    this.isRepeat = value;
+    this.listDaySelected = [];
+    if (this.isRepeat) {
+      for (var i = 0; i < 7; i++) {
+        this.listDaySelected.add(datetime.add(Duration(days: i)));
+      }
+    } else {
+      this.listDaySelected.add(datetime);
     }
     notifyListeners();
   }

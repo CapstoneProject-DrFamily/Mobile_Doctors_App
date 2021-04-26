@@ -178,6 +178,7 @@ class SchedulePage extends StatelessWidget {
                                                           model.changeDate,
                                                           model.selectedEvents,
                                                           model);
+
                                                   // await model
                                                   //     .selectTime(context);
                                                   // await model
@@ -340,6 +341,32 @@ class SchedulePage extends StatelessWidget {
                       ),
                     ],
                   ),
+                  floatingActionButton: (!model.isAdd)
+                      ? null
+                      : Padding(
+                          padding: const EdgeInsets.only(bottom: 50),
+                          child: FloatingActionButton(
+                            onPressed: () {
+                              // AddTimeDialog().showCustomDialog(
+                              //     context,
+                              //     model.changeDate,
+                              //     model.selectedEvents,
+                              //     model);
+
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AddSchedulePage(
+                                            context: context,
+                                            datetime: model.changeDate,
+                                            listHasChoose: model.selectedEvents,
+                                            schedulePageViewModel: model,
+                                          )));
+                            },
+                            child: const Icon(Icons.add),
+                            backgroundColor: Color(0xff0d47a1),
+                          ),
+                        ),
                 );
               }
             } else {
