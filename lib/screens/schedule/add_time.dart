@@ -215,7 +215,7 @@ class AddTimeDialog {
                                                             .center,
                                                     children: [
                                                       Text(
-                                                          DateTime.now()
+                                                          datetime
                                                               .add(Duration(
                                                                   days:
                                                                       position))
@@ -226,10 +226,9 @@ class AddTimeDialog {
                                                           )),
                                                       Text(
                                                         DateFormat('EE').format(
-                                                            DateTime.now().add(
-                                                                Duration(
-                                                                    days:
-                                                                        position))),
+                                                            datetime.add(Duration(
+                                                                days:
+                                                                    position))),
                                                         style: TextStyle(
                                                             fontSize: 5),
                                                       )
@@ -357,7 +356,7 @@ class AddSchedulePage extends StatelessWidget {
             onPressed: () => Navigator.of(context).pop(),
           ),
           title: Text(
-            "Patient History Record",
+            "Create new schedule",
             textAlign: TextAlign.center,
             style: GoogleFonts.varelaRound(
               fontWeight: FontWeight.w600,
@@ -366,7 +365,341 @@ class AddSchedulePage extends StatelessWidget {
             ),
           ),
         ),
-        body: Text('sa'),
+        body: FutureBuilder(
+          future: addTimeModel.initAddTime(datetime, listHasChoose),
+          builder: (context, snapshot) {
+            if (addTimeModel.isLoadingAddTimePopUp) {
+              return Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            } else {
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                          minWidth: constraints.maxWidth,
+                          minHeight: constraints.maxHeight),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Please select time for your appoinment.",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20.0),
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "These time slots are in Vietnam timezone \n(GMT+7:00).",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: Color(0xff0d47a1),
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              height: MediaQuery.of(context).size.height * 0.5,
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Color(0xff0d47a1), width: 2),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount:
+                                      addTimeModel.listTimeDisplay.length,
+                                  itemBuilder: (context, index) {
+                                    return (addTimeModel.listTimeDisplay.values
+                                                .toList()[index] ==
+                                            1)
+                                        ? Container()
+                                        : InkWell(
+                                            onTap: () {
+                                              (addTimeModel.listTimeDisplay
+                                                          .values
+                                                          .toList()[index] ==
+                                                      2)
+                                                  ? print("notThing")
+                                                  : addTimeModel.chooseDateTime(
+                                                      addTimeModel
+                                                          .listTimeDisplay.keys
+                                                          .toList()[index],
+                                                      index);
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    0, 10, 0, 10),
+                                                decoration: BoxDecoration(
+                                                  border: Border(
+                                                    bottom: (index ==
+                                                            addTimeModel
+                                                                    .listTimeDisplay
+                                                                    .length -
+                                                                1)
+                                                        ? BorderSide(
+                                                            color: Colors.white,
+                                                            width: 0.5,
+                                                          )
+                                                        : BorderSide(
+                                                            color: Colors.grey,
+                                                            width: 0.5,
+                                                          ),
+                                                  ),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      addTimeModel.timeFormat
+                                                          .format(addTimeModel
+                                                              .listTimeDisplay
+                                                              .keys
+                                                              .toList()[index]),
+                                                      style: TextStyle(
+                                                        fontSize: 15,
+                                                        color: Color(0xff0d47a1)
+                                                            .withOpacity(0.8),
+                                                      ),
+                                                    ),
+                                                    (addTimeModel.listTimeDisplay
+                                                                    .values
+                                                                    .toList()[
+                                                                index] ==
+                                                            2)
+                                                        ? Icon(EvaIcons
+                                                            .radioButtonOn)
+                                                        : addTimeModel
+                                                                .listTimeChoose
+                                                                .contains(addTimeModel
+                                                                        .listTimeDisplay
+                                                                        .keys
+                                                                        .toList()[
+                                                                    index])
+                                                            ? Icon(EvaIcons
+                                                                .checkmarkCircle2)
+                                                            : Icon(EvaIcons
+                                                                .checkmarkCircle2Outline),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                  },
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              height: 100,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: 7,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder: (context, position) {
+                                        return Container(
+                                            margin: position != 0
+                                                ? EdgeInsets.only(left: 10)
+                                                : null,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                addTimeModel.changeSelectedDay(
+                                                    datetime.add(Duration(
+                                                        days: position)),
+                                                    datetime.add(
+                                                        Duration(days: 0)));
+                                                print(datetime.add(
+                                                    Duration(days: position)));
+                                              },
+                                              child: FittedBox(
+                                                child: Container(
+                                                  height: 30,
+                                                  width: 30,
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                    color: addTimeModel
+                                                            .listDaySelected
+                                                            .contains(datetime
+                                                                .add(Duration(
+                                                                    days:
+                                                                        position)))
+                                                        ? Color(0xff0d47a1)
+                                                        : Colors.blueGrey[100],
+                                                    border: Border.all(
+                                                        color: addTimeModel
+                                                                .listDaySelected
+                                                                .contains(datetime
+                                                                    .add(Duration(
+                                                                        days:
+                                                                            position)))
+                                                            ? Color(0xff0d47a1)
+                                                            : Colors
+                                                                .blueGrey[100]),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5.0),
+                                                  ),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        DateFormat.MMMM().format(
+                                                            datetime.add(Duration(
+                                                                days:
+                                                                    position))),
+                                                        style: TextStyle(
+                                                          fontSize: 5,
+                                                          color: addTimeModel
+                                                                  .listDaySelected
+                                                                  .contains(datetime
+                                                                      .add(Duration(
+                                                                          days:
+                                                                              position)))
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                          datetime
+                                                              .add(Duration(
+                                                                  days:
+                                                                      position))
+                                                              .day
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                            fontSize: 10,
+                                                            color: addTimeModel
+                                                                    .listDaySelected
+                                                                    .contains(datetime.add(
+                                                                        Duration(
+                                                                            days:
+                                                                                position)))
+                                                                ? Colors.white
+                                                                : Colors.black,
+                                                          )),
+                                                      Text(
+                                                        DateFormat('EE').format(
+                                                            datetime.add(Duration(
+                                                                days:
+                                                                    position))),
+                                                        style: TextStyle(
+                                                          fontSize: 5,
+                                                          color: addTimeModel
+                                                                  .listDaySelected
+                                                                  .contains(datetime
+                                                                      .add(Duration(
+                                                                          days:
+                                                                              position)))
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ));
+                                      },
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text('Repeat on next 7 days'),
+                                      Switch(
+                                        value: addTimeModel.isRepeat,
+                                        onChanged: (value) {
+                                          addTimeModel.changeRepeat(
+                                              value, datetime);
+                                          print(value);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                schedulePageViewModel.addMultipleSchedule(
+                                    addTimeModel.listTimeChoose, context);
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.06,
+                                decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color(0xff374ABE),
+                                        Color(0xff64B6FF)
+                                      ],
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                    ),
+                                    borderRadius: BorderRadius.circular(30.0)),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Add",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
+            }
+          },
+        ),
       );
     });
   }

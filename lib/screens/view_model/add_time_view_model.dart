@@ -22,16 +22,9 @@ class AddTimeViewModel extends BaseModel {
 
   List<DateTime> listTimeChoose = [];
 
-  String getWeek(DateTime dateTime) {
-    var lastDayOfWeek =
-        dateTime.add(Duration(days: DateTime.daysPerWeek - dateTime.weekday));
+  List<DateTime> listDaySelected = [];
 
-    var firstDayOfWeek =
-        dateTime.subtract(Duration(days: dateTime.weekday - 1));
-    return firstDayOfWeek.toIso8601String() +
-        " - " +
-        lastDayOfWeek.toIso8601String();
-  }
+  bool isRepeat = false;
 
   Future<void> initAddTime(DateTime time, List<dynamic> listHasChoose) async {
     if (_isFirstAddTimePopUp) {
@@ -62,10 +55,26 @@ class AddTimeViewModel extends BaseModel {
               DateTime.parse(listHasChoose[i].appointmentTime), index);
         }
       }
+
+      listDaySelected.add(time);
+
       _isFirstAddTimePopUp = false;
       _isLoadingAddTimePopUp = false;
       notifyListeners();
     }
+  }
+
+  void changeSelectedDay(DateTime dateTime, DateTime defaultDate) {
+    if (dateTime == defaultDate) {
+      return;
+    }
+
+    if (this.listDaySelected.contains(dateTime)) {
+      this.listDaySelected.removeWhere((element) => element == dateTime);
+    } else {
+      this.listDaySelected.add(dateTime);
+    }
+    notifyListeners();
   }
 
   void chooseDateTimeIinit(DateTime chooseTime, int index) {
@@ -133,6 +142,19 @@ class AddTimeViewModel extends BaseModel {
       }
       listTimeDisplay.update(chooseTime, (value) => 2);
       print('list choose add $listChoose');
+    }
+    notifyListeners();
+  }
+
+  void changeRepeat(bool value, DateTime datetime) {
+    this.isRepeat = value;
+    this.listDaySelected = [];
+    if (this.isRepeat) {
+      for (var i = 0; i < 7; i++) {
+        this.listDaySelected.add(datetime.add(Duration(days: i)));
+      }
+    } else {
+      this.listDaySelected.add(datetime);
     }
     notifyListeners();
   }

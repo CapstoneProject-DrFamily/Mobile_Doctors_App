@@ -172,13 +172,13 @@ class SchedulePage extends StatelessWidget {
                                                   ),
                                                 ),
                                                 onTap: () async {
-                                                  // AddTimeDialog()
-                                                  //     .showCustomDialog(
-                                                  //         context,
-                                                  //         model.changeDate,
-                                                  //         model.selectedEvents,
-                                                  //         model);
-                                                  //
+                                                  AddTimeDialog()
+                                                      .showCustomDialog(
+                                                          context,
+                                                          model.changeDate,
+                                                          model.selectedEvents,
+                                                          model);
+
                                                   // await model
                                                   //     .selectTime(context);
                                                   // await model
