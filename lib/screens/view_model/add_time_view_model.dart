@@ -22,6 +22,17 @@ class AddTimeViewModel extends BaseModel {
 
   List<DateTime> listTimeChoose = [];
 
+  String getWeek(DateTime dateTime) {
+    var lastDayOfWeek =
+        dateTime.add(Duration(days: DateTime.daysPerWeek - dateTime.weekday));
+
+    var firstDayOfWeek =
+        dateTime.subtract(Duration(days: dateTime.weekday - 1));
+    return firstDayOfWeek.toIso8601String() +
+        " - " +
+        lastDayOfWeek.toIso8601String();
+  }
+
   Future<void> initAddTime(DateTime time, List<dynamic> listHasChoose) async {
     if (_isFirstAddTimePopUp) {
       DateFormat dateFormat = DateFormat("yyyy-MM-dd");
@@ -42,13 +53,14 @@ class AddTimeViewModel extends BaseModel {
         );
         listTimeDisplay.putIfAbsent(dateStart, () => 0);
       }
-
-      for (int i = 0; i < listHasChoose.length; i++) {
-        int index = listTimeDisplay.keys.toList().indexWhere((element) =>
-            element.isAtSameMomentAs(
-                DateTime.parse(listHasChoose[i].appointmentTime)));
-        chooseDateTimeIinit(
-            DateTime.parse(listHasChoose[i].appointmentTime), index);
+      if (listHasChoose != null) {
+        for (int i = 0; i < listHasChoose.length; i++) {
+          int index = listTimeDisplay.keys.toList().indexWhere((element) =>
+              element.isAtSameMomentAs(
+                  DateTime.parse(listHasChoose[i].appointmentTime)));
+          chooseDateTimeIinit(
+              DateTime.parse(listHasChoose[i].appointmentTime), index);
+        }
       }
       _isFirstAddTimePopUp = false;
       _isLoadingAddTimePopUp = false;
