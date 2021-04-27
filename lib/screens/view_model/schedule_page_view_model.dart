@@ -12,6 +12,7 @@ import 'package:mobile_doctors_apps/model/transaction.dart';
 import 'package:mobile_doctors_apps/repository/appconfig_repo.dart';
 import 'package:mobile_doctors_apps/repository/doctor_repo.dart';
 import 'package:mobile_doctors_apps/repository/examination_repo.dart';
+import 'package:mobile_doctors_apps/repository/notify_repo.dart';
 import 'package:mobile_doctors_apps/repository/patient_repo.dart';
 import 'package:mobile_doctors_apps/repository/schedule_repo.dart';
 import 'package:mobile_doctors_apps/repository/sign_up/specialty_repo.dart';
@@ -30,6 +31,7 @@ class SchedulePageViewModel extends BaseModel {
   final ISpecialtyRepo _specialtyRepo = SpecialtyRepo();
   final IExaminationRepo _examinationRepo = ExaminationRepo();
   final IAppConfigRepo _appConfigRepo = AppConfigRepo();
+  final INotifyRepo _notifyRepo = NotifyRepo();
 
   bool isLoading = true;
   bool isFirst = true;
@@ -685,9 +687,10 @@ class SchedulePageViewModel extends BaseModel {
       String location,
       String note,
       int patientId,
-      String transactionID) async {
+      String transactionID,
+      String patientName) async {
     waitDialog(context, message: "Canceling booking please wait...");
-
+    var notiTokenPatient = await _patientRepo.getPatientNotitoken(patientId);
     String updateScheduleJson = jsonEncode({
       "scheduleId": scheduleId,
       "doctorId": doctorId,
@@ -696,6 +699,7 @@ class SchedulePageViewModel extends BaseModel {
       "insBy": null,
       "updBy": doctorName,
     });
+
     print('update Schedule $updateScheduleJson');
 
     bool isUpdateSchedule =
@@ -710,11 +714,14 @@ class SchedulePageViewModel extends BaseModel {
         scheduleId: scheduleId,
         estimatedTime: null,
         reasonCancel: reasonCancel);
+
     bool isUpdateTransaction =
         await _transactionRepo.updateTransaction(transactionTemp);
 
     if (isUpdateSchedule && isUpdateTransaction) {
       print("oke udpate transaction");
+      await _notifyRepo.cancelSchedule(
+          notiTokenPatient, doctorName, patientName, appointmentTime);
       await CoolAlert.show(
         barrierDismissible: false,
         context: context,

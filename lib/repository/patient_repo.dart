@@ -8,6 +8,7 @@ import 'package:mobile_doctors_apps/model/patient_model.dart';
 abstract class IPatientRepo {
   Future<PatientModel> getPatientInfo(int patientId);
   Future<String> getPatientPhone(int patientId);
+  Future<String> getPatientNotitoken(int patientID);
 }
 
 class PatientRepo extends IPatientRepo {
@@ -45,6 +46,25 @@ class PatientRepo extends IPatientRepo {
       var phone = userJson['patientNavigation']['account']['username'];
 
       return phone;
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  Future<String> getPatientNotitoken(int patientID) async {
+    String urlAPI = APIHelper.PATIENT_API + '/$patientID';
+
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    var response = await http.get(urlAPI, headers: header);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> userJson = jsonDecode(response.body);
+      var tokenNoti = userJson['patientNavigation']['account']['notiToken'];
+
+      return tokenNoti;
     } else {
       return null;
     }
