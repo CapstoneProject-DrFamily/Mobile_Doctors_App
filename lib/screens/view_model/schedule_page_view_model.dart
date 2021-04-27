@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile_doctors_apps/model/schedule_add_model.dart';
 import 'package:mobile_doctors_apps/model/schedule_model.dart';
 import 'package:mobile_doctors_apps/model/transaction.dart';
+import 'package:mobile_doctors_apps/repository/appconfig_repo.dart';
 import 'package:mobile_doctors_apps/repository/doctor_repo.dart';
 import 'package:mobile_doctors_apps/repository/examination_repo.dart';
 import 'package:mobile_doctors_apps/repository/patient_repo.dart';
@@ -28,6 +29,7 @@ class SchedulePageViewModel extends BaseModel {
   final IDoctorRepo _doctorRepo = DoctorRepo();
   final ISpecialtyRepo _specialtyRepo = SpecialtyRepo();
   final IExaminationRepo _examinationRepo = ExaminationRepo();
+  final IAppConfigRepo _appConfigRepo = AppConfigRepo();
 
   bool isLoading = true;
   bool isFirst = true;
@@ -80,9 +82,12 @@ class SchedulePageViewModel extends BaseModel {
 
   String reasonCancel;
 
+  int timeCanCheck;
+
   Future<void> initScheduleToday() async {
     if (isFirst) {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
+      timeCanCheck = await _appConfigRepo.getMinuteToClick();
       doctorId = prefs.getInt("doctorId");
       doctorName = prefs.getString("usName");
       loadingListTransaction = true;
@@ -576,8 +581,20 @@ class SchedulePageViewModel extends BaseModel {
     waitDialog(context, message: "Deleting your booking please wait...");
 
     bool isDelete = await _scheduleRepo.deleteScheduleNoTask(scheduleId);
+    Transaction transactionTemp = new Transaction(
+        doctorId: doctorId,
+        location: location,
+        note: note,
+        patientId: patientId,
+        status: 4,
+        transactionId: transactionID,
+        scheduleId: scheduleId,
+        estimatedTime: null,
+        reasonCancel: reasonCancel);
+    bool isUpdateTransaction =
+        await _transactionRepo.updateTransaction(transactionTemp);
 
-    if (isDelete) {
+    if (isUpdateTransaction && isDelete) {
       Navigator.pop(context);
       await CoolAlert.show(
         barrierDismissible: false,
