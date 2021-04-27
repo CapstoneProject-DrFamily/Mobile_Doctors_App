@@ -431,8 +431,8 @@ class SchedulePageViewModel extends BaseModel {
   //end Add schedule
 
   //addMultipleShedule
-  void addMultipleSchedule(
-      List<DateTime> timeChoose, BuildContext context) async {
+  void addMultipleSchedule(List<DateTime> timeChoose,
+      List<DateTime> daySelected, BuildContext context) async {
     waitDialog(context, message: "Setting your Schedule please wait...");
 
     var listTimeChoose = timeChoose;
@@ -465,17 +465,39 @@ class SchedulePageViewModel extends BaseModel {
     //   );
     // }
 
-    for (int i = 0; i < listTimeChoose.length; i++) {
-      ScheduleAddModel addScheduleModel = ScheduleAddModel(
-          scheduleId: "0",
-          appointmentTime: listTimeChoose[i].toString(),
-          doctorId: doctorId,
-          insBy: doctorName,
-          status: false,
-          disable: false);
-      listSchedule.add(addScheduleModel);
+    // for (int i = 0; i < listTimeChoose.length; i++) {
+    //   ScheduleAddModel addScheduleModel = ScheduleAddModel(
+    //       scheduleId: "0",
+    //       appointmentTime: listTimeChoose[i].toString(),
+    //       doctorId: doctorId,
+    //       insBy: doctorName,
+    //       status: false,
+    //       disable: false);
+    //   listSchedule.add(addScheduleModel);
+    // }
+    for (int i = 0; i < daySelected.length; i++) {
+      for (int k = 0; k < listTimeChoose.length; k++) {
+        DateTime date = daySelected[i];
+        date = new DateTime(
+            date.year,
+            date.month,
+            date.day,
+            listTimeChoose[k].hour,
+            listTimeChoose[k].minute,
+            listTimeChoose[k].second,
+            listTimeChoose[k].millisecond,
+            listTimeChoose[k].microsecond);
+        print(date);
+        ScheduleAddModel addScheduleModel = ScheduleAddModel(
+            scheduleId: "0",
+            appointmentTime: date.toString(),
+            doctorId: doctorId,
+            insBy: doctorName,
+            status: false,
+            disable: false);
+        listSchedule.add(addScheduleModel);
+      }
     }
-
     String scheduleJson = jsonEncode(listSchedule);
 
     print("listScheduleJson: $scheduleJson");

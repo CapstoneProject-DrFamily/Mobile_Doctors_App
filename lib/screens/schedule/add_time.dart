@@ -248,7 +248,9 @@ class AddTimeDialog {
                               InkWell(
                                 onTap: () {
                                   schedulePageViewModel.addMultipleSchedule(
-                                      addTimeModel.listTimeChoose, context);
+                                      addTimeModel.listTimeChoose,
+                                      addTimeModel.listDaySelected,
+                                      context);
                                 },
                                 child: Container(
                                   width: 130,
@@ -331,7 +333,7 @@ class AddSchedulePage extends StatelessWidget {
               );
             } else {
               return LayoutBuilder(
-                builder: (context, constraints) {
+                builder: (contextB, constraints) {
                   return SingleChildScrollView(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
@@ -662,7 +664,9 @@ class AddSchedulePage extends StatelessWidget {
                             InkWell(
                               onTap: () {
                                 schedulePageViewModel.addMultipleSchedule(
-                                    addTimeModel.listTimeChoose, context);
+                                    addTimeModel.listTimeChoose,
+                                    addTimeModel.listDaySelected,
+                                    context);
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.8,
