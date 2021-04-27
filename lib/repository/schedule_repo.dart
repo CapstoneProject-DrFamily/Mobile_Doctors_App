@@ -7,7 +7,7 @@ import 'package:mobile_doctors_apps/model/schedule_model.dart';
 import 'package:mobile_doctors_apps/model/transaction_schedule_model.dart';
 
 abstract class IScheduleRepo {
-  Future<bool> createSchedule(String jsonSchedule);
+  Future<List<dynamic>> createSchedule(String jsonSchedule);
   Future<List<ScheduleModel>> loadListSchedule(
       String dateStart, String dateEnd, int doctorId);
   Future<bool> deleteScheduleNoTask(int scheduleId);
@@ -17,7 +17,7 @@ abstract class IScheduleRepo {
 
 class ScheduleRepo extends IScheduleRepo {
   @override
-  Future<bool> createSchedule(String jsonSchedule) async {
+  Future<List<dynamic>> createSchedule(String jsonSchedule) async {
     String urlAPI = APIHelper.SCHEDULE_API;
     Map<String, String> header = {
       HttpHeaders.contentTypeHeader: "application/json",
@@ -26,16 +26,23 @@ class ScheduleRepo extends IScheduleRepo {
     var response = await http.post(urlAPI, headers: header, body: jsonSchedule);
     print("Status code: " + response.statusCode.toString());
     bool isCreated = true;
-
+    List<dynamic> listReturn = [];
     if (response.statusCode == 201) {
-      String jSonData = response.body;
-      var decodeData = jsonDecode(jSonData);
+      String jsonData = response.body;
+      print("jsonDataScheduleAdd $jsonData");
+      List<ScheduleModel> listSchedule = (json.decode(response.body) as List)
+          .map((data) => ScheduleModel.fromJson(data))
+          .toList();
 
-      print('jsonValueSchedule $decodeData');
-      return isCreated;
+      listReturn.add(isCreated);
+      listReturn.add(listSchedule);
+
+      print('jsonValueSchedule ${listSchedule.length}');
+      return listReturn;
     } else {
       isCreated = false;
-      return isCreated;
+      listReturn.add(isCreated);
+      return listReturn;
     }
   }
 

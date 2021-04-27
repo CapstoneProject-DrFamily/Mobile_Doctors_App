@@ -1,7 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile_doctors_apps/screens/landing/landing_page.dart';
 
 class PushNotifycationService {
   // static List<TransactionNoti> transaction = [];
@@ -96,6 +95,7 @@ class PushNotifycationService {
                             height: 50,
                             width: 120,
                             decoration: BoxDecoration(
+                              color: Colors.blueAccent,
                               borderRadius: BorderRadius.circular(30),
                               border: Border.all(color: Colors.blueAccent),
                             ),
@@ -105,7 +105,7 @@ class PushNotifycationService {
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'avenir',
-                                color: Colors.blueAccent,
+                                color: Colors.white,
                               ),
                             ),
                           ),

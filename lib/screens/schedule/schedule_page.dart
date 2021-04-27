@@ -500,13 +500,16 @@ class SchedulePage extends StatelessWidget {
                                   )
                                 : (timeCheckFormater
                                             .parse(DateTime.now().toString())
-                                            .isBefore(DateTime.parse(time)
-                                                .add(Duration(minutes: 30))) &&
+                                            .isBefore(DateTime.parse(time).add(
+                                                Duration(
+                                                    minutes:
+                                                        model.timeCanCheck))) &&
                                         timeCheckFormater
                                             .parse(DateTime.now().toString())
                                             .isAfter(DateTime.parse(time)
-                                                .subtract(
-                                                    Duration(minutes: 30))))
+                                                .subtract(Duration(
+                                                    minutes:
+                                                        model.timeCanCheck))))
                                     ? Container(
                                         child: Text(
                                           "On-time",
@@ -570,7 +573,8 @@ class SchedulePage extends StatelessWidget {
                       height: 15,
                     ),
                     (timeCheckFormater.parse(DateTime.now().toString()).isAfter(
-                            DateTime.parse(time).add(Duration(minutes: 30))))
+                            DateTime.parse(time)
+                                .add(Duration(minutes: model.timeCanCheck))))
                         ? Container(
                             child: ClipOval(
                               child: Material(
@@ -723,13 +727,16 @@ class SchedulePage extends StatelessWidget {
                                 ? Container()
                                 : (timeCheckFormater
                                             .parse(DateTime.now().toString())
-                                            .isBefore(DateTime.parse(time)
-                                                .add(Duration(minutes: 30))) &&
+                                            .isBefore(DateTime.parse(time).add(
+                                                Duration(
+                                                    minutes:
+                                                        model.timeCanCheck))) &&
                                         timeCheckFormater
                                             .parse(DateTime.now().toString())
                                             .isAfter(DateTime.parse(time)
-                                                .subtract(
-                                                    Duration(minutes: 30))))
+                                                .subtract(Duration(
+                                                    minutes:
+                                                        model.timeCanCheck))))
                                     ? RaisedButton(
                                         child: Icon(Icons.timer),
                                         color: Colors.green,
@@ -776,8 +783,10 @@ class SchedulePage extends StatelessWidget {
                                             .isBefore(DateTime.parse(time)) ||
                                         timeCheckFormater
                                             .parse(DateTime.now().toString())
-                                            .isBefore(DateTime.parse(time)
-                                                .add(Duration(minutes: 30))))
+                                            .isBefore(DateTime.parse(time).add(
+                                                Duration(
+                                                    minutes:
+                                                        model.timeCanCheck))))
                                     ? RaisedButton(
                                         child: Icon(Icons.block),
                                         color: Colors.red,

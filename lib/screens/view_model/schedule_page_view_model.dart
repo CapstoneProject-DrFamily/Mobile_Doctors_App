@@ -88,6 +88,7 @@ class SchedulePageViewModel extends BaseModel {
     if (isFirst) {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       timeCanCheck = await _appConfigRepo.getMinuteToClick();
+      print("timeCanCheck $timeCanCheck");
       doctorId = prefs.getInt("doctorId");
       doctorName = prefs.getString("usName");
       loadingListTransaction = true;
@@ -240,108 +241,108 @@ class SchedulePageViewModel extends BaseModel {
   }
 
   //add ScheduleTime
-  Future<void> confirmDateTime(BuildContext context) async {
-    if (selectedTime != null) {
-      waitDialog(context, message: "Setting your Schedule please wait...");
+  // Future<void> confirmDateTime(BuildContext context) async {
+  //   if (selectedTime != null) {
+  //     waitDialog(context, message: "Setting your Schedule please wait...");
 
-      String month, day, hour, minute;
-      if (_changeDate.month <= 9)
-        month = '0${_changeDate.month}';
-      else
-        month = _changeDate.month.toString();
+  //     String month, day, hour, minute;
+  //     if (_changeDate.month <= 9)
+  //       month = '0${_changeDate.month}';
+  //     else
+  //       month = _changeDate.month.toString();
 
-      if (_changeDate.day <= 9)
-        day = '0${_changeDate.day}';
-      else
-        day = _changeDate.day.toString();
+  //     if (_changeDate.day <= 9)
+  //       day = '0${_changeDate.day}';
+  //     else
+  //       day = _changeDate.day.toString();
 
-      if (selectedTime.hour <= 9)
-        hour = '0${selectedTime.hour}';
-      else
-        hour = selectedTime.hour.toString();
+  //     if (selectedTime.hour <= 9)
+  //       hour = '0${selectedTime.hour}';
+  //     else
+  //       hour = selectedTime.hour.toString();
 
-      if (selectedTime.minute <= 9)
-        minute = '0${selectedTime.minute}';
-      else
-        minute = selectedTime.minute.toString();
+  //     if (selectedTime.minute <= 9)
+  //       minute = '0${selectedTime.minute}';
+  //     else
+  //       minute = selectedTime.minute.toString();
 
-      String dateChooseString =
-          '${_changeDate.year}-$month-$day $hour:$minute:00';
+  //     String dateChooseString =
+  //         '${_changeDate.year}-$month-$day $hour:$minute:00';
 
-      DateTime dateChoose = DateTime.parse(dateChooseString);
+  //     DateTime dateChoose = DateTime.parse(dateChooseString);
 
-      print('dateChoose $dateChoose');
+  //     print('dateChoose $dateChoose');
 
-      if (dateChoose.hour >= 21 || dateChoose.hour < 8) {
-        Navigator.pop(context);
+  //     if (dateChoose.hour >= 21 || dateChoose.hour < 8) {
+  //       Navigator.pop(context);
 
-        Fluttertoast.showToast(
-          msg: "Time set much be > 8 AM and < 21 PM.",
-          textColor: Colors.red,
-          toastLength: Toast.LENGTH_LONG,
-          backgroundColor: Colors.white,
-          gravity: ToastGravity.CENTER,
-        );
-      } else {
-        bool isValid = validateDateTime(dateChoose);
+  //       Fluttertoast.showToast(
+  //         msg: "Time set much be > 8 AM and < 21 PM.",
+  //         textColor: Colors.red,
+  //         toastLength: Toast.LENGTH_LONG,
+  //         backgroundColor: Colors.white,
+  //         gravity: ToastGravity.CENTER,
+  //       );
+  //     } else {
+  //       bool isValid = validateDateTime(dateChoose);
 
-        if (!isValid) {
-          Navigator.pop(context);
-          Fluttertoast.showToast(
-            msg: "Please set Time before or after the exist time 1:30 hours.",
-            textColor: Colors.red,
-            toastLength: Toast.LENGTH_LONG,
-            backgroundColor: Colors.white,
-            gravity: ToastGravity.CENTER,
-          );
-        } else {
-          //add transaction
-          String transaction = jsonEncode({
-            "doctorId": doctorId,
-            "patientId": null,
-            "status": 0,
-            "location": null,
-            "note": "Nothing",
-            "serviceId": serviceId,
-          });
+  //       if (!isValid) {
+  //         Navigator.pop(context);
+  //         Fluttertoast.showToast(
+  //           msg: "Please set Time before or after the exist time 1:30 hours.",
+  //           textColor: Colors.red,
+  //           toastLength: Toast.LENGTH_LONG,
+  //           backgroundColor: Colors.white,
+  //           gravity: ToastGravity.CENTER,
+  //         );
+  //       } else {
+  //         //add transaction
+  //         String transaction = jsonEncode({
+  //           "doctorId": doctorId,
+  //           "patientId": null,
+  //           "status": 0,
+  //           "location": null,
+  //           "note": "Nothing",
+  //           "serviceId": serviceId,
+  //         });
 
-          print("transaction: " + transaction);
-          String transactionId =
-              await _transactionRepo.addBookingTransaction(transaction);
+  //         print("transaction: " + transaction);
+  //         String transactionId =
+  //             await _transactionRepo.addBookingTransaction(transaction);
 
-          //add schedule
-          bool status = await addSchedule(dateChoose, transactionId);
+  //         //add schedule
+  //         bool status = await addSchedule(dateChoose, transactionId);
 
-          if (status) {
-            Navigator.pop(context);
+  //         if (status) {
+  //           Navigator.pop(context);
 
-            loadBackSchedule();
-          } else
-            Fluttertoast.showToast(
-              msg: "Error please try agian.",
-              textColor: Colors.red,
-              toastLength: Toast.LENGTH_LONG,
-              backgroundColor: Colors.white,
-              gravity: ToastGravity.CENTER,
-            );
-        }
-      }
-    }
-  }
+  //           loadBackSchedule();
+  //         } else
+  //           Fluttertoast.showToast(
+  //             msg: "Error please try agian.",
+  //             textColor: Colors.red,
+  //             toastLength: Toast.LENGTH_LONG,
+  //             backgroundColor: Colors.white,
+  //             gravity: ToastGravity.CENTER,
+  //           );
+  //       }
+  //     }
+  //   }
+  // }
 
-  Future<bool> addSchedule(DateTime dateChoose, String transactionId) async {
-    ScheduleAddModel addScheduleModel = ScheduleAddModel(
-        scheduleId: transactionId,
-        appointmentTime: dateChoose.toString(),
-        doctorId: doctorId,
-        insBy: doctorName,
-        status: false,
-        disable: false);
-    String jsonSchedule = jsonEncode(addScheduleModel.toJson());
-    print('jsonSchedule: $jsonSchedule');
-    bool status = await _scheduleRepo.createSchedule(jsonSchedule);
-    return status;
-  }
+  // Future<bool> addSchedule(DateTime dateChoose, String transactionId) async {
+  //   ScheduleAddModel addScheduleModel = ScheduleAddModel(
+  //       scheduleId: 0,
+  //       appointmentTime: dateChoose.toString(),
+  //       doctorId: doctorId,
+  //       insBy: doctorName,
+  //       status: false,
+  //       disable: false);
+  //   String jsonSchedule = jsonEncode(addScheduleModel.toJson());
+  //   print('jsonSchedule: $jsonSchedule');
+  //   bool status = await _scheduleRepo.createSchedule(jsonSchedule);
+  //   return status;
+  // }
 
   bool validateDateTime(DateTime datechoose) {
     bool isValid = false;
@@ -494,7 +495,7 @@ class SchedulePageViewModel extends BaseModel {
             listTimeChoose[k].microsecond);
         print(date);
         ScheduleAddModel addScheduleModel = ScheduleAddModel(
-            scheduleId: "0",
+            scheduleId: 0,
             appointmentTime: date.toString(),
             doctorId: doctorId,
             insBy: doctorName,
@@ -507,31 +508,63 @@ class SchedulePageViewModel extends BaseModel {
 
     print("listScheduleJson: $scheduleJson");
 
-    bool isAdd = await _scheduleRepo.createSchedule(scheduleJson);
-
-    if (isAdd) {
-      //oke
-      Navigator.pop(context);
-      Navigator.pop(context);
-      CoolAlert.show(
-          barrierDismissible: false,
-          context: context,
-          type: CoolAlertType.success,
-          text: "Update your schedule success",
-          backgroundColor: Colors.lightBlue[200]);
-
-      loadBackSchedule();
-    } else {
-      Navigator.pop(context);
+    if (listSchedule.isEmpty) {
       Navigator.pop(context);
 
       CoolAlert.show(
           barrierDismissible: false,
           context: context,
           type: CoolAlertType.error,
-          text: "False to udpate schedule!",
+          text: "Please select your time first!",
           backgroundColor: Colors.lightBlue[200]);
-      //error
+    } else {
+      List<dynamic> listReturn =
+          await _scheduleRepo.createSchedule(scheduleJson);
+      bool isAdd = listReturn[0];
+      List<ScheduleModel> listErrorSchedule = listReturn[1];
+      if (isAdd && listErrorSchedule.length == 0) {
+        //oke
+        Navigator.pop(context);
+        Navigator.pop(context);
+        CoolAlert.show(
+            barrierDismissible: false,
+            context: context,
+            type: CoolAlertType.success,
+            text: "Update your schedule success",
+            backgroundColor: Colors.lightBlue[200]);
+
+        loadBackSchedule();
+      } else if (isAdd && listErrorSchedule.length != 0) {
+        Navigator.pop(context);
+
+        Navigator.pop(context);
+        String errorSchedule = "";
+        for (var item in listErrorSchedule) {
+          String timeFormat = DateFormat("dd-MM-yyyy - HH:mm")
+              .format(DateTime.parse(item.appointmentTime))
+              .toString();
+          errorSchedule = errorSchedule + "$timeFormat\n";
+        }
+        CoolAlert.show(
+            barrierDismissible: false,
+            context: context,
+            type: CoolAlertType.warning,
+            text: errorSchedule,
+            title: "List ERROR Schedule",
+            backgroundColor: Colors.lightBlue[200]);
+        loadBackSchedule();
+      } else {
+        Navigator.pop(context);
+        Navigator.pop(context);
+
+        CoolAlert.show(
+            barrierDismissible: false,
+            context: context,
+            type: CoolAlertType.error,
+            text: "Fail to udpate schedule!",
+            backgroundColor: Colors.lightBlue[200]);
+        //error
+      }
     }
   }
 

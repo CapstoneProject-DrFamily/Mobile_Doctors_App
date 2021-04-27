@@ -9,16 +9,17 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_doctors_apps/enums/processState.dart';
 import 'package:mobile_doctors_apps/model/examination_history.dart';
+import 'package:mobile_doctors_apps/repository/appconfig_repo.dart';
 import 'package:mobile_doctors_apps/repository/examination_repo.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/timeline_view_model.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class SamplePageViewModel extends BaseModel {
   final IExaminationRepo _examinationRepo = ExaminationRepo();
+  final IAppConfigRepo _appConfigRepo = AppConfigRepo();
 
   String transactionId;
   bool init = true;
@@ -52,9 +53,12 @@ class SamplePageViewModel extends BaseModel {
 
   bool isLoading = false;
 
+  int numberImage;
+
   fetchData(transactionId, TimeLineViewModel model) async {
     if (init) {
       this.transactionId = transactionId;
+      numberImage = await _appConfigRepo.getNumberofImage();
       _examinationHistory =
           await _examinationRepo.getExaminationHistory(transactionId);
       if (model.currentIndex < model.index) {
@@ -101,123 +105,123 @@ class SamplePageViewModel extends BaseModel {
     notifyListeners();
   }
 
-  Future getImageFromGallery(String field) async {
-    isLoading = true;
-    notifyListeners();
-    switch (field) {
-      case "Hematology":
-        var pickedImage =
-            await ImagePicker().getImage(source: ImageSource.gallery);
-        imageHematologyFile = File(pickedImage.path);
-        imageHematology = await upLoadImage(imageHematologyFile);
-        print(imageHematology);
-        isLoading = false;
-        notifyListeners();
+  // Future getImageFromGallery(String field) async {
+  //   isLoading = true;
+  //   notifyListeners();
+  //   switch (field) {
+  //     case "Hematology":
+  //       var pickedImage =
+  //           await ImagePicker().getImage(source: ImageSource.gallery);
+  //       imageHematologyFile = File(pickedImage.path);
+  //       imageHematology = await upLoadImage(imageHematologyFile);
+  //       print(imageHematology);
+  //       isLoading = false;
+  //       notifyListeners();
 
-        break;
-      case "Serum biochemistry":
-        var pickedImage =
-            await ImagePicker().getImage(source: ImageSource.gallery);
-        imageSerumbiochemistryFile = File(pickedImage.path);
-        imageSerumbiochemistry = await upLoadImage(imageSerumbiochemistryFile);
-        isLoading = false;
-        notifyListeners();
-        break;
-      case "Urine biochemistry":
-        var pickedImage =
-            await ImagePicker().getImage(source: ImageSource.gallery);
-        imageUrinebiochemistryFile = File(pickedImage.path);
-        imageUrinebiochemistry = await upLoadImage(imageUrinebiochemistryFile);
-        isLoading = false;
-        notifyListeners();
-        break;
-      case "Abdominal ultrasound":
-        var pickedImage =
-            await ImagePicker().getImage(source: ImageSource.gallery);
-        imageAbdominalultrasoundFile = File(pickedImage.path);
-        imageAbdominalultrasound =
-            await upLoadImage(imageAbdominalultrasoundFile);
-        isLoading = false;
-        notifyListeners();
-        break;
-      default:
-    }
+  //       break;
+  //     case "Serum biochemistry":
+  //       var pickedImage =
+  //           await ImagePicker().getImage(source: ImageSource.gallery);
+  //       imageSerumbiochemistryFile = File(pickedImage.path);
+  //       imageSerumbiochemistry = await upLoadImage(imageSerumbiochemistryFile);
+  //       isLoading = false;
+  //       notifyListeners();
+  //       break;
+  //     case "Urine biochemistry":
+  //       var pickedImage =
+  //           await ImagePicker().getImage(source: ImageSource.gallery);
+  //       imageUrinebiochemistryFile = File(pickedImage.path);
+  //       imageUrinebiochemistry = await upLoadImage(imageUrinebiochemistryFile);
+  //       isLoading = false;
+  //       notifyListeners();
+  //       break;
+  //     case "Abdominal ultrasound":
+  //       var pickedImage =
+  //           await ImagePicker().getImage(source: ImageSource.gallery);
+  //       imageAbdominalultrasoundFile = File(pickedImage.path);
+  //       imageAbdominalultrasound =
+  //           await upLoadImage(imageAbdominalultrasoundFile);
+  //       isLoading = false;
+  //       notifyListeners();
+  //       break;
+  //     default:
+  //   }
 
-    notifyListeners();
-  }
+  //   notifyListeners();
+  // }
 
-  Future getImageFromCamera(String field) async {
-    isLoading = true;
-    notifyListeners();
-    switch (field) {
-      case "Hematology":
-        var pickedImage =
-            await ImagePicker().getImage(source: ImageSource.camera);
-        imageHematologyFile = File(pickedImage.path);
-        imageHematology = await upLoadImage(imageHematologyFile);
-        isLoading = false;
-        notifyListeners();
-        break;
-      case "Serum biochemistry":
-        var pickedImage =
-            await ImagePicker().getImage(source: ImageSource.camera);
-        imageSerumbiochemistryFile = File(pickedImage.path);
-        imageSerumbiochemistry = await upLoadImage(imageSerumbiochemistryFile);
-        isLoading = false;
-        notifyListeners();
-        break;
-      case "Urine biochemistry":
-        var pickedImage =
-            await ImagePicker().getImage(source: ImageSource.camera);
-        imageUrinebiochemistryFile = File(pickedImage.path);
-        imageUrinebiochemistry = await upLoadImage(imageUrinebiochemistryFile);
-        isLoading = false;
-        notifyListeners();
-        break;
-      case "Abdominal ultrasound":
-        var pickedImage =
-            await ImagePicker().getImage(source: ImageSource.camera);
-        imageAbdominalultrasoundFile = File(pickedImage.path);
-        imageAbdominalultrasound =
-            await upLoadImage(imageAbdominalultrasoundFile);
-        isLoading = false;
-        notifyListeners();
-        break;
-      default:
-    }
+  // Future getImageFromCamera(String field) async {
+  //   isLoading = true;
+  //   notifyListeners();
+  //   switch (field) {
+  //     case "Hematology":
+  //       var pickedImage =
+  //           await ImagePicker().getImage(source: ImageSource.camera);
+  //       imageHematologyFile = File(pickedImage.path);
+  //       imageHematology = await upLoadImage(imageHematologyFile);
+  //       isLoading = false;
+  //       notifyListeners();
+  //       break;
+  //     case "Serum biochemistry":
+  //       var pickedImage =
+  //           await ImagePicker().getImage(source: ImageSource.camera);
+  //       imageSerumbiochemistryFile = File(pickedImage.path);
+  //       imageSerumbiochemistry = await upLoadImage(imageSerumbiochemistryFile);
+  //       isLoading = false;
+  //       notifyListeners();
+  //       break;
+  //     case "Urine biochemistry":
+  //       var pickedImage =
+  //           await ImagePicker().getImage(source: ImageSource.camera);
+  //       imageUrinebiochemistryFile = File(pickedImage.path);
+  //       imageUrinebiochemistry = await upLoadImage(imageUrinebiochemistryFile);
+  //       isLoading = false;
+  //       notifyListeners();
+  //       break;
+  //     case "Abdominal ultrasound":
+  //       var pickedImage =
+  //           await ImagePicker().getImage(source: ImageSource.camera);
+  //       imageAbdominalultrasoundFile = File(pickedImage.path);
+  //       imageAbdominalultrasound =
+  //           await upLoadImage(imageAbdominalultrasoundFile);
+  //       isLoading = false;
+  //       notifyListeners();
+  //       break;
+  //     default:
+  //   }
 
-    notifyListeners();
-  }
+  //   notifyListeners();
+  // }
 
-  Future deleteImage(String field) async {
-    isLoading = true;
-    notifyListeners();
-    switch (field) {
-      case "Hematology":
-        imageHematology = null;
-        isLoading = false;
-        notifyListeners();
-        break;
-      case "Serum biochemistry":
-        imageSerumbiochemistry = null;
-        isLoading = false;
-        notifyListeners();
-        break;
-      case "Urine biochemistry":
-        imageUrinebiochemistry = null;
-        isLoading = false;
-        notifyListeners();
-        break;
-      case "Abdominal ultrasound":
-        imageAbdominalultrasound = null;
-        isLoading = false;
-        notifyListeners();
-        break;
-      default:
-    }
+  // Future deleteImage(String field) async {
+  //   isLoading = true;
+  //   notifyListeners();
+  //   switch (field) {
+  //     case "Hematology":
+  //       imageHematology = null;
+  //       isLoading = false;
+  //       notifyListeners();
+  //       break;
+  //     case "Serum biochemistry":
+  //       imageSerumbiochemistry = null;
+  //       isLoading = false;
+  //       notifyListeners();
+  //       break;
+  //     case "Urine biochemistry":
+  //       imageUrinebiochemistry = null;
+  //       isLoading = false;
+  //       notifyListeners();
+  //       break;
+  //     case "Abdominal ultrasound":
+  //       imageAbdominalultrasound = null;
+  //       isLoading = false;
+  //       notifyListeners();
+  //       break;
+  //     default:
+  //   }
 
-    notifyListeners();
-  }
+  //   notifyListeners();
+  // }
 
   Future<String> upLoadImage(File image) async {
     String basename = path.basename(image.path);
@@ -372,7 +376,7 @@ class SamplePageViewModel extends BaseModel {
 
     try {
       resultList = await MultiImagePicker.pickImages(
-        maxImages: 3,
+        maxImages: numberImage,
         enableCamera: true,
         selectedAssets: imagesSerumbiochemistry,
         materialOptions: MaterialOptions(
@@ -412,7 +416,7 @@ class SamplePageViewModel extends BaseModel {
 
     try {
       resultList = await MultiImagePicker.pickImages(
-        maxImages: 3,
+        maxImages: numberImage,
         enableCamera: true,
         selectedAssets: imagesUrinebiochemistry,
         materialOptions: MaterialOptions(
