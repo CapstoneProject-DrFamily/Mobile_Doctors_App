@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 abstract class INotifyRepo {
   Future<void> cancelTransaction(String usToken, String transactionId);
   Future<void> acceptTransaction(String usToken);
   Future<void> arrivedTransaction(String usToken, String transactionId);
+  Future<void> cancelSchedule(String usToken, String doctorname,
+      String patientName, String appointmentTime);
 }
 
 class NotifyRepo extends INotifyRepo {
@@ -103,6 +106,42 @@ class NotifyRepo extends INotifyRepo {
             'transactionId': transactionId,
             'status': 'arrived',
             'type': 'booking',
+          },
+          'to': usToken,
+        },
+      ),
+    );
+  }
+
+  @override
+  Future<void> cancelSchedule(String usToken, String doctorname,
+      String patientName, String appointmentTime) async {
+    await firebaseMessaging.requestNotificationPermissions(
+      const IosNotificationSettings(
+          sound: true, badge: true, alert: true, provisional: false),
+    );
+    String appointTime = DateFormat("dd-MM-yyyy - HH:mm")
+        .format(DateTime.parse(appointmentTime))
+        .toString();
+    String body =
+        "Doctor $doctorname has cancel appointment $patientName at $appointTime";
+
+    await http.post(
+      'https://fcm.googleapis.com/fcm/send',
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'key=$serverToken',
+      },
+      body: jsonEncode(
+        <String, dynamic>{
+          'notification': <String, dynamic>{
+            'body': '$body',
+            'title': 'DOCTOR HAS CANCEL SCHEDULE'
+          },
+          'priority': 'high',
+          'data': <String, dynamic>{
+            'status': 'cancel',
+            'type': 'schedule',
           },
           'to': usToken,
         },
