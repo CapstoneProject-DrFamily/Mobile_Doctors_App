@@ -99,7 +99,9 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
           margin: EdgeInsets.all(15),
           child: RaisedButton(
             onPressed: () {
-              model.btnArrived(context);
+              (model.arrived)
+                  ? model.btnChecking(context)
+                  : model.btnArrived(context);
             },
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(80.0)),
@@ -115,7 +117,9 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
               child: Container(
                 alignment: Alignment.center,
                 child: Text(
-                  "ARRIVED",
+                  (model.arrived)
+                      ? "Checking"
+                      : "ARRIVED\n(Notify for patient)",
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white, fontSize: 15),
                 ),

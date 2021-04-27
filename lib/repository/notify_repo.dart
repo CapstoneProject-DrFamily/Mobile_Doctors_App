@@ -94,6 +94,10 @@ class NotifyRepo extends INotifyRepo {
       },
       body: jsonEncode(
         <String, dynamic>{
+          'notification': <String, dynamic>{
+            'body': 'Please go Check',
+            'title': 'DOCTOR HAS ARRIVED'
+          },
           'priority': 'high',
           'data': <String, dynamic>{
             'transactionId': transactionId,

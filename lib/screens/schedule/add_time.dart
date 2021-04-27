@@ -19,7 +19,7 @@ class AddTimeDialog {
         return BaseView<AddTimeViewModel>(
           builder: (context, child, addTimeModel) {
             return FutureBuilder(
-              future: addTimeModel.initAddTime(datetime, listHasChoose),
+              future: addTimeModel.initAddTime(datetime),
               builder: (context, snapshot) {
                 return Dialog(
                   shape: RoundedRectangleBorder(
@@ -323,7 +323,7 @@ class AddSchedulePage extends StatelessWidget {
           ),
         ),
         body: FutureBuilder(
-          future: addTimeModel.initAddTime(datetime, listHasChoose),
+          future: addTimeModel.initAddTime(datetime),
           builder: (context, snapshot) {
             if (addTimeModel.isLoadingAddTimePopUp) {
               return Container(
@@ -636,25 +636,6 @@ class AddSchedulePage extends StatelessWidget {
                                       )
                                     ],
                                   ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(right: 20, left: 20),
-                              child: Row(
-                                children: [
-                                  Icon(EvaIcons.radioButtonOn),
-                                  Text(
-                                    "Time has schedule",
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xff0d47a1),
-                                        fontWeight: FontWeight.normal),
-                                  )
                                 ],
                               ),
                             ),

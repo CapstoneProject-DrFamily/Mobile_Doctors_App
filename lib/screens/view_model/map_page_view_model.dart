@@ -94,6 +94,8 @@ class MapPageViewModel extends BaseModel {
 
   String reasonCancel;
 
+  bool arrived = false;
+
   MapPageViewModel(
       TransactionBasicModel transaction, DirectionDetails directionDetails) {
     _isLoading = true;
@@ -117,6 +119,16 @@ class MapPageViewModel extends BaseModel {
     userId = _firebaseuser.uid;
     _doctorRequest =
         FirebaseDatabase.instance.reference().child("Doctor Request");
+    await _transactionRequest
+        .child(_basicTransaction.transactionId)
+        .once()
+        .then((DataSnapshot dataSnapshot) {
+      var status = dataSnapshot.value['transaction_status'];
+      print("statusTransaction $status");
+      if (status == "Arrived") {
+        arrived = true;
+      }
+    });
     if (_basicTransaction.patientSymptom.isEmpty) {
       symptomsDisplay = [];
     } else {
@@ -381,15 +393,15 @@ class MapPageViewModel extends BaseModel {
   void btnArrived(BuildContext context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String usToken = prefs.getString("userToken");
-    HelperMethod.disableLiveLocationUpdates();
-    HelperMethod.disableTransactionMapUpdates();
+    // HelperMethod.disableLiveLocationUpdates();
+    // HelperMethod.disableTransactionMapUpdates();
 
-    await _doctorRequest.child(userId).remove();
+    // await _doctorRequest.child(userId).remove();
 
     _doctorRequest = FirebaseDatabase.instance.reference().child("Transaction");
     Map transactionInfo = {
       "doctor_FBId": userId,
-      "transaction_status": "Analysis Symptom",
+      "transaction_status": "Arrived",
       "doctor_id": _basicTransaction.doctorId,
       "patientId": _basicTransaction.patientId,
       "estimatedTime": _basicTransaction.estimateTime,
@@ -400,6 +412,44 @@ class MapPageViewModel extends BaseModel {
     await _doctorRequest
         .child(_basicTransaction.transactionId)
         .set(transactionInfo);
+
+    // Transaction updateTransactionModel = Transaction(
+    //     doctorId: _basicTransaction.doctorId,
+    //     estimatedTime: _basicTransaction.estimateTime,
+    //     location: _basicTransaction.location,
+    //     note: _basicTransaction.patientNote,
+    //     patientId: _basicTransaction.patientId,
+    //     status: 2,
+    //     transactionId: _basicTransaction.transactionId);
+
+    // _transactionRepo.updateTransaction(updateTransactionModel);
+
+    _notifyRepo.arrivedTransaction(usToken, _basicTransaction.transactionId);
+    // prefs.remove("userToken");
+    arrived = true;
+    notifyListeners();
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) =>
+    //         BaseTimeLine(transactionId: _basicTransaction.transactionId),
+    //   ),
+    // );
+  }
+
+  void btnChecking(BuildContext context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String usToken = prefs.getString("userToken");
+    HelperMethod.disableLiveLocationUpdates();
+    HelperMethod.disableTransactionMapUpdates();
+
+    await _doctorRequest.child(userId).remove();
+
+    _doctorRequest = FirebaseDatabase.instance.reference().child("Transaction");
+
+    await _doctorRequest.child(_basicTransaction.transactionId).update({
+      "transaction_status": "Analysis Symptom",
+    });
 
     Transaction updateTransactionModel = Transaction(
         doctorId: _basicTransaction.doctorId,
@@ -412,7 +462,7 @@ class MapPageViewModel extends BaseModel {
 
     _transactionRepo.updateTransaction(updateTransactionModel);
 
-    _notifyRepo.arrivedTransaction(usToken, _basicTransaction.transactionId);
+    // _notifyRepo.arrivedTransaction(usToken, _basicTransaction.transactionId);
     prefs.remove("userToken");
     Navigator.pushReplacement(
       context,

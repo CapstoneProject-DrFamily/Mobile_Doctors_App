@@ -128,6 +128,10 @@ class TimeLineViewModel extends BaseModel {
       }
     });
 
+    await _transactionRequest.child(transactionId).update({
+      "transaction_status": "cancel",
+    });
+
     this.cancelTransaction = false;
     notifyListeners();
     return isUpdated;

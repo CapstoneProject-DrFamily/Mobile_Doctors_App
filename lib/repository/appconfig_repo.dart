@@ -9,6 +9,8 @@ abstract class IAppConfigRepo {
   Future<int> appConfigTimeOut();
   Future<List<MedicineTemplateModel>> appConfigPrescriptionTemplate();
   Future<String> getPolicy();
+  Future<int> getNumberofImage();
+  Future<int> getMinuteToClick();
 }
 
 class AppConfigRepo extends IAppConfigRepo {
@@ -97,6 +99,36 @@ class AppConfigRepo extends IAppConfigRepo {
     if (response.statusCode == 200) {
       Map<String, dynamic> data = json.decode(response.body);
       return data['policy'];
+    } else
+      return null;
+  }
+
+  @override
+  Future<int> getNumberofImage() async {
+    String urlAPI = APIHelper.APP_CONFIG;
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    var response = await http.get(urlAPI, headers: header);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = json.decode(response.body);
+      return data['imageQuantity'];
+    } else
+      return null;
+  }
+
+  @override
+  Future<int> getMinuteToClick() async {
+    String urlAPI = APIHelper.APP_CONFIG;
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    var response = await http.get(urlAPI, headers: header);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = json.decode(response.body);
+      return data['appointmentNotifyTime'];
     } else
       return null;
   }

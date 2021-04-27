@@ -17,23 +17,30 @@ class SamplePage extends StatelessWidget {
       return FutureBuilder(
         future: model.fetchData(transactionId, timelineModel),
         builder: (context, snapshot) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  image: DecorationImage(
-                    colorFilter: new ColorFilter.mode(
-                        Colors.white.withOpacity(0.6), BlendMode.dstATop),
-                    image: AssetImage('assets/images/sample.jpg'),
-                  )),
-              child: Scaffold(
-                resizeToAvoidBottomInset: false,
-                backgroundColor: Colors.transparent,
-                body: buildListParameter(context, model),
+          if (model.init) {
+            return Container(
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
-            ),
-          );
+            );
+          } else
+            return Padding(
+              padding: const EdgeInsets.only(top: 30),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    image: DecorationImage(
+                      colorFilter: new ColorFilter.mode(
+                          Colors.white.withOpacity(0.6), BlendMode.dstATop),
+                      image: AssetImage('assets/images/sample.jpg'),
+                    )),
+                child: Scaffold(
+                  resizeToAvoidBottomInset: false,
+                  backgroundColor: Colors.transparent,
+                  body: buildListParameter(context, model),
+                ),
+              ),
+            );
         },
       );
     });
@@ -560,7 +567,7 @@ class SamplePage extends StatelessWidget {
         crossAxisCount: 3,
         shrinkWrap: true,
         childAspectRatio: 1,
-        children: List.generate(3, (index) {
+        children: List.generate(model.numberImage, (index) {
           return Card(
             color: Colors.grey,
             child: Icon(

@@ -26,7 +26,7 @@ class AddTimeViewModel extends BaseModel {
 
   bool isRepeat = false;
 
-  Future<void> initAddTime(DateTime time, List<dynamic> listHasChoose) async {
+  Future<void> initAddTime(DateTime time) async {
     if (_isFirstAddTimePopUp) {
       DateFormat dateFormat = DateFormat("yyyy-MM-dd");
       String dateStartString = dateFormat.format(time);
@@ -46,15 +46,15 @@ class AddTimeViewModel extends BaseModel {
         );
         listTimeDisplay.putIfAbsent(dateStart, () => 0);
       }
-      if (listHasChoose != null) {
-        for (int i = 0; i < listHasChoose.length; i++) {
-          int index = listTimeDisplay.keys.toList().indexWhere((element) =>
-              element.isAtSameMomentAs(
-                  DateTime.parse(listHasChoose[i].appointmentTime)));
-          chooseDateTimeIinit(
-              DateTime.parse(listHasChoose[i].appointmentTime), index);
-        }
-      }
+      // if (listHasChoose != null) {
+      //   for (int i = 0; i < listHasChoose.length; i++) {
+      //     int index = listTimeDisplay.keys.toList().indexWhere((element) =>
+      //         element.isAtSameMomentAs(
+      //             DateTime.parse(listHasChoose[i].appointmentTime)));
+      //     chooseDateTimeIinit(
+      //         DateTime.parse(listHasChoose[i].appointmentTime), index);
+      //   }
+      // }
 
       listDaySelected.add(time);
 
@@ -148,6 +148,7 @@ class AddTimeViewModel extends BaseModel {
       listTimeDisplay.update(chooseTime, (value) => 2);
       print('list choose add $listChoose');
     }
+
     notifyListeners();
   }
 
