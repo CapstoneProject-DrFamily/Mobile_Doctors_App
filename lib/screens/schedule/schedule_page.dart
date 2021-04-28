@@ -320,7 +320,7 @@ class SchedulePage extends StatelessWidget {
                                                     }())
                                                   : _buildDayNoTask(
                                                       context,
-                                                      DateFormat('hh:mm a')
+                                                      DateFormat('HH:mm')
                                                           .format(
                                                         DateTime.parse(model
                                                             .selectedEvents[
@@ -433,7 +433,7 @@ class SchedulePage extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(10, 20, 20, 20),
               width: MediaQuery.of(context).size.width * 0.25,
               child: Text(
-                DateFormat('hh:mm a').format(DateTime.parse(time)),
+                DateFormat('HH:mm').format(DateTime.parse(time)),
                 style:
                     TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
                 textAlign: TextAlign.right,
