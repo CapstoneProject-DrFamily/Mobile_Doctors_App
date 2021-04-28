@@ -23,6 +23,12 @@ class BaseTimeLine extends StatelessWidget {
                   iconTheme: IconThemeData(color: MainColors.blueBegin),
                   backgroundColor: Colors.white,
                   elevation: 0,
+                  leading: new IconButton(
+                    icon: new Icon(
+                      Icons.clear,
+                    ),
+                    onPressed: () => Navigator.of(contextA).pop(true),
+                  ),
                   actions: [
                     PopupMenuButton<String>(
                       onSelected: model.handleClick,
@@ -31,6 +37,7 @@ class BaseTimeLine extends StatelessWidget {
                           'Patient Profile',
                           'Patient Health Record',
                           'Patient History Checking',
+                          'Waiting Sample',
                           'End Transaction',
                         }.map((String choice) {
                           return PopupMenuItem<String>(

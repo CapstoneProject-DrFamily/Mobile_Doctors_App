@@ -294,26 +294,49 @@ class _ArticleDescription extends StatelessWidget {
                                   ),
                                 ),
                               )
-                            : Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 10),
-                                constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * 0.7,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(color: Colors.orange),
-                                ),
-                                child: Text(
-                                  "Awaiting Payment",
-                                  style: GoogleFonts.varelaRound(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 13,
-                                    color: Colors.orange,
+                            : (status == 6)
+                                ? Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 10),
+                                    constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.7,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: Border.all(color: Colors.grey),
+                                    ),
+                                    child: Text(
+                                      "Awaiting Sample",
+                                      style: GoogleFonts.varelaRound(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 13,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 10),
+                                    constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.7,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: Border.all(color: Colors.orange),
+                                    ),
+                                    child: Text(
+                                      "Awaiting Payment",
+                                      style: GoogleFonts.varelaRound(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 13,
+                                        color: Colors.orange,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
           ],
         ),
         const Padding(padding: EdgeInsets.only(bottom: 2.0)),

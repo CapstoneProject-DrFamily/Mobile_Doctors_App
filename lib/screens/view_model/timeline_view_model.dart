@@ -12,6 +12,7 @@ import 'package:mobile_doctors_apps/screens/medicine/medicine_list_page.dart';
 import 'package:mobile_doctors_apps/screens/record/analyze_page.dart';
 import 'package:mobile_doctors_apps/screens/record/diagnose_page.dart';
 import 'package:mobile_doctors_apps/screens/record/sample_page.dart';
+import 'package:mobile_doctors_apps/screens/record/waiting_sample_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/share/health_record_page.dart';
 import 'package:mobile_doctors_apps/screens/share/popup_info_patient_page.dart';
@@ -95,7 +96,80 @@ class TimeLineViewModel extends BaseModel {
           ),
         );
         break;
+      case 'Waiting Sample':
+        bool isConfirm = await _confirmDialog(this.buildContext);
+        print(transactionId);
+        if (isConfirm) {
+          waitDialog(this.buildContext, message: "Loading...");
+          bool isWaiting = await waitingSample();
+
+          if (isWaiting) {
+            Navigator.pop(this.buildContext);
+
+            Fluttertoast.showToast(
+              msg: "Perform action success",
+              textColor: Colors.white,
+              toastLength: Toast.LENGTH_SHORT,
+              backgroundColor: Colors.green,
+              gravity: ToastGravity.CENTER,
+            );
+            Navigator.of(this.buildContext).pushReplacement(MaterialPageRoute(
+                builder: (BuildContext context) => WaitingSamplePage(
+                      transactionId: transactionId,
+                    )));
+          } else {
+            Navigator.pop(this.buildContext);
+
+            Fluttertoast.showToast(
+              msg: "Perform action failed",
+              textColor: Colors.white,
+              toastLength: Toast.LENGTH_SHORT,
+              backgroundColor: Colors.red,
+              gravity: ToastGravity.CENTER,
+            );
+          }
+        }
+        break;
     }
+  }
+
+  Future<bool> waitingSample() async {
+    print("transaction ID : " + transactionId);
+    bool isUpdated = false;
+    String step;
+    notifyListeners();
+    // get transaction
+    _transactionRequest =
+        FirebaseDatabase.instance.reference().child("Transaction");
+
+    await _transactionRequest
+        .child(transactionId)
+        .once()
+        .then((DataSnapshot dataSnapshot) async {
+      if (dataSnapshot.value != null) {
+        Transaction transaction = Transaction(
+          transactionId: this.transactionId,
+          doctorId: dataSnapshot.value['doctor_id'],
+          patientId: dataSnapshot.value['patientId'],
+          estimatedTime: dataSnapshot.value['estimatedTime'],
+          status: 6,
+          location: dataSnapshot.value['location'],
+          note: dataSnapshot.value['note'],
+        );
+        isUpdated = await _transactionRepo.updateTransaction(transaction);
+        step = dataSnapshot.value['transaction_status'];
+        notifyListeners();
+        return isUpdated;
+      }
+    });
+    if (step != null) {
+      await _transactionRequest.child(transactionId).update({
+        "transaction_status": "waiting;$step",
+      });
+    }
+
+    notifyListeners();
+    return isUpdated;
   }
 
   Future<bool> endTransaction() async {
@@ -135,6 +209,139 @@ class TimeLineViewModel extends BaseModel {
     this.cancelTransaction = false;
     notifyListeners();
     return isUpdated;
+  }
+
+  Future _confirmDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (bookingContext) {
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(bookingContext).requestFocus(new FocusNode());
+          },
+          child: Container(
+            alignment: Alignment.center,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
+                  ),
+                ),
+                child: Container(
+                  width: MediaQuery.of(bookingContext).size.width * 0.8,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Icon(
+                        Icons.info,
+                        color: Colors.red,
+                        size: 90,
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Text(
+                        "Confirmation?",
+                        style: TextStyle(
+                          fontSize: 27,
+                          fontWeight: FontWeight.w800,
+                          fontFamily: 'avenir',
+                          color: Color(0xff0d47a1),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Text(
+                        'Are you sure want to perform this action?',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'avenir',
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          InkWell(
+                            customBorder: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            onTap: () {
+                              Navigator.of(bookingContext).pop(true);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 50,
+                              width: MediaQuery.of(bookingContext).size.width *
+                                  0.3,
+                              decoration: BoxDecoration(
+                                color: Colors.blueAccent,
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(color: Colors.blueAccent),
+                              ),
+                              child: Text(
+                                "Yes",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'avenir',
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            customBorder: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            onTap: () {
+                              Navigator.of(bookingContext).pop(false);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 50,
+                              width: MediaQuery.of(bookingContext).size.width *
+                                  0.3,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(color: Colors.blueAccent),
+                              ),
+                              child: Text(
+                                "No",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'avenir',
+                                  color: Colors.blueAccent,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Future _confirmCancelBookingDialog(BuildContext context) {
@@ -313,6 +520,9 @@ class TimeLineViewModel extends BaseModel {
         break;
       case 'Patient History Checking':
         return Icon(Icons.analytics_outlined);
+        break;
+      case 'Waiting Sample':
+        return Icon(Icons.pause);
         break;
       default:
     }

@@ -10,6 +10,7 @@ import 'package:mobile_doctors_apps/repository/map_repo.dart';
 import 'package:mobile_doctors_apps/repository/transaction_repo.dart';
 import 'package:mobile_doctors_apps/screens/history/transaction_detail_page.dart';
 import 'package:mobile_doctors_apps/screens/home/map_page.dart';
+import 'package:mobile_doctors_apps/screens/record/waiting_sample_page.dart';
 import 'package:mobile_doctors_apps/screens/share/base_timeline.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/map_page_view_model.dart';
@@ -43,7 +44,8 @@ class MedicalCareHistoryViewModel extends BaseModel {
     'All',
     'On Going',
     'Checking',
-    "Awaiting Payment",
+    'Awaiting Sample',
+    'Awaiting Payment',
     'Done',
     'Cancel'
   ];
@@ -133,7 +135,7 @@ class MedicalCareHistoryViewModel extends BaseModel {
           _status = status;
           notifyListeners();
           _listTransaction = await transactionRepo.getListTransactionHistory(
-              _doctorId.toString(), 5);
+              _doctorId.toString(), 6);
           _loadingList = false;
 
           if (_listTransaction == null) {
@@ -152,7 +154,7 @@ class MedicalCareHistoryViewModel extends BaseModel {
           _status = status;
           notifyListeners();
           _listTransaction = await transactionRepo.getListTransactionHistory(
-              _doctorId.toString(), 3);
+              _doctorId.toString(), 5);
           _loadingList = false;
           if (_listTransaction == null) {
             _isNotHave = true;
@@ -162,6 +164,23 @@ class MedicalCareHistoryViewModel extends BaseModel {
         }
         break;
       case 5:
+        {
+          _isNotHave = false;
+
+          _loadingList = true;
+          _status = status;
+          notifyListeners();
+          _listTransaction = await transactionRepo.getListTransactionHistory(
+              _doctorId.toString(), 3);
+          _loadingList = false;
+          if (_listTransaction == null) {
+            _isNotHave = true;
+          }
+
+          notifyListeners();
+        }
+        break;
+      case 6:
         {
           _isNotHave = false;
 
@@ -291,6 +310,21 @@ class MedicalCareHistoryViewModel extends BaseModel {
             await initHistory();
           });
         }
+        break;
+      case 6:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => WaitingSamplePage(
+              transactionId: transactionId,
+            ),
+          ),
+        ).then((value) async {
+          _status = 0;
+          _isFirst = true;
+          print('init6 $_isFirst');
+          await initHistory();
+        });
         break;
       default:
     }
