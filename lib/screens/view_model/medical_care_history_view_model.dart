@@ -71,6 +71,11 @@ class MedicalCareHistoryViewModel extends BaseModel {
     }
   }
 
+  void loadBack() {
+    _isFirst = true;
+    notifyListeners();
+  }
+
   void changeStatus(int status) async {
     switch (status) {
       case 0:

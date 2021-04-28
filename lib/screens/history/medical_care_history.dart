@@ -1,4 +1,5 @@
 import 'package:commons/commons.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -26,6 +27,23 @@ class MedicalCareHistory extends StatelessWidget {
                     backgroundColor: Colors.white,
                     elevation: 0,
                     centerTitle: true,
+                    actions: <Widget>[
+                      InkWell(
+                        onTap: () {
+                          model.loadBack();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: Center(
+                            child: Icon(
+                              EvaIcons.refreshOutline,
+                              color: Colors.black,
+                              size: 23,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                     title: Text(
                       "History Record",
                       textAlign: TextAlign.center,
