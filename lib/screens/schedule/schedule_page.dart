@@ -405,27 +405,29 @@ class SchedulePage extends StatelessWidget {
         actionExtentRatio: 0.25,
         secondaryActions: (!model.isDelete)
             ? []
-            : [
-                IconSlideAction(
-                  caption: 'Delete',
-                  color: Colors.red,
-                  icon: Icons.delete,
-                  onTap: () async {
-                    //Delete transaction
-                    await _confirmCancelBookingDialog(
-                        context,
-                        model,
-                        scheduleId,
-                        time,
-                        location,
-                        note,
-                        patientId,
-                        transactionId,
-                        true,
-                        name);
-                  },
-                ),
-              ],
+            : (transactionStatus == 3)
+                ? []
+                : [
+                    IconSlideAction(
+                      caption: 'Delete',
+                      color: Colors.red,
+                      icon: Icons.delete,
+                      onTap: () async {
+                        //Delete transaction
+                        await _confirmCancelBookingDialog(
+                            context,
+                            model,
+                            scheduleId,
+                            time,
+                            location,
+                            note,
+                            patientId,
+                            transactionId,
+                            true,
+                            name);
+                      },
+                    ),
+                  ],
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -499,47 +501,71 @@ class SchedulePage extends StatelessWidget {
                                           fontWeight: FontWeight.w700),
                                     ),
                                   )
-                                : (timeCheckFormater
-                                            .parse(DateTime.now().toString())
-                                            .isBefore(DateTime.parse(time).add(
-                                                Duration(
-                                                    minutes:
-                                                        model.timeCanCheck))) &&
-                                        timeCheckFormater
-                                            .parse(DateTime.now().toString())
-                                            .isAfter(DateTime.parse(time)
-                                                .subtract(Duration(
-                                                    minutes:
-                                                        model.timeCanCheck))))
+                                : (transactionStatus == 5)
                                     ? Container(
                                         child: Text(
-                                          "On-time",
+                                          "Awaiting Payment",
                                           style: TextStyle(
-                                              color: Colors.green,
+                                              color: Colors.orange,
                                               fontStyle: FontStyle.italic,
                                               fontWeight: FontWeight.w700),
                                         ),
                                       )
-                                    : (timeCheckFormater
-                                            .parse(DateTime.now().toString())
-                                            .isBefore(DateTime.parse(time)))
+                                    : (transactionStatus == 6)
                                         ? Container(
                                             child: Text(
-                                              "Not yet time",
+                                              "Awaiting Sample",
                                               style: TextStyle(
-                                                  color: Colors.green,
+                                                  color: Colors.grey,
                                                   fontStyle: FontStyle.italic,
                                                   fontWeight: FontWeight.w700),
                                             ),
                                           )
-                                        : Container(
-                                            child: Text("Overtime",
-                                                style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontStyle: FontStyle.italic,
-                                                    fontWeight:
-                                                        FontWeight.w700)),
-                                          ),
+                                        : (timeCheckFormater.parse(DateTime.now().toString()).isBefore(
+                                                    DateTime.parse(time).add(Duration(
+                                                        minutes: model
+                                                            .timeCanCheck))) &&
+                                                timeCheckFormater
+                                                    .parse(DateTime.now()
+                                                        .toString())
+                                                    .isAfter(DateTime.parse(time).subtract(Duration(
+                                                        minutes: model
+                                                            .timeCanCheck))))
+                                            ? Container(
+                                                child: Text(
+                                                  "On-time",
+                                                  style: TextStyle(
+                                                      color: Colors.green,
+                                                      fontStyle:
+                                                          FontStyle.italic,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              )
+                                            : (timeCheckFormater
+                                                    .parse(DateTime.now().toString())
+                                                    .isBefore(DateTime.parse(time)))
+                                                ? Container(
+                                                    child: Text(
+                                                      "Not yet time",
+                                                      style: TextStyle(
+                                                          color: Colors.green,
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                  )
+                                                : Container(
+                                                    child: Text("Overtime",
+                                                        style: TextStyle(
+                                                            color: Colors.red,
+                                                            fontStyle: FontStyle
+                                                                .italic,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700)),
+                                                  ),
                       ],
                     ),
                     SizedBox(
@@ -574,8 +600,10 @@ class SchedulePage extends StatelessWidget {
                       height: 15,
                     ),
                     (timeCheckFormater.parse(DateTime.now().toString()).isAfter(
-                            DateTime.parse(time)
-                                .add(Duration(minutes: model.timeCanCheck))))
+                                DateTime.parse(time).add(
+                                    Duration(minutes: model.timeCanCheck))) ||
+                            transactionStatus == 5 ||
+                            transactionStatus == 3)
                         ? Container(
                             child: ClipOval(
                               child: Material(
@@ -722,7 +750,9 @@ class SchedulePage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        (transactionStatus == 2)
+                        (transactionStatus == 2 ||
+                                transactionStatus == 5 ||
+                                transactionStatus == 6)
                             ? Container()
                             : (transactionStatus == 3)
                                 ? Container()
@@ -775,7 +805,9 @@ class SchedulePage extends StatelessWidget {
                         SizedBox(
                           width: 10,
                         ),
-                        (transactionStatus == 2)
+                        (transactionStatus == 2 ||
+                                transactionStatus == 5 ||
+                                transactionStatus == 6)
                             ? Container()
                             : (transactionStatus == 3)
                                 ? Container()

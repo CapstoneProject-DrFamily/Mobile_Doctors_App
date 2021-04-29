@@ -14,386 +14,463 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseView<HomePageViewModel>(builder: (context, child, model) {
       return SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              image: DecorationImage(
-                colorFilter: new ColorFilter.mode(
-                    Colors.black.withOpacity(0.3), BlendMode.dstATop),
-                image: AssetImage('assets/backgroundhome.jpg'),
-              )),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
+        child: FutureBuilder(
+          future: model.init(),
+          builder: (context, snapshot) {
+            if (model.loading) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              return Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    image: DecorationImage(
+                      colorFilter: new ColorFilter.mode(
+                          Colors.black.withOpacity(0.3), BlendMode.dstATop),
+                      image: AssetImage('assets/backgroundhome.jpg'),
+                    )),
+                child: Scaffold(
+                  backgroundColor: Colors.transparent,
+                  body: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: LoadingButton(
-                      onPressed: () async {
-                        if (!model.active) {
-                          model.isConnecting(true);
-                          model.isFinding(true);
-                          bool result = await model.activeDoc();
-                          if (result) {
-                            // model.makeDoctorOnline();
-                            model.getLocationLiveUpdates();
-                            print('success');
-                            model.isActive(true);
-                            model.isConnecting(false);
-                            CoolAlert.show(
-                                context: context,
-                                type: CoolAlertType.success,
-                                text: "Ready to cure",
-                                backgroundColor: Colors.lightBlue[200]);
-                          } else {
-                            print('fail');
-                            model.isActive(false);
-                            model.isConnecting(false);
-                            model.isFinding(false);
-                            if (model.isChecking) {
-                              CoolAlert.show(
-                                  context: context,
-                                  type: CoolAlertType.error,
-                                  text:
-                                      "You still have a Record is checking please try to done that Record!",
-                                  backgroundColor: Colors.lightBlue[200]);
-                            } else if (model.isOverTime) {
-                              CoolAlert.show(
-                                  context: context,
-                                  type: CoolAlertType.error,
-                                  text:
-                                      "You have a Appoiment please check it first!",
-                                  backgroundColor: Colors.lightBlue[200]);
-                            } else
-                              CoolAlert.show(
-                                  context: context,
-                                  type: CoolAlertType.error,
-                                  text: "Something is ERROR please try again!",
-                                  backgroundColor: Colors.lightBlue[200]);
-                          }
-                        } else {
-                          CoolAlert.show(
-                              context: context,
-                              type: CoolAlertType.confirm,
-                              text: "Are you sure want to offline!",
-                              backgroundColor: Colors.lightBlue[200],
-                              onConfirmBtnTap: () {
-                                model.offlineDoctor();
-                                model.isConnecting(false);
-                                model.isActive(false);
-                                model.isFinding(false);
-                                Navigator.pop(context);
-                              },
-                              onCancelBtnTap: () {
-                                model.isActive(true);
-                                print('Active : ' + model.active.toString());
-                                Navigator.pop(context);
-                              });
-                        }
-                      },
-                      backgroundColor: Colors.blueAccent[200],
-                      isLoading: model.connecting,
-                      loadingWidget: SizedBox(
-                        width: 25,
-                        height: 25,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: LoadingButton(
+                            onPressed: () async {
+                              if (!model.active) {
+                                model.isConnecting(true);
+                                model.isFinding(true);
+                                bool result = await model.activeDoc();
+                                if (result) {
+                                  // model.makeDoctorOnline();
+                                  model.getLocationLiveUpdates();
+                                  print('success');
+                                  model.isActive(true);
+                                  model.isConnecting(false);
+                                  CoolAlert.show(
+                                      context: context,
+                                      type: CoolAlertType.success,
+                                      text: "Ready to cure",
+                                      backgroundColor: Colors.lightBlue[200]);
+                                } else {
+                                  print('fail');
+                                  model.isActive(false);
+                                  model.isConnecting(false);
+                                  model.isFinding(false);
+                                  if (model.isChecking) {
+                                    CoolAlert.show(
+                                        context: context,
+                                        type: CoolAlertType.error,
+                                        text:
+                                            "You still have a Record is checking please try to done that Record!",
+                                        backgroundColor: Colors.lightBlue[200]);
+                                  } else if (model.isOverTime) {
+                                    CoolAlert.show(
+                                        context: context,
+                                        type: CoolAlertType.error,
+                                        text:
+                                            "You have a Appoiment please check it first!",
+                                        backgroundColor: Colors.lightBlue[200]);
+                                  } else
+                                    CoolAlert.show(
+                                        context: context,
+                                        type: CoolAlertType.error,
+                                        text:
+                                            "Something is ERROR please try again!",
+                                        backgroundColor: Colors.lightBlue[200]);
+                                }
+                              } else {
+                                CoolAlert.show(
+                                    context: context,
+                                    type: CoolAlertType.confirm,
+                                    text: "Are you sure want to offline!",
+                                    backgroundColor: Colors.lightBlue[200],
+                                    onConfirmBtnTap: () {
+                                      model.offlineDoctor();
+                                      model.isConnecting(false);
+                                      model.isActive(false);
+                                      model.isFinding(false);
+                                      Navigator.pop(context);
+                                    },
+                                    onCancelBtnTap: () {
+                                      model.isActive(true);
+                                      print('Active : ' +
+                                          model.active.toString());
+                                      Navigator.pop(context);
+                                    });
+                              }
+                            },
+                            backgroundColor: Colors.blueAccent[200],
+                            isLoading: model.connecting,
+                            loadingWidget: SizedBox(
+                              width: 25,
+                              height: 25,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                ),
+                              ),
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(boxShadow: [
+                                BoxShadow(
+                                    offset: Offset(0, 20),
+                                    blurRadius: 80,
+                                    color: Colors.lightBlue[200])
+                              ], borderRadius: BorderRadius.circular(100.0)),
+                              child: Text(
+                                !model.active ? 'Connect' : 'Disconnect',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(boxShadow: [
-                          BoxShadow(
-                              offset: Offset(0, 20),
-                              blurRadius: 80,
-                              color: Colors.lightBlue[200])
-                        ], borderRadius: BorderRadius.circular(100.0)),
-                        child: Text(
-                          !model.active ? 'Connect' : 'Disconnect',
-                          style: TextStyle(fontSize: 20),
+                        SizedBox(height: 20),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                                padding: EdgeInsets.only(left: 10, bottom: 20),
+                                child: Image(
+                                    image: model.active
+                                        ? AssetImage('assets/ondemand.png')
+                                        : AssetImage('assets/offdemand.png'),
+                                    width: 100),
+                                margin: const EdgeInsets.only(left: 20)),
+                            Container(
+                              padding: EdgeInsets.only(left: 10, bottom: 20),
+                              child: model.finding
+                                  ? PulsatingCircleIconButton(
+                                      icon: null,
+                                      onTap: () {},
+                                    )
+                                  : Text(''),
+                            ),
+                          ],
                         ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                          padding: EdgeInsets.only(left: 10, bottom: 20),
-                          child: Image(
-                              image: model.active
-                                  ? AssetImage('assets/ondemand.png')
-                                  : AssetImage('assets/offdemand.png'),
-                              width: 100),
-                          margin: const EdgeInsets.only(left: 20)),
-                      Container(
-                        padding: EdgeInsets.only(left: 10, bottom: 20),
-                        child: model.finding
-                            ? PulsatingCircleIconButton(
-                                icon: null,
-                                onTap: () {},
-                              )
-                            : Text(''),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                          color: MainColors.blueBegin.withOpacity(0.3),
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(40),
-                              topRight: Radius.circular(40))),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              child: ListView.builder(
-                                itemCount: model.listTransaction.length,
-                                // itemCount: 1,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                          height: 230,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(24),
-                                            border: Border.all(
-                                                color: MainColors.blueEnd,
-                                                width: 5),
-                                            gradient: LinearGradient(
-                                                colors: [
-                                                  MainColors.blueBegin,
-                                                  MainColors.blueEnd
-                                                ],
-                                                begin: Alignment.topLeft,
-                                                end: Alignment.bottomRight),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: MainColors.blueBegin,
-                                                  blurRadius: 12,
-                                                  offset: Offset(0, 6))
-                                            ],
-                                          ),
-                                        ),
-                                        Positioned(
-                                          right: 0,
-                                          bottom: 0,
-                                          top: 0,
-                                          child: CustomPaint(
-                                            size: Size(70, 100),
-                                            painter: CustomCardShapePainter(
-                                                24,
-                                                MainColors.blueBegin,
-                                                MainColors.blueEnd),
-                                          ),
-                                        ),
-                                        Positioned.fill(
-                                          child: Row(
+                        SizedBox(height: 10),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                color: MainColors.blueBegin.withOpacity(0.3),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(40),
+                                    topRight: Radius.circular(40))),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    child: ListView.builder(
+                                      itemCount: model.listTransaction.length,
+                                      // itemCount: 1,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Stack(
                                             children: [
-                                              Column(
-                                                children: [
-                                                  Expanded(
-                                                    flex: 2,
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: CircleAvatar(
-                                                        backgroundImage: (model
-                                                                    .listTransaction[
-                                                                        index]
-                                                                    .patientImage ==
-                                                                null)
-                                                            ? NetworkImage(
-                                                                DEFAULT_IMG)
-                                                            : NetworkImage(
-                                                                // 'https://www.w3schools.com/w3css/img_lights.jpg'
-                                                                model
-                                                                    .listTransaction[
-                                                                        index]
-                                                                    .patientImage,
-                                                              ),
-                                                        radius: 35,
-                                                        backgroundColor:
-                                                            Colors.white,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
+                                              Container(
+                                                height: 230,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(24),
+                                                  border: Border.all(
+                                                      color: MainColors.blueEnd,
+                                                      width: 5),
+                                                  gradient: LinearGradient(
+                                                      colors: [
+                                                        MainColors.blueBegin,
+                                                        MainColors.blueEnd
+                                                      ],
+                                                      begin: Alignment.topLeft,
+                                                      end: Alignment
+                                                          .bottomRight),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        color: MainColors
+                                                            .blueBegin,
+                                                        blurRadius: 12,
+                                                        offset: Offset(0, 6))
+                                                  ],
+                                                ),
                                               ),
-                                              Expanded(
-                                                flex: 4,
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                              Positioned(
+                                                right: 0,
+                                                bottom: 0,
+                                                top: 0,
+                                                child: CustomPaint(
+                                                  size: Size(70, 100),
+                                                  painter:
+                                                      CustomCardShapePainter(
+                                                          24,
+                                                          MainColors.blueBegin,
+                                                          MainColors.blueEnd),
+                                                ),
+                                              ),
+                                              Positioned.fill(
+                                                child: Row(
                                                   children: [
-                                                    Text(
-                                                        // 'Name',
-                                                        model
-                                                            .listTransaction[
-                                                                index]
-                                                            .patientName,
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 20,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
-                                                    SizedBox(height: 10),
-                                                    Row(
+                                                    Column(
                                                       children: [
-                                                        Icon(Icons.location_on,
-                                                            color: MainColors
-                                                                .blueEnd),
-                                                        Flexible(
+                                                        Expanded(
+                                                          flex: 2,
                                                           child: Padding(
                                                             padding:
                                                                 const EdgeInsets
-                                                                        .fromLTRB(
-                                                                    5.0,
-                                                                    0,
-                                                                    0,
-                                                                    0),
-                                                            child: Text(
-                                                                // 'Location Name Location Name Location Name Location Name Location Name Location Name Location Name Location Name Location Name Location Name Location Name Location Name',
-                                                                model
-                                                                    .listTransaction[
-                                                                        index]
-                                                                    .locationName,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                maxLines: 3,
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        14,
-                                                                    fontStyle:
-                                                                        FontStyle
-                                                                            .italic)),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    SizedBox(height: 10),
-                                                    Row(
-                                                      children: [
-                                                        Icon(Icons.add_box,
-                                                            color: MainColors
-                                                                .blueEnd),
-                                                        Flexible(
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .fromLTRB(
-                                                                    5.0,
-                                                                    0,
-                                                                    0,
-                                                                    0),
-                                                            child: Text(
-                                                                // 'symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom',
-                                                                model.listTransaction[index].patientNote ==
-                                                                        null
-                                                                    ? "Nothing"
-                                                                    : model
-                                                                        .listTransaction[
-                                                                            index]
-                                                                        .patientNote,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                maxLines: 2,
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        14,
-                                                                    fontStyle:
-                                                                        FontStyle
-                                                                            .italic)),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    SizedBox(height: 10),
-                                                    Flexible(
-                                                      child: Row(
-                                                        children: [
-                                                          RaisedButton(
-                                                            child: Icon(
-                                                                Icons.check),
-                                                            // Text('Accept'),
-                                                            color: Colors.green,
-                                                            textColor:
-                                                                Colors.white,
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          18.0),
-                                                            ),
-                                                            onPressed: () {
-                                                              model.acceptTransaction(
-                                                                  model
-                                                                      .listTransaction[
-                                                                          index]
-                                                                      .transactionId,
-                                                                  context);
-
-                                                              // Navigator.push(
-                                                              //     context,
-                                                              //     MaterialPageRoute(
-                                                              //         builder:
-                                                              //             (context) =>
-                                                              //                 PatientDetailPage()));
-                                                            },
-                                                          ),
-                                                          SizedBox(
-                                                            width: 10,
-                                                          ),
-                                                          Flexible(
-                                                            child: RaisedButton(
-                                                                child: Icon(
-                                                                    Icons
-                                                                        .block),
-                                                                // Text(
-                                                                //     'Cancel'),
-                                                                color:
-                                                                    Colors.red,
-                                                                textColor:
-                                                                    Colors
-                                                                        .white,
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              18.0),
-                                                                ),
-                                                                onPressed: () {
-                                                                  model.cancelTransaction(
+                                                                    .all(8.0),
+                                                            child: CircleAvatar(
+                                                              backgroundImage: (model
+                                                                          .listTransaction[
+                                                                              index]
+                                                                          .patientImage ==
+                                                                      null)
+                                                                  ? NetworkImage(
+                                                                      DEFAULT_IMG)
+                                                                  : NetworkImage(
+                                                                      // 'https://www.w3schools.com/w3css/img_lights.jpg'
                                                                       model
                                                                           .listTransaction[
                                                                               index]
-                                                                          .transactionId,
-                                                                      context);
-                                                                }),
+                                                                          .patientImage,
+                                                                    ),
+                                                              radius: 35,
+                                                              backgroundColor:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Expanded(
+                                                      flex: 4,
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                              // 'Name',
+                                                              model
+                                                                  .listTransaction[
+                                                                      index]
+                                                                  .patientName,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 20,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold)),
+                                                          SizedBox(height: 10),
+                                                          Row(
+                                                            children: [
+                                                              Icon(
+                                                                  Icons
+                                                                      .location_on,
+                                                                  color: MainColors
+                                                                      .blueEnd),
+                                                              Flexible(
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .fromLTRB(
+                                                                          5.0,
+                                                                          0,
+                                                                          0,
+                                                                          0),
+                                                                  child: Text(
+                                                                      // 'Location Name Location Name Location Name Location Name Location Name Location Name Location Name Location Name Location Name Location Name Location Name Location Name',
+                                                                      model
+                                                                          .listTransaction[
+                                                                              index]
+                                                                          .locationName,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      maxLines:
+                                                                          3,
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontSize:
+                                                                              14,
+                                                                          fontStyle:
+                                                                              FontStyle.italic)),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(height: 10),
+                                                          Row(
+                                                            children: [
+                                                              Icon(
+                                                                  Icons.add_box,
+                                                                  color: MainColors
+                                                                      .blueEnd),
+                                                              Flexible(
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .fromLTRB(
+                                                                          5.0,
+                                                                          0,
+                                                                          0,
+                                                                          0),
+                                                                  child: Text(
+                                                                      // 'symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom symptom',
+                                                                      model.listTransaction[index].patientNote == null
+                                                                          ? "Nothing"
+                                                                          : model
+                                                                              .listTransaction[
+                                                                                  index]
+                                                                              .patientNote,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      maxLines:
+                                                                          2,
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontSize:
+                                                                              14,
+                                                                          fontStyle:
+                                                                              FontStyle.italic)),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(height: 10),
+                                                          Flexible(
+                                                            child: Row(
+                                                              children: [
+                                                                RaisedButton(
+                                                                  child: Icon(
+                                                                      Icons
+                                                                          .check),
+                                                                  // Text('Accept'),
+                                                                  color: Colors
+                                                                      .green,
+                                                                  textColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            18.0),
+                                                                  ),
+                                                                  onPressed:
+                                                                      () {
+                                                                    model.acceptTransaction(
+                                                                        model
+                                                                            .listTransaction[index]
+                                                                            .transactionId,
+                                                                        context);
+
+                                                                    // Navigator.push(
+                                                                    //     context,
+                                                                    //     MaterialPageRoute(
+                                                                    //         builder:
+                                                                    //             (context) =>
+                                                                    //                 PatientDetailPage()));
+                                                                  },
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 10,
+                                                                ),
+                                                                Flexible(
+                                                                  child: RaisedButton(
+                                                                      child: Icon(Icons.block),
+                                                                      // Text(
+                                                                      //     'Cancel'),
+                                                                      color: Colors.red,
+                                                                      textColor: Colors.white,
+                                                                      shape: RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(18.0),
+                                                                      ),
+                                                                      onPressed: () {
+                                                                        model.cancelTransaction(
+                                                                            model.listTransaction[index].transactionId,
+                                                                            context);
+                                                                      }),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Icon(
+                                                              Icons.location_on,
+                                                              color: MainColors
+                                                                  .blueEnd),
+                                                          Text(
+                                                              '${model.listTransaction[index].distance} km',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold)),
+                                                          SizedBox(height: 10),
+                                                          CountdownTimer(
+                                                            endTime: model
+                                                                .listTransaction[
+                                                                    index]
+                                                                .endTime,
+                                                            onEnd: () async {
+                                                              if (model
+                                                                      .listTransaction
+                                                                      .length >
+                                                                  0) {
+                                                                print(
+                                                                    "time cancel");
+                                                                await model.cancelTransaction(
+                                                                    model
+                                                                        .listTransaction[
+                                                                            index]
+                                                                        .transactionId,
+                                                                    context);
+                                                              }
+                                                            },
+                                                            widgetBuilder:
+                                                                (_, time) {
+                                                              if (time ==
+                                                                  null) {
+                                                                return Text(
+                                                                  'Expired',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white),
+                                                                );
+                                                              }
+                                                              return Text(
+                                                                  (time.min ==
+                                                                          null)
+                                                                      ? '0:${time.sec}'
+                                                                      : '${time.min}:${time.sec}',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white));
+                                                            },
                                                           )
                                                         ],
                                                       ),
@@ -401,83 +478,24 @@ class HomePage extends StatelessWidget {
                                                   ],
                                                 ),
                                               ),
-                                              Expanded(
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Icon(Icons.location_on,
-                                                        color:
-                                                            MainColors.blueEnd),
-                                                    Text(
-                                                        '${model.listTransaction[index].distance} km',
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
-                                                    SizedBox(height: 10),
-                                                    CountdownTimer(
-                                                      endTime: model
-                                                          .listTransaction[
-                                                              index]
-                                                          .endTime,
-                                                      onEnd: () async {
-                                                        if (model
-                                                                .listTransaction
-                                                                .length >
-                                                            0) {
-                                                          print("time cancel");
-                                                          await model.cancelTransaction(
-                                                              model
-                                                                  .listTransaction[
-                                                                      index]
-                                                                  .transactionId,
-                                                              context);
-                                                        }
-                                                      },
-                                                      widgetBuilder: (_, time) {
-                                                        if (time == null) {
-                                                          return Text(
-                                                            'Expired',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white),
-                                                          );
-                                                        }
-                                                        return Text(
-                                                            (time.min == null)
-                                                                ? '0:${time.sec}'
-                                                                : '${time.min}:${time.sec}',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white));
-                                                      },
-                                                    )
-                                                  ],
-                                                ),
-                                              )
                                             ],
                                           ),
-                                        ),
-                                      ],
+                                        );
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
+                                  ),
+                                )
+                              ],
                             ),
-                          )
-                        ],
-                      ),
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
-            ),
-          ),
+                  ),
+                ),
+              );
+            }
+          },
         ),
       );
     });
