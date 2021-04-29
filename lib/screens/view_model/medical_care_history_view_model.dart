@@ -244,6 +244,8 @@ class MedicalCareHistoryViewModel extends BaseModel {
               ),
             ).then((value) async {
               HelperMethod.disableLiveLocationUpdates();
+              HelperMethod.disableBookTransactionUpdates();
+              HelperMethod.disableCancelTransactionUpdates();
               _status = 0;
               _isFirst = true;
               print('init2 $_isFirst');

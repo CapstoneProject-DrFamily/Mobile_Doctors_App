@@ -171,6 +171,8 @@ class TransactionRepo extends ITransactionRepo {
     var response = await http.put(urlAPI,
         headers: header, body: jsonEncode(transaction.toJson()));
 
+    print('statusTransaction ${response.statusCode}');
+
     if (response.statusCode == 200) {
       isSuccess = true;
     }

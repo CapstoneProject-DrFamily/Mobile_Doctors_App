@@ -71,6 +71,7 @@ class MedicineListViewModel extends BaseModel {
   fetchData(transactionId) async {
     if (init) {
       this.transactionId = transactionId;
+      print("transactionID $transactionId");
       _examinationHistory =
           await _examinationRepo.getExaminationHistory(transactionId);
       List<String> slitText = _examinationHistory.conclusion.split(";");
@@ -89,11 +90,11 @@ class MedicineListViewModel extends BaseModel {
             .toList();
         _listTemplateDisplay = _listTemplateDisplay + itemTemplate;
       }
-
-      listMedicine = _listTemplateDisplay[initTemplate].listMedicine;
-
-      print(
-          "init medicine ${_listTemplateDisplay[initTemplate].listMedicine[0].totalQuantity}");
+      if (_listTemplateDisplay.isNotEmpty) {
+        listMedicine = _listTemplateDisplay[initTemplate].listMedicine;
+        print(
+            "init medicine ${_listTemplateDisplay[initTemplate].listMedicine[0].totalQuantity}");
+      }
 
       print(_listTemplateDisplay.length);
 
@@ -123,8 +124,10 @@ class MedicineListViewModel extends BaseModel {
 
       print("listTest ${listDropdownMenuItems.length}");
 
-      template = _listTemplateDisplay[initTemplate];
-
+      if (_listTemplateDisplay.isNotEmpty) {
+        template = _listTemplateDisplay[initTemplate];
+        print("template");
+      }
       init = false;
       print("load transaction");
       getTransactionFireBase();
@@ -191,20 +194,23 @@ class MedicineListViewModel extends BaseModel {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String doctor = prefs.getString("usName");
     isUpdate = false;
-    PrescriptionModel prescriptionModel = new PrescriptionModel(
-        prescriptionId: transactionId,
-        prescriptionDes:
-            (_noteController.text == "") ? null : _noteController.text,
-        insBy: doctor,
-        updateBy: doctor,
-        diseaseId: diseaseId,
-        listMedicine: listMedicine);
+    if (listMedicine.isNotEmpty) {
+      print("has prescription");
+      PrescriptionModel prescriptionModel = new PrescriptionModel(
+          prescriptionId: transactionId,
+          prescriptionDes:
+              (_noteController.text == "") ? null : _noteController.text,
+          insBy: doctor,
+          updateBy: doctor,
+          diseaseId: diseaseId,
+          listMedicine: listMedicine);
 
-    String prescriptionJson = jsonEncode(prescriptionModel.toJson());
+      String prescriptionJson = jsonEncode(prescriptionModel.toJson());
 
-    print(prescriptionJson);
+      print(prescriptionJson);
 
-    await _prescriptionRepo.createPrescription(prescriptionJson);
+      await _prescriptionRepo.createPrescription(prescriptionJson);
+    }
 
     Transaction transaction = new Transaction(
         transactionId: transactionId,
