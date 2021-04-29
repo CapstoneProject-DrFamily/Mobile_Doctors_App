@@ -438,7 +438,9 @@ class MapPageViewModel extends BaseModel {
   }
 
   void btnChecking(BuildContext context) async {
+    waitDialog(context);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+
     String usToken = prefs.getString("userToken");
     HelperMethod.disableLiveLocationUpdates();
     HelperMethod.disableTransactionMapUpdates();
@@ -464,6 +466,7 @@ class MapPageViewModel extends BaseModel {
 
     // _notifyRepo.arrivedTransaction(usToken, _basicTransaction.transactionId);
     prefs.remove("userToken");
+    Navigator.of(context).pop();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

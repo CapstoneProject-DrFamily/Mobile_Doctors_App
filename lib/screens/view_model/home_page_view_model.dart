@@ -35,7 +35,7 @@ class HomePageViewModel extends BaseModel {
   final IAppConfigRepo _appConfigRepo = AppConfigRepo();
   final IScheduleRepo _scheduleRepo = ScheduleRepo();
   static int timeOut = 0;
-
+  bool loading = true;
   FirebaseUser _firebaseuser;
   DatabaseReference _doctorRequest;
 
@@ -78,56 +78,58 @@ class HomePageViewModel extends BaseModel {
 
   HomePageViewModel() {
     print('listtran ${_listTransaction.length}');
-
-    init();
   }
 
   Future<void> init() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String phone = prefs.getString("usPhone");
-    int profileID = prefs.get("usProfileID");
-    int userID = prefs.get("usAccountID");
+    if (loading) {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      String phone = prefs.getString("usPhone");
+      int profileID = prefs.get("usProfileID");
+      int userID = prefs.get("usAccountID");
 
-    var timeOutVar = await _appConfigRepo.appConfigTimeOut();
-    timeOut = timeOutVar;
-    print("timeOut $timeOut");
+      var timeOutVar = await _appConfigRepo.appConfigTimeOut();
+      timeOut = timeOutVar;
+      print("timeOut $timeOut");
 
-    _doctorModel = await _doctorRepo.getSimpleInfo(profileID);
-    prefs.setString("usImage", _doctorModel.doctorImage);
-    prefs.setString("usName", _doctorModel.doctorName);
-    prefs.setInt("doctorId", _doctorModel.doctorId);
-    if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
-      // Use location.
-    }
-
-    _firebaseuser = await FirebaseAuth.instance.currentUser();
-    _userFBID = _firebaseuser.uid;
-
-    _doctorRequest =
-        FirebaseDatabase.instance.reference().child("Doctor Request");
-
-    _doctorRequest.child(_userFBID).once().then((DataSnapshot dataSnapshot) {
-      if (dataSnapshot.value != null) {
-        String status = dataSnapshot.value['doctor_status'];
-        if (status != null && status == "waiting") {
-          this.active = true;
-          checkStatus = true;
-          this.finding = true;
-          getLocationLiveUpdates();
-        }
+      _doctorModel = await _doctorRepo.getSimpleInfo(profileID);
+      prefs.setString("usImage", _doctorModel.doctorImage);
+      prefs.setString("usName", _doctorModel.doctorName);
+      prefs.setInt("doctorId", _doctorModel.doctorId);
+      if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
+        // Use location.
       }
-    });
 
-    notifyListeners();
+      _firebaseuser = await FirebaseAuth.instance.currentUser();
+      _userFBID = _firebaseuser.uid;
 
-    print("Phone: " +
-        phone +
-        " ProfileID: " +
-        profileID.toString() +
-        " AccountID: " +
-        userID.toString());
+      _doctorRequest =
+          FirebaseDatabase.instance.reference().child("Doctor Request");
 
-    print("Doctor: " + _doctorModel.doctorId.toString());
+      _doctorRequest.child(_userFBID).once().then((DataSnapshot dataSnapshot) {
+        if (dataSnapshot.value != null) {
+          String status = dataSnapshot.value['doctor_status'];
+          if (status != null && status == "waiting") {
+            this.active = true;
+            checkStatus = true;
+            this.finding = true;
+            getLocationLiveUpdates();
+          }
+        }
+      });
+
+      notifyListeners();
+
+      print("Phone: " +
+          phone +
+          " ProfileID: " +
+          profileID.toString() +
+          " AccountID: " +
+          userID.toString());
+
+      print("Doctor: " + _doctorModel.doctorId.toString());
+
+      loading = false;
+    }
   }
 
   Future<bool> activeDoc() async {

@@ -766,6 +766,7 @@ class SchedulePageViewModel extends BaseModel {
       "estimatedTime": null,
       "location": location,
       "note": note,
+      "scheduleId": scheduleId
     };
 
     await _transactionRequest.child(transactionId).set(transactionInfo);
@@ -792,7 +793,10 @@ class SchedulePageViewModel extends BaseModel {
         MaterialPageRoute(
           builder: (context) => BaseTimeLine(transactionId: transactionId),
         ),
-      );
+      ).then((value) {
+        isFirst = true;
+        notifyListeners();
+      });
     } else {
       Fluttertoast.showToast(
         msg: "Sorry, something is went please try again",

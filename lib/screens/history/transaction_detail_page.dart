@@ -204,7 +204,7 @@ class TransactionDetailPage extends StatelessWidget {
                                             ? Flexible(
                                                 child: Container(
                                                   child: Text(
-                                                      'This transaction has no feedback'),
+                                                      'This record has no feedback'),
                                                 ),
                                               )
                                             : Flexible(

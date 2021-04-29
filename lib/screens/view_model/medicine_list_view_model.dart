@@ -37,7 +37,7 @@ class MedicineListViewModel extends BaseModel {
   DatabaseReference _transactionRequest;
 
   String transactionId, estimateTime, location, note;
-  int doctorId, examId, patientId;
+  int doctorId, examId, patientId, scheduleId;
 
   bool isLoading = false;
 
@@ -149,6 +149,7 @@ class MedicineListViewModel extends BaseModel {
         doctorId = dataSnapshot.value['doctor_id'];
         patientId = dataSnapshot.value['patientId'];
         examId = dataSnapshot.value['exam_id'];
+        scheduleId = dataSnapshot.value['scheduleId'];
       }
     });
   }
@@ -219,7 +220,8 @@ class MedicineListViewModel extends BaseModel {
         estimatedTime: estimateTime,
         location: location,
         note: note,
-        status: 5);
+        status: 5,
+        scheduleId: scheduleId);
 
     bool statusUpdate = await _transactionRepo.updateTransaction(transaction);
 

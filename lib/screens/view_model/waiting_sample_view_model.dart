@@ -3,6 +3,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_doctors_apps/model/transaction.dart';
+import 'package:mobile_doctors_apps/repository/patient_repo.dart';
 import 'package:mobile_doctors_apps/repository/transaction_repo.dart';
 import 'package:mobile_doctors_apps/screens/share/base_timeline.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
@@ -10,6 +11,27 @@ import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 class WaitingSampleViewModel extends BaseModel {
   final ITransactionRepo _transactionRepo = TransactionRepo();
   DatabaseReference _transactionRequest;
+  bool init = true;
+  int patientId;
+  final IPatientRepo _patientRepo = PatientRepo();
+
+  Future<void> fetchData(transactionId) async {
+    if (init) {
+      _transactionRequest =
+          FirebaseDatabase.instance.reference().child("Transaction");
+
+      await _transactionRequest
+          .child(transactionId)
+          .once()
+          .then((DataSnapshot dataSnapshot) async {
+        if (dataSnapshot.value != null) {
+          patientId = dataSnapshot.value['patientId'];
+        }
+      });
+
+      init = false;
+    }
+  }
 
   Future<void> continueChecking(
       BuildContext context, String transactionId) async {
@@ -215,5 +237,13 @@ class WaitingSampleViewModel extends BaseModel {
         );
       },
     );
+  }
+
+  Future<void> callPhone() async {
+    var phone = await _patientRepo.getPatientPhone(patientId);
+    String newPhone = "0" + phone.toString().substring(2);
+    print('phone $newPhone');
+
+    await launch('tel://$newPhone');
   }
 }

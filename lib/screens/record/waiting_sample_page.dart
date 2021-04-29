@@ -13,125 +13,159 @@ class WaitingSamplePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseView<WaitingSampleViewModel>(
       builder: (context, child, model) {
-        return Scaffold(
-            // appBar: AppBar(
-            //   backgroundColor: Colors.white,
-            //   elevation: 0,
-            //   centerTitle: true,
-            //   leading: new IconButton(
-            //     icon: new Icon(Icons.arrow_back_ios, color: Color(0xff0d47a1)),
-            //     onPressed: () => Navigator.of(context).pop(),
-            //   ),
-            //   title: Text(
-            //     "Awaiting Sample",
-            //     textAlign: TextAlign.center,
-            //     style: GoogleFonts.varelaRound(
-            //       fontWeight: FontWeight.w600,
-            //       fontSize: 20,
-            //       color: Color(0xff0d47a1),
-            //     ),
-            //   ),
-            // ),
-            body: Column(
-          children: [
-            Stack(
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: CustomPaint(
-                    painter: pathPainter(),
-                  ),
+        return FutureBuilder(
+          future: model.fetchData(transactionId),
+          builder: (context, snapshot) {
+            if (model.init) {
+              return Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
                 ),
-                Container(
-                  padding: EdgeInsets.all(50),
-                  margin: EdgeInsets.only(top: 50),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "This transaction has been temporarily paused.",
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w900,
+              );
+            } else {
+              return Scaffold(
+                  // appBar: AppBar(
+                  //   backgroundColor: Colors.white,
+                  //   elevation: 0,
+                  //   centerTitle: true,
+                  //   leading: new IconButton(
+                  //     icon: new Icon(Icons.arrow_back_ios, color: Color(0xff0d47a1)),
+                  //     onPressed: () => Navigator.of(context).pop(),
+                  //   ),
+                  //   title: Text(
+                  //     "Awaiting Sample",
+                  //     textAlign: TextAlign.center,
+                  //     style: GoogleFonts.varelaRound(
+                  //       fontWeight: FontWeight.w600,
+                  //       fontSize: 20,
+                  //       color: Color(0xff0d47a1),
+                  //     ),
+                  //   ),
+                  // ),
+                  body: Column(
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width,
+                        child: CustomPaint(
+                          painter: pathPainter(),
                         ),
                       ),
-                      Text(
-                        "Waiting for test results",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500,
+                      Container(
+                        padding: EdgeInsets.all(50),
+                        margin: EdgeInsets.only(top: 50),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              "This transaction has been temporarily paused.",
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                            Text(
+                              "Waiting for test results",
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          ],
                         ),
-                      )
+                      ),
+                      Positioned(
+                        bottom: MediaQuery.of(context).size.height * 0.3,
+                        child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: Center(
+                              child: Image.asset('assets/onBoardDoc.png'),
+                            )),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: InkWell(
+                          child: Container(
+                            padding: EdgeInsets.only(left: 10, right: 10),
+                            height: 80,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  stops: [0, 1],
+                                  colors: [
+                                    MainColors.blueBegin,
+                                    MainColors.blueEnd
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(25),
+                                )),
+                            child: Center(
+                              child: Text(
+                                "Continue checking",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ),
+                          ),
+                          onTap: () {
+                            model.continueChecking(context, transactionId);
+                          },
+                        ),
+                      ),
+                      Positioned(
+                        top: 0.0,
+                        left: 0.0,
+                        right: 0.0,
+                        child: AppBar(
+                          leading: new IconButton(
+                            icon: new Icon(Icons.arrow_back_ios,
+                                color: Colors.black),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                          backgroundColor: Colors.blue
+                              .withOpacity(0), //You can make this transparent
+                          elevation: 0.0, //No shadow
+                          actions: <Widget>[
+                            InkWell(
+                              onTap: () {
+                                model.callPhone();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 15),
+                                child: Center(
+                                  child: Icon(
+                                    EvaIcons.phone,
+                                    color: Colors.black,
+                                    size: 23,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                ),
-                Positioned(
-                  bottom: MediaQuery.of(context).size.height * 0.3,
-                  child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: Center(
-                        child: Image.asset('assets/onBoardDoc.png'),
-                      )),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: InkWell(
-                    child: Container(
-                      padding: EdgeInsets.only(left: 10, right: 10),
-                      height: 80,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            stops: [0, 1],
-                            colors: [MainColors.blueBegin, MainColors.blueEnd],
-                          ),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(25),
-                          )),
-                      child: Center(
-                        child: Text(
-                          "Continue checking",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                    ),
-                    onTap: () {
-                      model.continueChecking(context, transactionId);
-                    },
-                  ),
-                ),
-                Positioned(
-                  top: 0.0,
-                  left: 0.0,
-                  right: 0.0,
-                  child: AppBar(
-                    leading: new IconButton(
-                      icon: new Icon(Icons.arrow_back_ios, color: Colors.black),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                    backgroundColor: Colors.blue
-                        .withOpacity(0), //You can make this transparent
-                    elevation: 0.0, //No shadow
-                  ),
-                ),
-              ],
-            ),
-          ],
-        )
-            // Container(
-            //   decoration: BoxDecoration(
-            //       image: DecorationImage(
-            //           image: AssetImage("assets/onBoardDoc.png"))),
-            //   child: Center(
-            //     child: Text('sa'),
-            //   ),
-            // ),
-            );
+                ],
+              )
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //       image: DecorationImage(
+                  //           image: AssetImage("assets/onBoardDoc.png"))),
+                  //   child: Center(
+                  //     child: Text('sa'),
+                  //   ),
+                  // ),
+                  );
+            }
+          },
+        );
       },
     );
   }
