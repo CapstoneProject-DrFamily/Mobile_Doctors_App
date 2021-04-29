@@ -41,6 +41,7 @@ class ExaminationRepo extends IExaminationRepo {
     };
 
     var response = await http.get(url, headers: header);
+    print("statusExamination ${response.statusCode}");
 
     ExaminationHistory examinationHistory;
 
