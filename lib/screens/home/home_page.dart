@@ -223,24 +223,30 @@ class HomePage extends StatelessWidget {
                                                             padding:
                                                                 const EdgeInsets
                                                                     .all(8.0),
-                                                            child: CircleAvatar(
-                                                              backgroundImage: (model
-                                                                          .listTransaction[
-                                                                              index]
-                                                                          .patientImage ==
-                                                                      null)
-                                                                  ? NetworkImage(
-                                                                      DEFAULT_IMG)
-                                                                  : NetworkImage(
-                                                                      // 'https://www.w3schools.com/w3css/img_lights.jpg'
-                                                                      model
-                                                                          .listTransaction[
-                                                                              index]
-                                                                          .patientImage,
-                                                                    ),
-                                                              radius: 35,
-                                                              backgroundColor:
-                                                                  Colors.white,
+                                                            child: Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child:
+                                                                  CircleAvatar(
+                                                                backgroundImage: (model
+                                                                            .listTransaction[
+                                                                                index]
+                                                                            .patientImage ==
+                                                                        null)
+                                                                    ? NetworkImage(
+                                                                        DEFAULT_IMG)
+                                                                    : NetworkImage(
+                                                                        // 'https://www.w3schools.com/w3css/img_lights.jpg'
+                                                                        model
+                                                                            .listTransaction[index]
+                                                                            .patientImage,
+                                                                      ),
+                                                                radius: 35,
+                                                                backgroundColor:
+                                                                    Colors
+                                                                        .white,
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
