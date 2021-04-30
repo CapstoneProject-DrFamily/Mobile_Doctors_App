@@ -255,7 +255,18 @@ class MedicineFormDetail extends StatelessWidget {
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white),
                                   )),
-                                  SizedBox(width: 10),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                      child: Text(
+                                    'Type',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  )),
+                                  SizedBox(width: 5),
                                   Expanded(
                                       flex: 3,
                                       child: Center(
@@ -330,18 +341,23 @@ class MedicineFormDetail extends StatelessWidget {
                                                       ),
                                                     )),
                                                 SizedBox(
-                                                  width: 10,
+                                                  width: 30,
                                                 ),
                                                 Expanded(
                                                     child: Text(
                                                   MedicineListViewModel
-                                                          .listMedicine[index]
-                                                          .totalQuantity
-                                                          .toString() +
-                                                      " " +
-                                                      MedicineListViewModel
-                                                          .listMedicine[index]
-                                                          .medicineType,
+                                                      .listMedicine[index]
+                                                      .totalQuantity
+                                                      .toString(),
+                                                  style:
+                                                      TextStyle(fontSize: 14),
+                                                )),
+                                                SizedBox(width: 20),
+                                                Expanded(
+                                                    child: Text(
+                                                  MedicineListViewModel
+                                                      .listMedicine[index]
+                                                      .medicineType,
                                                   style:
                                                       TextStyle(fontSize: 14),
                                                 )),
@@ -389,18 +405,8 @@ class MedicineFormDetail extends StatelessWidget {
                                                             ),
                                                             Expanded(
                                                               flex: 2,
-                                                              child: Text(
-                                                                MedicineListViewModel
-                                                                    .listMedicine[
-                                                                        index]
-                                                                    .medicineType,
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        14),
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                              ),
+                                                              child:
+                                                                  Container(),
                                                             ),
                                                           ],
                                                         ),
@@ -441,18 +447,8 @@ class MedicineFormDetail extends StatelessWidget {
                                                             ),
                                                             Expanded(
                                                               flex: 2,
-                                                              child: Text(
-                                                                MedicineListViewModel
-                                                                    .listMedicine[
-                                                                        index]
-                                                                    .medicineType,
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        14),
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                              ),
+                                                              child:
+                                                                  Container(),
                                                             ),
                                                           ],
                                                         ),
@@ -498,19 +494,8 @@ class MedicineFormDetail extends StatelessWidget {
                                                             ),
                                                             Expanded(
                                                               flex: 2,
-                                                              child: Text(
-                                                                MedicineListViewModel
-                                                                    .listMedicine[
-                                                                        index]
-                                                                    .medicineType,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 14,
-                                                                ),
-                                                              ),
+                                                              child:
+                                                                  Container(),
                                                             )
                                                           ],
                                                         ),

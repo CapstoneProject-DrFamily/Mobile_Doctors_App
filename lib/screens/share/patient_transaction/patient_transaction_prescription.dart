@@ -96,242 +96,285 @@ class TransactionPrescriptionScreen extends StatelessWidget {
                             ),
                             // collapsed: Text('See details'),
                             expanded: Center(
-                                child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Divider(
-                                          thickness: 3,
-                                          color: Colors.white,
-                                          indent: 10,
-                                          endIndent: 10,
-                                        ),
-                                        Visibility(
-                                          visible: model.list[index]
-                                                          .morningQuantity !=
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Divider(
+                                      thickness: 3,
+                                      color: Colors.white,
+                                      indent: 10,
+                                      endIndent: 10,
+                                    ),
+                                    Visibility(
+                                      visible:
+                                          model.list[index].morningQuantity !=
                                                       0 &&
                                                   model.list[index]
                                                           .morningQuantity !=
                                                       null
                                               ? true
                                               : false,
-                                          child: Row(
-                                            children: [
-                                              SizedBox(width: 10),
-                                              Expanded(
-                                                flex: 3,
-                                                child: Text(
-                                                  'Morning',
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 8, right: 8),
-                                                  child: Text(
-                                                    model.list[index]
-                                                        .morningQuantity
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  model.list[index].type,
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                            ],
+                                      child: Row(
+                                        children: [
+                                          SizedBox(width: 10),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Text(
+                                              'Morning',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white),
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        Visibility(
-                                          visible:
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8, right: 8),
+                                              child: Text(
+                                                model
+                                                    .list[index].morningQuantity
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Container(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Visibility(
+                                      visible: model.list[index].noonQuantity !=
+                                                  0 &&
                                               model.list[index].noonQuantity !=
-                                                          0 &&
-                                                      model.list[index]
-                                                              .noonQuantity !=
-                                                          null
-                                                  ? true
-                                                  : false,
-                                          child: Row(
-                                            children: [
-                                              SizedBox(width: 10),
-                                              Expanded(
-                                                flex: 3,
-                                                child: Text(
-                                                  'Noon',
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 8, right: 8),
-                                                  child: Text(
-                                                    model.list[index]
-                                                        .noonQuantity
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  model.list[index].type,
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                            ],
+                                                  null
+                                          ? true
+                                          : false,
+                                      child: Row(
+                                        children: [
+                                          SizedBox(width: 10),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Text(
+                                              'Noon',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white),
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        Visibility(
-                                          visible: model.list[index]
-                                                          .afternoonQuantity !=
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8, right: 8),
+                                              child: Text(
+                                                model.list[index].noonQuantity
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Container(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Visibility(
+                                      visible:
+                                          model.list[index].afternoonQuantity !=
                                                       0 &&
                                                   model.list[index]
                                                           .afternoonQuantity !=
                                                       null
                                               ? true
                                               : false,
-                                          child: Row(
-                                            children: [
-                                              SizedBox(width: 10),
-                                              Expanded(
-                                                flex: 3,
-                                                child: Text(
-                                                  'Afternoon',
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.white),
-                                                ),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(width: 10),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Text(
+                                              'Afternoon',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8, right: 8),
+                                              child: Text(
+                                                model.list[index]
+                                                    .afternoonQuantity
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.white),
                                               ),
-                                              Expanded(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 8, right: 8),
-                                                  child: Text(
-                                                    model.list[index]
-                                                        .afternoonQuantity
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  model.list[index].type,
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                            ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Container(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Divider(
+                                      thickness: 3,
+                                      color: Colors.white,
+                                      indent: 10,
+                                      endIndent: 10,
+                                    ),
+                                    Row(
+                                      children: [
+                                        SizedBox(width: 10),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Text(
+                                            'Total',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white),
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 10,
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8, right: 8),
+                                            child: Text(
+                                              model.list[index].totalQuantity
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
                                         ),
-                                        Divider(
-                                          thickness: 3,
-                                          color: Colors.white,
-                                          indent: 10,
-                                          endIndent: 10,
-                                        ),
-                                        Row(
-                                          children: [
-                                            SizedBox(width: 10),
-                                            Expanded(
-                                              flex: 3,
-                                              child: Text(
-                                                'Total',
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 8, right: 8),
-                                                child: Text(
-                                                  model
-                                                      .list[index].totalQuantity
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Text(
-                                                model.list[index].type,
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 10),
-                                        Row(
-                                          children: [
-                                            SizedBox(width: 10),
-                                            Expanded(
-                                              flex: 3,
-                                              child: Text(
-                                                'Days',
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 8, right: 8),
-                                                child: Text(
-                                                  model.list[index].totalDays
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Text(
-                                                'days',
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          ],
+                                        Expanded(
+                                          child: Container(),
                                         ),
                                       ],
-                                    ))),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        SizedBox(width: 10),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Text(
+                                            'Type',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8, right: 8),
+                                            child: Text(
+                                              model.list[index].type.toString(),
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Container(),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        SizedBox(width: 10),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Text(
+                                            'Days',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8, right: 8),
+                                            child: Text(
+                                              model.list[index].totalDays
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            'days',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10),
+                                    Divider(
+                                      thickness: 3,
+                                      color: Colors.white,
+                                      indent: 10,
+                                      endIndent: 10,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8, right: 8),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              'Method',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8, right: 8),
+                                              child: Text(
+                                                model.list[index].method == null
+                                                    ? ''
+                                                    : model.list[index].method
+                                                        .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
                             tapHeaderToExpand: true,
                             hasIcon: true,
                             iconColor: Colors.white,

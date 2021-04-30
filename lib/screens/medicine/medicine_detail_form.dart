@@ -123,7 +123,7 @@ class MedicineDetailForm extends StatelessWidget {
                           flex: 4,
                           child: _buildQuantityField(
                               model, model.morningQuantityController)),
-                      Flexible(flex: 6, child: _buildChildType(model))
+                      Flexible(flex: 6, child: Container())
                     ],
                   ),
                   SizedBox(
@@ -136,7 +136,7 @@ class MedicineDetailForm extends StatelessWidget {
                           flex: 4,
                           child: _buildQuantityField(
                               model, model.noonQuantityController)),
-                      Flexible(flex: 6, child: _buildChildType(model))
+                      Flexible(flex: 6, child: Container())
                     ],
                   ),
                   SizedBox(
@@ -144,12 +144,13 @@ class MedicineDetailForm extends StatelessWidget {
                   ),
                   _buildTitle("Afternoon Quantity"),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Flexible(
                           flex: 4,
                           child: _buildQuantityField(
                               model, model.afternoonQuantityController)),
-                      Flexible(flex: 6, child: _buildChildType(model))
+                      Flexible(flex: 6, child: Container())
                     ],
                   ),
                   SizedBox(
