@@ -898,8 +898,12 @@ class TransactionFormScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(bottom: 10, top: 10, left: 10),
             child: TextFormField(
+              style: TextStyle(
+                color: Color(0xff0d47a1),
+              ),
               initialValue: this.model.getFieldNumber(field) != null
-                  ? this.model.getFieldNumber(field).toString()
+                  ? this.model.getFieldNumber(field).toStringAsFixed(0) +
+                      " / 10"
                   : null,
               enabled: false,
               textAlign: TextAlign.center,
