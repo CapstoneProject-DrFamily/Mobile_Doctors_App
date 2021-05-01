@@ -851,6 +851,7 @@ class AnalyzePage extends StatelessWidget {
           width: 15,
         ),
         Expanded(
+          flex: 3,
           child: Text(
             label,
             style: TextStyle(
@@ -860,57 +861,64 @@ class AnalyzePage extends StatelessWidget {
           ),
         ),
         Expanded(
-            child: Container(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 10, top: 10, left: 10),
-            child: TextFormField(
-              validator: (value) {
-                if (value.isNotEmpty) {
-                  try {
-                    double num = double.parse(value);
-                    if (num < 0 || num > 10) {
-                      return "Range 0 ~ 10";
+          flex: 2,
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 10, top: 10, left: 10),
+              child: TextFormField(
+                validator: (value) {
+                  if (value.isNotEmpty) {
+                    try {
+                      double num = double.parse(value);
+                      if (num < 0 || num > 10) {
+                        return "Range 0 ~ 10";
+                      }
+                    } catch (e) {
+                      return "Must be a number";
                     }
-                  } catch (e) {
-                    return "Must be a number";
                   }
-                }
 
-                return null;
-              },
-              initialValue: model.getFieldNumber(field) != null
-                  ? model.getFieldNumber(field).toString()
-                  : null,
-              onChanged: (value) {
-                model.changeFieldNumber(field, model, value);
-              },
-              maxLength: 2,
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                counterText: "",
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.grey, width: 2),
-                  borderRadius: BorderRadius.circular(20.0),
+                  return null;
+                },
+                initialValue: model.getFieldNumber(field) != null
+                    ? model.getFieldNumber(field).toString()
+                    : null,
+                onChanged: (value) {
+                  model.changeFieldNumber(field, model, value);
+                },
+                maxLength: 2,
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  counterText: "",
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.grey, width: 2),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(color: MainColors.blueBegin, width: 2),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.red, width: 2),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.red, width: 2),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  hintText: hintText,
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(color: MainColors.blueBegin, width: 2),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.red, width: 2),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.red, width: 2),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                hintText: hintText,
               ),
             ),
           ),
-        )),
+        ),
+        Expanded(
+            child: Text(
+          " / 10",
+          style: TextStyle(color: Color(0xff0d47a1)),
+        ))
       ],
     );
   }

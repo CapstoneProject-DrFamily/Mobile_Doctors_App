@@ -249,7 +249,7 @@ class MedicineFormDetail extends StatelessWidget {
                                   ),
                                   Expanded(
                                       child: Text(
-                                    'Total',
+                                    'Days',
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -341,26 +341,29 @@ class MedicineFormDetail extends StatelessWidget {
                                                       ),
                                                     )),
                                                 SizedBox(
-                                                  width: 30,
+                                                  width: 50,
                                                 ),
                                                 Expanded(
                                                     child: Text(
                                                   MedicineListViewModel
                                                       .listMedicine[index]
-                                                      .totalQuantity
+                                                      .totalDays
                                                       .toString(),
                                                   style:
                                                       TextStyle(fontSize: 14),
                                                 )),
-                                                SizedBox(width: 20),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
                                                 Expanded(
+                                                    flex: 2,
                                                     child: Text(
-                                                  MedicineListViewModel
-                                                      .listMedicine[index]
-                                                      .medicineType,
-                                                  style:
-                                                      TextStyle(fontSize: 14),
-                                                )),
+                                                      MedicineListViewModel
+                                                          .listMedicine[index]
+                                                          .medicineType,
+                                                      style: TextStyle(
+                                                          fontSize: 14),
+                                                    )),
                                                 SizedBox(width: 20),
                                                 Expanded(
                                                   flex: 3,
@@ -373,7 +376,7 @@ class MedicineFormDetail extends StatelessWidget {
                                                         Row(
                                                           children: [
                                                             Expanded(
-                                                              flex: 5,
+                                                              flex: 2,
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
@@ -389,7 +392,7 @@ class MedicineFormDetail extends StatelessWidget {
                                                               ),
                                                             ),
                                                             Expanded(
-                                                              flex: 1,
+                                                              flex: 6,
                                                               child: Center(
                                                                 child: Text(
                                                                   MedicineListViewModel
@@ -404,7 +407,6 @@ class MedicineFormDetail extends StatelessWidget {
                                                               ),
                                                             ),
                                                             Expanded(
-                                                              flex: 2,
                                                               child:
                                                                   Container(),
                                                             ),
@@ -416,7 +418,7 @@ class MedicineFormDetail extends StatelessWidget {
                                                         Row(
                                                           children: [
                                                             Expanded(
-                                                              flex: 5,
+                                                              flex: 2,
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
@@ -432,6 +434,7 @@ class MedicineFormDetail extends StatelessWidget {
                                                               ),
                                                             ),
                                                             Expanded(
+                                                              flex: 6,
                                                               child: Center(
                                                                 child: Text(
                                                                   MedicineListViewModel
@@ -446,7 +449,6 @@ class MedicineFormDetail extends StatelessWidget {
                                                               ),
                                                             ),
                                                             Expanded(
-                                                              flex: 2,
                                                               child:
                                                                   Container(),
                                                             ),
@@ -458,7 +460,7 @@ class MedicineFormDetail extends StatelessWidget {
                                                         Row(
                                                           children: [
                                                             Expanded(
-                                                              flex: 5,
+                                                              flex: 2,
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
@@ -479,6 +481,7 @@ class MedicineFormDetail extends StatelessWidget {
                                                               ),
                                                             ),
                                                             Expanded(
+                                                              flex: 6,
                                                               child: Center(
                                                                 child: Text(
                                                                   MedicineListViewModel
@@ -493,7 +496,6 @@ class MedicineFormDetail extends StatelessWidget {
                                                               ),
                                                             ),
                                                             Expanded(
-                                                              flex: 2,
                                                               child:
                                                                   Container(),
                                                             )
