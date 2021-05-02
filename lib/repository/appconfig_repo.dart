@@ -11,6 +11,8 @@ abstract class IAppConfigRepo {
   Future<String> getPolicy();
   Future<int> getNumberofImage();
   Future<int> getMinuteToClick();
+  Future<int> getEstimateTime();
+  Future<double> getGapTimeSchedule();
 }
 
 class AppConfigRepo extends IAppConfigRepo {
@@ -129,6 +131,36 @@ class AppConfigRepo extends IAppConfigRepo {
     if (response.statusCode == 200) {
       Map<String, dynamic> data = json.decode(response.body);
       return data['appointmentNotifyTime'];
+    } else
+      return null;
+  }
+
+  @override
+  Future<int> getEstimateTime() async {
+    String urlAPI = APIHelper.APP_CONFIG;
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    var response = await http.get(urlAPI, headers: header);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = json.decode(response.body);
+      return data['minusTimeInMinute'];
+    } else
+      return null;
+  }
+
+  @override
+  Future<double> getGapTimeSchedule() async {
+    String urlAPI = APIHelper.APP_CONFIG;
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json",
+    };
+
+    var response = await http.get(urlAPI, headers: header);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = json.decode(response.body);
+      return data['examinationHour'];
     } else
       return null;
   }

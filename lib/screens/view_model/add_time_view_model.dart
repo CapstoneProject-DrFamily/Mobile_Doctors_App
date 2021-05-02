@@ -1,7 +1,9 @@
 import 'package:intl/intl.dart';
+import 'package:mobile_doctors_apps/repository/appconfig_repo.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 
 class AddTimeViewModel extends BaseModel {
+  final IAppConfigRepo _appConfigRepo = AppConfigRepo();
   bool _isFirstAddTimePopUp = true;
   bool get isFirstAddTimePopUp => _isFirstAddTimePopUp;
 
@@ -18,7 +20,7 @@ class AddTimeViewModel extends BaseModel {
 
   DateFormat formatInit = DateFormat("yyyy-MM-dd HH:mm");
 
-  int timeGap = 30;
+  int timeGap;
 
   List<DateTime> listTimeChoose = [];
 
@@ -28,6 +30,9 @@ class AddTimeViewModel extends BaseModel {
 
   Future<void> initAddTime(DateTime time) async {
     if (_isFirstAddTimePopUp) {
+      double timeGapDouble = await _appConfigRepo.getGapTimeSchedule() * 60;
+      timeGap = timeGapDouble.toInt();
+      print(timeGap);
       DateFormat dateFormat = DateFormat("yyyy-MM-dd");
       String dateStartString = dateFormat.format(time);
       DateTime dateStart = DateTime.parse(dateStartString);
@@ -82,75 +87,74 @@ class AddTimeViewModel extends BaseModel {
     notifyListeners();
   }
 
-  void chooseDateTimeIinit(DateTime chooseTime, int index) {
-    if (listTimeChoose.contains(chooseTime)) {
-      listTimeChoose.remove(chooseTime);
-      List<DateTime> dateDisable = listChoose[chooseTime];
-      print(dateDisable[0]);
-      for (int i = 0; i < dateDisable.length; i++) {
-        listTimeDisplay.update(dateDisable[i], (value) => 0);
-      }
-      listTimeDisplay.update(chooseTime, (value) => 0);
-      listChoose.removeWhere((key, value) => key == chooseTime);
-    } else {
-      listTimeChoose.add(chooseTime);
-      if (index == 0) {
-        List<DateTime> disable = [];
-        DateTime timePlus130 = chooseTime.add(Duration(hours: 1, minutes: 30));
-        for (int i = 0; i < listTimeDisplay.length; i++) {
-          if (listTimeDisplay.keys.toList()[i].isBefore(timePlus130)) {
-            if (listTimeDisplay.keys.toList()[i] == chooseTime) {
-            } else {
-              disable.add(listTimeDisplay.keys.toList()[i]);
-              listTimeDisplay.update(
-                  listTimeDisplay.keys.toList()[i], (value) => 1);
-            }
-          }
-        }
-        listChoose.putIfAbsent(chooseTime, () => disable);
-      } else {
-        List<DateTime> disable = [];
-        DateTime timePlus130 = chooseTime.add(Duration(hours: 1, minutes: 30));
+  // void chooseDateTimeIinit(DateTime chooseTime, int index) {
+  //   if (listTimeChoose.contains(chooseTime)) {
+  //     listTimeChoose.remove(chooseTime);
+  //     List<DateTime> dateDisable = listChoose[chooseTime];
+  //     print(dateDisable[0]);
+  //     for (int i = 0; i < dateDisable.length; i++) {
+  //       listTimeDisplay.update(dateDisable[i], (value) => 0);
+  //     }
+  //     listTimeDisplay.update(chooseTime, (value) => 0);
+  //     listChoose.removeWhere((key, value) => key == chooseTime);
+  //   } else {
+  //     listTimeChoose.add(chooseTime);
+  //     if (index == 0) {
+  //       List<DateTime> disable = [];
+  //       DateTime timePlus130 = chooseTime.add(Duration(minutes: timeGap));
+  //       for (int i = 0; i < listTimeDisplay.length; i++) {
+  //         if (listTimeDisplay.keys.toList()[i].isBefore(timePlus130)) {
+  //           if (listTimeDisplay.keys.toList()[i] == chooseTime) {
+  //           } else {
+  //             disable.add(listTimeDisplay.keys.toList()[i]);
+  //             listTimeDisplay.update(
+  //                 listTimeDisplay.keys.toList()[i], (value) => 1);
+  //           }
+  //         }
+  //       }
+  //       listChoose.putIfAbsent(chooseTime, () => disable);
+  //     } else {
+  //       List<DateTime> disable = [];
+  //       DateTime timePlus130 = chooseTime.add(Duration(minutes: 90));
 
-        for (int i = index; i < listTimeDisplay.length; i++) {
-          if (listTimeDisplay.keys.toList()[i].isBefore(timePlus130)) {
-            if (listTimeDisplay.keys.toList()[i] == chooseTime) {
-            } else {
-              if (listTimeDisplay.values.toList()[i] == 1) {
-              } else {
-                disable.add(listTimeDisplay.keys.toList()[i]);
-                listTimeDisplay.update(
-                    listTimeDisplay.keys.toList()[i], (value) => 1);
-              }
-            }
-          }
-        }
+  //       for (int i = index; i < listTimeDisplay.length; i++) {
+  //         if (listTimeDisplay.keys.toList()[i].isBefore(timePlus130)) {
+  //           if (listTimeDisplay.keys.toList()[i] == chooseTime) {
+  //           } else {
+  //             if (listTimeDisplay.values.toList()[i] == 1) {
+  //             } else {
+  //               disable.add(listTimeDisplay.keys.toList()[i]);
+  //               listTimeDisplay.update(
+  //                   listTimeDisplay.keys.toList()[i], (value) => 1);
+  //             }
+  //           }
+  //         }
+  //       }
 
-        DateTime timeMinus130 =
-            chooseTime.subtract(Duration(hours: 1, minutes: 30));
-        print(
-            "time minus ${timeMinus130.isBefore(listTimeDisplay.keys.toList()[0])}");
-        for (int i = index; i >= 0; i--) {
-          if (listTimeDisplay.keys.toList()[i].isAfter(timeMinus130)) {
-            if (listTimeDisplay.keys.toList()[i] == chooseTime) {
-            } else {
-              if (listTimeDisplay.values.toList()[i] == 1) {
-              } else {
-                disable.add(listTimeDisplay.keys.toList()[i]);
-                listTimeDisplay.update(
-                    listTimeDisplay.keys.toList()[i], (value) => 1);
-              }
-            }
-          }
-        }
-        listChoose.putIfAbsent(chooseTime, () => disable);
-      }
-      listTimeDisplay.update(chooseTime, (value) => 2);
-      print('list choose add $listChoose');
-    }
+  //       DateTime timeMinus130 = chooseTime.subtract(Duration(minutes: 90));
+  //       print(
+  //           "time minus ${timeMinus130.isBefore(listTimeDisplay.keys.toList()[0])}");
+  //       for (int i = index; i >= 0; i--) {
+  //         if (listTimeDisplay.keys.toList()[i].isAfter(timeMinus130)) {
+  //           if (listTimeDisplay.keys.toList()[i] == chooseTime) {
+  //           } else {
+  //             if (listTimeDisplay.values.toList()[i] == 1) {
+  //             } else {
+  //               disable.add(listTimeDisplay.keys.toList()[i]);
+  //               listTimeDisplay.update(
+  //                   listTimeDisplay.keys.toList()[i], (value) => 1);
+  //             }
+  //           }
+  //         }
+  //       }
+  //       listChoose.putIfAbsent(chooseTime, () => disable);
+  //     }
+  //     listTimeDisplay.update(chooseTime, (value) => 2);
+  //     print('list choose add $listChoose');
+  //   }
 
-    notifyListeners();
-  }
+  //   notifyListeners();
+  // }
 
   void changeRepeat(bool value, DateTime datetime) {
     this.isRepeat = value;
@@ -168,69 +172,10 @@ class AddTimeViewModel extends BaseModel {
   void chooseDateTime(DateTime chooseTime, int index) {
     if (listTimeChoose.contains(chooseTime)) {
       listTimeChoose.remove(chooseTime);
-      List<DateTime> dateDisable = listChoose[chooseTime];
-      print(dateDisable[0]);
-      for (int i = 0; i < dateDisable.length; i++) {
-        listTimeDisplay.update(dateDisable[i], (value) => 0);
-      }
-      listTimeDisplay.update(chooseTime, (value) => 0);
-      listChoose.removeWhere((key, value) => key == chooseTime);
     } else {
       listTimeChoose.add(chooseTime);
-      if (index == 0) {
-        List<DateTime> disable = [];
-        DateTime timePlus130 = chooseTime.add(Duration(hours: 1, minutes: 30));
-        for (int i = 0; i < listTimeDisplay.length; i++) {
-          if (listTimeDisplay.keys.toList()[i].isBefore(timePlus130)) {
-            if (listTimeDisplay.keys.toList()[i] == chooseTime) {
-            } else {
-              disable.add(listTimeDisplay.keys.toList()[i]);
-              listTimeDisplay.update(
-                  listTimeDisplay.keys.toList()[i], (value) => 1);
-            }
-          }
-        }
-        listChoose.putIfAbsent(chooseTime, () => disable);
-      } else {
-        List<DateTime> disable = [];
-        DateTime timePlus130 = chooseTime.add(Duration(hours: 1, minutes: 30));
-
-        for (int i = index; i < listTimeDisplay.length; i++) {
-          if (listTimeDisplay.keys.toList()[i].isBefore(timePlus130)) {
-            if (listTimeDisplay.keys.toList()[i] == chooseTime) {
-            } else {
-              if (listTimeDisplay.values.toList()[i] == 1) {
-              } else {
-                disable.add(listTimeDisplay.keys.toList()[i]);
-                listTimeDisplay.update(
-                    listTimeDisplay.keys.toList()[i], (value) => 1);
-              }
-            }
-          }
-        }
-
-        DateTime timeMinus130 =
-            chooseTime.subtract(Duration(hours: 1, minutes: 30));
-        print(
-            "time minus ${timeMinus130.isBefore(listTimeDisplay.keys.toList()[0])}");
-        for (int i = index; i >= 0; i--) {
-          if (listTimeDisplay.keys.toList()[i].isAfter(timeMinus130)) {
-            if (listTimeDisplay.keys.toList()[i] == chooseTime) {
-            } else {
-              if (listTimeDisplay.values.toList()[i] == 1) {
-              } else {
-                disable.add(listTimeDisplay.keys.toList()[i]);
-                listTimeDisplay.update(
-                    listTimeDisplay.keys.toList()[i], (value) => 1);
-              }
-            }
-          }
-        }
-        listChoose.putIfAbsent(chooseTime, () => disable);
-      }
-      listTimeDisplay.update(chooseTime, (value) => 0);
-      print('list choose add $listChoose');
     }
+
     notifyListeners();
   }
 }

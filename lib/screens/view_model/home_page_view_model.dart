@@ -320,6 +320,7 @@ class HomePageViewModel extends BaseModel {
     waitDialog(
       context,
     );
+    int estimateTime = await _appConfigRepo.getEstimateTime();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     int indexTransaction = _listTransaction
@@ -336,7 +337,7 @@ class HomePageViewModel extends BaseModel {
         await _mapRepo.getDirectionDetails(positionLatLng, destinationLocation);
     var firstEstimate =
         DateTime.now().add(Duration(seconds: directionDetails.durationValue));
-    var secondEstimate = firstEstimate.add(Duration(minutes: 15));
+    var secondEstimate = firstEstimate.add(Duration(minutes: estimateTime));
 
     var firstHours = (firstEstimate.hour < 9)
         ? "0" + firstEstimate.hour.toString()
