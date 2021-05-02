@@ -91,7 +91,7 @@ class MedicineSearchPage extends StatelessWidget {
                           if (model.changeList) {
                             model.medicineDetail(
                                 context,
-                                model.listMedicineModel[index].medicineId,
+                                model.listMedicineSearchModel[index].medicineId,
                                 '${model.listMedicineSearchModel[index].medicineName} - ${model.listMedicineSearchModel[index].medicineStrength}');
                           } else {
                             model.medicineDetail(
