@@ -32,7 +32,7 @@ class SettingPage extends StatelessWidget {
                         color: Colors.white,
                         child: ListTile(
                           leading: Icon(Icons.policy),
-                          title: Text("Policy"),
+                          title: Text("Terms & Policy"),
                           trailing: Icon(Icons.keyboard_arrow_right),
                         ),
                       ),
