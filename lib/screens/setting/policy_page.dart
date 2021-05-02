@@ -14,7 +14,7 @@ class PolicyPage extends StatelessWidget {
             elevation: 0,
             centerTitle: true,
             title: Text(
-              "App Policy",
+              "App Terms & Policy",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Color(0xff0d47a1),
