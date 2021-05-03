@@ -76,10 +76,10 @@ class TransactionRepo extends ITransactionRepo {
       double distanceKM = 0;
 
       Map<String, dynamic> transactionSimpleInfo = jsonDecode(response.body);
-      List<SymptomTempModel> listSymptom =
-          (transactionSimpleInfo['symptomDetails'] as List)
-              .map((data) => SymptomTempModel.fromJson(data))
-              .toList();
+      // List<SymptomTempModel> listSymptom =
+      //     (transactionSimpleInfo['symptomDetails'] as List)
+      //         .map((data) => SymptomTempModel.fromJson(data))
+      //         .toList();
       String locationTemp = transactionSimpleInfo['location'];
 
       longitude = locationTemp.split(',')[1].split(':')[1].split(';')[0];
@@ -103,18 +103,18 @@ class TransactionRepo extends ITransactionRepo {
 
       distanceKM = double.parse((distance / 1000).toStringAsFixed(1));
 
-      if (listSymptom != null) {
-        for (int i = 0; i < listSymptom.length; i++) {
-          if (i == listSymptom.length - 1) {
-            symptomName = symptomName + listSymptom[i].symptomName.toString();
-          } else {
-            symptomName =
-                symptomName + listSymptom[i].symptomName.toString() + ", ";
-          }
-        }
-      } else {
-        symptomName = null;
-      }
+      // if (listSymptom != null) {
+      //   for (int i = 0; i < listSymptom.length; i++) {
+      //     if (i == listSymptom.length - 1) {
+      //       symptomName = symptomName + listSymptom[i].symptomName.toString();
+      //     } else {
+      //       symptomName =
+      //           symptomName + listSymptom[i].symptomName.toString() + ", ";
+      //     }
+      //   }
+      // } else {
+      //   symptomName = null;
+      // }
 
       patientName =
           transactionSimpleInfo["patient"]["patientNavigation"]["fullName"];
@@ -144,7 +144,7 @@ class TransactionRepo extends ITransactionRepo {
         latitude: double.parse(latitude),
         longitude: double.parse(longitude),
         patientImage: patientImage,
-        patientSymptom: listSymptom,
+        // patientSymptom: listSymptom,
         patientNote: patientNote,
         doctorId: doctorId,
         location: location,
@@ -202,13 +202,13 @@ class TransactionRepo extends ITransactionRepo {
 
       List<SymptomModel> listSymptom = [];
 
-      int sizeSym = data['symptomDetails'].length;
-      for (int i = 0; i < sizeSym; i++) {
-        SymptomModel symp =
-            SymptomModel.fromJson(data['symptomDetails'][i]['symptom']);
+      // int sizeSym = data['symptomDetails'].length;
+      // for (int i = 0; i < sizeSym; i++) {
+      //   SymptomModel symp =
+      //       SymptomModel.fromJson(data['symptomDetails'][i]['symptom']);
 
-        listSymptom.add(symp);
-      }
+      //   listSymptom.add(symp);
+      // }
 
       // FEEDBACK
       FeedbackModel feedback;
@@ -295,10 +295,10 @@ class TransactionRepo extends ITransactionRepo {
       String estimateTime = "";
 
       Map<String, dynamic> transactionSimpleInfo = jsonDecode(response.body);
-      List<SymptomTempModel> listSymptom =
-          (transactionSimpleInfo['symptomDetails'] as List)
-              .map((data) => SymptomTempModel.fromJson(data))
-              .toList();
+      // List<SymptomTempModel> listSymptom =
+      //     (transactionSimpleInfo['symptomDetails'] as List)
+      //         .map((data) => SymptomTempModel.fromJson(data))
+      //         .toList();
       String locationTemp = transactionSimpleInfo['location'];
 
       longitude = locationTemp.split(',')[1].split(':')[1].split(';')[0];
@@ -307,18 +307,18 @@ class TransactionRepo extends ITransactionRepo {
 
       placeName = locationTemp.split(";")[1].split(":")[1];
 
-      if (listSymptom != null) {
-        for (int i = 0; i < listSymptom.length; i++) {
-          if (i == listSymptom.length) {
-            symptomName = symptomName + listSymptom[i].symptomName.toString();
-          } else {
-            symptomName =
-                symptomName + listSymptom[i].symptomName.toString() + ", ";
-          }
-        }
-      } else {
-        symptomName = null;
-      }
+      // if (listSymptom != null) {
+      //   for (int i = 0; i < listSymptom.length; i++) {
+      //     if (i == listSymptom.length) {
+      //       symptomName = symptomName + listSymptom[i].symptomName.toString();
+      //     } else {
+      //       symptomName =
+      //           symptomName + listSymptom[i].symptomName.toString() + ", ";
+      //     }
+      //   }
+      // } else {
+      //   symptomName = null;
+      // }
 
       patientName =
           transactionSimpleInfo["patient"]["patientNavigation"]["fullName"];
@@ -345,7 +345,7 @@ class TransactionRepo extends ITransactionRepo {
         latitude: double.parse(latitude),
         longitude: double.parse(longitude),
         patientImage: patientImage,
-        patientSymptom: listSymptom,
+        // patientSymptom: listSymptom,
         patientNote: patientNote,
         doctorId: doctorId,
         location: location,

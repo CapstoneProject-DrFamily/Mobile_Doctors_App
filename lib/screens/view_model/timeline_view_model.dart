@@ -148,14 +148,14 @@ class TimeLineViewModel extends BaseModel {
         .then((DataSnapshot dataSnapshot) async {
       if (dataSnapshot.value != null) {
         Transaction transaction = Transaction(
-          transactionId: this.transactionId,
-          doctorId: dataSnapshot.value['doctor_id'],
-          patientId: dataSnapshot.value['patientId'],
-          estimatedTime: dataSnapshot.value['estimatedTime'],
-          status: 6,
-          location: dataSnapshot.value['location'],
-          note: dataSnapshot.value['note'],
-        );
+            transactionId: this.transactionId,
+            doctorId: dataSnapshot.value['doctor_id'],
+            patientId: dataSnapshot.value['patientId'],
+            estimatedTime: dataSnapshot.value['estimatedTime'],
+            status: 6,
+            location: dataSnapshot.value['location'],
+            note: dataSnapshot.value['note'],
+            scheduleId: dataSnapshot.value['scheduleId']);
         isUpdated = await _transactionRepo.updateTransaction(transaction);
         step = dataSnapshot.value['transaction_status'];
         notifyListeners();
@@ -194,6 +194,7 @@ class TimeLineViewModel extends BaseModel {
           location: dataSnapshot.value['location'],
           note: dataSnapshot.value['note'],
           reasonCancel: reasonCancel,
+          scheduleId: dataSnapshot.value['scheduleId'],
         );
         isUpdated = await _transactionRepo.updateTransaction(transaction);
         this.cancelTransaction = false;

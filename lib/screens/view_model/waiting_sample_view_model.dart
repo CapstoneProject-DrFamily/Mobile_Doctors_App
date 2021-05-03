@@ -92,6 +92,7 @@ class WaitingSampleViewModel extends BaseModel {
           status: 2,
           location: dataSnapshot.value['location'],
           note: dataSnapshot.value['note'],
+          scheduleId: dataSnapshot.value['scheduleId'],
         );
 
         step = dataSnapshot.value['transaction_status'];

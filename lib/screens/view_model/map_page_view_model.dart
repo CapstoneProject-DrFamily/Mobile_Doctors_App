@@ -57,8 +57,8 @@ class MapPageViewModel extends BaseModel {
   TransactionBasicModel _basicTransaction;
   TransactionBasicModel get basicTransaction => _basicTransaction;
 
-  List<SymptomTempModel> symptomsDisplay = [];
-  List<String> titleSymptom = [];
+  // List<SymptomTempModel> symptomsDisplay = [];
+  // List<String> titleSymptom = [];
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -129,50 +129,51 @@ class MapPageViewModel extends BaseModel {
         arrived = true;
       }
     });
-    if (_basicTransaction.patientSymptom.isEmpty) {
-      symptomsDisplay = [];
-    } else {
-      bool first = true;
-      SymptomTempModel symptom;
-      String sympTitle;
-      List<SymptomTempModel> symptomsList = _basicTransaction.patientSymptom;
-      String symptomName;
-      for (int i = 0; i < symptomsList.length; i++) {
-        if (titleSymptom.contains(symptomsList[i].symptomtype)) {
-          if (i == (symptomsList.length - 1)) {
-            symptomName = symptomName + symptomsList[i].symptomName;
-          } else {
-            symptomName = symptomName + symptomsList[i].symptomName + ", ";
-          }
-          first = false;
-        } else {
-          if (first == true) {
-            titleSymptom.add(symptomsList[i].symptomtype);
-            sympTitle = symptomsList[i].symptomtype;
-            symptomName = "";
-            symptomName = symptomName + symptomsList[i].symptomName + ", ";
-          } else {
-            first = true;
-            symptomName = symptomName.substring(0, symptomName.length - 2);
-            symptom = SymptomTempModel(
-                symptomtype: sympTitle, symptomName: symptomName);
-            symptomsDisplay.add(symptom);
-            titleSymptom.add(symptomsList[i].symptomtype);
-            sympTitle = symptomsList[i].symptomtype;
-            if (i == (symptomsList.length - 1)) {
-              symptomName = "";
-              symptomName = symptomName + symptomsList[i].symptomName;
-            } else {
-              symptomName = "";
-              symptomName = symptomName + symptomsList[i].symptomName + ", ";
-            }
-          }
-        }
-      }
-      symptom =
-          SymptomTempModel(symptomtype: sympTitle, symptomName: symptomName);
-      symptomsDisplay.add(symptom);
-    }
+
+    // if (_basicTransaction.patientSymptom.isEmpty) {
+    //   symptomsDisplay = [];
+    // } else {
+    //   bool first = true;
+    //   SymptomTempModel symptom;
+    //   String sympTitle;
+    //   List<SymptomTempModel> symptomsList = _basicTransaction.patientSymptom;
+    //   String symptomName;
+    //   for (int i = 0; i < symptomsList.length; i++) {
+    //     if (titleSymptom.contains(symptomsList[i].symptomtype)) {
+    //       if (i == (symptomsList.length - 1)) {
+    //         symptomName = symptomName + symptomsList[i].symptomName;
+    //       } else {
+    //         symptomName = symptomName + symptomsList[i].symptomName + ", ";
+    //       }
+    //       first = false;
+    //     } else {
+    //       if (first == true) {
+    //         titleSymptom.add(symptomsList[i].symptomtype);
+    //         sympTitle = symptomsList[i].symptomtype;
+    //         symptomName = "";
+    //         symptomName = symptomName + symptomsList[i].symptomName + ", ";
+    //       } else {
+    //         first = true;
+    //         symptomName = symptomName.substring(0, symptomName.length - 2);
+    //         symptom = SymptomTempModel(
+    //             symptomtype: sympTitle, symptomName: symptomName);
+    //         symptomsDisplay.add(symptom);
+    //         titleSymptom.add(symptomsList[i].symptomtype);
+    //         sympTitle = symptomsList[i].symptomtype;
+    //         if (i == (symptomsList.length - 1)) {
+    //           symptomName = "";
+    //           symptomName = symptomName + symptomsList[i].symptomName;
+    //         } else {
+    //           symptomName = "";
+    //           symptomName = symptomName + symptomsList[i].symptomName + ", ";
+    //         }
+    //       }
+    //     }
+    //   }
+    //   symptom =
+    //       SymptomTempModel(symptomtype: sympTitle, symptomName: symptomName);
+    //   symptomsDisplay.add(symptom);
+    // }
 
     getTransactionUpdate();
 
