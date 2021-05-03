@@ -31,7 +31,7 @@ class PushNotifycationService {
         } else if (typeNoti.endsWith("schedule")) {
           isSchedule = true;
           String info = message['notification']['body'];
-          String formatInfo = info.substring(0, info.length - 1);
+          print("info $info");
           print("in schedule");
           Get.dialog(
             Dialog(
@@ -68,7 +68,7 @@ class PushNotifycationService {
                       height: 25,
                     ),
                     Text(
-                      '$formatInfo!',
+                      '$info',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
