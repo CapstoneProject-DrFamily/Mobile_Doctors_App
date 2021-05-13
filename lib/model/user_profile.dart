@@ -14,8 +14,8 @@ class UserProfile {
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
-        profileId: json['profileId'] as int,
-        fullName: json['fullName'] as String,
+        profileId: json['id'] as int,
+        fullName: json['fullname'] as String,
         birthday: json['birthday'] as String,
         gender: json['gender'] as String,
         phone: json['phone'] as String,

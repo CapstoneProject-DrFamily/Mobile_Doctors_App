@@ -13,12 +13,12 @@ class DoctorDetail {
 
   factory DoctorDetail.fromJson(Map<String, dynamic> json) {
     return DoctorDetail(
-      doctorId: json['doctorId'] as int,
+      doctorId: json['id'] as int,
       degree: json['degree'] as String,
       experience: json['experience'] as String,
       description: json['description'] as String,
       specialtyId: json['specialtyId'] as int,
-      profileId: json['profileId'] as int,
+      profileId: json['id'] as int,
       school: json['school'] as String,
     );
   }

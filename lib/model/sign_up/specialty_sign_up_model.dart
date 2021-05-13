@@ -10,7 +10,7 @@ class SpecialtyModel {
 
   factory SpecialtyModel.fromJson(Map<String, dynamic> json) {
     return SpecialtyModel(
-      specialtyId: json['specialtyId'] as int,
+      specialtyId: json['id'] as int,
       specialtyImage: json['image'] as String,
       specialtyTitle: json['name'] as String,
       specialtyDes: json['description'] as String,
