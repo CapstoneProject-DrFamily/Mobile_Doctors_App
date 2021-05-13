@@ -65,8 +65,8 @@ class ScheduleRepo extends IScheduleRepo {
 
       print("list schedule $jsonData");
       for (int i = 0; i < jsonData.length; i++) {
-        print("json ${jsonData[i]['transactions']}");
-        if (jsonData[i]['transactions'].isEmpty) {
+        print("json ${jsonData[i]['treatments']}");
+        if (jsonData[i]['treatments'].isEmpty) {
           print("empty");
           ScheduleModel model = ScheduleModel(
             appointmentTime: jsonData[i]['appointmentTime'],
@@ -81,7 +81,7 @@ class ScheduleRepo extends IScheduleRepo {
           print("not empty");
 
           TransactionScheduleModel transactionScheduleModel =
-              TransactionScheduleModel.fromJson(jsonData[i]['transactions'][0]);
+              TransactionScheduleModel.fromJson(jsonData[i]['treatments'][0]);
           ScheduleModel model = ScheduleModel(
             appointmentTime: jsonData[i]['appointmentTime'],
             scheduleId: jsonData[i]['scheduleId'],

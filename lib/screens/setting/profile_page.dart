@@ -123,29 +123,6 @@ class ProfilePage extends StatelessWidget {
                                   ),
                                   Row(
                                     children: [
-                                      _buildTitle('Phone Number'),
-                                      SizedBox(
-                                        width: 2.0,
-                                      ),
-                                      Text(
-                                        "(*)",
-                                        style: TextStyle(
-                                          color: Colors.red.shade300,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  _buildPhoneNumberField(model),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  Row(
-                                    children: [
                                       _buildTitle('Email'),
                                       SizedBox(
                                         width: 2.0,

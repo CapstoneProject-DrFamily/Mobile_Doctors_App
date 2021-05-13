@@ -52,8 +52,7 @@ class DoctorRepo extends IDoctorRepo {
     if (response.statusCode == 200) {
       Map<String, dynamic> doctorData = jsonDecode(response.body);
       DoctorDetail doctor = DoctorDetail.fromJson(doctorData);
-      UserProfile profile =
-          UserProfile.fromJson(doctorData['doctorNavigation']);
+      UserProfile profile = UserProfile.fromJson(doctorData);
       list.add(doctor);
       list.add(profile);
     }
