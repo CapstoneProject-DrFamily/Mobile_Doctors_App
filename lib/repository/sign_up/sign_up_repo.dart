@@ -9,7 +9,7 @@ abstract class ISignUpRepo {
 class SignUpRepo extends ISignUpRepo {
   @override
   Future<bool> createDoctorProfile(String createDoctorProfileJson) async {
-    String urlAPI = APIHelper.CREATE_DOCTOR_API;
+    String urlAPI = APIHelper.DOCTOR_API;
     Map<String, String> header = {
       HttpHeaders.contentTypeHeader: "application/json",
     };
