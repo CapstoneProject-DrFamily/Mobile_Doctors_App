@@ -10,7 +10,7 @@ import 'package:mobile_doctors_apps/model/user_profile.dart';
 abstract class IDoctorRepo {
   Future<RequestDoctorModel> getSimpleInfo(int profileId);
   Future<List<dynamic>> getDoctorDetail(int doctorId);
-  Future<bool> updateDoctor(DoctorDetail doctorDetail, UserProfile userProfile);
+  Future<bool> updateDoctor(DoctorDetail doctorDetail);
   Future<int> getSpecialtyId(int doctorId);
 }
 
@@ -52,32 +52,26 @@ class DoctorRepo extends IDoctorRepo {
     if (response.statusCode == 200) {
       Map<String, dynamic> doctorData = jsonDecode(response.body);
       DoctorDetail doctor = DoctorDetail.fromJson(doctorData);
-      UserProfile profile = UserProfile.fromJson(doctorData);
+      // UserProfile profile = UserProfile.fromJson(doctorData);
       list.add(doctor);
-      list.add(profile);
+      // list.add(profile);
     }
     return list;
   }
 
   @override
-  Future<bool> updateDoctor(
-      DoctorDetail doctorDetail, UserProfile userProfile) async {
+  Future<bool> updateDoctor(DoctorDetail doctorDetail) async {
     bool isSuccess = false;
-    String urlAPI = APIHelper.CREATE_DOCTOR_API;
+    String urlAPI = APIHelper.DOCTOR_API;
     Map<String, String> header = {
       HttpHeaders.contentTypeHeader: "application/json",
     };
-    var response1 = await http.put(urlAPI,
+    var response = await http.put(urlAPI,
         headers: header, body: jsonEncode(doctorDetail.toJson()));
 
-    urlAPI = APIHelper.CREATE_PROFILE_API;
-    var response2 = await http.put(urlAPI,
-        headers: header, body: jsonEncode(userProfile.toJson()));
-
-    if (response1.statusCode == 200 && response2.statusCode == 200) {
+    if (response.statusCode == 200) {
       isSuccess = true;
     }
-
     return isSuccess;
   }
 
