@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:mobile_doctors_apps/model/sign_up/create_doctor_model.dart';
 import 'package:mobile_doctors_apps/model/sign_up/create_profile_model.dart';
 import 'package:mobile_doctors_apps/model/sign_up/specialty_sign_up_model.dart';
 import 'package:mobile_doctors_apps/repository/sign_up/sign_up_repo.dart';
@@ -19,7 +18,6 @@ class SignUpViewModel extends BaseModel {
   final ISpecialtyRepo _specialtyRepo = SpecialtyRepo();
   ISignUpRepo _signUpRepo = SignUpRepo();
   CreateProfileModel _createProfileModel;
-  CreateDoctorModel _createDoctorModel;
   String phone;
   int profileId;
 
@@ -410,7 +408,7 @@ class SignUpViewModel extends BaseModel {
     if (_checkDOB.value == null) _isReady = false;
     if (_degree.value == null) _isReady = false;
     if (_specialty.value == null) _isReady = false;
-    if (_specialty.value == null) _isReady = false;
+    if (_school.value == null) _isReady = false;
 
     bool check = false;
     if (_isReady == true) {
@@ -428,6 +426,7 @@ class SignUpViewModel extends BaseModel {
       var accountId = sharedPreferences.getInt('usAccountID');
 
       _createProfileModel = new CreateProfileModel(
+        accountId: accountId,
         image: currentImage,
         fullName: _fullName.value,
         idCard: _idCard.value,
@@ -435,19 +434,6 @@ class SignUpViewModel extends BaseModel {
         dob: _dob,
         phone: phone,
         email: _email.value,
-        accountId: accountId,
-      );
-
-      String createProfileJson = jsonEncode(_createProfileModel.toJson());
-      print("CreateProfileJson: " + createProfileJson + "\n");
-
-      check = await _signUpRepo.createProfile(createProfileJson);
-      // if (check == true) check = await _signUpRepo.updateUser();
-
-      profileId = sharedPreferences.getInt('usProfileID');
-
-      _createDoctorModel = new CreateDoctorModel(
-        doctorId: profileId,
         degree: _degreeController.text,
         experience: _experience.value,
         description: _description.value,
@@ -455,13 +441,10 @@ class SignUpViewModel extends BaseModel {
         school: _schoolController.text,
       );
 
-      String createDoctorJson = jsonEncode(_createDoctorModel.toJson());
-      print("CreateDoctorJson: " + createDoctorJson + "\n");
+      String createDoctorProfileJson = jsonEncode(_createProfileModel.toJson());
+      print("CreateDoctorProfileJson: " + createDoctorProfileJson + "\n");
 
-      if (check == true)
-        check = await _signUpRepo.createDoctor(createDoctorJson);
-
-      await sharedPreferences.clear();
+      check = await _signUpRepo.createDoctorProfile(createDoctorProfileJson);
     }
 
     return check;

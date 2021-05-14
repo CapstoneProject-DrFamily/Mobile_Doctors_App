@@ -746,33 +746,50 @@ class ProfilePage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         GestureDetector(
-          onTap: () {
-            model.changeGender(0);
-          },
+          // onTap: () {
+          //   model.changeGender(0);
+          // },
           child: Container(
             padding: EdgeInsets.only(left: 8),
-            child: Row(
-              children: [
-                model.gender == 0
-                    ? Icon(
+            child: model.gender == 0
+                ? Row(
+                    children: [
+                      Icon(
                         EvaIcons.radioButtonOn,
                         color: Colors.blue,
                         size: 25,
-                      )
-                    : Icon(
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Male',
+                        style: GoogleFonts.varelaRound(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black),
+                      ),
+                    ],
+                  )
+                : Row(
+                    children: [
+                      Icon(
                         EvaIcons.radioButtonOffOutline,
+                        color: Colors.grey.shade300,
                         size: 25,
                       ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Male',
-                  style: GoogleFonts.varelaRound(
-                      fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-              ],
-            ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Male',
+                        style: GoogleFonts.varelaRound(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.grey.shade300),
+                      ),
+                    ],
+                  ),
           ),
         ),
         GestureDetector(
@@ -780,31 +797,45 @@ class ProfilePage extends StatelessWidget {
           //   model.changeGender(1);
           // },
           child: Container(
-            child: Row(
-              children: [
-                model.gender == 1
-                    ? Icon(
+            child: model.gender == 1
+                ? Row(
+                    children: [
+                      Icon(
                         EvaIcons.radioButtonOn,
                         color: Colors.blue,
                         size: 25,
-                      )
-                    : Icon(
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Female',
+                        style: GoogleFonts.varelaRound(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black),
+                      ),
+                    ],
+                  )
+                : Row(
+                    children: [
+                      Icon(
                         EvaIcons.radioButtonOffOutline,
                         color: Colors.grey.shade300,
                         size: 25,
                       ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Female',
-                  style: GoogleFonts.varelaRound(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.grey.shade300),
-                ),
-              ],
-            ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Female',
+                        style: GoogleFonts.varelaRound(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.grey.shade300),
+                      ),
+                    ],
+                  ),
           ),
         ),
       ],

@@ -160,7 +160,7 @@ class ProfilePageViewModel extends BaseModel {
     if (res != null) {
       print('resp: $res');
       doctorDetail = res[0];
-      userProfile = res[1];
+      // userProfile = res[1];
       transferToViewModel(doctorDetail, userProfile);
     }
     loadingProfile = false;
@@ -170,27 +170,27 @@ class ProfilePageViewModel extends BaseModel {
 
   Future<void> transferToViewModel(
       DoctorDetail doctorDetail, UserProfile userProfile) async {
-    fullNameController.text = userProfile.fullName;
+    fullNameController.text = doctorDetail.fullName;
     // miss gender, birthday, sle
-    if (userProfile.gender.toLowerCase().trim() == 'male') {
+    if (doctorDetail.gender.toLowerCase().trim() == 'male') {
       changeGender(0);
-    } else if (userProfile.gender.toLowerCase().trim() == 'female') {
+    } else if (doctorDetail.gender.toLowerCase().trim() == 'female') {
       changeGender(1);
     } else
       changeGender(2);
 
-    defaultImage = userProfile.image;
+    defaultImage = doctorDetail.image;
 
-    phoneNumController.text = userProfile.phone;
-    emailController.text = userProfile.email;
-    identityNumberController.text = userProfile.idCard;
-    _currentImage = userProfile.image;
+    phoneNumController.text = doctorDetail.phone;
+    emailController.text = doctorDetail.email;
+    identityNumberController.text = doctorDetail.idCard;
+    _currentImage = doctorDetail.image;
     degreeController.text = doctorDetail.degree;
     specialtyId = doctorDetail.specialtyId;
     experienceTypeController.text = doctorDetail.experience;
     graduatedController.text = doctorDetail.school;
     descriptionController.text = doctorDetail.description;
-    DateTime date = DateTime.parse(userProfile.birthday);
+    DateTime date = DateTime.parse(doctorDetail.dob);
     changeDOB(date);
 
     listSpecialtyModel = await _specialtyRepo.getAllSpecialty();
@@ -224,7 +224,7 @@ class ProfilePageViewModel extends BaseModel {
           datetime.year.toString();
     }
 
-    userProfile.birthday = datetime.toIso8601String();
+    doctorDetail.dob = datetime.toIso8601String();
     notifyListeners();
   }
 
@@ -263,32 +263,32 @@ class ProfilePageViewModel extends BaseModel {
       defaultImage = url.toString();
     }
     transferToModel();
-    bool isUpdated = await _doctorRepo.updateDoctor(doctorDetail, userProfile);
+    bool isUpdated = await _doctorRepo.updateDoctor(doctorDetail);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    prefs.setString("usName", userProfile.fullName);
-    prefs.setString("usImage", userProfile.image);
+    prefs.setString("usName", doctorDetail.fullName);
+    prefs.setString("usImage", doctorDetail.image);
     isLoading = false;
     notifyListeners();
     return isUpdated;
   }
 
   void transferToModel() {
-    userProfile.fullName = fullNameController.text;
+    doctorDetail.fullName = fullNameController.text;
 
     if (_gender == 0) {
-      userProfile.gender = "Male";
+      doctorDetail.gender = "Male";
     } else if (_gender == 1) {
-      userProfile.gender = "Female";
+      doctorDetail.gender = "Female";
     }
 
-    userProfile.image = defaultImage;
+    doctorDetail.image = defaultImage;
 
-    userProfile.phone = phoneNumController.text;
+    doctorDetail.phone = phoneNumController.text;
 
-    userProfile.email = emailController.text;
+    doctorDetail.email = emailController.text;
 
-    userProfile.idCard = identityNumberController.text;
+    doctorDetail.idCard = identityNumberController.text;
 
     doctorDetail.degree = degreeController.text;
 
