@@ -206,6 +206,7 @@ class VerifyOTPViewModel extends BaseModel {
               prefs.setString("usToken", _userModel.token);
               prefs.setString("usRole", _userModel.role);
               prefs.setInt("usAccountID", _userModel.userId);
+              print("accountID ${_userModel.userId}");
 
               var waiting = _userModel.waiting;
 
