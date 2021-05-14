@@ -20,7 +20,7 @@ class Transaction {
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
     return Transaction(
-      transactionId: json['transactionId'] as String,
+      transactionId: json['id'] as String,
       doctorId: json['doctorId'] as int,
       patientId: json['patientId'] as int,
       prescriptionId: json['prescriptionId'] as int,
@@ -36,7 +36,7 @@ class Transaction {
   }
 
   Map<String, dynamic> toJson() => {
-        "transactionId": transactionId,
+        "id": transactionId,
         "doctorId": doctorId,
         "patientId": patientId,
         "prescriptionId": prescriptionId,

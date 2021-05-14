@@ -14,10 +14,8 @@ class FeedbackModel {
 
   factory FeedbackModel.fromJson(Map<String, dynamic> json) {
     return FeedbackModel(
-      feedbackId: json['feedbackId'] as String,
+      feedbackId: json['id'] as String,
       ratingPoint: json['ratingPoint'] as double,
-      patientId: json['patientId'] as int,
-      doctorId: json['doctorId'] as int,
       note: json['note'] as String,
     );
   }
@@ -25,8 +23,6 @@ class FeedbackModel {
   Map<String, dynamic> toJson() => {
         "feedbackId": this.feedbackId,
         "ratingPoint": this.ratingPoint,
-        "patientId": this.patientId,
-        "doctorId": this.doctorId,
         "note": this.note,
       };
 }

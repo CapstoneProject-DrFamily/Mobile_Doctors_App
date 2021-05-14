@@ -172,12 +172,17 @@ class PatientDialog {
                                                 children: [
                                                   Container(
                                                       child: SvgPicture.asset(
-                                                          'assets/icons/old-typical-phone.svg',
+                                                          'assets/icons/blood-type-a.svg',
                                                           width: 30,
-                                                          height: 30)),
+                                                          height: 40)),
                                                   SizedBox(width: 10),
-                                                  Text(popupModel.patientModel
-                                                      .patientPhone)
+                                                  (popupModel.patientModel
+                                                              .patientBloodType !=
+                                                          null)
+                                                      ? Text(popupModel
+                                                          .patientModel
+                                                          .patientBloodType)
+                                                      : Text("Not Choose Yet")
                                                 ],
                                               ),
                                             ),
@@ -217,43 +222,43 @@ class PatientDialog {
                                           ],
                                         ),
                                         SizedBox(height: 20),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Row(
-                                                children: [
-                                                  Container(
-                                                      child: SvgPicture.asset(
-                                                          'assets/icons/blood-type-a.svg',
-                                                          width: 30,
-                                                          height: 40)),
-                                                  SizedBox(width: 10),
-                                                  (popupModel.patientModel
-                                                              .patientBloodType !=
-                                                          null)
-                                                      ? Text(popupModel
-                                                          .patientModel
-                                                          .patientBloodType)
-                                                      : Text("Not Choose Yet")
-                                                ],
-                                              ),
-                                            ),
-                                            // Expanded(
-                                            //   child: Row(
-                                            //     children: [
-                                            //       Container(
-                                            //           child: SvgPicture.asset(
-                                            //               'assets/icons/users.svg',
-                                            //               width: 30,
-                                            //               height: 30)),
-                                            //       SizedBox(width: 10),
-                                            //       Text(model.patientModel
-                                            //           .patientRelationShip)
-                                            //     ],
-                                            //   ),
-                                            // ),
-                                          ],
-                                        ),
+                                        // Row(
+                                        //   children: [
+                                        //     // Expanded(
+                                        //     //   child: Row(
+                                        //     //     children: [
+                                        //     //       Container(
+                                        //     //           child: SvgPicture.asset(
+                                        //     //               'assets/icons/blood-type-a.svg',
+                                        //     //               width: 30,
+                                        //     //               height: 40)),
+                                        //     //       SizedBox(width: 10),
+                                        //     //       (popupModel.patientModel
+                                        //     //                   .patientBloodType !=
+                                        //     //               null)
+                                        //     //           ? Text(popupModel
+                                        //     //               .patientModel
+                                        //     //               .patientBloodType)
+                                        //     //           : Text("Not Choose Yet")
+                                        //     //     ],
+                                        //     //   ),
+                                        //     // ),
+                                        //     // Expanded(
+                                        //     //   child: Row(
+                                        //     //     children: [
+                                        //     //       Container(
+                                        //     //           child: SvgPicture.asset(
+                                        //     //               'assets/icons/users.svg',
+                                        //     //               width: 30,
+                                        //     //               height: 30)),
+                                        //     //       SizedBox(width: 10),
+                                        //     //       Text(model.patientModel
+                                        //     //           .patientRelationShip)
+                                        //     //     ],
+                                        //     //   ),
+                                        //     // ),
+                                        //   ],
+                                        // ),
                                         SizedBox(height: 30),
                                       ],
                                     ),
