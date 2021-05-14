@@ -116,19 +116,16 @@ class TransactionRepo extends ITransactionRepo {
       //   symptomName = null;
       // }
 
-      patientName =
-          transactionSimpleInfo["patient"]["patientNavigation"]["fullName"];
-      patientImage =
-          transactionSimpleInfo["patient"]["patientNavigation"]["image"];
-      transactionID = transactionSimpleInfo["transactionId"];
+      patientName = transactionSimpleInfo["patient"]["fullname"];
+      patientImage = transactionSimpleInfo["patient"]["image"];
+      transactionID = transactionSimpleInfo["id"];
       patientNote = transactionSimpleInfo["note"];
       doctorId = transactionSimpleInfo["doctorId"];
       patientId = transactionSimpleInfo["patientId"];
       location = locationTemp;
-      serviceName = transactionSimpleInfo['service']['serviceName'];
-      servicePrice = transactionSimpleInfo['service']['servicePrice'];
-      accountId =
-          transactionSimpleInfo['patient']['patientNavigation']['accountId'];
+      serviceName = transactionSimpleInfo['service']['name'];
+      servicePrice = transactionSimpleInfo['service']['price'];
+      accountId = transactionSimpleInfo['patient']['accountId'];
 
       print('$serviceName - $symptomName');
       int endTime = DateTime.now().millisecondsSinceEpoch +
@@ -195,8 +192,7 @@ class TransactionRepo extends ITransactionRepo {
 
       transaction = Transaction.fromJson(data);
 
-      ProfileModel profileUser =
-          ProfileModel.fromJson(data['patient']['patientNavigation']);
+      ProfileModel profileUser = ProfileModel.fromJson(data['patient']);
 
       ServiceModel service = ServiceModel.fromJson(data['service']);
 
@@ -320,20 +316,17 @@ class TransactionRepo extends ITransactionRepo {
       //   symptomName = null;
       // }
 
-      patientName =
-          transactionSimpleInfo["patient"]["patientNavigation"]["fullName"];
-      patientImage =
-          transactionSimpleInfo["patient"]["patientNavigation"]["image"];
-      transactionID = transactionSimpleInfo["transactionId"];
+      patientName = transactionSimpleInfo["patient"]["fullname"];
+      patientImage = transactionSimpleInfo["patient"]["image"];
+      transactionID = transactionSimpleInfo["id"];
       patientNote = transactionSimpleInfo["note"];
       doctorId = transactionSimpleInfo["doctorId"];
       patientId = transactionSimpleInfo["patientId"];
       location = locationTemp;
-      serviceName = transactionSimpleInfo['service']['serviceName'];
-      servicePrice = transactionSimpleInfo['service']['servicePrice'];
+      serviceName = transactionSimpleInfo['service']['name'];
+      servicePrice = transactionSimpleInfo['service']['price'];
       estimateTime = transactionSimpleInfo['estimatedTime'];
-      accountId =
-          transactionSimpleInfo['patient']['patientNavigation']['accountId'];
+      accountId = transactionSimpleInfo['patient']['accountId'];
 
       print('$serviceName - $symptomName');
 
@@ -402,12 +395,10 @@ class TransactionRepo extends ITransactionRepo {
       PatientTransactionModel transaction =
           PatientTransactionModel.fromJson(data);
 
-      ProfileModel profilePatient =
-          ProfileModel.fromJson(data['patient']['patientNavigation']);
+      ProfileModel profilePatient = ProfileModel.fromJson(data['patient']);
       String doctorSpeciality = data['doctor']['specialty']['name'];
 
-      ProfileModel profileDoctor =
-          ProfileModel.fromJson(data['doctor']['doctorNavigation']);
+      ProfileModel profileDoctor = ProfileModel.fromJson(data['doctor']);
 
       ServiceModel service = ServiceModel.fromJson(data['service']);
       ExaminationHistoryModel examination =

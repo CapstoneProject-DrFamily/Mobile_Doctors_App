@@ -16,4 +16,4 @@ StreamSubscription<Event> transactionMapStreamSubscription;
 
 DateFormat serverFormater = DateFormat('yyyy-MM-dd');
 
-DateFormat timeCheckFormater = DateFormat('yyyy-MM-dd hh:mm');
+DateFormat timeCheckFormater = DateFormat('yyyy-MM-dd HH:mm');

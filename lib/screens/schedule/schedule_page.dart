@@ -242,17 +242,18 @@ class SchedulePage extends StatelessWidget {
                                                 model.selectedEvents.length,
                                             itemBuilder: (context, index) {
                                               return (model
-                                                          .selectedEvents[index]
-                                                          .transactionScheduleModel !=
-                                                      null)
+                                                              .selectedEvents[
+                                                                  index]
+                                                              .transactionScheduleModel !=
+                                                          null &&
+                                                      model
+                                                              .selectedEvents[
+                                                                  index]
+                                                              .scheduleStatus ==
+                                                          true)
                                                   ? (() {
-                                                      // print('status ' +
-                                                      //     model
-                                                      //         .selectedEvents[
-                                                      //             index]
-                                                      //         .transactionScheduleModel
-                                                      //         .transactionStatus
-                                                      //         .toString());
+                                                      // print(
+                                                      //     "status Schedule ${model.selectedEvents[index].scheduleStatus}");
                                                       return _buildDayTask(
                                                         context,
                                                         model
