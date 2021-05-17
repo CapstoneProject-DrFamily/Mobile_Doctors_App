@@ -455,6 +455,7 @@ class AnalyzePage extends StatelessWidget {
                   alignment: Alignment.topCenter,
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: TextFormField(
+                    maxLength: 255,
                     initialValue: model.examinationForm.history,
                     maxLines: 5,
                     decoration: InputDecoration.collapsed(
@@ -685,6 +686,7 @@ class AnalyzePage extends StatelessWidget {
             onChanged: (value) {
               model.examinationForm.mucosa = value;
             },
+            maxLength: 50,
             maxLines: 3,
             decoration: InputDecoration(
                 hintText: 'Enter text',
@@ -706,6 +708,7 @@ class AnalyzePage extends StatelessWidget {
             onChanged: (value) {
               model.examinationForm.otherBody = value;
             },
+            maxLength: 255,
             maxLines: 3,
             decoration: InputDecoration(
                 hintText: 'Enter text',
