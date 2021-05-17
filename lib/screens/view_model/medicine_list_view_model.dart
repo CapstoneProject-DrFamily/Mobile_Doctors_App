@@ -92,6 +92,7 @@ class MedicineListViewModel extends BaseModel {
       }
       if (_listTemplateDisplay.isNotEmpty) {
         listMedicine = _listTemplateDisplay[initTemplate].listMedicine;
+        diseaseId = _listTemplateDisplay[initTemplate].diseaseId;
         print(
             "init medicine ${_listTemplateDisplay[initTemplate].listMedicine[0].totalQuantity}");
       }

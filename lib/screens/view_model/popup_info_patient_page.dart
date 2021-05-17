@@ -15,6 +15,7 @@ class PopupInfoPatientPage extends BaseModel {
 
   Future<void> initInfoPatient(int patientId) async {
     if (_isFirstPopUp) {
+      print("patientID $patientId");
       patientModel = await _patientRepo.getPatientInfo(patientId);
       _isLoadingPopUp = false;
       _isFirstPopUp = false;

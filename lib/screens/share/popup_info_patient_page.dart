@@ -157,12 +157,18 @@ class PatientDialog {
                                                           height: 30)),
                                                   SizedBox(width: 10),
                                                   Text(
-                                                    DateFormat("dd-MM-yyyy")
-                                                        .format(
-                                                      DateTime.parse(popupModel
-                                                          .patientModel
-                                                          .patientDOB),
-                                                    ),
+                                                    (popupModel.patientModel
+                                                                .patientDOB ==
+                                                            null)
+                                                        ? "No Info"
+                                                        : DateFormat(
+                                                                "dd-MM-yyyy")
+                                                            .format(
+                                                            DateTime.parse(
+                                                                popupModel
+                                                                    .patientModel
+                                                                    .patientDOB),
+                                                          ),
                                                   ),
                                                 ],
                                               ),
@@ -182,7 +188,7 @@ class PatientDialog {
                                                       ? Text(popupModel
                                                           .patientModel
                                                           .patientBloodType)
-                                                      : Text("Not Choose Yet")
+                                                      : Text("No Info")
                                                 ],
                                               ),
                                             ),
@@ -200,8 +206,11 @@ class PatientDialog {
                                                           width: 30,
                                                           height: 30)),
                                                   SizedBox(width: 10),
-                                                  Text(
-                                                      '${popupModel.patientModel.patientHeight} cm')
+                                                  Text((popupModel.patientModel
+                                                              .patientHeight ==
+                                                          null)
+                                                      ? "No Info"
+                                                      : '${popupModel.patientModel.patientHeight} cm')
                                                 ],
                                               ),
                                             ),
@@ -214,8 +223,11 @@ class PatientDialog {
                                                           width: 30,
                                                           height: 30)),
                                                   SizedBox(width: 10),
-                                                  Text(
-                                                      '${popupModel.patientModel.patientWeight} kg')
+                                                  Text((popupModel.patientModel
+                                                              .patientWeight ==
+                                                          null)
+                                                      ? "No Info"
+                                                      : '${popupModel.patientModel.patientWeight} kg')
                                                 ],
                                               ),
                                             ),

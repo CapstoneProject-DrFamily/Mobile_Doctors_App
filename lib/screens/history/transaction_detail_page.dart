@@ -277,35 +277,9 @@ class TransactionDetailPage extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: SizedBox(
-                                            height: 60,
-                                            child: ListView.builder(
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount: model.listSymp.length,
-                                              itemBuilder: (context, index) {
-                                                return Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Chip(
-                                                    backgroundColor:
-                                                        Colors.lightBlue,
-                                                    label: Text(
-                                                      model.listSymp[index]
-                                                          .symptomName,
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    )
+                                    SizedBox(
+                                      height: 15,
+                                    ),
                                   ],
                                 ),
                               )

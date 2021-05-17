@@ -11,7 +11,7 @@ class MedicineModel {
 
   factory MedicineModel.fromJson(Map<String, dynamic> json) {
     return MedicineModel(
-      medicineId: json['medicineId'] as int,
+      medicineId: json['id'] as int,
       medicineForm: json['form'] as String,
       medicineStrength: json['strength'] as String,
       medicineName: json['name'] as String,
@@ -20,7 +20,7 @@ class MedicineModel {
   }
 
   Map<String, dynamic> toJson() => {
-        "medicineId": medicineId,
+        "id": medicineId,
         "form": medicineForm,
         "strength": medicineStrength,
         "name": medicineName,

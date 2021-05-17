@@ -70,7 +70,7 @@ class ScheduleRepo extends IScheduleRepo {
           print("empty");
           ScheduleModel model = ScheduleModel(
             appointmentTime: jsonData[i]['appointmentTime'],
-            scheduleId: jsonData[i]['scheduleId'],
+            scheduleId: jsonData[i]['id'],
             scheduleStatus: jsonData[i]['status'],
             updBy: jsonData[i]['updBy'],
             updDatetime: jsonData[i]['updDatetime'],
@@ -84,7 +84,7 @@ class ScheduleRepo extends IScheduleRepo {
               TransactionScheduleModel.fromJson(jsonData[i]['treatments'][0]);
           ScheduleModel model = ScheduleModel(
             appointmentTime: jsonData[i]['appointmentTime'],
-            scheduleId: jsonData[i]['scheduleId'],
+            scheduleId: jsonData[i]['id'],
             scheduleStatus: jsonData[i]['status'],
             updBy: jsonData[i]['updBy'],
             updDatetime: jsonData[i]['updDatetime'],

@@ -31,7 +31,7 @@ class MedicineDetailModel {
 
   factory MedicineDetailModel.fromJson(Map<String, dynamic> json) {
     return MedicineDetailModel(
-        medicineId: json['medicine']['medicineId'] as int,
+        medicineId: json['medicine']['id'] as int,
         morningQuantity: json['morningQuantity'] as int,
         medicineMethod: json['method'] as String,
         noonQuantity: json['noonQuantity'] as int,
