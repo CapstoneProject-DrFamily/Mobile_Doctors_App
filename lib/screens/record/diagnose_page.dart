@@ -346,12 +346,26 @@ class DiagnosePage extends StatelessWidget {
                                                                   .doctorAdviceController,
                                                               maxLines: 5,
                                                               maxLength: 255,
-                                                              decoration:
-                                                                  InputDecoration(
-                                                                      counterText:
-                                                                          "",
-                                                                      hintText:
-                                                                          'Enter your text'),
+                                                              decoration: InputDecoration(
+                                                                  border:
+                                                                      InputBorder
+                                                                          .none,
+                                                                  focusedBorder:
+                                                                      InputBorder
+                                                                          .none,
+                                                                  enabledBorder:
+                                                                      InputBorder
+                                                                          .none,
+                                                                  errorBorder:
+                                                                      InputBorder
+                                                                          .none,
+                                                                  disabledBorder:
+                                                                      InputBorder
+                                                                          .none,
+                                                                  counterText:
+                                                                      "",
+                                                                  hintText:
+                                                                      'Enter your text'),
                                                             ),
                                                           ),
                                                         ],
