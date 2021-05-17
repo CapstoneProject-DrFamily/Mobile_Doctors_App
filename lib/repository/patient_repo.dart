@@ -43,9 +43,22 @@ class PatientRepo extends IPatientRepo {
     var response = await http.get(urlAPI, headers: header);
     if (response.statusCode == 200) {
       Map<String, dynamic> userJson = jsonDecode(response.body);
-      var phone = userJson['patientNavigation']['account']['username'];
+      var accountID = userJson['accountId'];
+      String urlAPI2 = APIHelper.UPDATE_USER_API + '/$accountID';
 
-      return phone;
+      Map<String, String> header = {
+        HttpHeaders.contentTypeHeader: "application/json",
+      };
+
+      var response2 = await http.get(urlAPI2, headers: header);
+      Map<String, dynamic> accountJson = jsonDecode(response2.body);
+
+      if (response2.statusCode == 200) {
+        var phone = accountJson['username'];
+        return phone;
+      } else {
+        return null;
+      }
     } else {
       return null;
     }
@@ -62,9 +75,22 @@ class PatientRepo extends IPatientRepo {
     var response = await http.get(urlAPI, headers: header);
     if (response.statusCode == 200) {
       Map<String, dynamic> userJson = jsonDecode(response.body);
-      var tokenNoti = userJson['patientNavigation']['account']['notiToken'];
+      var accountId = userJson['accountId'];
+      String urlAPI2 = APIHelper.UPDATE_USER_API + '/$accountId';
 
-      return tokenNoti;
+      Map<String, String> header = {
+        HttpHeaders.contentTypeHeader: "application/json",
+      };
+
+      var response2 = await http.get(urlAPI2, headers: header);
+      Map<String, dynamic> accountJson = jsonDecode(response2.body);
+
+      if (response2.statusCode == 200) {
+        var notiToken = accountJson['notiToken'];
+        return notiToken;
+      } else {
+        return null;
+      }
     } else {
       return null;
     }

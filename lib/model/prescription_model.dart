@@ -13,7 +13,7 @@ class PrescriptionModel {
       this.diseaseId});
 
   Map<String, dynamic> toJson() => {
-        "prescriptionId": prescriptionId,
+        "id": prescriptionId,
         "description": prescriptionDes,
         "diseaseId": diseaseId,
         "insBy": insBy,

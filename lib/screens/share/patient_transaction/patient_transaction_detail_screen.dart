@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_doctors_apps/helper/app_image.dart';
 import 'package:mobile_doctors_apps/helper/common.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
 import 'package:mobile_doctors_apps/screens/view_model/patient_base_transaction_view_model.dart';
@@ -59,22 +60,22 @@ class PatientTransactionDetailScreen extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.phone,
-                                  color: Colors.black,
-                                  size: 24.0,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(this.model.profileDoctor.phone),
-                              ],
-                            ),
+                            // SizedBox(
+                            //   height: 10,
+                            // ),
+                            // Row(
+                            //   children: [
+                            //     Icon(
+                            //       Icons.phone,
+                            //       color: Colors.black,
+                            //       size: 24.0,
+                            //     ),
+                            //     SizedBox(
+                            //       width: 10,
+                            //     ),
+                            //     Text(this.model.profileDoctor.phone),
+                            //   ],
+                            // ),
                             Row(
                               children: [
                                 Expanded(
@@ -133,7 +134,9 @@ class PatientTransactionDetailScreen extends StatelessWidget {
                       CircleAvatar(
                         radius: 30.0,
                         backgroundImage:
-                            NetworkImage(this.model.profilePatient.image),
+                            (this.model.profilePatient.image == null)
+                                ? NetworkImage(DEFAULT_IMG)
+                                : NetworkImage(this.model.profilePatient.image),
                         backgroundColor: Colors.transparent,
                       ),
                       SizedBox(
@@ -148,22 +151,22 @@ class PatientTransactionDetailScreen extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.phone,
-                                  color: Colors.black,
-                                  size: 24.0,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(this.model.profilePatient.phone),
-                              ],
-                            ),
+                            // SizedBox(
+                            //   height: 10,
+                            // ),
+                            // Row(
+                            //   children: [
+                            //     Icon(
+                            //       Icons.phone,
+                            //       color: Colors.black,
+                            //       size: 24.0,
+                            //     ),
+                            //     SizedBox(
+                            //       width: 10,
+                            //     ),
+                            //     Text(this.model.profilePatient.phone),
+                            //   ],
+                            // ),
                           ],
                         ),
                       )
