@@ -25,7 +25,7 @@ class TransactionScheduleModel {
 
   factory TransactionScheduleModel.fromJson(Map<String, dynamic> json) {
     return TransactionScheduleModel(
-      transactionId: json['transactionId'] as String,
+      transactionId: json['id'] as String,
       patientId: json['patientId'] as int,
       dateStart: json['dateStart'] as String,
       transactionStatus: json['status'] as int,
