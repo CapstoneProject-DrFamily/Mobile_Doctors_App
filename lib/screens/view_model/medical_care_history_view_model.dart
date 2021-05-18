@@ -208,6 +208,7 @@ class MedicalCareHistoryViewModel extends BaseModel {
 
   void chooseTransaction(
       BuildContext context, String transactionId, int transactionStatus) async {
+    print("transactionId $transactionId");
     switch (transactionStatus) {
       case 1:
         {
