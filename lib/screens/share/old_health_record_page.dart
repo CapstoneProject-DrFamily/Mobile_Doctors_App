@@ -4,98 +4,84 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_doctors_apps/screens/share/base_view.dart';
-import 'package:mobile_doctors_apps/screens/share/list_old_health_record_page.dart';
-import 'package:mobile_doctors_apps/screens/view_model/health_record_page_view_model.dart';
+import 'package:mobile_doctors_apps/screens/view_model/old_health_record_view_model.dart';
 
-class HealthRecordScreen extends StatelessWidget {
-  final int patientId;
-  HealthRecordScreen({Key key, @required this.patientId}) : super(key: key);
+class OldHealthRecordScreen extends StatelessWidget {
+  final int healthRecordID;
+  OldHealthRecordScreen({Key key, @required this.healthRecordID})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<HealthRecordViewModel>(builder: (context, child, model) {
+    return BaseView<OldHealthRecordViewModel>(builder: (context, child, model) {
       return FutureBuilder(
-        future: model.getHealthRecordByID(patientId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+          future: model.getPersonalHealthRecordByID(healthRecordID),
+          builder: (context, snapshot) {
             return DefaultTabController(
               length: 2,
-              child: Scaffold(
-                appBar: new AppBar(
-                  backgroundColor: Colors.white,
-                  elevation: 0,
-                  centerTitle: true,
-                  title: Text(
-                    "Personal Health Record",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xff0d47a1),
-                    ),
-                  ),
-                  leading: new IconButton(
-                    icon: new Icon(Icons.arrow_back_ios,
-                        color: Color(0xff0d47a1)),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                  actions: [
-                    IconButton(
-                      icon: new Icon(Icons.history, color: Color(0xff0d47a1)),
-                      onPressed: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ListOldHealthRecordScreen(
-                              patientID: patientId,
+              child: model.isLoading
+                  ? Scaffold(
+                      body: Center(
+                        child: CircularProgressIndicator(
+                          backgroundColor: Colors.white,
+                        ),
+                      ),
+                    )
+                  : Scaffold(
+                      appBar: new AppBar(
+                        backgroundColor: Colors.white,
+                        elevation: 0,
+                        centerTitle: true,
+                        title: Text(
+                          "Old Personal Health Record",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff0d47a1),
+                          ),
+                        ),
+                        leading: new IconButton(
+                          icon: new Icon(Icons.arrow_back_ios,
+                              color: Color(0xff0d47a1)),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        bottom: TabBar(
+                          unselectedLabelColor: Colors.black,
+                          labelColor: Color(0xff0d47a1),
+                          tabs: [
+                            Tab(
+                              child: Text(
+                                "History & Allergy",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                            Tab(
+                              child: Text(
+                                "Exposure",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      body: TabBarView(
+                        children: [
+                          _tabView1(context, model),
+                          _tabView2(context, model),
+                        ],
+                      ),
                     ),
-                  ],
-                  bottom: TabBar(
-                    unselectedLabelColor: Colors.black,
-                    labelColor: Color(0xff0d47a1),
-                    tabs: [
-                      Tab(
-                        child: Text(
-                          "History & Allergy",
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      Tab(
-                        child: Text(
-                          "Exposure",
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                body: TabBarView(
-                  children: [
-                    _tabView1(context, model),
-                    _tabView2(context, model),
-                  ],
-                ),
-              ),
             );
-          } else {
-            return Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-          }
-        },
-      );
+          });
     });
   }
 
   //TabBarView for Tiền sử & Dị ứng
   DefaultTabController _tabView1(
-      BuildContext context, HealthRecordViewModel model) {
+      BuildContext context, OldHealthRecordViewModel model) {
     return DefaultTabController(
       length: 6,
       child: Scaffold(
@@ -281,7 +267,7 @@ class HealthRecordScreen extends StatelessWidget {
   }
 
   //TabBarView for Yếu tố tiếp xúc
-  Widget _tabView2(BuildContext context, HealthRecordViewModel model) {
+  Widget _tabView2(BuildContext context, OldHealthRecordViewModel model) {
     return SingleChildScrollView(
       child: Container(
         child: Column(
@@ -1126,7 +1112,7 @@ class HealthRecordScreen extends StatelessWidget {
   }
 
 //TabBarView for Tình trạng lúc sinh
-  Widget _tabView3(BuildContext context, HealthRecordViewModel model) {
+  Widget _tabView3(BuildContext context, OldHealthRecordViewModel model) {
     List<String> buttonOriginalList = [
       "Spontaneous delivery",
       "Abdominal delivery",
@@ -1405,7 +1391,7 @@ class HealthRecordScreen extends StatelessWidget {
   }
 
 //TabBarView for Tiền sử bệnh tật, dị ứng
-  Widget _tabView4(BuildContext context, HealthRecordViewModel model) {
+  Widget _tabView4(BuildContext context, OldHealthRecordViewModel model) {
     return SingleChildScrollView(
       child: Container(
         child: Column(
@@ -1880,7 +1866,7 @@ class HealthRecordScreen extends StatelessWidget {
   }
 
 //TabBarView for khuyết tật
-  Widget _tabView5(BuildContext context, HealthRecordViewModel model) {
+  Widget _tabView5(BuildContext context, OldHealthRecordViewModel model) {
     return SingleChildScrollView(
       child: Container(
         child: Column(
@@ -2274,7 +2260,7 @@ class HealthRecordScreen extends StatelessWidget {
   }
 
 //TabBarView for Tiền sử phẫu thuật
-  Widget _tabView6(BuildContext context, HealthRecordViewModel model) {
+  Widget _tabView6(BuildContext context, OldHealthRecordViewModel model) {
     return SingleChildScrollView(
       child: Container(
         child: Column(
@@ -2356,7 +2342,7 @@ class HealthRecordScreen extends StatelessWidget {
   }
 
 //TabBarView for Tiền sử gia đình
-  Widget _tabView7(BuildContext context, HealthRecordViewModel model) {
+  Widget _tabView7(BuildContext context, OldHealthRecordViewModel model) {
     return SingleChildScrollView(
       child: Container(
         child: Column(
@@ -2831,7 +2817,7 @@ class HealthRecordScreen extends StatelessWidget {
   }
 
 //TabBarView for Vấn đề khác
-  Widget _tabView8(BuildContext context, HealthRecordViewModel model) {
+  Widget _tabView8(BuildContext context, OldHealthRecordViewModel model) {
     return SingleChildScrollView(
       child: Container(
         child: Column(
