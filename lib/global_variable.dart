@@ -17,3 +17,5 @@ StreamSubscription<Event> transactionMapStreamSubscription;
 DateFormat serverFormater = DateFormat('yyyy-MM-dd');
 
 DateFormat timeCheckFormater = DateFormat('yyyy-MM-dd HH:mm');
+
+String GoogleKey = "AIzaSyDGDKvCvpBi_SqMNbs0XO5SHV9e2XctW1Y";

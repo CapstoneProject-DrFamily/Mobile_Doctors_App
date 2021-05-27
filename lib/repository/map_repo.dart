@@ -1,5 +1,6 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile_doctors_apps/global_variable.dart';
 import 'package:mobile_doctors_apps/helper/request_helper.dart';
 import 'package:mobile_doctors_apps/model/direction_detail.dart';
 
@@ -13,7 +14,7 @@ class MapRepo extends IMapRepo {
   Future<DirectionDetails> getDirectionDetails(
       LatLng startPosition, LatLng endPosition) async {
     String url =
-        'https://maps.googleapis.com/maps/api/directions/json?origin=${startPosition.latitude},${startPosition.longitude}&destination=${endPosition.latitude},${endPosition.longitude}&mode=driving&key=AIzaSyCwNfWK4DEyGG34TkZBtPp4c5Cpf2JnuR8';
+        'https://maps.googleapis.com/maps/api/directions/json?origin=${startPosition.latitude},${startPosition.longitude}&destination=${endPosition.latitude},${endPosition.longitude}&mode=driving&key=$GoogleKey';
 
     var response = await RequestHealper.getRequest(url);
 
