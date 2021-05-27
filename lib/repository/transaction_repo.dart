@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile_doctors_apps/global_variable.dart';
 import 'package:mobile_doctors_apps/helper/api_helper.dart';
 import 'package:mobile_doctors_apps/model/feedback/feedback_model.dart';
 import 'package:mobile_doctors_apps/model/patient_transacion/examination_history_model.dart';
@@ -89,7 +90,7 @@ class TransactionRepo extends ITransactionRepo {
       print('longitude: $longitude, latitude $latitude');
 
       String url =
-          'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=AIzaSyCwNfWK4DEyGG34TkZBtPp4c5Cpf2JnuR8';
+          'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$GoogleKey';
 
       http.Response responseMap = await http.get(url);
       if (responseMap.statusCode == 200) {
